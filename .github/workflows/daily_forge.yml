@@ -49,13 +49,6 @@ jobs:
               cp "$file" "skills/$skill_folder/SKILL.md"
             done
 
-            # Fetch dynamically generated commit message, fallback if missing
-            if [ -f "/tmp/agentic_skills_run/commit_msg.txt" ]; then
-              COMMIT_MSG=$(cat /tmp/agentic_skills_run/commit_msg.txt)
-            else
-              COMMIT_MSG="feat(skills): daily automated multi-agent skill generation batch"
-            fi
-
             # Setup Git Identity
             git config --global user.name "Davi Bonetto"
             git config --global user.email "davi.bonetto100@gmail.com"
@@ -63,15 +56,20 @@ jobs:
             # Adjust remote
             git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
 
-            git add skills/*
+            # Iterate through each skill folder generated and commit individually
+            for file in /tmp/agentic_skills_run/ready_for_commit/*.md; do
+              skill_folder=$(basename "$file" .md)
+              
+              git add "skills/$skill_folder/SKILL.md"
+              
+              # Only commit if there are changes for this specific skill
+              if ! git diff-index --quiet HEAD; then
+                git commit -m "feat(skills): add $skill_folder skill"
+              fi
+            done
             
-            # Only commit if there are changes
-            if ! git diff-index --quiet HEAD; then
-              git commit -m "$COMMIT_MSG"
-              git push origin HEAD:${GITHUB_REF#refs/heads/}
-            else
-              echo "No changes to commit."
-            fi
+            # Push all commits at once
+            git push origin HEAD:${GITHUB_REF#refs/heads/}
           else
             echo "No skills were generated to commit."
           fi
