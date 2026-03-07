@@ -34,12 +34,12 @@ def main():
     )
 
     models_config = {
-        "planner": "llama-3.1-8b-instant",
-        "builder": "llama-3.1-8b-instant",
-        "refiner": "llama-3.1-8b-instant",
-        "validator": "llama-3.1-8b-instant",
-        "integrator": "llama-3.1-8b-instant",
-        "auditor": "llama-3.1-8b-instant"
+        "planner": "llama-3.3-70b-versatile",
+        "builder": "llama-3.3-70b-versatile",
+        "refiner": "llama-3.3-70b-versatile",
+        "validator": "llama-3.3-70b-versatile",
+        "integrator": "llama-3.3-70b-versatile",
+        "auditor": "llama-3.3-70b-versatile"
     }
 
     # Initialize Core
@@ -76,8 +76,8 @@ def main():
             else:
                 logger.info(f"Skipping duplicate proposal: {b.title}")
                 
-        # Limit to strictly 20 if we got more, or proceed with whatever is left
-        briefings = briefings_list[:20]
+        # Protect Free Groq Accounts from hitting the 100,000 Tokens Per Day (TPD) Limit instantly
+        briefings = briefings_list[:5]
         state_manager.save_briefings(briefings)
         logger.info(f"Wave 1 Complete: {len(briefings)} unique briefings ready.")
 
