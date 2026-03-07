@@ -31,6 +31,7 @@ jobs:
       - name: Run Multi-Agent Orchestrator
         env:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          GROQ_API_KEY_2: ${{ secrets.GROQ_API_KEY_2 }}
           # Adjust path dynamically relative to the runner workspace
           SKILLS_DIR: ${{ github.workspace }}/skills
         run: |
