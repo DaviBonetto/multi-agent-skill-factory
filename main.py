@@ -34,12 +34,12 @@ def main():
     )
 
     models_config = {
-        "planner": "llama-3.3-70b-versatile",
-        "builder": "llama-3.3-70b-versatile",
-        "refiner": "llama-3.3-70b-versatile",
-        "validator": "llama-3.3-70b-versatile",
-        "integrator": "llama-3.3-70b-versatile",
-        "auditor": "llama-3.3-70b-versatile"
+        "planner": "llama-3.1-8b-instant",
+        "builder": "llama-3.1-8b-instant",
+        "refiner": "llama-3.1-8b-instant",
+        "validator": "llama-3.1-8b-instant",
+        "integrator": "llama-3.1-8b-instant",
+        "auditor": "llama-3.1-8b-instant"
     }
 
     # Initialize Core
@@ -84,47 +84,57 @@ def main():
     # --- WAVE 2: The Factory ---
     for b in briefings:
         skill_name = b["folder_name"]
-        
-        # 1. Builder
-        draft = state_manager.load_skill_draft(skill_name, "builder_draft")
-        if not draft:
-            rate_limiter.wait_if_needed()
-            draft = a2_builder.generate_draft(str(b))
-            rate_limiter.add_delay()
-            state_manager.save_skill_draft(skill_name, "builder_draft", draft)
 
-        # 2. Refiner
-        refined = state_manager.load_skill_draft(skill_name, "refiner_draft")
-        if not refined:
-            rate_limiter.wait_if_needed()
-            refined = a3_refiner.refine_draft(draft)
-            rate_limiter.add_delay()
-            state_manager.save_skill_draft(skill_name, "refiner_draft", refined)
+        # Let's just catch any Exception inside the Factory Loop to allow graceful death
+        try:
+            # 1. Builder
+            draft = state_manager.load_skill_draft(skill_name, "builder_draft")
+            if not draft:
+                rate_limiter.wait_if_needed()
+                draft = a2_builder.generate_draft(str(b))
+                rate_limiter.add_delay()
+                state_manager.save_skill_draft(skill_name, "builder_draft", draft)
 
-        # 3. Validator (QA via loop)
-        qa_status = "FAIL"
-        attempts = 0
-        max_attempts = 2  # Hard limit to avoid blowing tokens on one bad idea
-        final_markdown = refined
-        
-        while qa_status == "FAIL" and attempts < max_attempts:
-            attempts += 1
-            rate_limiter.wait_if_needed()
-            validation_result = a4_validator.validate_skill(final_markdown)
-            rate_limiter.add_delay()
+            # 2. Refiner
+            refined = state_manager.load_skill_draft(skill_name, "refiner_draft")
+            if not refined:
+                rate_limiter.wait_if_needed()
+                refined = a3_refiner.refine_draft(draft)
+                rate_limiter.add_delay()
+                state_manager.save_skill_draft(skill_name, "refiner_draft", refined)
+
+            # 3. Validator (QA via loop)
+            qa_status = "FAIL"
+            attempts = 0
+            max_attempts = 2  # Hard limit to avoid blowing tokens on one bad idea
+            final_markdown = refined
             
-            qa_status = validation_result.status
-            if qa_status == "PASS":
-                final_markdown = validation_result.fixed_markdown
-            else:
-                logger.warning(f"Validation failed for {skill_name} on attempt {attempts}. Reason: {validation_result.reasoning}")
-                if validation_result.fixed_markdown:
+            while qa_status == "FAIL" and attempts < max_attempts:
+                attempts += 1
+                rate_limiter.wait_if_needed()
+                validation_result = a4_validator.validate_skill(final_markdown)
+                rate_limiter.add_delay()
+                
+                qa_status = validation_result.status
+                if qa_status == "PASS":
                     final_markdown = validation_result.fixed_markdown
+                else:
+                    logger.warning(f"Validation failed for {skill_name} on attempt {attempts}. Reason: {validation_result.reasoning}")
+                    if validation_result.fixed_markdown:
+                        final_markdown = validation_result.fixed_markdown
 
-        if qa_status == "PASS" and final_markdown:
-            state_manager.mark_skill_completed(skill_name, final_markdown)
-        else:
-            logger.error(f"Skill {skill_name} failed final validation and was discarded.")
+            if qa_status == "PASS" and final_markdown:
+                state_manager.mark_skill_completed(skill_name, final_markdown)
+            else:
+                logger.error(f"Skill {skill_name} failed final validation and was discarded.")
+
+        except Exception as e:
+            if "Rate limit reached" in str(e) or "429" in str(e):
+                logger.warning(f"Tokens Per Day Limit Hit during Wave 2! Breaking loop early: {str(e)}")
+                break
+            else:
+                logger.error(f"Unhandled error for skill {skill_name}: {str(e)}")
+                continue
 
     # --- WAVE 3: Integration ---
     report_data = state_manager.get_tmp_size_report()
