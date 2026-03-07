@@ -45,8 +45,8 @@ def main():
     # Initialize Core
     rate_limiter = RateLimiter(max_requests=30, time_window=60.0)
     
-    workspace_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
-    skills_dir = os.environ.get("SKILLS_DIR", os.path.join(workspace_root, ".agent", "skills"))
+    workspace_root = os.path.abspath(os.path.join(os.path.dirname(__file__)))
+    skills_dir = os.environ.get("SKILLS_DIR", os.path.join(workspace_root, "skills"))
     
     local_rag = LocalRAG(skills_dir=skills_dir)
     state_manager = StateManager(tmp_dir="/tmp/agentic_skills_run")
