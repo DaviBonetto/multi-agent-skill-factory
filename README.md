@@ -6,18 +6,33 @@
 <a href="https://github.com/DaviBonetto/multi-agent-skill-factory/blob/main/LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge"></a>
 <a href="https://groq.com"><img alt="Powered by Groq" src="https://img.shields.io/badge/Powered%20by-Groq-f55a3c.svg?style=for-the-badge"></a>
 <a href="https://python.org"><img alt="Python 3.11+" src="https://img.shields.io/badge/python-3.11+-blue.svg?style=for-the-badge"></a>
+<a href="https://pydantic.dev/"><img alt="Pydantic Validation" src="https://img.shields.io/badge/Pydantic-Validation-e92063.svg?style=for-the-badge"></a>
+<a href="https://scikit-learn.org/"><img alt="Scikit-Learn TF-IDF" src="https://img.shields.io/badge/scikit--learn-TF--IDF-f7931e.svg?style=for-the-badge"></a>
 
 **An autonomous, multi-agent CI/CD pipeline that orchestrates, generates, and validates highly technical AI skills daily.**
 
-[Key Features](#-key-features) • [Architecture](#%EF%B8%8F-multi-agent-architecture) • [Getting Started](#-getting-started) • [Workflow Guidelines](#%EF%B8%8F-workflow-guidelines) • [License](#-license)
+[Key Features](#-key-features) • [What Problem it Solves](#%EF%B8%8F-the-problem-it-solves) • [Architecture](#%EF%B8%8F-multi-agent-architecture) • [Getting Started](#-getting-started) • [License](#-license)
 
 </div>
 
 <br/>
 
-## 🌟 Key Features
+## � What is it about?
 
-The **Multi-Agent Skill Factory** operates on a zero-intervention CI/CD schedule. It leverages state-of-the-art LLMs (like LLaMA 3.3 70B via Groq) to independently research, draft, refine, review, and commit production-ready technical skills (`.md` guides) to your system.
+The **Multi-Agent Skill Factory** is a "self-driving" knowledge generator. It is a completely automated Python pipeline that wakes up every day, thinks of new software engineering and AI skills that don't exist in your current repository, writes them meticulously in Markdown, reviews its own code for security flaws, and commits the result directly to your GitHub repository—all without a single human click.
+
+## 🛠️ The Problem it Solves
+
+Building a high-quality database of AI prompts, workflows, and "Agent Skills" requires immense manual effort. Engineers have to brainstorm ideas, write technical step-by-step guides, handle edge cases, and manually format files.
+Additionally, when attempting to automate this using LLM scripts, engineers run into API **Rate Limits (HTTP 429)** and generate repetitive, low-quality content.
+
+**This project solves those bottlenecks by:**
+
+1. **Mathematical Rate Limiting**: Implementing a Token Bucket algorithm with sequential looping that perfectly avoids Groq's strict 30 RPM limits.
+2. **Contextual Anti-Duplication**: Using an NLP technique (TF-IDF Vectorization) to read past skills and mathematically block the AI from generating duplicate topics.
+3. **Agentic Code Quality**: Forcing the AI through a "QA Gauntlet". A generated skill is only accepted if the Auditor and Validator agents approve its technical accuracy and resilience.
+
+## 🌟 Key Features
 
 - **Sequential Worker with Token Bucket**: Custom built rate limiter mathematically tuned to respect tight 30 RPM limits, sidestepping `HTTP 429` completely. 🚦
 - **6-Agent Orchestration**: Specialized roles—Planner, Builder, Refiner, Validator, Integrator, and Auditor—operating recursively to ensure maximum code output quality. 👥
@@ -42,7 +57,7 @@ The factory's intelligence is divided into specialized agents working in cascadi
 ### 🌊 Wave 3: Integration
 
 - **A5: The Integrator (Release Manager)**: Writes conventional-commit histories based on the successfully assembled batch.
-- **A6: The Auditor (Global QA)**: Assesses the entire `/tmp/` batch to verify 20 complete files are prepared. Acts as the `go/no-go` decision for the CI pipeline.
+- **A6: The Auditor (Global QA)**: Assesses the entire `/tmp/` batch to verify complete files are prepared. Acts as the `go/no-go` decision for the CI pipeline.
 
 ## 🚀 Getting Started
 
@@ -72,14 +87,10 @@ $ python main.py
 3. Add `BOT_GITHUB_TOKEN`: A Personal Access Token (PAT) with `contents: write` permissions.
 4. The `.github/workflows/daily_forge.yml` is scheduled to run daily at 02:00 AM UTC.
 
-## ⚙️ CI/CD Reliability
-
-The framework employs a "Graceful Degradation" strategy. If the Validator agent (A4) rejects a skill beyond maximum retry attempts, that single thread is dropped while the rest of the batch continues. As long as **at least 1 skill** survives the Gauntlet, the Integrator (A5) will gracefully package a semantic commit for the successful survivors.
-
 ## 📝 License
 
 Distributed under the MIT License. See `LICENSE` for more information.
 
 <div align="center">
-  <sub>Built with ❤️ by Davi Bonetto. Powered by OSS LLMs.</sub>
+  <sub>Developed & Architected by Davi Bonetto | Shaping the future of Autonomous Engineering</sub>
 </div>
