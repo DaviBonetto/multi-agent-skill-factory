@@ -1,0 +1,79 @@
+name: Agentic Skill Forge Daily Run
+
+on:
+  schedule:
+    - cron: "0 2 * * *" # Every day at 2 AM
+  workflow_dispatch: # Allows manual trigger from the UI
+
+permissions:
+  contents: write
+
+jobs:
+  run-forge:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install Dependencies
+        run: |
+          cd Agentic-Skill-Forge
+          pip install -r requirements.txt
+
+      - name: Run Multi-Agent Orchestrator
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          # Adjust path dynamically relative to the runner workspace
+          SKILLS_DIR: ${{ github.workspace }}/.agent/skills
+        run: |
+          cd Agentic-Skill-Forge
+          python main.py
+
+      - name: Commit and Push (If Successful)
+        env:
+          BOT_GITHUB_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
+        run: |
+          if [ -d "/tmp/agentic_skills_run/ready_for_commit" ]; then
+            # Copy generated skills back into the repo
+            # Assuming the folder structure is .agent/skills/<Skill-Name>/SKILL.md
+            for file in /tmp/agentic_skills_run/ready_for_commit/*.md; do
+              skill_folder=$(basename "$file" .md)
+              mkdir -p ".agent/skills/$skill_folder"
+              cp "$file" ".agent/skills/$skill_folder/SKILL.md"
+            done
+
+            # Fetch dynamically generated commit message, fallback if missing
+            if [ -f "/tmp/agentic_skills_run/commit_msg.txt" ]; then
+              COMMIT_MSG=$(cat /tmp/agentic_skills_run/commit_msg.txt)
+            else
+              COMMIT_MSG="feat(skills): daily automated multi-agent skill generation batch"
+            fi
+
+            # Setup Git Identity
+            git config --global user.name "Davi Bonetto"
+            git config --global user.email "davi.bonetto100@gmail.com"
+            
+            # Adjust remote
+            git remote set-url origin https://x-access-token:${{ secrets.BOT_GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+
+            git add .agent/skills/*
+            
+            # Only commit if there are changes
+            if ! git diff-index --quiet HEAD; then
+              git commit -m "$COMMIT_MSG"
+              git push origin HEAD:${GITHUB_REF#refs/heads/}
+            else
+              echo "No changes to commit."
+            fi
+          else
+            echo "No skills were generated to commit."
+          fi
