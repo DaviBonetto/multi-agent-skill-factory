@@ -137,11 +137,11 @@ def main():
                 logger.error(f"Skill {skill_name} failed final validation and was discarded.")
 
         except Exception as e:
-            if "Rate limit reached" in str(e) or "429" in str(e):
-                logger.warning(f"Tokens Per Day Limit Hit on Client 1! Breaking Generator early: {str(e)}")
+            if "RateLimitError" in repr(e) or "429" in str(e) or "Rate limit reached" in str(e):
+                logger.warning(f"Tokens Per Day Limit Hit on Client 1! Breaking Generator early: {repr(e)}")
                 break
             else:
-                logger.error(f"Unhandled error for generated skill {skill_name}: {str(e)}")
+                logger.error(f"Unhandled error for generated skill {skill_name}: {repr(e)}")
                 continue
 
     # Pipeline B: Harvester (15 External Skills using Client 2)
@@ -186,11 +186,11 @@ def main():
                 logger.error(f"Harvested Skill {skill_name} failed final validation and was discarded.")
 
         except Exception as e:
-            if "Rate limit reached" in str(e) or "429" in str(e):
-                logger.warning(f"Tokens Per Day Limit Hit on Client 2! Breaking Harvester early: {str(e)}")
+            if "RateLimitError" in repr(e) or "429" in str(e) or "Rate limit reached" in str(e):
+                logger.warning(f"Tokens Per Day Limit Hit on Client 2! Breaking Harvester early: {repr(e)}")
                 break
             else:
-                logger.error(f"Unhandled error for harvested skill {skill_name}: {str(e)}")
+                logger.error(f"Unhandled error for harvested skill {skill_name}: {repr(e)}")
                 continue
 
     # --- WAVE 3: Integration ---
