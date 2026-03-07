@@ -38,7 +38,7 @@ jobs:
 
       - name: Commit and Push (If Successful)
         env:
-          BOT_GITHUB_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           if [ -d "/tmp/agentic_skills_run/ready_for_commit" ]; then
             # Copy generated skills back into the repo
@@ -60,7 +60,7 @@ jobs:
             git config --global user.email "davi.bonetto100@gmail.com"
             
             # Adjust remote
-            git remote set-url origin https://x-access-token:${{ secrets.BOT_GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+            git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
 
             git add skills/*
             
