@@ -1,2 +1,2 @@
 # Troubleshooting Guide
-... (conteúdo do markdown original)
+... (conteúdo do arquivo SKILL.md)
