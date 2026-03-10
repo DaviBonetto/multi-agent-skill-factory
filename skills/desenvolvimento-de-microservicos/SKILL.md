@@ -1,109 +1,85 @@
 ---
 name: Desenvolvimento de Microserviços
-description: Ensina como projetar e implementar microserviços escaláveis e seguros
+description: Ensina a criar aplicações escaláveis e flexíveis utilizando arquitetura de microserviços
 ---
 
 ## Objetivo
-O objetivo deste guia é fornecer uma visão abrangente sobre como projetar e implementar microserviços escaláveis e seguros. Ao final, você estará capacitado a desenvolver soluções de microserviços que atendam às necessidades de sistemas complexos e distribuídos.
+O objetivo deste guia é fornecer uma abordagem prática para o desenvolvimento de microserviços, permitindo que os desenvolvedores criem aplicações escaláveis e flexíveis. Com isso, será possível entender como dividir uma aplicação monolítica em serviços menores, independentes e escaláveis.
 
 ## Pré-requisitos
-Para seguir este guia, é recomendado que você tenha conhecimento em:
-- Programação em linguagens como Java, Python ou C#
-- Conceitos básicos de arquitetura de software
-- Experiência com frameworks de desenvolvimento web
-- Conhecimento básico de bancos de dados relacionais e NoSQL
+Para seguir este guia, é necessário ter conhecimento em:
+- Programação em linguagens como Java, Python ou Node.js
+- Conhecimento básico de arquitetura de software
+- Experiência com desenvolvimento de aplicações web
+- Conhecimento de ferramentas de gerenciamento de containers, como Docker
 
 ## Passo a Passo Técnico / Exemplos de Código
-### 1. Definição do Microserviço
-Antes de começar a implementar, é crucial definir o que o microserviço irá fazer. Isso envolve identificar as responsabilidades, as interfaces de comunicação e os requisitos de dados.
+### 1. Definição dos Microserviços
+Para começar, é necessário definir quais serão os microserviços que comporão a aplicação. Isso pode ser feito identificando as funcionalidades principais da aplicação e dividindo-as em serviços menores.
 
 ### 2. Escolha da Tecnologia
-Escolha uma linguagem de programação e um framework adequados para o seu microserviço. Por exemplo, se você está trabalhando com Java, pode usar o Spring Boot para criar microserviços.
+Em seguida, é necessário escolher a tecnologia que será utilizada para desenvolver cada microserviço. Isso pode incluir a escolha da linguagem de programação, do framework e da base de dados.
 
-```java
-// Exemplo de configuração básica do Spring Boot
-@SpringBootApplication
-public class MeuMicroservicoApplication {
-    public static void main(String[] args) {
-        SpringApplication.run(MeuMicroservicoApplication.class, args);
-    }
-}
+### 3. Desenvolvimento dos Microserviços
+Com a definição dos microserviços e a escolha da tecnologia, é possível começar a desenvolver cada serviço. Isso pode ser feito utilizando uma abordagem de desenvolvimento ágil, com iterações e entregas contínuas.
+
+Exemplo de código em Node.js para um microserviço de autenticação:
+```javascript
+const express = require('express');
+const app = express();
+
+app.post('/login', (req, res) => {
+  try {
+    const { username, password } = req.body;
+    // Lógica de autenticação
+    res.json({ token: 'token_de_autenticação' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Erro ao autenticar' });
+  }
+});
+
+app.listen(3000, () => {
+  console.log('Microserviço de autenticação rodando na porta 3000');
+});
 ```
 
-### 3. Implementação do Microserviço
-Implemente as funcionalidades do microserviço de acordo com a definição feita anteriormente. Isso pode incluir a criação de endpoints REST, a implementação de lógica de negócios e a integração com bancos de dados.
+### 4. Integração dos Microserviços
+Com os microserviços desenvolvidos, é necessário integrá-los para que possam se comunicar entre si. Isso pode ser feito utilizando APIs RESTful ou mensageria.
 
+Exemplo de código em Python para consumir o microserviço de autenticação:
 ```python
-# Exemplo de endpoint REST em Python com Flask
-from flask import Flask, jsonify
+import requests
 
-app = Flask(__name__)
-
-@app.route('/usuarios', methods=['GET'])
-def get_usuarios():
-    # Lógica para recuperar usuários do banco de dados
-    return jsonify({'usuarios': ['João', 'Maria']})
-
-if __name__ == '__main__':
-    app.run(debug=True)
-```
-
-### 4. Testes e Validação
-Realize testes unitários e de integração para garantir que o microserviço esteja funcionando corretamente. Use frameworks de teste como JUnit para Java ou Pytest para Python.
-
-```java
-// Exemplo de teste unitário com JUnit
-@Test
-public void testGetUsuarios() {
-    // Configuração do teste
-    when(usuarioService.getUsuarios()).thenReturn(Arrays.asList("João", "Maria"));
-    
-    // Execução do teste
-    ResponseEntity<List<String>> response = usuarioController.getUsuarios();
-    
-    // Verificação do resultado
-    assertEquals(HttpStatus.OK, response.getStatusCode());
-}
+try:
+  response = requests.post('http://localhost:3000/login', json={'username': 'usuário', 'password': 'senha'})
+  response.raise_for_status()
+  token = response.json()['token']
+  print(token)
+except requests.exceptions.RequestException as err:
+  print(f"Erro ao consumir o microserviço: {err}")
 ```
 
 ## Validação
-Após a implementação e os testes, valide o microserviço em um ambiente de produção ou de homologação. Verifique se o desempenho, a escalabilidade e a segurança atendem aos requisitos definidos. Realize monitoramento contínuo para identificar e solucionar problemas rapidamente.
+Para validar o desenvolvimento dos microserviços, é necessário realizar testes unitários e de integração. Além disso, é importante realizar testes de desempenho e escalabilidade para garantir que a aplicação possa lidar com um grande volume de requisições.
+
+Exemplo de código em Java para teste unitário de um microserviço:
+```java
+import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+
+public class MicroservicoTest {
+  @Test
+  public void testLogin() {
+    // Lógica de teste
+    assertEquals("token_de_autenticação", resposta);
+  }
+}
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-É fundamental considerar os casos de exceção e edge cases durante a implementação do microserviço. Isso inclui:
-- **Tratamento de Erros**: Implemente mecanismos para lidar com erros inesperados, como exceções de banco de dados ou falhas de rede. Use try-catch para capturar e tratar exceções de forma adequada.
-- **Validação de Entrada**: Valide todas as entradas de dados para evitar ataques de injeção de SQL ou cross-site scripting (XSS). Use bibliotecas de validação de dados para garantir a segurança.
-- **Controle de Acesso**: Implemente controle de acesso para garantir que apenas usuários autorizados possam acessar os recursos do microserviço. Use autenticação e autorização para proteger os endpoints.
-- **Limite de Requisições**: Implemente limites de requisições para evitar ataques de negação de serviço (DoS). Use mecanismos de rate limiting para controlar o número de requisições por minuto.
-- **Monitoramento de Desempenho**: Monitore o desempenho do microserviço para identificar problemas de performance. Use ferramentas de monitoramento para coletar métricas e alertar quando necessário.
-
-```java
-// Exemplo de tratamento de exceção com try-catch
-try {
-    // Código que pode lançar exceção
-    usuarioService.getUsuarios();
-} catch (Exception e) {
-    // Tratamento da exceção
-    logger.error("Erro ao recuperar usuários", e);
-    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-}
-```
-
-```python
-# Exemplo de validação de entrada com Flask
-from flask import request
-from flask_wtf import FlaskForm
-from wtforms import StringField
-from wtforms.validators import DataRequired
-
-class UsuarioForm(FlaskForm):
-    nome = StringField('nome', validators=[DataRequired()])
-
-@app.route('/usuarios', methods=['POST'])
-def criar_usuario():
-    form = UsuarioForm(request.form)
-    if form.validate():
-        # Código para criar usuário
-        return jsonify({'mensagem': 'Usuário criado com sucesso'})
-    else:
-        return jsonify({'mensagem': 'Erro ao criar usuário'}), 400
+É fundamental tratar exceções e edge cases para garantir a robustez e a segurança da aplicação. Alguns exemplos incluem:
+- **Tratamento de erros de autenticação**: em caso de erro de autenticação, o microserviço deve retornar um erro 401 (Unauthorized) e não expor informações sensíveis.
+- **Tratamento de erros de integração**: em caso de erro de integração entre microserviços, o microserviço deve retornar um erro 500 (Internal Server Error) e registrar o erro para posterior análise.
+- **Tratamento de edge cases**: é importante considerar edge cases, como por exemplo, quando um usuário tenta autenticar com um username ou password vazio. Nesse caso, o microserviço deve retornar um erro 400 (Bad Request) e não permitir a autenticação.
+- **Segurança**: é fundamental garantir a segurança da aplicação, utilizando técnicas como autenticação e autorização, criptografia de dados sensíveis e validação de entradas.
+- **Monitoramento e logging**: é importante monitorar e registrar os logs da aplicação para detectar e solucionar problemas de forma eficiente.
