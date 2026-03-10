@@ -1,2 +1,1 @@
-# Testing Anti-Patterns
-... (conteúdo original)
+# Testing Anti-Patterns... (conteúdo completo do arquivo SKILL.md)
