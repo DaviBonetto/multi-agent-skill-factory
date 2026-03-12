@@ -1,64 +1,84 @@
 # SKILL
 ## Introdução
-A skill de parse de media types é responsável por analisar e processar os tipos de mídia em requisições HTTP.
+Esta skill fornece uma lista de códigos de status HTTP, incluindo suas descrições e categorias.
 
 ## Histórico de Versões
-### 0.3.0 / 2014-09-07
-* Support Node.js 0.6
-* Throw error when parameter format invalid on parse
+### 2.0.2 / 2025-06-06
+* Migrate to `String.prototype.slice()`
 
-### 0.2.0 / 2014-06-18
-* Add `typer.format()` to format media types
+### 2.0.1 / 2021-01-03
+* Fix returning values from `Object.prototype`
 
-### 0.1.0 / 2014-06-17
-* Accept `req` as argument to `parse`
-* Accept `res` as argument to `parse`
-* Parse media type with extra LWS between type and first parameter
+### 2.0.0 / 2020-04-19
+* Drop support for Node.js 0.6
+* Fix messaging casing of `418 I'm a Teapot`
+* Remove code 306
+* Remove `status[code]` exports; use `status.message[code]`
+* Remove `status[msg]` exports; use `status.code[msg]`
+* Rename `425 Unordered Collection` to standard `425 Too Early`
+* Rename `STATUS_CODES` export to `message`
+* Return status message for `statuses(code)` when given code
 
-### 0.0.0 / 2014-06-13
-* Initial implementation
+### 1.5.0 / 2018-03-27
+* Add `103 Early Hints`
+
+### 1.4.0 / 2017-10-20
+* Add `STATUS_CODES` export
+
+### 1.3.1 / 2016-11-11
+* Fix return type in JSDoc
+
+### 1.3.0 / 2016-05-17
+* Add `421 Misdirected Request`
+* perf: enable strict mode
+
+### 1.2.1 / 2015-02-01
+* Fix message for status 451
+  - `451 Unavailable For Legal Reasons`
+
+### 1.2.0 / 2014-09-28
+* Add `208 Already Repored`
+* Add `226 IM Used`
+* Add `306 (Unused)`
+* Add `415 Unable For Legal Reasons`
+* Add `508 Loop Detected`
+
+### 1.1.1 / 2014-09-24
+* Add missing 308 to `codes.json`
+
+### 1.1.0 / 2014-09-21
+* Add `codes.json` for universal support
+
+### 1.0.4 / 2014-08-20
+* Package cleanup
+
+### 1.0.3 / 2014-06-08
+* Add 308 to `.redirect` category
+
+### 1.0.2 / 2014-03-13
+* Add `.retry` category
+
+### 1.0.1 / 2014-03-12
+* Initial release
+
+## Códigos de Status
+A lista de códigos de status HTTP inclui:
+* 100-199: Informação
+* 200-299: Sucesso
+* 300-399: Redirecionamento
+* 400-499: Erro do cliente
+* 500-599: Erro do servidor
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
 ### Tratamento de Erros
-* Verificar se o parâmetro de entrada é válido antes de realizar o parse.
-* Lançar um erro personalizado com mensagem clara e concisa quando o parâmetro de entrada for inválido.
-* Utilizar try-catch para capturar e tratar exceções durante o processo de parse.
+* Verificar se o código de status é válido antes de tentar acessar sua descrição.
+* Lidar com erros de sintaxe ao parsear o arquivo `codes.json`.
+* Implementar um mecanismo de fallback para códigos de status desconhecidos.
 
 ### Edge Cases
-* Lidar com casos de entrada vazia ou nula.
-* Considerar a possibilidade de entrada com caracteres especiais ou não ASCII.
-* Testar a skill com diferentes tipos de mídia e parâmetros para garantir a robustez e flexibilidade.
+* Lidar com códigos de status personalizados ou não padrão.
+* Considerar a possibilidade de códigos de status serem adicionados ou removidos no futuro.
+* Implementar uma política de cache para evitar requisições excessivas ao arquivo `codes.json`.
 
-### Segurança
-* Validar a entrada para evitar ataques de injeção de código ou cross-site scripting (XSS).
-* Utilizar bibliotecas e frameworks de segurança para proteger a aplicação contra vulnerabilidades conhecidas.
-* Realizar testes de segurança regulares para garantir a integridade da skill.
-
-## Exemplos de Implementação
-* Exemplo de uso da skill em uma aplicação web:
-```javascript
-const mediaTypeParser = require('media-type-parser');
-const express = require('express');
-const app = express();
-
-app.get('/', (req, res) => {
-  const mediaType = mediaTypeParser.parse(req.headers['content-type']);
-  res.send(`Media Type: ${mediaType}`);
-});
-```
-
-## Testes
-* Testes unitários para a skill:
-```javascript
-const mediaTypeParser = require('media-type-parser');
-const assert = require('assert');
-
-describe('Media Type Parser', () => {
-  it('should parse media type correctly', () => {
-    const mediaType = mediaTypeParser.parse('application/json; charset=utf-8');
-    assert.equal(mediaType, 'application/json');
-  });
-});
-
-## Uso
-A skill pode ser utilizada em aplicações web para analisar e processar os tipos de mídia em requisições HTTP. Ela fornece métodos para parsear e formatar os tipos de mídia, além de tratar exceções e edge cases.
+## Conclusão
+Esta skill fornece uma lista de códigos de status HTTP, incluindo suas descrições e categorias. Além disso, inclui um tratamento de exceções e edge cases para garantir a robustez e flexibilidade da skill.
