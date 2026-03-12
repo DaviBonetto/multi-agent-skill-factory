@@ -59,16 +59,11 @@ Task tool (general-purpose):
     - Spec compliant (if everything matches after code inspection)
     - Issues found: [list specifically what's missing or extra, with file:line references]
 
-    ⚠️ Tratamento de Exceções e Edge Cases
-    - **Caso de uso não previsto:** Verifique se o implementador lidou corretamente com casos de uso não previstos ou exceções.
-    - **Entradas inválidas:** Verifique se o implementador tratou corretamente entradas inválidas ou edge cases.
-    - **Condições de erro:** Verifique se o implementador implementou condições de erro e tratamento de exceções de acordo com as especificações.
-    - **Segurança:** Verifique se o implementador seguiu as melhores práticas de segurança e se o código é seguro contra vulnerabilidades conhecidas.
-    - **Desempenho:** Verifique se o implementador otimizou o código para desempenho e se o código é eficiente em termos de recursos.
-    - **Manutenção:** Verifique se o implementador seguiu as melhores práticas de manutenção e se o código é fácil de entender e modificar.
-```
-Exemplos de edge cases e tratamento de erros que devem ser considerados:
-- **Tratamento de erros de rede:** Verifique se o implementador lidou corretamente com erros de rede, como timeouts, conexões perdidas, etc.
-- **Tratamento de erros de banco de dados:** Verifique se o implementador lidou corretamente com erros de banco de dados, como queries inválidas, permissões negadas, etc.
-- **Tratamento de erros de segurança:** Verifique se o implementador lidou corretamente com erros de segurança, como injeção de SQL, cross-site scripting, etc.
-- **Tratamento de erros de desempenho:** Verifique se o implementador lidou corretamente com erros de desempenho, como memoria insuficiente, processamento lento, etc.
+    Tratamento de Exceções e Edge Cases
+    - **Caso de uso não previsto:** Se o implementador apresentar um caso de uso não previsto, verifique se ele está dentro do escopo da especificação e se foi implementado corretamente.
+    - **Exceções de segurança:** Verifique se o implementador tratou corretamente as exceções de segurança, como injeção de código, cross-site scripting (XSS) e outros tipos de ataques.
+    - **Tratamento de erros:** Verifique se o implementador tratou corretamente os erros, como erros de sintaxe, erros de lógica e outros tipos de erros.
+    - **Limites de recursos:** Verifique se o implementador respeitou os limites de recursos, como memória, processamento e outros recursos.
+    - **Compatibilidade:** Verifique se o implementador garantir a compatibilidade com diferentes plataformas, navegadores e dispositivos.
+    - **Legibilidade e manutenção:** Verifique se o código é legível e fácil de manter, com comentários claros e concisos.
+    - **Testes:** Verifique se o implementador realizou testes adequados, como testes unitários, testes de integração e testes de sistema.
