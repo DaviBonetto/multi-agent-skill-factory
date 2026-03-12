@@ -1,23 +1,17 @@
 # SKILL
 ## Descrição
-description: "Deprecated - use the superpowers:writing-plans skill instead"
-
-Tell your human partner that this command is deprecated and will be removed in the next major release. They should ask you to use the "superpowers writing-plans" skill instead.
-
+description: 'Utilize a skill superpowers:writing-plans para criar planos de ação'
 ## Uso
-Para utilizar esta habilidade, basta informar ao seu parceiro humano que o comando está descontinuado e será removido na próxima versão major. Eles devem solicitar que você use a habilidade "superpowers writing-plans" em vez disso.
-
+Para utilizar esta skill, basta informar ao seu parceiro humano que você deseja criar um plano de ação utilizando a skill 'superpowers writing-plans'.
 ## ⚠️ Tratamento de Exceções e Edge Cases
 ### Casos de Uso Inválidos
-- Se o usuário não tiver permissão para utilizar a habilidade "superpowers writing-plans", mostre uma mensagem de erro informando sobre a falta de permissão.
-- Se a habilidade "superpowers writing-plans" não estiver disponível, mostre uma mensagem de erro informando sobre a indisponibilidade da habilidade.
-- Se o usuário tentar utilizar esta habilidade de forma indevida, mostre uma mensagem de erro informando sobre o uso indevido.
-
+- Se o usuário não tiver permissão para utilizar a skill 'superpowers writing-plans', mostre uma mensagem de erro informando sobre a falta de permissão, por exemplo: 'Você não tem permissão para utilizar a skill superpowers writing-plans'.
+- Se a skill 'superpowers writing-plans' não estiver disponível, mostre uma mensagem de erro informando sobre a indisponibilidade da skill, por exemplo: 'A skill superpowers writing-plans não está disponível no momento'.
+- Se o usuário tentar utilizar esta skill após a data de remoção programada, mostre uma mensagem de erro informando que a skill está depreciada e não pode mais ser utilizada, por exemplo: 'A skill está depreciada e não pode mais ser utilizada'.
 ### Tratamento de Erros
-- Se ocorrer um erro durante a execução da habilidade, mostre uma mensagem de erro genérica informando sobre o ocorrido e solicite que o usuário tente novamente.
-- Se o erro for específico, mostre uma mensagem de erro detalhada informando sobre o problema e como solucioná-lo.
-
+- Se ocorrer um erro durante a execução da skill, mostre uma mensagem de erro genérica informando que ocorreu um problema e solicitando que o usuário tente novamente mais tarde, por exemplo: 'Ocorreu um erro. Tente novamente mais tarde'.
+- Se o erro for específico da skill 'superpowers writing-plans', mostre uma mensagem de erro detalhada informando sobre o problema e como resolver, por exemplo: 'Ocorreu um erro ao criar o plano de ação. Verifique se você tem permissão para criar planos de ação e tente novamente'.
 ### Segurança
-- Certifique-se de que a habilidade "superpowers writing-plans" seja utilizada de forma segura, sem expor informações confidenciais.
-- Verifique se o usuário tem as permissões necessárias para utilizar a habilidade "superpowers writing-plans".
-- Implemente medidas de segurança para prevenir o uso indevido da habilidade.
+- Certifique-se de que a skill não contenha nenhum código malicioso ou vulnerabilidades de segurança.
+- Verifique regularmente a skill para garantir que ela esteja atualizada e segura.
+- Se a skill for utilizada em um ambiente de produção, certifique-se de que ela esteja configurada corretamente e seguindo as políticas de segurança da empresa.
