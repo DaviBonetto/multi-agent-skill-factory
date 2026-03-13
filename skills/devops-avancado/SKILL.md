@@ -1,80 +1,83 @@
 ---
 name: DevOps Avançado
-description: Ensina técnicas avançadas de DevOps, incluindo automação de deploy, monitoramento e logging, utilizando ferramentas como Ansible e Prometheus
+description: Ensina a implementar pipelines de entrega contínua e monitoramento
 ---
 
 ## Objetivo
-O objetivo deste guia é fornecer uma visão aprofundada sobre técnicas avançadas de DevOps, abordando tópicos como automação de deploy, monitoramento e logging. Com isso, os participantes poderão aprimorar suas habilidades em utilizar ferramentas como Ansible e Prometheus para melhorar a eficiência e a confiabilidade dos processos de desenvolvimento e operação de software.
+O objetivo deste guia é fornecer uma visão geral detalhada sobre como implementar pipelines de entrega contínua e monitoramento em um ambiente de DevOps avançado. Isso permitirá que os desenvolvedores e equipes de operações trabalhem juntos de forma mais eficiente, reduzindo o tempo de entrega de software e melhorando a qualidade geral do produto.
 
 ## Pré-requisitos
-Antes de iniciar este guia, é recomendado que os participantes tenham conhecimento básico em:
-- Conceitos de DevOps
-- Ferramentas de automação de deploy (como Ansible)
-- Ferramentas de monitoramento e logging (como Prometheus)
-- Experiência em trabalhar com ambientes de desenvolvimento e produção
+Antes de começar, é importante ter conhecimento básico em:
+- Desenvolvimento de software
+- Infraestrutura como código (IaC)
+- Ferramentas de automação de entrega contínua (como Jenkins, GitLab CI/CD, etc.)
+- Monitoramento e logging (como Prometheus, Grafana, ELK Stack, etc.)
 
 ## Passo a Passo Técnico / Exemplos de Código
 ### Configurando o Ambiente
-Para começar, você precisará ter o Ansible e o Prometheus instalados em sua máquina. Você pode instalar o Ansible usando o seguinte comando:
-```bash
-sudo apt-get update && sudo apt-get install ansible
-```
-Para o Prometheus, você pode usar o seguinte comando:
-```bash
-sudo apt-get update && sudo apt-get install prometheus
-```
-### Automatizando o Deploy com Ansible
-Um exemplo de playbook Ansible para deploy de uma aplicação web pode ser visto abaixo:
-```yml
----
-- name: Deploy Web Application
-  hosts: web_servers
-  become: yes
+1. **Instalação do Jenkins**: Para começar, você precisará instalar o Jenkins em sua máquina. Isso pode ser feito baixando o pacote apropriado para seu sistema operacional a partir do site oficial do Jenkins.
+2. **Configuração do GitLab CI/CD**: Se você estiver usando o GitLab, configure o CI/CD para que os pipelines sejam executados automaticamente após cada push para o repositório.
 
-  tasks:
-  - name: Instalar dependências
-    apt:
-      name: "{{ item }}"
-      state: present
-    loop:
-      - python3
-      - python3-pip
+```bash
+# Exemplo de .gitlab-ci.yml para build e deploy
+image: docker:latest
 
-  - name: Clonar repositório
-    git:
-      repo: https://github.com/seu-repositorio.git
-      dest: /var/www/seu-aplicativo
+stages:
+  - build
+  - deploy
+
+build:
+  stage: build
+  script:
+    - docker build -t myapp .
+  only:
+    - main
+
+deploy:
+  stage: deploy
+  script:
+    - docker push myapp
+    - docker run -d myapp
+  only:
+    - main
 ```
-### Configurando o Monitoramento com Prometheus
-Para configurar o Prometheus, você precisará criar um arquivo de configuração (`prometheus.yml`) com o seguinte conteúdo:
+
+### Implementando Monitoramento
+1. **Instalação do Prometheus e Grafana**: Para o monitoramento, você precisará instalar o Prometheus para coletar métricas e o Grafana para visualizar essas métricas.
+2. **Configuração do Prometheus**: Configure o Prometheus para coletar métricas do seu aplicativo.
+
 ```yml
+# Exemplo de configuração do Prometheus
 global:
-  scrape_interval: 15s
+  scrape_interval: 10s
 
 scrape_configs:
-  - job_name: 'node'
+  - job_name: 'myapp'
     scrape_interval: 10s
     static_configs:
-      - targets: ['localhost:9090']
+      - targets: ['myapp:8080']
 ```
+
 ## Validação
-Para validar a configuração, você pode acessar o painel do Prometheus em `http://localhost:9090` e verificar se os dados de monitoramento estão sendo coletados corretamente. Além disso, você pode testar a automação de deploy executando o playbook Ansible e verificando se a aplicação foi deployada com sucesso.
+Para validar a implementação, siga os passos abaixo:
+1. **Verifique o Jenkins**: Acesse a interface do Jenkins e verifique se os jobs estão sendo executados corretamente.
+2. **Verifique o GitLab CI/CD**: Acesse o GitLab e verifique se os pipelines estão sendo executados automaticamente após cada push.
+3. **Verifique o Prometheus e Grafana**: Acesse o Prometheus e o Grafana para verificar se as métricas estão sendo coletadas e visualizadas corretamente.
+
+Se todos os passos forem seguidos corretamente, você terá um ambiente de DevOps avançado com pipelines de entrega contínua e monitoramento implementados.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-### Erros de Instalação
-- **Erro de permissão**: Certifique-se de que você tem permissão de superusuário para instalar os pacotes necessários.
-- **Erro de dependência**: Verifique se todas as dependências necessárias estão instaladas antes de prosseguir com a instalação do Ansible e do Prometheus.
+### Erros Comuns
+- **Falha na Instalação do Jenkins**: Verifique se o pacote do Jenkins está correto para o seu sistema operacional e se há espaço suficiente em disco.
+- **Problemas com o GitLab CI/CD**: Verifique se o arquivo `.gitlab-ci.yml` está correto e se o repositório está configurado corretamente.
+- **Erros de Conexão com o Prometheus e Grafana**: Verifique se os serviços estão rodando e se as configurações de rede estão corretas.
 
-### Erros de Configuração
-- **Erro de sintaxe**: Verifique se o arquivo de configuração do Prometheus (`prometheus.yml`) está correto e não contém erros de sintaxe.
-- **Erro de conectividade**: Certifique-se de que o Prometheus possa se conectar ao servidor de destino para coletar os dados de monitoramento.
+### Edge Cases
+- **Implementação em Ambientes de Nuvem**: Certifique-se de que as configurações de segurança e rede estejam de acordo com as políticas da nuvem.
+- **Integração com Outras Ferramentas**: Verifique a compatibilidade e configure as integrações corretamente para evitar erros.
+- **Monitoramento de Aplicativos Legados**: Pode ser necessário adaptar as configurações de monitoramento para aplicativos mais antigos ou com tecnologias específicas.
 
-### Erros de Execução
-- **Erro de execução do playbook**: Verifique se o playbook Ansible está correto e se as tarefas estão sendo executadas corretamente.
-- **Erro de deploy**: Certifique-se de que a aplicação foi deployada com sucesso e que os serviços necessários estão em execução.
-
-### Segurança
-- **Autenticação**: Certifique-se de que as credenciais de autenticação estejam seguras e não sejam expostas em nenhum lugar.
-- **Autorização**: Verifique se as permissões de acesso estão corretas e se os usuários têm apenas as permissões necessárias para executar as tarefas.
-
-Ao seguir essas diretrizes e considerar os possíveis erros e edge cases, você poderá garantir uma configuração segura e eficaz do Ansible e do Prometheus para automação de deploy e monitoramento.
+### Melhores Práticas para Segurança
+- **Use Autenticação e Autorização**: Certifique-se de que todos os acessos aos serviços e aplicativos sejam devidamente autenticados e autorizados.
+- **Mantenha os Serviços Atualizados**: Mantenha todos os serviços e ferramentas atualizados para evitar vulnerabilidades de segurança conhecidas.
+- **Use Criptografia**: Use criptografia para proteger os dados em trânsito e em repouso.
