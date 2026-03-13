@@ -1,85 +1,108 @@
 ---
-name: Desenvolvimento de Microserviços
-description: Ensina a criar aplicações escaláveis e flexíveis utilizando arquitetura de microserviços
+name: Desenvolvimento de Microserviços Avançado
+description: Ensina a implementar arquiteturas de microserviços escaláveis e seguras
 ---
 
 ## Objetivo
-O objetivo deste guia é fornecer uma abordagem prática para o desenvolvimento de microserviços, permitindo que os desenvolvedores criem aplicações escaláveis e flexíveis. Com isso, será possível entender como dividir uma aplicação monolítica em serviços menores, independentes e escaláveis.
+O objetivo deste guia é fornecer uma visão abrangente sobre o desenvolvimento de microserviços avançado, permitindo que os desenvolvedores criem sistemas escaláveis, seguros e eficientes. Este conteúdo é direcionado a profissionais sênior que buscam aprimorar suas habilidades em arquiteturas de microserviços.
 
 ## Pré-requisitos
-Para seguir este guia, é necessário ter conhecimento em:
+Antes de iniciar este guia, é recomendado que os participantes tenham conhecimento em:
 - Programação em linguagens como Java, Python ou Node.js
-- Conhecimento básico de arquitetura de software
+- Conceitos básicos de arquitetura de software
 - Experiência com desenvolvimento de aplicações web
-- Conhecimento de ferramentas de gerenciamento de containers, como Docker
+- Conhecimento básico de contêineres e orquestração com Docker e Kubernetes
 
 ## Passo a Passo Técnico / Exemplos de Código
-### 1. Definição dos Microserviços
-Para começar, é necessário definir quais serão os microserviços que comporão a aplicação. Isso pode ser feito identificando as funcionalidades principais da aplicação e dividindo-as em serviços menores.
+### 1. Planejamento da Arquitetura
+Para iniciar o desenvolvimento de microserviços, é crucial planejar a arquitetura do sistema. Isso envolve identificar os serviços, suas responsabilidades e como eles se comunicarão entre si.
 
-### 2. Escolha da Tecnologia
-Em seguida, é necessário escolher a tecnologia que será utilizada para desenvolver cada microserviço. Isso pode incluir a escolha da linguagem de programação, do framework e da base de dados.
+### 2. Implementação dos Microserviços
+A implementação dos microserviços pode ser feita em diferentes linguagens de programação. Por exemplo, em Python, utilizando o framework Flask para criar um serviço de usuário:
+```python
+from flask import Flask, jsonify
 
-### 3. Desenvolvimento dos Microserviços
-Com a definição dos microserviços e a escolha da tecnologia, é possível começar a desenvolver cada serviço. Isso pode ser feito utilizando uma abordagem de desenvolvimento ágil, com iterações e entregas contínuas.
+app = Flask(__name__)
 
-Exemplo de código em Node.js para um microserviço de autenticação:
-```javascript
-const express = require('express');
-const app = express();
+# Simulação de um banco de dados
+usuarios = [
+    {"id": 1, "nome": "João"},
+    {"id": 2, "nome": "Maria"}
+]
 
-app.post('/login', (req, res) => {
-  try {
-    const { username, password } = req.body;
-    // Lógica de autenticação
-    res.json({ token: 'token_de_autenticação' });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Erro ao autenticar' });
-  }
-});
+@app.route('/usuarios', methods=['GET'])
+def get_usuarios():
+    try:
+        return jsonify(usuarios)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
-app.listen(3000, () => {
-  console.log('Microserviço de autenticação rodando na porta 3000');
-});
+if __name__ == '__main__':
+    app.run(debug=True)
 ```
 
-### 4. Integração dos Microserviços
-Com os microserviços desenvolvidos, é necessário integrá-los para que possam se comunicar entre si. Isso pode ser feito utilizando APIs RESTful ou mensageria.
-
-Exemplo de código em Python para consumir o microserviço de autenticação:
+### 3. Implementação da Comunicação entre Microserviços
+A comunicação entre microserviços pode ser realizada utilizando APIs RESTful ou mensageria. Por exemplo, utilizando o RabbitMQ para enviar mensagens entre serviços:
 ```python
-import requests
+import pika
 
+# Conexão com o RabbitMQ
+connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
+channel = connection.channel()
+
+# Declaração da fila
+channel.queue_declare(queue='fila_de_mensagens')
+
+# Envio de mensagem
 try:
-  response = requests.post('http://localhost:3000/login', json={'username': 'usuário', 'password': 'senha'})
-  response.raise_for_status()
-  token = response.json()['token']
-  print(token)
-except requests.exceptions.RequestException as err:
-  print(f"Erro ao consumir o microserviço: {err}")
+    channel.basic_publish(exchange='',
+                          routing_key='fila_de_mensagens',
+                          body='Mensagem de teste')
+except pika.exceptions.AMQPError as e:
+    print(f"Erro ao enviar mensagem: {e}")
+```
+
+### 4. Orquestração com Kubernetes
+Para orquestrar os microserviços, podemos utilizar o Kubernetes. Isso envolve criar deployments, services e pods para gerenciar a execução dos serviços:
+```yml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-usuarios
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: usuarios
+  template:
+    metadata:
+      labels:
+        app: usuarios
+    spec:
+      containers:
+      - name: usuarios
+        image: imagem-do-servico-de-usuarios
+        ports:
+        - containerPort: 80
 ```
 
 ## Validação
-Para validar o desenvolvimento dos microserviços, é necessário realizar testes unitários e de integração. Além disso, é importante realizar testes de desempenho e escalabilidade para garantir que a aplicação possa lidar com um grande volume de requisições.
-
-Exemplo de código em Java para teste unitário de um microserviço:
-```java
-import org.junit.Test;
-import static org.junit.Assert.assertEquals;
-
-public class MicroservicoTest {
-  @Test
-  public void testLogin() {
-    // Lógica de teste
-    assertEquals("token_de_autenticação", resposta);
-  }
-}
+Para validar a implementação dos microserviços, é importante realizar testes unitários, de integração e de carga. Além disso, monitorar o desempenho do sistema em produção é crucial para identificar e corrigir problemas de forma proativa. Ferramentas como Prometheus e Grafana podem ser utilizadas para monitoramento e visualização de métricas.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-É fundamental tratar exceções e edge cases para garantir a robustez e a segurança da aplicação. Alguns exemplos incluem:
-- **Tratamento de erros de autenticação**: em caso de erro de autenticação, o microserviço deve retornar um erro 401 (Unauthorized) e não expor informações sensíveis.
-- **Tratamento de erros de integração**: em caso de erro de integração entre microserviços, o microserviço deve retornar um erro 500 (Internal Server Error) e registrar o erro para posterior análise.
-- **Tratamento de edge cases**: é importante considerar edge cases, como por exemplo, quando um usuário tenta autenticar com um username ou password vazio. Nesse caso, o microserviço deve retornar um erro 400 (Bad Request) e não permitir a autenticação.
-- **Segurança**: é fundamental garantir a segurança da aplicação, utilizando técnicas como autenticação e autorização, criptografia de dados sensíveis e validação de entradas.
-- **Monitoramento e logging**: é importante monitorar e registrar os logs da aplicação para detectar e solucionar problemas de forma eficiente.
+É fundamental considerar os seguintes casos de bordo e exceções:
+- **Conexão perdida com o banco de dados**: Implementar retry e timeout para garantir a resiliência do sistema.
+- **Mensagens duplicadas**: Utilizar mecanismos de deduplicação para evitar processamento duplicado de mensagens.
+- **Falha na orquestração**: Implementar rollback e retry para garantir a consistência do sistema em caso de falha.
+- **Ataques de segurança**: Implementar autenticação e autorização para proteger os microserviços contra acessos não autorizados.
+- **Sobrecarga do sistema**: Implementar escalabilidade automática para garantir a capacidade do sistema de lidar com aumentos de carga.
+
+Exemplo de tratamento de exceção em Python:
+```python
+try:
+    # Código que pode gerar exceção
+except Exception as e:
+    # Tratamento da exceção
+    print(f"Erro: {e}")
+    # Ações de recuperação ou notificação
+```
