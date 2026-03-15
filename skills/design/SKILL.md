@@ -58,16 +58,14 @@ internal/
 6. Invalid inputs produce clear error messages
 7. All tests pass
 ## ⚠️ Tratamento de Exceções e Edge Cases
-### Exceções
-- **Erro de inicialização**: Caso ocorra um erro durante a inicialização do CLI, o programa deve exibir uma mensagem de erro clara e sair com um código de erro não zero.
-- **Erro de parsing de flags**: Se um flag for passado com um valor inválido, o programa deve exibir uma mensagem de erro clara e sair com um código de erro não zero.
-- **Erro de geração de fractal**: Se ocorrer um erro durante a geração de um fractal, o programa deve exibir uma mensagem de erro clara e sair com um código de erro não zero.
+### Tratamento de Erros
+*   Verificar se os valores de `--size`, `--width`, `--height`, `--depth` e `--iterations` são números inteiros positivos.
+*   Verificar se o caractere especificado em `--char` é um caractere único.
+*   Tratar erros de saída de arquivo, como falta de permissão para escrever na saída padrão.
+*   Implementar tratamento de erros para os algoritmos de Sierpinski e Mandelbrot, como overflow de pilha devido à recursão excessiva.
 ### Edge Cases
-- **Tamanho de saída muito grande**: Se o tamanho de saída for muito grande, o programa deve ser capaz de lidar com isso sem travar ou consumir muita memória.
-- **Profundidade de recursão muito grande**: Se a profundidade de recursão for muito grande, o programa deve ser capaz de lidar com isso sem estourar a pilha de chamadas.
-- **Caractere inválido**: Se um caractere inválido for passado como parâmetro, o programa deve exibir uma mensagem de erro clara e sair com um código de erro não zero.
-- **Flags conflitantes**: Se flags conflitantes forem passados, o programa deve exibir uma mensagem de erro clara e sair com um código de erro não zero.
-### Testes
-- **Testes unitários**: Devem ser escritos testes unitários para garantir que cada parte do programa esteja funcionando corretamente.
-- **Testes de integração**: Devem ser escritos testes de integração para garantir que o programa esteja funcionando corretamente como um todo.
-- **Testes de edge cases**: Devem ser escritos testes para garantir que o programa esteja lidando corretamente com edge cases.
+*   **Tamanho mínimo**: Verificar como o programa se comporta com tamanhos mínimos para `--size`, `--width` e `--height` (por exemplo, 1).
+*   **Tamanho máximo**: Verificar como o programa se comporta com tamanhos máximos para `--size`, `--width` e `--height` (por exemplo, valores próximos ao limite do tipo de dados).
+*   **Profundidade máxima**: Verificar como o programa se comporta com valores altos de `--depth` para o triângulo de Sierpinski, considerando o risco de overflow de pilha.
+*   **Iterações máximas**: Verificar como o programa se comporta com valores altos de `--iterations` para o conjunto de Mandelbrot, considerando o impacto no desempenho.
+*   **Caractere inválido**: Verificar como o programa se comporta quando um caractere inválido é especificado para `--char`.
