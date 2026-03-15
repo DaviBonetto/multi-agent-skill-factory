@@ -1,86 +1,113 @@
 ---
 name: Desenvolvimento de Microserviços
-description: Ensina como desenvolver sistemas escaláveis e flexíveis utilizando arquitetura de microserviços
+description: Ensina como projetar, desenvolver e implantar sistemas baseados em microserviços
 ---
 
 ## Objetivo
-O objetivo deste guia é fornecer uma visão geral sobre como desenvolver sistemas escaláveis e flexíveis utilizando arquitetura de microserviços. Ao final, você estará capacitado a projetar e implementar soluções baseadas em microserviços, melhorando a escalabilidade e a manutenção dos sistemas.
+O objetivo deste guia é fornecer uma visão geral detalhada sobre como projetar, desenvolver e implantar sistemas baseados em microserviços, utilizando tecnologias como Docker, Kubernetes e API Gateway. Este guia é destinado a desenvolvedores senior que buscam aprimorar suas habilidades em desenvolvimento de microserviços.
 
 ## Pré-requisitos
-Para seguir este guia, é recomendado ter conhecimento em:
-- Programação em linguagens como Java, Python ou C#
-- Conceitos básicos de arquitetura de software
-- Experiência com desenvolvimento de aplicações web
-- Conhecimento em bancos de dados relacionais e NoSQL
+Antes de começar, é necessário ter conhecimento em:
+- Programação em linguagens como Java, Python ou Node.js
+- Conceitos básicos de rede e segurança
+- Experiência com contêineres e orquestração de contêineres
+- Conhecimento básico de Docker e Kubernetes
 
 ## Passo a Passo Técnico / Exemplos de Código
-### 1. Definição da Arquitetura
-A arquitetura de microserviços é baseada em serviços independentes que se comunicam entre si. Cada microserviço deve ter sua própria base de dados e ser capaz de ser escalado independentemente.
+### 1. Projetando Microserviços
+Para projetar microserviços, é importante considerar a seguinte estrutura:
+- Identificar os serviços que devem ser separados
+- Definir as APIs e interfaces de comunicação entre os serviços
+- Escolher a tecnologia de contêinerização (Docker) e orquestração (Kubernetes)
 
-### 2. Escolha da Tecnologia
-A escolha da tecnologia para desenvolver microserviços depende das necessidades do projeto. Algumas opções populares incluem:
-- Spring Boot para Java
-- Flask ou Django para Python
-- ASP.NET Core para C#
-
-### 3. Implementação de Microserviços
-Um exemplo simples de implementação de um microserviço em Python usando Flask pode ser visto abaixo:
+### 2. Desenvolvendo Microserviços
+Exemplo de código em Python para criar um microserviço simples usando Flask:
 ```python
 from flask import Flask, jsonify
 
 app = Flask(__name__)
 
-# Simula um banco de dados
-dados = [
-    {"id": 1, "nome": "Produto 1"},
-    {"id": 2, "nome": "Produto 2"}
-]
-
-# Rota para listar produtos
-@app.route("/produtos", methods=["GET"])
-def listar_produtos():
+@app.route('/api/servico', methods=['GET'])
+def get_servico():
     try:
-        return jsonify(dados)
+        return jsonify({'mensagem': 'Serviço funcionando'})
     except Exception as e:
-        return jsonify({"erro": str(e)}), 500
+        return jsonify({'erro': str(e)}), 500
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     app.run(debug=True)
 ```
-Este exemplo ilustra um microserviço simples que expõe uma rota para listar produtos.
 
-### 4. Comunicação entre Microserviços
-A comunicação entre microserviços pode ser feita usando APIs RESTful ou mensageria. Um exemplo de comunicação usando REST pode ser visto abaixo:
-```python
-import requests
+### 3. Implantando Microserviços com Docker e Kubernetes
+Para implantar os microserviços, é necessário criar um arquivo Dockerfile para cada serviço:
+```dockerfile
+FROM python:3.9-slim
 
-# URL do microserviço de produtos
-url_produtos = "http://localhost:5000/produtos"
+WORKDIR /app
 
-# Requisição GET para listar produtos
-try:
-    response = requests.get(url_produtos, timeout=5)
-    response.raise_for_status()
-    produtos = response.json()
-    print(produtos)
-except requests.exceptions.Timeout:
-    print("Tempo de espera excedido")
-except requests.exceptions.HTTPError as e:
-    print(f"Erro HTTP: {e}")
-except requests.exceptions.RequestException as e:
-    print(f"Erro de requisição: {e}")
+COPY requirements.txt .
+
+RUN pip install -r requirements.txt
+
+COPY . .
+
+CMD ["python", "app.py"]
 ```
-Este exemplo mostra como um microserviço pode consumir a API de outro microserviço.
+E então, criar um arquivo de deployment para o Kubernetes:
+```yml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: microservico
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: microservico
+  template:
+    metadata:
+      labels:
+        app: microservico
+    spec:
+      containers:
+      - name: microservico
+        image: microservico:latest
+        ports:
+        - containerPort: 5000
+      securityContext:
+        runAsUser: 1001
+        fsGroup: 1001
+```
 
 ## Validação
-Para validar a implementação dos microserviços, é importante realizar testes unitários e de integração. Além disso, é crucial monitorar o desempenho dos microserviços em produção para identificar e corrigir problemas rapidamente. Ferramentas como Prometheus e Grafana podem ser usadas para monitoramento e visualização de métricas.
+Para validar a implantação dos microserviços, é necessário:
+- Verificar se os serviços estão funcionando corretamente
+- Testar as APIs e interfaces de comunicação entre os serviços
+- Monitorar o desempenho e a segurança dos serviços
+- Realizar testes de carga e estresse para garantir a escalabilidade dos serviços.
 
-## ⚠️ Tratamento de Exceções e Edge Cases
-É fundamental tratar exceções e edge cases para garantir a robustez e a confiabilidade dos microserviços. Alguns exemplos incluem:
-- **Tratamento de erros de banco de dados**: Implementar mecanismos para lidar com erros de conexão, timeouts e erros de consulta.
-- **Tratamento de erros de rede**: Implementar mecanismos para lidar com erros de conexão, timeouts e erros de envio de requisições.
-- **Tratamento de erros de negócio**: Implementar mecanismos para lidar com erros de lógica de negócio, como validação de dados e regras de negócio.
-- **Edge cases**: Considerar cenários de bordo, como:
-  - **Dados inválidos**: Lidar com dados inválidos ou inconsistentes.
-  - **Requisições malformadas**: Lidar com requisições malformadas ou com parâmetros inválidos.
-  - **Sobrecarga de tráfego**: Lidar com picos de tráfego e garantir que o microserviço possa lidar com a carga.
+## Tratamento de Exceções e Edge Cases
+Alguns exemplos de edge cases e tratamento de exceções que devem ser considerados:
+- **Tratamento de erros de rede**: Implementar retry e timeout para lidar com erros de rede.
+- **Tratamento de erros de banco de dados**: Implementar retry e timeout para lidar com erros de banco de dados.
+- **Tratamento de erros de segurança**: Implementar autenticação e autorização para lidar com erros de segurança.
+- **Tratamento de erros de desempenho**: Implementar monitoramento e alertas para lidar com erros de desempenho.
+- **Tratamento de erros de escalabilidade**: Implementar auto-escalabilidade para lidar com erros de escalabilidade.
+
+Exemplo de código em Python para tratar exceções:
+```python
+from flask import Flask, jsonify
+import logging
+
+app = Flask(__name__)
+
+@app.route('/api/servico', methods=['GET'])
+def get_servico():
+    try:
+        return jsonify({'mensagem': 'Serviço funcionando'})
+    except Exception as e:
+        logging.error(str(e))
+        return jsonify({'erro': str(e)}), 500
+
+if __name__ == '__main__':
+    app.run(debug=True)
