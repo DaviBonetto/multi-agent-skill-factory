@@ -136,17 +136,18 @@ uv run scripts/evaluation_manager.py extract-readme \
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
 
-O tratamento de exceções e edge cases é crucial para garantir a robustez e confiabilidade do extrator de tabelas de avaliação. Aqui estão alguns exemplos de como lidar com esses casos:
+O tratamento de exceções e edge cases é crucial para garantir a robustez e confiabilidade do extractor de tabelas de avaliação. Aqui estão alguns exemplos de como lidar com esses casos:
 
-* **Tabelas malformadas**: O extrator deve ser capaz de lidar com tabelas que não seguem a sintaxe markdown padrão. Isso pode incluir tabelas com linhas ou colunas faltantes, ou com células que contenham texto em vez de números.
-* **Valores não numéricos**: O extrator deve ser capaz de lidar com valores não numéricos nas células das tabelas. Isso pode incluir texto, datas ou outros tipos de dados.
-* **Tabelas com múltiplas linhas de cabeçalho**: O extrator deve ser capaz de lidar com tabelas que têm múltiplas linhas de cabeçalho. Isso pode incluir tabelas com linhas de cabeçalho que se estendem por várias linhas.
-* **Tabelas com células vazias**: O extrator deve ser capaz de lidar com tabelas que têm células vazias. Isso pode incluir tabelas com células que não contêm nenhum valor.
-* **Erros de parsing**: O extrator deve ser capaz de lidar com erros de parsing que ocorrem durante a extração das tabelas. Isso pode incluir erros de sintaxe ou erros de formato.
+* **Tabelas malformadas**: O extractor deve ser capaz de lidar com tabelas que não seguem a sintaxe markdown padrão. Isso pode incluir tabelas com linhas ou colunas faltantes, ou com células que contenham texto em vez de números.
+* **Valores não numéricos**: O extractor deve ser capaz de lidar com valores não numéricos nas células das tabelas. Isso pode incluir texto, datas, ou outros tipos de dados que não sejam números.
+* **Tabelas vazias**: O extractor deve ser capaz de lidar com tabelas vazias, ou seja, tabelas que não contenham nenhuma linha ou coluna.
+* **Tabelas com cabeçalhos duplicados**: O extractor deve ser capaz de lidar com tabelas que contenham cabeçalhos duplicados, ou seja, colunas com o mesmo nome.
+* **Tabelas com linhas duplicadas**: O extractor deve ser capaz de lidar com tabelas que contenham linhas duplicadas, ou seja, linhas que contenham os mesmos valores.
 
-Para lidar com esses casos, o extrator pode implementar as seguintes estratégias:
+Para lidar com esses casos, o extractor pode implementar as seguintes estratégias:
 
-* **Validação de tabela**: O extrator pode validar a tabela antes de tentar extrair os dados. Isso pode incluir verificar se a tabela está bem formada e se as células contêm valores numéricos.
-* **Tratamento de exceções**: O extrator pode implementar tratamento de exceções para lidar com erros que ocorrem durante a extração dos dados. Isso pode incluir capturar exceções e registrar erros para que possam ser investigados posteriormente.
-* **Uso de bibliotecas de parsing**: O extrator pode usar bibliotecas de parsing para lidar com tabelas malformadas ou com valores não numéricos. Isso pode incluir usar bibliotecas como pandas ou numpy para lidar com dados numéricos.
-* **Implementação de regras de negócios**: O extrator pode implementar regras de negócios para lidar com casos específicos. Isso pode incluir regras para lidar com tabelas que têm múltiplas linhas de cabeçalho ou com células vazias.
+* **Validação de tabela**: O extractor pode validar a estrutura da tabela antes de tentar extrair os dados. Isso pode incluir verificar se a tabela tem linhas e colunas, se as células contêm números, etc.
+* **Tratamento de exceções**: O extractor pode implementar tratamento de exceções para lidar com erros que ocorrem durante a extração dos dados. Isso pode incluir capturar exceções e registrar erros, ou retornar um valor padrão em caso de erro.
+* **Padronização de dados**: O extractor pode padronizar os dados extraídos para garantir que eles sejam consistentes e fáceis de trabalhar. Isso pode incluir converter todos os valores para um tipo de dado padrão, como float ou int.
+
+Ao lidar com esses casos, o extractor pode garantir que os dados sejam extraídos corretamente e que o processo de extração seja robusto e confiável.
