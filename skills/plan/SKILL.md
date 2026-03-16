@@ -1,202 +1,225 @@
-# Go Fractals CLI - Implementation Plan
+# Svelte Todo List - Implementation Plan
 
 Execute this plan using the `superpowers:subagent-driven-development` skill.
 
 ## Context
 
-Building a CLI tool that generates ASCII fractals. See `design.md` for full specification.
+Building a todo list app with Svelte. See `design.md` for full specification.
 
 ## Tasks
 
 ### Task 1: Project Setup
 
-Create the Go module and directory structure.
+Create the Svelte project with Vite.
 
 **Do:**
-- Initialize `go.mod` with module name `github.com/superpowers-test/fractals`
-- Create directory structure: `cmd/fractals/`, `internal/sierpinski/`, `internal/mandelbrot/`, `internal/cli/`
-- Create minimal `cmd/fractals/main.go` that prints "fractals cli"
-- Add `github.com/spf13/cobra` dependency
+- Run `npm create vite@latest . -- --template svelte-ts`
+- Install dependencies with `npm install`
+- Verify dev server works
+- Clean up default Vite template content from App.svelte
 
 **Verify:**
-- `go build ./cmd/fractals` succeeds
-- `./fractals` prints "fractals cli"
+- `npm run dev` starts server
+- App shows minimal "Svelte Todos" heading
+- `npm run build` succeeds
 
----
+### Task 2: Todo Store
 
-### Task 2: CLI Framework with Help
-
-Set up Cobra root command with help output.
+Create the Svelte store for todo state management.
 
 **Do:**
-- Create `internal/cli/root.go` with root command
-- Configure help text showing available subcommands
-- Wire root command into `main.go`
+- Create `src/lib/store.ts`
+- Define `Todo` interface with id, text, completed
+- Create writable store with initial empty array
+- Export functions: `addTodo(text)`, `toggleTodo(id)`, `deleteTodo(id)`, `clearCompleted()`
+- Create `src/lib/store.test.ts` with tests for each function
+- Handle potential errors when adding, toggling, or deleting todos
 
 **Verify:**
-- `./fractals --help` shows usage with "sierpinski" and "mandelbrot" listed as available commands
-- `./fractals` (no args) shows help
+- Tests pass: `npm run test` (install vitest if needed)
 
----
+### Task 3: localStorage Persistence
 
-### Task 3: Sierpinski Algorithm
-
-Implement the Sierpinski triangle generation algorithm.
+Add persistence layer for todos.
 
 **Do:**
-- Create `internal/sierpinski/sierpinski.go`
-- Implement `Generate(size, depth int, char rune) []string` that returns lines of the triangle
-- Use recursive midpoint subdivision algorithm
-- Create `internal/sierpinski/sierpinski_test.go` with tests:
-  - Small triangle (size=4, depth=2) matches expected output
-  - Size=1 returns single character
-  - Depth=0 returns filled triangle
+- Create `src/lib/storage.ts`
+- Implement `loadTodos(): Todo[]` and `saveTodos(todos: Todo[])`
+- Handle JSON parse errors gracefully (return empty array)
+- Integrate with store: load on init, save on change
+- Add tests for load/save/error handling
+- Consider security implications of storing data in localStorage
 
 **Verify:**
-- `go test ./internal/sierpinski/...` passes
-
----
-
-### Task 4: Sierpinski CLI Integration
-
-Wire the Sierpinski algorithm to a CLI subcommand.
-
-**Do:**
-- Create `internal/cli/sierpinski.go` with `sierpinski` subcommand
-- Add flags: `--size` (default 32), `--depth` (default 5), `--char` (default '*')
-- Call `sierpinski.Generate()` and print result to stdout
-
-**Verify:**
-- `./fractals sierpinski` outputs a triangle
-- `./fractals sierpinski --size 16 --depth 3` outputs smaller triangle
-- `./fractals sierpinski --help` shows flag documentation
-
----
-
-### Task 5: Mandelbrot Algorithm
-
-Implement the Mandelbrot set ASCII renderer.
-
-**Do:**
-- Create `internal/mandelbrot/mandelbrot.go`
-- Implement `Render(width, height, maxIter int, char string) []string`
-- Map complex plane region (-2.5 to 1.0 real, -1.0 to 1.0 imaginary) to output dimensions
-- Map iteration count to character gradient ".:-=+*#%@" (or single char if provided)
-- Create `internal/mandelbrot/mandelbrot_test.go` with tests:
-  - Output dimensions match requested width/height
-  - Known point inside set (0,0) maps to max-iteration character
-  - Known point outside set (2,0) maps to low-iteration character
-
-**Verify:**
-- `go test ./internal/mandelbrot/...` passes
-
----
-
-### Task 6: Mandelbrot CLI Integration
-
-Wire the Mandelbrot algorithm to a CLI subcommand.
-
-**Do:**
-- Create `internal/cli/mandelbrot.go` with `mandelbrot` subcommand
-- Add flags: `--width` (default 80), `--height` (default 24), `--iterations` (default 100), `--char` (default "")
-- Call `mandelbrot.Render()` and print result to stdout
-
-**Verify:**
-- `./fractals mandelbrot` outputs recognizable Mandelbrot set
-- `./fractals mandelbrot --width 40 --height 12` outputs smaller version
-- `./fractals mandelbrot --help` shows flag documentation
-
----
-
-### Task 7: Character Set Configuration
-
-Ensure `--char` flag works consistently across both commands.
-
-**Do:**
-- Verify Sierpinski `--char` flag passes character to algorithm
-- For Mandelbrot, `--char` should use single character instead of gradient
-- Add tests for custom character output
-
-**Verify:**
-- `./fractals sierpinski --char '#'` uses '#' character
-- `./fractals mandelbrot --char '.'` uses '.' for all filled points
 - Tests pass
+- Manual test: add todo, refresh page, todo persists
 
----
+### Task 4: TodoInput Component
 
-### Task 8: Input Validation and Error Handling
-
-Add validation for invalid inputs.
-
-**Do:**
-- Sierpinski: size must be > 0, depth must be >= 0
-- Mandelbrot: width/height must be > 0, iterations must be > 0
-- Return clear error messages for invalid inputs
-- Add tests for error cases
-
-**Verify:**
-- `./fractals sierpinski --size 0` prints error, exits non-zero
-- `./fractals mandelbrot --width -1` prints error, exits non-zero
-- Error messages are clear and helpful
-
----
-
-### Task 9: Integration Tests
-
-Add integration tests that invoke the CLI.
+Create the input component for adding todos.
 
 **Do:**
-- Create `cmd/fractals/main_test.go` or `test/integration_test.go`
-- Test full CLI invocation for both commands
-- Verify output format and exit codes
-- Test error cases return non-zero exit
+- Create `src/lib/TodoInput.svelte`
+- Text input bound to local state
+- Add button calls `addTodo()` and clears input
+- Enter key also submits
+- Disable Add button when input is empty
+- Add component tests
+- Handle edge case where user enters an empty string
 
 **Verify:**
-- `go test ./...` passes all tests including integration tests
+- Tests pass
+- Component renders input and button
 
----
+### Task 5: TodoItem Component
 
-### Task 10: README
+Create the single todo item component.
 
-Document usage and examples.
+**Do:**
+- Create `src/lib/TodoItem.svelte`
+- Props: `todo: Todo`
+- Checkbox toggles completion (calls `toggleTodo`)
+- Text with strikethrough when completed
+- Delete button (X) calls `deleteTodo`
+- Add component tests
+- Handle edge case where todo item is null or undefined
+
+**Verify:**
+- Tests pass
+- Component renders checkbox, text, delete button
+
+### Task 6: TodoList Component
+
+Create the list container component.
+
+**Do:**
+- Create `src/lib/TodoList.svelte`
+- Props: `todos: Todo[]`
+- Renders TodoItem for each todo
+- Shows "No todos yet" when empty
+- Add component tests
+- Handle edge case where todos array is null or undefined
+
+**Verify:**
+- Tests pass
+- Component renders list of TodoItems
+
+### Task 7: FilterBar Component
+
+Create the filter and status bar component.
+
+**Do:**
+- Create `src/lib/FilterBar.svelte`
+- Props: `todos: Todo[]`, `filter: Filter`, `onFilterChange: (f: Filter) => void`
+- Show count: "X items left" (incomplete count)
+- Three filter buttons: All, Active, Completed
+- Active filter is visually highlighted
+- "Clear completed" button (hidden when no completed todos)
+- Add component tests
+- Handle edge case where filter is null or undefined
+
+**Verify:**
+- Tests pass
+- Component renders count, filters, clear button
+
+### Task 8: App Integration
+
+Wire all components together in App.svelte.
+
+**Do:**
+- Import all components and store
+- Add filter state (default: 'all')
+- Compute filtered todos based on filter state
+- Render: heading, TodoInput, TodoList, FilterBar
+- Pass appropriate props to each component
+- Handle potential errors when rendering components
+
+**Verify:**
+- App renders all components
+- Adding todos works
+- Toggling works
+- Deleting works
+
+### Task 9: Filter Functionality
+
+Ensure filtering works end-to-end.
+
+**Do:**
+- Verify filter buttons change displayed todos
+- 'all' shows all todos
+- 'active' shows only incomplete todos
+- 'completed' shows only completed todos
+- Clear completed removes completed todos and resets filter if needed
+- Add integration tests
+- Handle edge case where filter is null or undefined
+
+**Verify:**
+- Filter tests pass
+- Manual verification of all filter states
+
+### Task 10: Styling and Polish
+
+Add CSS styling for usability.
+
+**Do:**
+- Style the app to match the design mockup
+- Completed todos have strikethrough and muted color
+- Active filter button is highlighted
+- Input has focus styles
+- Delete button appears on hover (or always on mobile)
+- Responsive layout
+- Consider accessibility implications of styling
+
+**Verify:**
+- App is visually usable
+- Styles don't break functionality
+
+### Task 11: End-to-End Tests
+
+Add Playwright tests for full user flows.
+
+**Do:**
+- Install Playwright: `npm init playwright@latest`
+- Create `tests/todo.spec.ts`
+- Test flows:
+  - Add a todo
+  - Complete a todo
+  - Delete a todo
+  - Filter todos
+  - Clear completed
+  - Persistence (add, reload, verify)
+- Handle potential errors during end-to-end testing
+
+**Verify:**
+- `npx playwright test` passes
+
+### Task 12: README
+
+Document the project.
 
 **Do:**
 - Create `README.md` with:
   - Project description
-  - Installation: `go install ./cmd/fractals`
-  - Usage examples for both commands
-  - Example output (small samples)
+  - Setup: `npm install`
+  - Development: `npm run dev`
+  - Testing: `npm test` and `npx playwright test`
+  - Build: `npm run build`
+- Consider security implications of documentation
 
 **Verify:**
-- README accurately describes the tool
-- Examples in README actually work
+- README accurately describes the project
+- Instructions work
 
----
+## ⚠️ Tratamento de Exceções e Edge Cases
 
-### ⚠️ Tratamento de Exceções e Edge Cases
+Ao longo do desenvolvimento do aplicativo, é importante considerar os seguintes casos de exceção e edge cases:
 
-Adicionar tratamento de exceções e edge cases para garantir a robustez do programa.
+*   **Erro ao adicionar todo:** Se ocorrer um erro ao adicionar um todo, o aplicativo deve exibir uma mensagem de erro ao usuário e não permitir que o todo seja adicionado.
+*   **Erro ao toggle de todo:** Se ocorrer um erro ao toggle de um todo, o aplicativo deve exibir uma mensagem de erro ao usuário e não permitir que o todo seja toggleado.
+*   **Erro ao deletar todo:** Se ocorrer um erro ao deletar um todo, o aplicativo deve exibir uma mensagem de erro ao usuário e não permitir que o todo seja deletado.
+*   **Todo item nulo ou indefinido:** Se um todo item for nulo ou indefinido, o aplicativo deve exibir uma mensagem de erro ao usuário e não permitir que o todo seja renderizado.
+*   **Filtro nulo ou indefinido:** Se o filtro for nulo ou indefinido, o aplicativo deve exibir uma mensagem de erro ao usuário e não permitir que o filtro seja aplicado.
+*   **Erro ao carregar todos:** Se ocorrer um erro ao carregar os todos, o aplicativo deve exibir uma mensagem de erro ao usuário e não permitir que os todos sejam renderizados.
+*   **Erro ao salvar todos:** Se ocorrer um erro ao salvar os todos, o aplicativo deve exibir uma mensagem de erro ao usuário e não permitir que os todos sejam salvos.
 
-**Do:**
-- Adicionar verificações para evitar divisão por zero
-- Tratar erros de leitura e escrita de arquivos
-- Verificar se as flags são válidas e consistentes
-- Adicionar testes para casos de erro e edge cases
-
-**Verify:**
-- O programa não trava ou crasha em casos de erro
-- As mensagens de erro são claras e úteis
-- Os testes para casos de erro e edge cases passam
-
-Exemplos de edge cases a considerar:
-- Tamanho de entrada muito grande
-- Profundidade de recursão muito grande
-- Caracteres inválidos ou não suportados
-- Entradas inválidas ou inconsistentes
-
-Exemplos de tratamento de exceções:
-- Usar `err` para verificar erros de leitura e escrita de arquivos
-- Usar `panic` para tratar erros fatais e inconsistentes
-- Usar `log` para registrar erros e warnings
-
-Lembre-se de que o tratamento de exceções e edge cases é fundamental para garantir a robustez e confiabilidade do programa.
+Para lidar com esses casos de exceção e edge cases, é importante implementar tratamento de erros e exceções em cada uma das funções e componentes do aplicativo. Além disso, é importante realizar testes rigorosos para garantir que o aplicativo esteja funcionando corretamente em diferentes cenários.
