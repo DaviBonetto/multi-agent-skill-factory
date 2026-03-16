@@ -41,6 +41,36 @@ Task tool (general-purpose):
     **While you work:** If you encounter something unexpected or unclear, **ask questions**.
     It's always OK to pause and clarify. Don't guess or make assumptions.
 
+    ## Code Organization
+
+    You reason best about code you can hold in context at once, and your edits are more
+    reliable when files are focused. Keep this in mind:
+    - Follow the file structure defined in the plan
+    - Each file should have one clear responsibility with a well-defined interface
+    - If a file you're creating is growing beyond the plan's intent, stop and report
+      it as DONE_WITH_CONCERNS — don't split files on your own without plan guidance
+    - If an existing file you're modifying is already large or tangled, work carefully
+      and note it as a concern in your report
+    - In existing codebases, follow established patterns. Improve code you're touching
+      the way a good developer would, but don't restructure things outside your task.
+
+    ## When You're in Over Your Head
+
+    It is always OK to stop and say "this is too hard for me." Bad work is worse than
+    no work. You will not be penalized for escalating.
+
+    **STOP and escalate when:**
+    - The task requires architectural decisions with multiple valid approaches
+    - You need to understand code beyond what was provided and can't find clarity
+    - You feel uncertain about whether your approach is correct
+    - The task involves restructuring existing code in ways the plan didn't anticipate
+    - You've been reading file after file trying to understand the system without progress
+
+    **How to escalate:** Report back with status BLOCKED or NEEDS_CONTEXT. Describe
+    specifically what you're stuck on, what you've tried, and what kind of help you need.
+    The controller can provide more context, re-dispatch with a more capable model,
+    or break the task into smaller pieces.
+
     ## Before Reporting Back: Self-Review
 
     Review your work with fresh eyes. Ask yourself:
@@ -70,19 +100,25 @@ Task tool (general-purpose):
     ## Report Format
 
     When done, report:
-    - What you implemented
+    - **Status:** DONE | DONE_WITH_CONCERNS | BLOCKED | NEEDS_CONTEXT
+    - What you implemented (or what you attempted, if blocked)
     - What you tested and test results
     - Files changed
     - Self-review findings (if any)
     - Any issues or concerns
 
+    Use DONE_WITH_CONCERNS if you completed the work but have doubts about correctness.
+    Use BLOCKED if you cannot complete the task. Use NEEDS_CONTEXT if you need
+    information that wasn't provided. Never silently produce work you're unsure about.
+
     ⚠️ Tratamento de Exceções e Edge Cases
 
-    Ao implementar a tarefa, considere os seguintes casos de bordo e exceções:
+    Ao implementar a tarefa, considere os seguintes casos de exceção e edge cases:
     - **Entradas inválidas:** Como a sua implementação lida com entradas inválidas ou inconsistentes?
-    - **Condições de erro:** Quais condições de erro podem ocorrer durante a execução da tarefa e como elas são tratadas?
-    - **Casos de bordo:** Quais são os casos de bordo que podem afetar a implementação, como valores limite, condições de igualdade, etc.?
-    - **Segurança:** Quais são as implicações de segurança da sua implementação e como elas são abordadas?
-    - **Desempenho:** Quais são as implicações de desempenho da sua implementação e como elas são otimizadas?
+    - **Condições de bordo:** Quais são as condições de bordo que a sua implementação precisa lidar, como valores limite ou extremos?
+    - **Exceções:** Como a sua implementação lida com exceções, como erros de sintaxe ou runtime?
+    - **Segurança:** Quais são as considerações de segurança relevantes para a sua implementação, como proteção de dados ou autenticação?
+    - **Desempenho:** Como a sua implementação afeta o desempenho do sistema, especialmente em casos de alta carga ou estresse?
+    - **Manutenção:** Como a sua implementação pode ser mantida e atualizada ao longo do tempo, especialmente em termos de legibilidade e manutenção do código?
 
-    Certifique-se de que a sua implementação seja robusta e possa lidar com esses casos de bordo e exceções de forma apropriada.
+    Certifique-se de que a sua implementação esteja preparada para lidar com esses casos e que você tenha considerado as implicações de segurança e desempenho.
