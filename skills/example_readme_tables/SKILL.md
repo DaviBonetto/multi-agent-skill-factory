@@ -136,18 +136,18 @@ uv run scripts/evaluation_manager.py extract-readme \
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
 
-O tratamento de exceções e edge cases é crucial para garantir a robustez e confiabilidade do extractor de tabelas de avaliação. Aqui estão alguns exemplos de como lidar com esses casos:
+O tratamento de exceções e edge cases é crucial para garantir a robustez e confiabilidade do script de extração de tabelas de avaliação. Aqui estão alguns exemplos de como lidar com esses casos:
 
-* **Tabelas malformadas**: O extractor deve ser capaz de lidar com tabelas que não seguem a sintaxe markdown padrão. Isso pode incluir tabelas com linhas ou colunas faltantes, ou com células que contenham texto em vez de números.
-* **Valores não numéricos**: O extractor deve ser capaz de lidar com valores não numéricos nas células das tabelas. Isso pode incluir texto, datas, ou outros tipos de dados que não sejam números.
-* **Tabelas vazias**: O extractor deve ser capaz de lidar com tabelas vazias, ou seja, tabelas que não contenham nenhuma linha ou coluna.
-* **Tabelas com cabeçalhos duplicados**: O extractor deve ser capaz de lidar com tabelas que contenham cabeçalhos duplicados, ou seja, colunas com o mesmo nome.
-* **Tabelas com linhas duplicadas**: O extractor deve ser capaz de lidar com tabelas que contenham linhas duplicadas, ou seja, linhas que contenham os mesmos valores.
+* **Tabelas malformadas**: O script deve ser capaz de lidar com tabelas que não seguem a sintaxe markdown padrão. Isso pode incluir tabelas com colunas ou linhas faltantes, ou com células que contenham texto em vez de números.
+* **Valores não numéricos**: O script deve ser capaz de lidar com valores que não são numéricos, como texto ou datas. Isso pode incluir a conversão de valores para um formato numérico, se possível, ou a exclusão deles da tabela de avaliação.
+* **Tabelas vazias**: O script deve ser capaz de lidar com tabelas vazias, ou seja, tabelas que não contenham nenhuma linha ou coluna. Isso pode incluir a criação de uma tabela vazia como resultado, ou a exclusão da tabela da saída.
+* **Erros de parsing**: O script deve ser capaz de lidar com erros de parsing, como erros de sintaxe markdown ou erros de conversão de valores. Isso pode incluir a criação de um log de erros para registrar os problemas encontrados durante a execução do script.
+* **Tabelas com múltiplas páginas**: O script deve ser capaz de lidar com tabelas que se estendem por múltiplas páginas. Isso pode incluir a concatenação das páginas para criar uma tabela única, ou a criação de uma tabela separada para cada página.
 
-Para lidar com esses casos, o extractor pode implementar as seguintes estratégias:
+Para lidar com esses casos, o script pode incluir mecanismos de tratamento de exceções, como:
 
-* **Validação de tabela**: O extractor pode validar a estrutura da tabela antes de tentar extrair os dados. Isso pode incluir verificar se a tabela tem linhas e colunas, se as células contêm números, etc.
-* **Tratamento de exceções**: O extractor pode implementar tratamento de exceções para lidar com erros que ocorrem durante a extração dos dados. Isso pode incluir capturar exceções e registrar erros, ou retornar um valor padrão em caso de erro.
-* **Padronização de dados**: O extractor pode padronizar os dados extraídos para garantir que eles sejam consistentes e fáceis de trabalhar. Isso pode incluir converter todos os valores para um tipo de dado padrão, como float ou int.
+* **Try-except**: O script pode usar blocos try-except para capturar erros e exceções durante a execução, e lidar com eles de forma apropriada.
+* **Validação de dados**: O script pode incluir validação de dados para garantir que os valores extraídos sejam numéricos e válidos.
+* **Logging**: O script pode incluir logging para registrar erros e problemas encontrados durante a execução, para que possam ser investigados e corrigidos posteriormente.
 
-Ao lidar com esses casos, o extractor pode garantir que os dados sejam extraídos corretamente e que o processo de extração seja robusto e confiável.
+Ao incluir esses mecanismos, o script pode ser mais robusto e confiável, e pode lidar com uma variedade de casos de uso e edge cases.
