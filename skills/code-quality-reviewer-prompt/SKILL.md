@@ -25,30 +25,18 @@ Task tool (superpowers:code-reviewer):
 
 **Code reviewer returns:** Strengths, Issues (Critical/Important/Minor), Assessment
 
- Tratamento de Exceções e Edge Cases
-- Verificar se o código lida corretamente com exceções e erros, incluindo:
-  - Tratamento de erros de entrada e saída
-  - Manipulação de exceções de forma apropriada
-  - Uso de mecanismos de retry e timeout quando necessário
-- Verificar se o código é robusto o suficiente para lidar com:
-  - Entradas inválidas ou malformadas
-  - Condições de bordo, como valores nulos ou vazios
-  - Casos de uso não comuns ou inesperados
-- Verificar se o código segue as melhores práticas de segurança, incluindo:
-  - Validação de entrada de usuário
-  - Proteção contra injeção de código
-  - Uso de criptografia quando necessário
-- Verificar se o código é escalável e performático, incluindo:
-  - Uso eficiente de recursos
-  - Minimização de operações de E/S
-  - Uso de técnicas de caching e memoização quando necessário
+⚠️ Tratamento de Exceções e Edge Cases
+### Tratamento de Exceções
+- Verificar se o código lida corretamente com exceções, como erros de sintaxe, erros de tipo, erros de runtime, etc.
+- Verificar se o código tem mecanismos de tratamento de exceções adequados, como try-catch blocks, para evitar que o programa crash ou entre em um estado inconsistente.
+- Verificar se o código registra corretamente as exceções, para que possam ser analisadas e resolvidas posteriormente.
 
-**Exemplos de Casos de Uso**
-- Implementação de um novo recurso que requer a integração com um serviço externo
-- Refatoração de um código legado para melhorar a manutenibilidade e a performance
-- Desenvolvimento de um novo módulo que requer a interação com outros módulos existentes
+### Edge Cases
+- Verificar se o código lida corretamente com casos de bordo, como entradas inválidas, condições de limite, etc.
+- Verificar se o código tem testes adequados para cobrir esses casos de bordo.
+- Verificar se o código é robusto o suficiente para lidar com diferentes tipos de entrada e saída, incluindo dados inválidos ou inconsistentes.
 
-**Melhores Práticas**
-- Seguir as diretrizes de codificação estabelecidas pela equipe
-- Manter a documentação atualizada e clara
-- Realizar testes unitários e de integração para garantir a qualidade do código
+### Segurança
+- Verificar se o código segue as melhores práticas de segurança, como validação de entrada, sanitização de saída, etc.
+- Verificar se o código usa bibliotecas e frameworks seguros e atualizados.
+- Verificar se o código tem mecanismos de autenticação e autorização adequados, para evitar acessos não autorizados.
