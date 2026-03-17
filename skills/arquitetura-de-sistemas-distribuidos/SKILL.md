@@ -1,108 +1,116 @@
 ---
 name: Arquitetura de Sistemas Distribuídos
-description: Aborda conceitos e práticas para projetar e implementar sistemas distribuídos
+description: Ensina como projetar e implementar sistemas distribuídos escaláveis e tolerantes a falhas, usando tecnologias como Apache Kafka e ZooKeeper
 ---
 
 ## Objetivo
-O objetivo deste guia é fornecer uma visão geral abrangente sobre arquitetura de sistemas distribuídos, abordando conceitos fundamentais e práticas para projetar e implementar sistemas distribuídos escaláveis e eficientes. Isso inclui a comunicação entre processos, concorrência e escalabilidade, visando o desenvolvimento de sistemas robustos e confiáveis.
+O objetivo deste guia é fornecer uma visão geral de como projetar e implementar sistemas distribuídos escaláveis e tolerantes a falhas, utilizando tecnologias como Apache Kafka e ZooKeeper. Com isso, os desenvolvedores poderão criar sistemas que atendam às necessidades de alta disponibilidade e escalabilidade.
 
 ## Pré-requisitos
-Para aproveitar ao máximo este guia, é recomendado que os leitores tenham conhecimento básico em:
-- Programação orientada a objetos
-- Redes de computadores
-- Sistemas operacionais
-- Conceitos de concorrência e paralelismo
-
-Além disso, experiência em desenvolvimento de software e conhecimento em linguagens de programação como Java, Python ou C++ são considerados pré-requisitos para uma compreensão mais profunda dos tópicos abordados.
+Para seguir este guia, é necessário ter conhecimento básico em:
+* Programação em linguagens como Java, Python ou C++
+* Conceitos de sistemas distribuídos e escalabilidade
+* Ferramentas de gerenciamento de clusters, como Apache ZooKeeper
+* Sistemas de mensageria, como Apache Kafka
 
 ## Passo a Passo Técnico / Exemplos de Código
-### Comunicação entre Processos
-A comunicação entre processos é fundamental em sistemas distribuídos. Isso pode ser alcançado através de sockets, RPC (Remote Procedure Call), ou mensagens assíncronas. Aqui está um exemplo simples de como estabelecer uma conexão usando sockets em Python:
-```python
-import socket
+### Instalação do Apache Kafka e ZooKeeper
+Para começar, é necessário instalar o Apache Kafka e o ZooKeeper. Isso pode ser feito utilizando os seguintes comandos:
+```bash
+# Instalar o Apache Kafka
+wget https://dl.bintray.com/apache/kafka/3.1.0/kafka_2.13-3.1.0.tgz
+tar -xvf kafka_2.13-3.1.0.tgz
+cd kafka_2.13-3.1.0
 
-# Criar um socket
-sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-# Conectar ao servidor
-server_address = ('localhost', 10000)
-try:
-    sock.connect(server_address)
-except ConnectionRefusedError:
-    print("Conexão recusada. Verifique se o servidor está em execução.")
-except socket.gaierror:
-    print("Erro de resolução de nome de host.")
-
-# Enviar mensagem
-message = "Olá, servidor!"
-try:
-    sock.sendall(message.encode())
-except BrokenPipeError:
-    print("Conexão fechada inesperadamente.")
-
-# Fechar a conexão
-try:
-    sock.close()
-except OSError:
-    print("Erro ao fechar a conexão.")
+# Instalar o Apache ZooKeeper
+wget https://dl.bintray.com/apache/zookeeper/zookeeper-3.7.1/apache-zookeeper-3.7.1-bin.tar.gz
+tar -xvf apache-zookeeper-3.7.1-bin.tar.gz
+cd apache-zookeeper-3.7.1-bin
 ```
+### Configuração do Apache Kafka e ZooKeeper
+Após a instalação, é necessário configurar o Apache Kafka e o ZooKeeper. Isso pode ser feito editando os arquivos de configuração:
+```bash
+# Configurar o Apache Kafka
+nano config/server.properties
 
-### Concorrência
-A concorrência é crucial para sistemas distribuídos, permitindo que múltiplas tarefas sejam executadas simultaneamente. Em Python, podemos usar a biblioteca `threading` para criar threads:
-```python
-import threading
-import time
-
-def print_numbers():
-    for i in range(10):
-        time.sleep(1)
-        print(i)
-
-def print_letters():
-    for letter in 'abcdefghij':
-        time.sleep(1)
-        print(letter)
-
-# Criar threads
-thread1 = threading.Thread(target=print_numbers)
-thread2 = threading.Thread(target=print_letters)
-
-# Iniciar threads
-thread1.start()
-thread2.start()
-
-# Aguardar a conclusão das threads
-try:
-    thread1.join()
-    thread2.join()
-except RuntimeError:
-    print("Erro ao aguardar a conclusão das threads.")
+# Configurar o Apache ZooKeeper
+nano conf/zoo.cfg
 ```
+### Implementação de um Sistema Distribuído
+Com o Apache Kafka e o ZooKeeper configurados, é possível implementar um sistema distribuído. Isso pode ser feito utilizando a seguinte estrutura de código:
+```java
+// Importar as bibliotecas necessárias
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.clients.producer.ProducerRecord;
 
+// Criar um produtor Kafka
+Properties props = new Properties();
+props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+KafkaProducer<String, String> producer = new KafkaProducer<>(props);
+
+// Enviar uma mensagem para o tópico
+ProducerRecord<String, String> record = new ProducerRecord<>("meu_topico", "Minha mensagem");
+producer.send(record);
+```
 ## Validação
-Para validar a implementação de um sistema distribuído, é importante realizar testes abrangentes que cubram diferentes cenários, incluindo:
-- Testes de unidade para garantir que cada componente funcione corretamente.
-- Testes de integração para verificar a interação entre os componentes.
-- Testes de desempenho para avaliar a escalabilidade e a eficiência do sistema.
-- Testes de segurança para identificar e mitigar vulnerabilidades.
-
-Além disso, o uso de ferramentas de monitoramento e logging pode ajudar a identificar problemas e melhorar a confiabilidade do sistema.
-
-## ⚠️ Tratamento de Exceções e Edge Cases
-No desenvolvimento de sistemas distribuídos, é crucial considerar exceções e edge cases para garantir a robustez e confiabilidade do sistema. Aqui estão alguns exemplos:
-- **Conexão perdida**: Implementar mecanismos de reconexão e timeout para lidar com a perda de conexão.
-- **Sobrecarga de servidor**: Implementar mecanismos de escalabilidade e balanceamento de carga para lidar com picos de demanda.
-- **Erros de sincronização**: Implementar mecanismos de sincronização e bloqueio para evitar erros de concorrência.
-- **Ataques de segurança**: Implementar mecanismos de autenticação, autorização e criptografia para proteger o sistema contra ataques.
-- **Falhas de hardware**: Implementar mecanismos de redundância e failover para lidar com falhas de hardware.
-
-Exemplo de tratamento de exceção em Python:
-```python
-try:
-    # Código que pode gerar uma exceção
-    sock.connect(server_address)
-except Exception as e:
-    # Tratamento da exceção
-    print(f"Erro: {e}")
-    # Ações de recuperação ou notificação
+Para validar a implementação do sistema distribuído, é possível utilizar ferramentas como o `kafka-console-consumer` para verificar se as mensagens estão sendo enviadas e recebidas corretamente:
+```bash
+# Verificar as mensagens no tópico
+kafka-console-consumer --bootstrap-server localhost:9092 --topic meu_topico
 ```
+## ⚠️ Tratamento de Exceções e Edge Cases
+É importante considerar os seguintes casos de exceção e edge cases ao implementar um sistema distribuído:
+* **Falha de conexão**: em caso de falha de conexão com o Kafka ou ZooKeeper, o sistema deve ser capaz de se recuperar e tentar reconectar.
+* **Mensagens duplicadas**: em caso de falha de envio de mensagens, o sistema deve ser capaz de lidar com mensagens duplicadas e evitar que elas sejam processadas mais de uma vez.
+* **Desconexão de brokers**: em caso de desconexão de brokers do Kafka, o sistema deve ser capaz de se adaptar e continuar funcionando com os brokers restantes.
+* **Sobrecarga de tráfego**: em caso de sobrecarga de tráfego, o sistema deve ser capaz de lidar com o aumento de mensagens e evitar que o sistema fique sobrecarregado.
+* **Segurança**: o sistema deve ser capaz de garantir a segurança das mensagens e dos dados, utilizando mecanismos de autenticação e autorização.
+
+Exemplos de código para lidar com esses casos de exceção e edge cases:
+```java
+// Lidar com falha de conexão
+try {
+    producer.send(record);
+} catch (Exception e) {
+    // Tentar reconectar e enviar a mensagem novamente
+    producer = new KafkaProducer<>(props);
+    producer.send(record);
+}
+
+// Lidar com mensagens duplicadas
+// Utilizar um mecanismo de controle de versão para evitar mensagens duplicadas
+if (record.getVersion() > 1) {
+    // Ignorar a mensagem duplicada
+    return;
+}
+
+// Lidar com desconexão de brokers
+// Utilizar um mecanismo de detecção de falhas para detectar a desconexão de brokers
+if (brokers.get(0).isConnected()) {
+    // Enviar a mensagem para o broker conectado
+    producer.send(record);
+} else {
+    // Tentar reconectar e enviar a mensagem novamente
+    producer = new KafkaProducer<>(props);
+    producer.send(record);
+}
+
+// Lidar com sobrecarga de tráfego
+// Utilizar um mecanismo de controle de fluxo para evitar sobrecarga de tráfego
+if (traffic.get() > 1000) {
+    // Reduzir a taxa de envio de mensagens
+    Thread.sleep(100);
+}
+
+// Lidar com segurança
+// Utilizar mecanismos de autenticação e autorização para garantir a segurança das mensagens
+if (auth.isAuthenticated()) {
+    // Enviar a mensagem
+    producer.send(record);
+} else {
+    // Negar acesso
+    return;
+}
+```
+Com isso, é possível criar um sistema distribuído escalável e tolerante a falhas, utilizando tecnologias como Apache Kafka e ZooKeeper, e lidar com casos de exceção e edge cases de forma eficaz.
