@@ -1,113 +1,102 @@
 ---
-name: Desenvolvimento de Microserviços
-description: Ensina como projetar, desenvolver e implantar sistemas baseados em microserviços
+name: Desenvolvimento de Microsserviços
+description: Ensina como projetar e implementar microsserviços escaláveis e seguros usando tecnologias como Docker e Kubernetes
 ---
+### Objetivo
+O objetivo deste guia é fornecer uma abordagem prática e técnica para o desenvolvimento de microsserviços escaláveis e seguros. Ao final, você estará capacitado a projetar e implementar microsserviços utilizando tecnologias como Docker e Kubernetes, essenciais para ambientes de desenvolvimento modernos e eficientes.
 
-## Objetivo
-O objetivo deste guia é fornecer uma visão geral detalhada sobre como projetar, desenvolver e implantar sistemas baseados em microserviços, utilizando tecnologias como Docker, Kubernetes e API Gateway. Este guia é destinado a desenvolvedores senior que buscam aprimorar suas habilidades em desenvolvimento de microserviços.
+### Pré-requisitos
+Para acompanhar este guia, é recomendado que você tenha conhecimentos básicos em:
+- Programação (preferencialmente em linguagens como Java, Python ou Node.js)
+- Conceitos de rede e sistemas operacionais
+- Familiaridade com o uso de terminais ou prompts de comando
+- Noções básicas de Docker e Kubernetes (não é necessário conhecimento aprofundado, mas uma base sólida será útil)
 
-## Pré-requisitos
-Antes de começar, é necessário ter conhecimento em:
-- Programação em linguagens como Java, Python ou Node.js
-- Conceitos básicos de rede e segurança
-- Experiência com contêineres e orquestração de contêineres
-- Conhecimento básico de Docker e Kubernetes
+### Passo a Passo Técnico / Exemplos de Código
+#### 1. Configurando o Ambiente
+Primeiro, você precisará instalar o Docker e o Kubernetes no seu sistema. Para isso, siga os passos abaixo:
+- **Instalação do Docker**: Acesse o site oficial do Docker e siga as instruções de instalação para o seu sistema operacional.
+- **Instalação do Kubernetes**: Após a instalação do Docker, você pode instalar o Kubernetes. Existem várias maneiras de fazer isso, incluindo o uso de ferramentas como Minikube para ambientes de desenvolvimento local.
 
-## Passo a Passo Técnico / Exemplos de Código
-### 1. Projetando Microserviços
-Para projetar microserviços, é importante considerar a seguinte estrutura:
-- Identificar os serviços que devem ser separados
-- Definir as APIs e interfaces de comunicação entre os serviços
-- Escolher a tecnologia de contêinerização (Docker) e orquestração (Kubernetes)
-
-### 2. Desenvolvendo Microserviços
-Exemplo de código em Python para criar um microserviço simples usando Flask:
+#### 2. Criando um Microsserviço
+Vamos criar um exemplo simples de microsserviço usando Python e Flask. Crie um arquivo chamado `app.py` com o seguinte conteúdo:
 ```python
 from flask import Flask, jsonify
 
 app = Flask(__name__)
 
-@app.route('/api/servico', methods=['GET'])
-def get_servico():
+@app.route('/hello', methods=['GET'])
+def hello():
     try:
-        return jsonify({'mensagem': 'Serviço funcionando'})
+        return jsonify({'message': 'Hello, World!'})
     except Exception as e:
-        return jsonify({'erro': str(e)}), 500
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)
 ```
+Este é um microsserviço básico que responde a requisições GET na rota `/hello`.
 
-### 3. Implantando Microserviços com Docker e Kubernetes
-Para implantar os microserviços, é necessário criar um arquivo Dockerfile para cada serviço:
+#### 3. Containerizando o Microsserviço
+Agora, vamos containerizar este microsserviço usando o Docker. Crie um arquivo `Dockerfile` na mesma pasta do seu `app.py` com o seguinte conteúdo:
 ```dockerfile
 FROM python:3.9-slim
 
 WORKDIR /app
 
-COPY requirements.txt .
+COPY app.py .
 
-RUN pip install -r requirements.txt
+RUN pip install flask
 
-COPY . .
+EXPOSE 5000
 
 CMD ["python", "app.py"]
 ```
-E então, criar um arquivo de deployment para o Kubernetes:
-```yml
+Este `Dockerfile` instrui o Docker a criar uma imagem a partir da imagem oficial do Python 3.9, copiar o arquivo `app.py` para o container, instalar o Flask, expor a porta 5000 e executar o `app.py` quando o container for iniciado.
+
+#### 4. Implementando com Kubernetes
+Para implementar este microsserviço com Kubernetes, você precisará criar um arquivo de configuração em YAML. Crie um arquivo chamado `deployment.yaml` com o seguinte conteúdo:
+```yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: microservico
+  name: hello-deployment
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: microservico
+      app: hello
   template:
     metadata:
       labels:
-        app: microservico
+        app: hello
     spec:
       containers:
-      - name: microservico
-        image: microservico:latest
+      - name: hello
+        image: <seu-nome-usuario>/hello:latest
         ports:
         - containerPort: 5000
-      securityContext:
-        runAsUser: 1001
-        fsGroup: 1001
+      restartPolicy: Always
 ```
+Substitua `<seu-nome-usuario>` pelo seu nome de usuário do Docker Hub. Este arquivo define um deployment chamado `hello-deployment` que cria 3 réplicas do seu microsserviço.
 
-## Validação
-Para validar a implantação dos microserviços, é necessário:
-- Verificar se os serviços estão funcionando corretamente
-- Testar as APIs e interfaces de comunicação entre os serviços
-- Monitorar o desempenho e a segurança dos serviços
-- Realizar testes de carga e estresse para garantir a escalabilidade dos serviços.
+### Validação
+Para validar se o seu microsserviço está funcionando corretamente, siga os passos abaixo:
+1. **Build da Imagem Docker**: Execute `docker build -t <seu-nome-usuario>/hello:latest .` na pasta do seu projeto para buildar a imagem Docker.
+2. **Push da Imagem para o Docker Hub**: Execute `docker push <seu-nome-usuario>/hello:latest` para enviar a imagem para o Docker Hub.
+3. **Aplicar a Configuração do Kubernetes**: Execute `kubectl apply -f deployment.yaml` para aplicar a configuração do Kubernetes.
+4. **Verificar os Pods**: Execute `kubectl get pods` para verificar se os pods estão rodando.
+5. **Acessar o Microsserviço**: Você pode acessar o microsserviço executando `kubectl port-forward deployment/hello-deployment 5000:5000 &` e então acessando `http://localhost:5000/hello` no seu navegador.
 
-## Tratamento de Exceções e Edge Cases
-Alguns exemplos de edge cases e tratamento de exceções que devem ser considerados:
-- **Tratamento de erros de rede**: Implementar retry e timeout para lidar com erros de rede.
-- **Tratamento de erros de banco de dados**: Implementar retry e timeout para lidar com erros de banco de dados.
-- **Tratamento de erros de segurança**: Implementar autenticação e autorização para lidar com erros de segurança.
-- **Tratamento de erros de desempenho**: Implementar monitoramento e alertas para lidar com erros de desempenho.
-- **Tratamento de erros de escalabilidade**: Implementar auto-escalabilidade para lidar com erros de escalabilidade.
+### ⚠️ Tratamento de Exceções e Edge Cases
+- **Tratamento de Erros**: Certifique-se de que o seu microsserviço esteja tratando erros de forma adequada. Isso inclui lidar com exceções, retornar respostas de erro significativas e registrar erros para monitoramento.
+- **Edge Cases**: Considere os seguintes casos de borda:
+  - **Requisições Inválidas**: O que acontece quando o microsserviço recebe uma requisição inválida? Certifique-se de que o serviço retorne uma resposta de erro apropriada.
+  - **Conexões de Rede**: O que acontece quando a conexão de rede é interrompida? Certifique-se de que o serviço possa lidar com falhas de rede e retorne uma resposta de erro apropriada.
+  - **Sobrecarga**: O que acontece quando o microsserviço está sobrecarregado? Certifique-se de que o serviço possa lidar com a sobrecarga e retorne uma resposta de erro apropriada.
+- **Segurança**: Certifique-se de que o seu microsserviço esteja seguro. Isso inclui:
+  - **Autenticação**: Certifique-se de que o serviço esteja autenticando os usuários de forma adequada.
+  - **Autorização**: Certifique-se de que o serviço esteja autorizando os usuários de forma adequada.
+  - **Criptografia**: Certifique-se de que o serviço esteja criptografando os dados de forma adequada.
 
-Exemplo de código em Python para tratar exceções:
-```python
-from flask import Flask, jsonify
-import logging
-
-app = Flask(__name__)
-
-@app.route('/api/servico', methods=['GET'])
-def get_servico():
-    try:
-        return jsonify({'mensagem': 'Serviço funcionando'})
-    except Exception as e:
-        logging.error(str(e))
-        return jsonify({'erro': str(e)}), 500
-
-if __name__ == '__main__':
-    app.run(debug=True)
+Com esses passos, você terá um microsserviço escalável e seguro implementado com Docker e Kubernetes.
