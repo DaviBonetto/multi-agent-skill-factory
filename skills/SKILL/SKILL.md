@@ -1,127 +1,155 @@
+# writing-plans
+description: Use when you have a spec or requirements for a multi-step task, before touching code
+
+# Writing Plans
+
+## Overview
+Write comprehensive implementation plans assuming the engineer has zero context for our codebase and questionable taste. Document everything they need to know: which files to touch for each task, code, testing, docs they might need to check, how to test it. Give them the whole plan as bite-sized tasks. DRY. YAGNI. TDD. Frequent commits.
+
+Assume they are a skilled developer, but know almost nothing about our toolset or problem domain. Assume they don't know good test design very well.
+
+**Announce at start:** "I'm using the writing-plans skill to create the implementation plan."
+
+**Context:** This should be run in a dedicated worktree (created by brainstorming skill).
+
+**Save plans to:** `docs/superpowers/plans/YYYY-MM-DD-<feature-name>.md`
+- (User preferences for plan location override this default)
+
+## Scope Check
+
+If the spec covers multiple independent subsystems, it should have been broken into sub-project specs during brainstorming. If it wasn't, suggest breaking this into separate plans — one per subsystem. Each plan should produce working, testable software on its own.
+
+## File Structure
+
+Before defining tasks, map out which files will be created or modified and what each one is responsible for. This is where decomposition decisions get locked in.
+
+- Design units with clear boundaries and well-defined interfaces. Each file should have one clear responsibility.
+- You reason best about code you can hold in context at once, and your edits are more reliable when files are focused. Prefer smaller, focused files over large ones that do too much.
+- Files that change together should live together. Split by responsibility, not by technical layer.
+- In existing codebases, follow established patterns. If the codebase uses large files, don't unilaterally restructure - but if a file you're modifying has grown unwieldy, including a split in the plan is reasonable.
+
+This structure informs the task decomposition. Each task should produce self-contained changes that make sense independently.
+
+## Bite-Sized Task Granularity
+
+**Each step is one action (2-5 minutes):**
+- "Write the failing test" - step
+- "Run it to make sure it fails" - step
+- "Implement the minimal code to make the test pass" - step
+- "Run the tests and make sure they pass" - step
+- "Commit" - step
+
+## Plan Document Header
+
+**Every plan MUST start with this header:**
+
+```markdown
+# [Feature Name] Implementation Plan
+
+> **For agentic workers:** REQUIRED: Use superpowers:subagent-driven-development (if subagents available) or superpowers:executing-plans to implement this plan. Steps use checkbox (`- [ ]`) syntax for tracking.
+
+**Goal:** [One sentence describing what this builds]
+
+**Architecture:** [2-3 sentences about approach]
+
+**Tech Stack:** [Key technologies/libraries]
+
 ---
-name: using-superpowers
-description: Use when starting any conversation - establishes how to find and use skills, requiring Skill tool invocation before ANY response including clarifying questions
----
-
-<SUBAGENT-STOP>
-If you were dispatched as a subagent to execute a specific task, skip this skill.
-</SUBAGENT-STOP>
-
-<EXTREMELY-IMPORTANT>
-If you think there is even a 1% chance a skill might apply to what you are doing, you ABSOLUTELY MUST invoke the skill.
-
-IF A SKILL APPLIES TO YOUR TASK, YOU DO NOT HAVE A CHOICE. YOU MUST USE IT.
-
-This is not negotiable. This is not optional. You cannot rationalize your way out of this.
-</EXTREMELY-IMPORTANT>
-
-## Instruction Priority
-
-Superpowers skills override default system prompt behavior, but **user instructions always take precedence**:
-
-1. **User's explicit instructions** (CLAUDE.md, GEMINI.md, AGENTS.md, direct requests) — highest priority
-2. **Superpowers skills** — override default system behavior where they conflict
-3. **Default system prompt** — lowest priority
-
-If CLAUDE.md, GEMINI.md, or AGENTS.md says "don't use TDD" and a skill says "always use TDD," follow the user's instructions. The user is in control.
-
-## How to Access Skills
-
-**In Claude Code:** Use the `Skill` tool. When you invoke a skill, its content is loaded and presented to you—follow it directly. Never use the Read tool on skill files.
-
-**In Gemini CLI:** Skills activate via the `activate_skill` tool. Gemini loads skill metadata at session start and activates the full content on demand.
-
-**In other environments:** Check your platform's documentation for how skills are loaded.
-
-## Platform Adaptation
-
-Skills use Claude Code tool names. Non-CC platforms: see `references/codex-tools.md` (Codex) for tool equivalents. Gemini CLI users get the tool mapping loaded automatically via GEMINI.md.
-
-# Using Skills
-
-## The Rule
-
-**Invoke relevant or requested skills BEFORE any response or action.** Even a 1% chance a skill might apply means that you should invoke the skill to check. If an invoked skill turns out to be wrong for the situation, you don't need to use it.
-
-```dot
-digraph skill_flow {
-    "User message received" [shape=doublecircle];
-    "About to EnterPlanMode?" [shape=doublecircle];
-    "Already brainstormed?" [shape=diamond];
-    "Invoke brainstorming skill" [shape=box];
-    "Might any skill apply?" [shape=diamond];
-    "Invoke Skill tool" [shape=box];
-    "Announce: 'Using [skill] to [purpose]'" [shape=box];
-    "Has checklist?" [shape=diamond];
-    "Create TodoWrite todo per item" [shape=box];
-    "Follow skill exactly" [shape=box];
-    "Respond (including clarifications)" [shape=doublecircle];
-
-    "About to EnterPlanMode?" -> "Already brainstormed?";
-    "Already brainstormed?" -> "Invoke brainstorming skill" [label="no"];
-    "Already brainstormed?" -> "Might any skill apply?" [label="yes"];
-    "Invoke brainstorming skill" -> "Might any skill apply?";
-
-    "User message received" -> "Might any skill apply?";
-    "Might any skill apply?" -> "Invoke Skill tool" [label="yes, even 1%"];
-    "Might any skill apply?" -> "Respond (including clarifications)" [label="definitely not"];
-    "Invoke Skill tool" -> "Announce: 'Using [skill] to [purpose]'";
-    "Announce: 'Using [skill] to [purpose]" -> "Has checklist?";
-    "Has checklist?" -> "Create TodoWrite todo per item" [label="yes"];
-    "Has checklist?" -> "Follow skill exactly" [label="no"];
-    "Create TodoWrite todo per item" -> "Follow skill exactly";
-}
 ```
 
-## Red Flags
+## Task Structure
 
-These thoughts mean STOP—you're rationalizing:
+```markdown
+### Task N: [Component Name]
 
-| Thought | Reality |
-|---------|---------|
-| "This is just a simple question" | Questions are tasks. Check for skills. |
-| "I need more context first" | Skill check comes BEFORE clarifying questions. |
-| "Let me explore the codebase first" | Skills tell you HOW to explore. Check first. |
-| "I can check git/files quickly" | Files lack conversation context. Check for skills. |
-| "Let me gather information first" | Skills tell you HOW to gather information. |
-| "This doesn't need a formal skill" | If a skill exists, use it. |
-| "I remember this skill" | Skills evolve. Read current version. |
-| "This doesn't count as a task" | Action = task. Check for skills. |
-| "The skill is overkill" | Simple things become complex. Use it. |
-| "I'll just do this one thing first" | Check BEFORE doing anything. |
-| "This feels productive" | Undisciplined action wastes time. Skills prevent this. |
-| "I know what that means" | Knowing the concept ≠ using the skill. Invoke it. |
+**Files:**
+- Create: `exact/path/to/file.py`
+- Modify: `exact/path/to/existing.py:123-145`
+- Test: `tests/exact/path/to/test.py`
 
-## Skill Priority
+- [ ] **Step 1: Write the failing test**
 
-When multiple skills could apply, use this order:
+```python
+def test_specific_behavior():
+    result = function(input)
+    assert result == expected
+```
 
-1. **Process skills first** (brainstorming, debugging) - these determine HOW to approach the task
-2. **Implementation skills second** (frontend-design, mcp-builder) - these guide execution
+- [ ] **Step 2: Run test to verify it fails**
 
-"Let's build X" → brainstorming first, then implementation skills.
-"Fix this bug" → debugging first, then domain-specific skills.
+Run: `pytest tests/path/test.py::test_name -v`
+Expected: FAIL with "function not defined"
 
-## Skill Types
+- [ ] **Step 3: Write minimal implementation**
 
-**Rigid** (TDD, debugging): Follow exactly. Don't adapt away discipline.
+```python
+def function(input):
+    return expected
+```
 
-**Flexible** (patterns): Adapt principles to context.
+- [ ] **Step 4: Run test to verify it passes**
 
-The skill itself tells you which.
+Run: `pytest tests/path/test.py::test_name -v`
+Expected: PASS
 
-## User Instructions
+- [ ] **Step 5: Commit**
 
-Instructions say WHAT, not HOW. "Add X" or "Fix Y" doesn't mean skip workflows.
+```bash
+git add tests/path/test.py src/path/file.py
+git commit -m "feat: add specific feature"
+```
+
+## Remember
+- Exact file paths always
+- Complete code in plan (not "add validation")
+- Exact commands with expected output
+- Reference relevant skills with @ syntax
+- DRY, YAGNI, TDD, frequent commits
+
+## Plan Review Loop
+
+After writing the complete plan:
+
+1. Dispatch a single plan-document-reviewer subagent (see plan-document-reviewer-prompt.md) with precisely crafted review context — never your session history. This keeps the reviewer focused on the plan, not your thought process.
+   - Provide: path to the plan document, path to spec document
+2. If Issues Found: fix the issues, re-dispatch reviewer for the whole plan
+3. If Approved: proceed to execution handoff
+
+**Review loop guidance:**
+- Same agent that wrote the plan fixes it (preserves context)
+- If loop exceeds 3 iterations, surface to human for guidance
+- Reviewers are advisory — explain disagreements if you believe feedback is incorrect
+
+## Execution Handoff
+
+After saving the plan:
+
+**"Plan complete and saved to `docs/superpowers/plans/<filename>.md`. Ready to execute?"**
+
+**Execution path depends on harness capabilities:**
+
+**If harness has subagents (Claude Code, etc.):**
+- **REQUIRED:** Use superpowers:subagent-driven-development
+- Do NOT offer a choice - subagent-driven is the standard approach
+- Fresh subagent per task + two-stage review
+
+**If harness does NOT have subagents:**
+- Execute plan in current session using superpowers:executing-plans
+- Batch execution with checkpoints for review
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
 
-Ao invocar habilidades, considere os seguintes casos de bordo:
+- **Tratamento de Erros:** Em cada etapa do plano, considere possíveis erros que podem ocorrer e forneça orientações sobre como lidar com eles. Isso inclui erros de sintaxe, erros de lógica, erros de execução, etc.
+- **Edge Cases:** Identifique e documente casos de bordo que possam afetar a implementação, como entradas inválidas, condições de limite, etc. Forneça exemplos de como lidar com esses casos.
+- **Segurança:** Considere aspectos de segurança em cada etapa do plano, como validação de entrada, prevenção de injeção de código, etc.
+- **Recuperação de Erros:** Forneça orientações sobre como recuperar de erros e exceções, garantindo que o sistema permaneça estável e funcional.
+- **Testes de Edge Cases:** Inclua testes para casos de bordo e erros, garantindo que a implementação seja robusta e confiável.
 
-* **Conflito de habilidades**: Se duas ou mais habilidades se aplicam a uma tarefa, siga a ordem de prioridade estabelecida na seção "Skill Priority".
-* **Habilidade não aplicável**: Se uma habilidade for invocada e não se aplicar à tarefa, não a use.
-* **Erro ao invocar habilidade**: Se ocorrer um erro ao invocar uma habilidade, verifique se a habilidade está corretamente configurada e se as dependências necessárias estão instaladas.
-* **Habilidade desatualizada**: Se uma habilidade estiver desatualizada, atualize-a antes de usá-la.
-* **Conflito com instruções do usuário**: Se as instruções do usuário conflitarem com as habilidades, siga as instruções do usuário.
+Exemplos de tratamento de exceções e edge cases:
 
-Ao lidar com exceções e casos de bordo, é fundamental manter a disciplina e seguir as habilidades estabelecidas. Se necessário, consulte a documentação da plataforma ou contate o suporte para obter ajuda.
+* Em caso de erro de sintaxe, forneça orientações sobre como corrigir o erro e continuar com a implementação.
+* Em caso de erro de lógica, forneça orientações sobre como identificar e corrigir o erro, e como testar a implementação para garantir que ela esteja funcionando corretamente.
+* Em caso de entrada inválida, forneça orientações sobre como lidar com a entrada inválida e como garantir que a implementação continue funcionando corretamente.
+* Em caso de condições de limite, forneça orientações sobre como lidar com as condições de limite e como garantir que a implementação continue funcionando corretamente.
+
+Ao considerar esses aspectos, você pode garantir que a implementação seja robusta, confiável e segura, e que os erros e exceções sejam tratados de forma eficaz.
