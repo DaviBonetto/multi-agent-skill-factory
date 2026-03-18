@@ -1,8 +1,8 @@
-# Saving Training Results to Hugging Face Hub
+# Saving Results to Hugging Face Hub
 
-**⚠️ CRITICAL:** Training environments are ephemeral. ALL results are lost when a job completes unless pushed to the Hub.
+**⚠️ CRITICAL:** Job environments are ephemeral. ALL results are lost when a job completes unless persisted to the Hub or external storage.
 
-## Why Hub Push is Required
+## Why Persistence is Required
 
 When running on Hugging Face Jobs:
 - Environment is temporary
@@ -10,121 +10,192 @@ When running on Hugging Face Jobs:
 - No local disk persistence
 - Cannot access results after job ends
 
-**Without Hub push, training is completely wasted.**
+**Without persistence, all work is permanently lost.**
 
-## Required Configuration
+## Persistence Options
 
-### 1. Training Configuration
+### Option 1: Push to Hugging Face Hub (Recommended)
 
-In your SFTConfig or trainer config:
-
+**For models:**
 ```python
-SFTConfig(
-    push_to_hub=True,                    # Enable Hub push
-    hub_model_id="username/model-name",   # Target repository
+from transformers import AutoModel
+model.push_to_hub("username/model-name", token=os.environ.get("HF_TOKEN"))
+```
+
+**For datasets:**
+```python
+from datasets import Dataset
+dataset.push_to_hub("username/dataset-name", token=os.environ.get("HF_TOKEN"))
+```
+
+**For files/artifacts:**
+```python
+from huggingface_hub import HfApi
+api = HfApi(token=os.environ.get("HF_TOKEN"))
+api.upload_file(
+    path_or_fileobj="results.json",
+    path_in_repo="results.json",
+    repo_id="username/results",
+    repo_type="dataset"
 )
 ```
 
-### 2. Job Configuration
+### Option 2: External Storage
 
-When submitting the job:
+**S3:**
+```python
+import boto3
+s3 = boto3.client('s3')
+s3.upload_file('results.json', 'my-bucket', 'results.json')
+```
+
+**Google Cloud Storage:**
+```python
+from google.cloud import storage
+client = storage.Client()
+bucket = client.bucket('my-bucket')
+blob = bucket.blob('results.json')
+blob.upload_from_filename('results.json')
+```
+
+### Option 3: API Endpoint
 
 ```python
+import requests
+requests.post("https://your-api.com/results", json=results)
+```
+
+## Required Configuration for Hub Push
+
+### Job Configuration
+
+**Always include HF_TOKEN:**
+```python
 hf_jobs("uv", {
-    "script": "train.py",
-    "secrets": {"HF_TOKEN": "$HF_TOKEN"}  # Provide authentication
+    "script": "your_script.py",
+    "secrets": {"HF_TOKEN": "$HF_TOKEN"}  # Required for Hub operations
 })
 ```
 
-**The `$HF_TOKEN` placeholder is automatically replaced with your Hugging Face token.**
+### Script Configuration
 
-## Complete Example
+**Verify token exists:**
+```python
+import os
+assert "HF_TOKEN" in os.environ, "HF_TOKEN required for Hub operations!"
+```
+
+**Use token for Hub operations:**
+```python
+from huggingface_hub import HfApi
+
+# Auto-detects HF_TOKEN from environment
+api = HfApi()
+
+# Or explicitly pass token
+api = HfApi(token=os.environ.get("HF_TOKEN"))
+```
+
+## Complete Examples
+
+### Example 1: Push Dataset
 
 ```python
-# train.py
+hf_jobs("uv", {
+    "script": """
 # /// script
-# dependencies = ["trl"]
+# dependencies = ["datasets", "huggingface-hub"]
 # ///
 
-from trl import SFTTrainer, SFTConfig
-from datasets import load_dataset
+import os
+from datasets import Dataset
+from huggingface_hub import HfApi
 
-dataset = load_dataset("trl-lib/Capybara", split="train")
+# Verify token
+assert "HF_TOKEN" in os.environ, "HF_TOKEN required!"
 
-# Configure with Hub push
-config = SFTConfig(
-    output_dir="my-model",
-    num_train_epochs=3,
-    
-    # ✅ CRITICAL: Hub push configuration
-    push_to_hub=True,
-    hub_model_id="myusername/my-trained-model",
-    
-    # Optional: Push strategy
-    push_to_hub_model_id="myusername/my-trained-model",
-    push_to_hub_organization=None,
-    push_to_hub_token=None,  # Uses environment token
-)
+# Process data
+data = {"text": ["Sample 1", "Sample 2"]}
+dataset = Dataset.from_dict(data)
 
-trainer = SFTTrainer(
-    model="Qwen/Qwen2.5-0.5B",
-    train_dataset=dataset,
-    args=config,
-)
-
-trainer.train()
-
-# ✅ Push final model
-trainer.push_to_hub()
-
-print("✅ Model saved to: https://huggingface.co/myusername/my-trained-model")
-```
-
-**Submit with authentication:**
-
-```python
-hf_jobs("uv", {
-    "script": "train.py",
-    "flavor": "a10g-large",
-    "timeout": "2h",
-    "secrets": {"HF_TOKEN": "$HF_TOKEN"}  # ✅ Required!
+# Push to Hub
+dataset.push_to_hub("username/my-dataset")
+print("Dataset pushed!")
+""",
+    "flavor": "cpu-basic",
+    "timeout": "30m",
+    "secrets": {"HF_TOKEN": "$HF_TOKEN"}
 })
 ```
 
-## What Gets Saved
-
-When `push_to_hub=True`:
-
-1. **Model weights** - Final trained parameters
-2. **Tokenizer** - Associated tokenizer
-3. **Configuration** - Model config (config.json)
-4. **Training arguments** - Hyperparameters used
-5. **Model card** - Auto-generated documentation
-6. **Checkpoints** - If `save_strategy="steps"` enabled
-
-## Checkpoint Saving
-
-Save intermediate checkpoints during training:
+### Example 2: Push Model
 
 ```python
-SFTConfig(
-    output_dir="my-model",
-    push_to_hub=True,
-    hub_model_id="username/my-model",
-    
-    # Checkpoint configuration
-    save_strategy="steps",
-    save_steps=100,              # Save every 100 steps
-    save_total_limit=3,          # Keep only last 3 checkpoints
-)
+hf_jobs("uv", {
+    "script": """
+# /// script
+# dependencies = ["transformers"]
+# ///
+
+import os
+from transformers import AutoModel, AutoTokenizer
+
+# Verify token
+assert "HF_TOKEN" in os.environ, "HF_TOKEN required!"
+
+# Load and process model
+model = AutoModel.from_pretrained("base-model")
+tokenizer = AutoTokenizer.from_pretrained("base-model")
+# ... process model ...
+
+# Push to Hub
+model.push_to_hub("username/my-model")
+tokenizer.push_to_hub("username/my-model")
+print("Model pushed!")
+""",
+    "flavor": "a10g-large",
+    "timeout": "2h",
+    "secrets": {"HF_TOKEN": "$HF_TOKEN"}
+})
 ```
 
-**Benefits:**
-- Resume training if job fails
-- Compare checkpoint performance
-- Use intermediate models
+### Example 3: Push Artifacts
 
-**Checkpoints are pushed to:** `username/my-model` (same repo)
+```python
+hf_jobs("uv", {
+    "script": """
+# /// script
+# dependencies = ["huggingface-hub", "pandas"]
+# ///
+
+import os
+import json
+import pandas as pd
+from huggingface_hub import HfApi
+
+# Verify token
+assert "HF_TOKEN" in os.environ, "HF_TOKEN required!"
+
+# Generate results
+results = {"accuracy": 0.95, "loss": 0.05}
+df = pd.DataFrame([results])
+
+# Save files
+with open("results.json", "w") as f:
+    json.dump(results, f)
+df.to_csv("results.csv", index=False)
+
+# Push to Hub
+api = HfApi()
+api.upload_file("results.json", "results.json", "username/results", repo_type="dataset")
+api.upload_file("results.csv", "results.csv", "username/results", repo_type="dataset")
+print("Results pushed!")
+""",
+    "flavor": "cpu-basic",
+    "timeout": "30m",
+    "secrets": {"HF_TOKEN": "$HF_TOKEN"}
+})
+```
 
 ## Authentication Methods
 
@@ -156,11 +227,11 @@ Pass as regular environment variable (less secure than secrets).
 
 ## Verification Checklist
 
-Before submitting any training job, verify:
+Before submitting any job that saves to Hub, verify:
 
-- [ ] `push_to_hub=True` in training config
-- [ ] `hub_model_id` is specified (format: `username/model-name`)
 - [ ] `secrets={"HF_TOKEN": "$HF_TOKEN"}` in job config
+- [ ] Script checks for token: `assert "HF_TOKEN" in os.environ`
+- [ ] Hub push code included in script
 - [ ] Repository name doesn't conflict with existing repos
 - [ ] You have write access to the target namespace
 
@@ -168,19 +239,19 @@ Before submitting any training job, verify:
 
 ### Automatic Creation
 
-If repository doesn't exist, it's created automatically when first pushing.
+If repository doesn't exist, it's created automatically when first pushing (if token has write permissions).
 
 ### Manual Creation
 
-Create repository before training:
+Create repository before pushing:
 
 ```python
 from huggingface_hub import HfApi
 
 api = HfApi()
 api.create_repo(
-    repo_id="username/model-name",
-    repo_type="model",
+    repo_id="username/repo-name",
+    repo_type="model",  # or "dataset"
     private=False,  # or True for private repo
 )
 ```
@@ -205,7 +276,7 @@ api.create_repo(
 
 **Solutions:**
 1. Verify `secrets={"HF_TOKEN": "$HF_TOKEN"}` in job config
-2. Check you're logged in: `hf auth whoami`
+2. Check you're logged in: `hf_whoami()`
 3. Re-login: `hf auth login`
 
 ### Error: 403 Forbidden
@@ -215,7 +286,7 @@ api.create_repo(
 **Solutions:**
 1. Check repository namespace matches your username
 2. Verify you're a member of organization (if using org namespace)
-3. Check repository isn't private (if accessing org repo)
+3. Check token has write permissions
 
 ### Error: Repository not found
 
@@ -226,161 +297,90 @@ api.create_repo(
 2. Check repository name format
 3. Verify namespace exists
 
-### Error: Push failed during training
+### Error: Push failed
 
 **Cause:** Network issues or Hub unavailable
 
 **Solutions:**
-1. Training continues but final push fails
-2. Checkpoints may be saved
-3. Re-run push manually after job completes
-
-### Issue: Model saved but not visible
-
-**Possible causes:**
-1. Repository is private—check https://huggingface.co/username
-2. Wrong namespace—verify `hub_model_id` matches login
-3. Push still in progress—wait a few minutes
-
-## Manual Push After Training
-
-If training completes but push fails, push manually:
-
-```python
-from transformers import AutoModel, AutoTokenizer
-
-# Load from local checkpoint
-model = AutoModel.from_pretrained("./output_dir")
-tokenizer = AutoTokenizer.from_pretrained("./output_dir")
-
-# Push to Hub
-model.push_to_hub("username/model-name", token="hf_abc123...")
-tokenizer.push_to_hub("username/model-name", token="hf_abc123...")
-```
-
-**Note:** Only possible if job hasn't completed (files still exist).
+1. Check logs for specific error
+2. Verify token is valid
+3. Retry push operation
 
 ## Best Practices
 
-1. **Always enable `push_to_hub=True`**
-2. **Use checkpoint saving** for long training runs
-3. **Verify Hub push** in logs before job completes
-4. **Set appropriate `save_total_limit`** to avoid excessive checkpoints
-5. **Use descriptive repo names** (e.g., `qwen-capybara-sft` not `model1`)
-6. **Add model card** with training details
-7. **Tag models** with relevant tags (e.g., `text-generation`, `fine-tuned`)
+1. **Always verify token exists** before Hub operations
+2. **Use descriptive repo names** (e.g., `my-experiment-results` not `results`)
+3. **Push incrementally** for large results (use checkpoints)
+4. **Verify push success** in logs before job completes
+5. **Use appropriate repo types** (model vs dataset)
+6. **Add README** with result descriptions
+7. **Tag repos** with relevant tags
 
 ## Monitoring Push Progress
 
 Check logs for push progress:
 
+**MCP Tool:**
 ```python
 hf_jobs("logs", {"job_id": "your-job-id"})
 ```
 
+**CLI:**
+```bash
+hf jobs logs <job-id>
+```
+
+**Python API:**
+```python
+from huggingface_hub import fetch_job_logs
+for log in fetch_job_logs(job_id="your-job-id"):
+    print(log)
+```
+
 **Look for:**
 ```
-Pushing model to username/model-name...
-Upload file pytorch_model.bin: 100%
-✅ Model pushed successfully
-```
-
-## Example: Full Production Setup
-
-```python
-# production_train.py
-# /// script
-# dependencies = ["trl>=0.12.0", "peft>=0.7.0"]
-# ///
-
-from datasets import load_dataset
-from peft import LoraConfig
-from trl import SFTTrainer, SFTConfig
-import os
-
-# Verify token is available
-assert "HF_TOKEN" in os.environ, "HF_TOKEN not found in environment!"
-
-# Load dataset
-dataset = load_dataset("trl-lib/Capybara", split="train")
-print(f"✅ Dataset loaded: {len(dataset)} examples")
-
-# Configure with comprehensive Hub settings
-config = SFTConfig(
-    output_dir="qwen-capybara-sft",
-    
-    # Hub configuration
-    push_to_hub=True,
-    hub_model_id="myusername/qwen-capybara-sft",
-    hub_strategy="checkpoint",  # Push checkpoints
-    
-    # Checkpoint configuration
-    save_strategy="steps",
-    save_steps=100,
-    save_total_limit=3,
-    
-    # Training settings
-    num_train_epochs=3,
-    per_device_train_batch_size=4,
-    
-    # Logging
-    logging_steps=10,
-    logging_first_step=True,
-)
-
-# Train with LoRA
-trainer = SFTTrainer(
-    model="Qwen/Qwen2.5-0.5B",
-    train_dataset=dataset,
-    args=config,
-    peft_config=LoraConfig(r=16, lora_alpha=32),
-)
-
-print("🚀 Starting training...")
-trainer.train()
-
-print("💾 Pushing final model to Hub...")
-trainer.push_to_hub()
-
-print("✅ Training complete!")
-print(f"Model available at: https://huggingface.co/myusername/qwen-capybara-sft")
-```
-
-**Submit:**
-
-```python
-hf_jobs("uv", {
-    "script": "production_train.py",
-    "flavor": "a10g-large",
-    "timeout": "6h",
-    "secrets": {"HF_TOKEN": "$HF_TOKEN"}
-})
+Pushing to username/repo-name...
+Upload file results.json: 100%
+Push successful
 ```
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
 
-### Tratamento de Erros de Autenticação
+Ao trabalhar com o Hugging Face Hub, é importante considerar os seguintes casos de bordo e exceções:
 
-*   Verifique se o token de autenticação está correto e se o usuário tem permissão para acessar o repositório.
-*   Se o token estiver incorreto, reautentique-se e tente novamente.
+* **Token de acesso inválido ou expirado**: Verifique se o token de acesso está válido e não expirou. Se o token estiver inválido ou expirado, você precisará reautenticar para obter um novo token.
+* **Repositório não encontrado**: Se o repositório não for encontrado, verifique se o nome do repositório está correto e se o repositório existe no Hugging Face Hub.
+* **Permissão de escrita negada**: Se você não tiver permissão de escrita no repositório, verifique se você é o proprietário do repositório ou se tem permissão de escrita concedida pelo proprietário.
+* **Erro de rede**: Se ocorrer um erro de rede durante a operação de push, tente novamente após alguns minutos ou verifique se há problemas de conectividade com o Hugging Face Hub.
+* **Tamanho do arquivo excessivo**: Se o tamanho do arquivo for excessivo, você pode precisar dividir o arquivo em partes menores ou usar um método de compressão para reduzir o tamanho do arquivo.
+* **Formatação de arquivo inválida**: Se o formato do arquivo for inválido, verifique se o arquivo está no formato correto e se atende aos requisitos do Hugging Face Hub.
 
-### Tratamento de Erros de Rede
+Para lidar com esses casos de bordo e exceções, você pode implementar os seguintes mecanismos:
 
-*   Verifique se a conexão de rede está estável e se o servidor do Hugging Face Hub está disponível.
-*   Se a conexão de rede estiver instável, tente novamente após alguns minutos.
+* **Verificação de token de acesso**: Verifique se o token de acesso está válido antes de realizar qualquer operação no Hugging Face Hub.
+* **Tratamento de erros**: Implemente um mecanismo de tratamento de erros para lidar com erros de rede, permissão de escrita negada, etc.
+* **Validação de arquivo**: Valide o formato e o tamanho do arquivo antes de realizar a operação de push.
+* **Retry**: Implemente um mecanismo de retry para tentar novamente a operação de push em caso de erro.
 
-### Tratamento de Erros de Repositório
-
-*   Verifique se o repositório existe e se o usuário tem permissão para acessá-lo.
-*   Se o repositório não existir, crie-o manualmente antes de tentar novamente.
-
-### Tratamento de Erros de Checkpoint
-
-*   Verifique se os checkpoints estão sendo salvos corretamente e se o limite de checkpoints não foi alcançado.
-*   Se os checkpoints não estiverem sendo salvos corretamente, verifique a configuração de salvamento de checkpoints e tente novamente.
+Exemplo de como lidar com exceções:
+```python
+try:
+    # Operação de push
+    api.upload_file("results.json", "results.json", "username/results", repo_type="dataset")
+except Exception as e:
+    # Tratamento de erro
+    print(f"Erro: {e}")
+    # Retry
+    time.sleep(60)
+    try:
+        api.upload_file("results.json", "results.json", "username/results", repo_type="dataset")
+    except Exception as e:
+        # Tratamento de erro
+        print(f"Erro: {e}")
+```
 
 ## Key Takeaway
 
-**Without `push_to_hub=True` and `secrets={"HF_TOKEN": "$HF_TOKEN"}`, all training results are permanently lost.**
+**Without `secrets={"HF_TOKEN": "$HF_TOKEN"}` and persistence code, all results are permanently lost.**
 
-Always verify both are configured before submitting any training job.
+Always verify both are configured before submitting any job that produces results.
