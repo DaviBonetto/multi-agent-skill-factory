@@ -1,5 +1,4 @@
 # Gemini CLI Tool Mapping
-
 Skills use Claude Code tool names. When you encounter these in a skill, use your platform equivalent:
 
 | Skill references | Gemini CLI equivalent |
@@ -17,11 +16,9 @@ Skills use Claude Code tool names. When you encounter these in a skill, use your
 | `Task` tool (dispatch subagent) | No equivalent — Gemini CLI does not support subagents |
 
 ## No subagent support
-
 Gemini CLI has no equivalent to Claude Code's `Task` tool. Skills that rely on subagent dispatch (`subagent-driven-development`, `dispatching-parallel-agents`) will fall back to single-session execution via `executing-plans`.
 
 ## Additional Gemini CLI tools
-
 These tools are available in Gemini CLI but have no Claude Code equivalent:
 
 | Tool | Purpose |
@@ -33,19 +30,18 @@ These tools are available in Gemini CLI but have no Claude Code equivalent:
 | `enter_plan_mode` / `exit_plan_mode` | Switch to read-only research mode before making changes |
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
+Para garantir a robustez e segurança da skill, é fundamental tratar exceções e edge cases. Aqui estão algumas diretrizes:
 
-O tratamento de exceções e edge cases é crucial para garantir a estabilidade e segurança do sistema. Aqui estão alguns exemplos de como lidar com esses casos:
+* **Tratamento de erros**: Todas as chamadas de API e operações de sistema devem ser encapsuladas em try-catch para capturar e tratar erros de forma adequada.
+* **Validação de entrada**: Todas as entradas de usuário devem ser validadas para evitar ataques de injeção de código ou outros tipos de ataques.
+* **Tratamento de casos limite**: Casos limite, como arquivos vazios ou diretórios inexistentes, devem ser tratados de forma adequada para evitar erros ou comportamentos inesperados.
+* **Segurança**: Todas as operações que envolvem acesso a arquivos ou sistemas devem ser realizadas com permissões adequadas e segurança para evitar acessos não autorizados.
+* **Testes**: A skill deve ser testada exhaustivamente para garantir que todos os casos de uso sejam cobertos e que a skill funcione corretamente em diferentes ambientes e condições.
 
-* **Arquivos não encontrados**: Ao usar `read_file` ou `write_file`, verifique se o arquivo existe antes de tentar acessá-lo. Se o arquivo não existir, gere um erro com uma mensagem clara e útil.
-* **Permissões de arquivo**: Ao usar `write_file` ou `replace`, verifique se o usuário tem permissão para escrever no arquivo. Se não tiver, gere um erro com uma mensagem clara e útil.
-* **Comandos inválidos**: Ao usar `run_shell_command`, verifique se o comando é válido e seguro antes de executá-lo. Se o comando for inválido ou inseguro, gere um erro com uma mensagem clara e útil.
-* **Entrada de usuário**: Ao usar `ask_user`, verifique se a entrada do usuário é válida e segura antes de processá-la. Se a entrada for inválida ou insegura, gere um erro com uma mensagem clara e útil.
-* **Exceções de sistema**: Ao usar qualquer ferramenta, esteja preparado para lidar com exceções de sistema, como falta de memória ou recursos. Gere um erro com uma mensagem clara e útil se ocorrer uma exceção de sistema.
+Exemplos de tratamento de exceções e edge cases:
 
-Além disso, é importante considerar os seguintes edge cases:
+* `try`-`catch` para capturar erros de leitura de arquivos: `try { read_file('arquivo.txt') } catch (e) { console.error('Erro ao ler arquivo:', e) }`
+* Validação de entrada de usuário: `if (typeof userInput === 'string' && userInput.trim() !== '') { // processar entrada } else { console.error('Entrada inválida') }`
+* Tratamento de casos limite: `if (fileExists('arquivo.txt')) { // processar arquivo } else { console.error('Arquivo não existe') }`
 
-* **Nomes de arquivos vazios**: Ao usar `read_file` ou `write_file`, verifique se o nome do arquivo é vazio. Se for vazio, gere um erro com uma mensagem clara e útil.
-* **Diretórios vazios**: Ao usar `list_directory`, verifique se o diretório é vazio. Se for vazio, retorne uma lista vazia.
-* **Entrada de usuário vazia**: Ao usar `ask_user`, verifique se a entrada do usuário é vazia. Se for vazia, gere um erro com uma mensagem clara e útil.
-
-Ao lidar com esses casos, é importante fornecer mensagens de erro claras e úteis para ajudar o usuário a entender o que aconteceu e como corrigir o problema. Além disso, é importante garantir que o sistema seja seguro e estável, mesmo em casos de erro ou edge cases.
+Ao seguir essas diretrizes e exemplos, é possível garantir que a skill seja robusta, segura e funcione corretamente em diferentes situações.
