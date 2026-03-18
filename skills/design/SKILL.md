@@ -43,7 +43,6 @@ interface Todo {
   text: string;      // Todo text
   completed: boolean;
 }
-
 type Filter = 'all' | 'active' | 'completed';
 ```
 ## Acceptance Criteria
@@ -57,13 +56,11 @@ type Filter = 'all' | 'active' | 'completed';
 8. Empty state shows helpful message
 9. All tests pass
 ## ⚠️ Tratamento de Exceções e Edge Cases
-### Exceções
-*   **Erro ao salvar no localStorage**: Caso ocorra um erro ao salvar os dados no localStorage, o aplicativo deve exibir uma mensagem de erro ao usuário e tentar salvar novamente após um curto período de tempo.
-*   **Erro ao carregar do localStorage**: Se ocorrer um erro ao carregar os dados do localStorage, o aplicativo deve exibir uma mensagem de erro ao usuário e inicializar com um estado vazio.
-*   **Entrada inválida**: Se o usuário digitar uma entrada inválida (por exemplo, um todo vazio), o aplicativo deve exibir uma mensagem de erro e não adicionar o todo.
-### Edge Cases
-*   **Lista de todos vazia**: Se a lista de todos estiver vazia, o aplicativo deve exibir uma mensagem indicando que não há todos.
-*   **Todos completados**: Se todos os todos estiverem completados, o aplicativo deve exibir uma mensagem indicando que não há todos ativos.
-*   **Filtro**: Se o usuário aplicar um filtro e não houver todos que atendam ao filtro, o aplicativo deve exibir uma mensagem indicando que não há todos que atendam ao filtro.
-*   **Tamanho máximo de todo**: O aplicativo deve ter um tamanho máximo para o texto de cada todo para evitar que o usuário insira uma grande quantidade de texto.
-*   **Quantidade máxima de todos**: O aplicativo deve ter uma quantidade máxima de todos para evitar que o usuário crie uma grande quantidade de todos.
+- **Validação de entrada**: Verificar se o texto do todo é vazio antes de adicioná-lo. Se estiver vazio, exibir uma mensagem de erro.
+- **Tratamento de erros de localStorage**: Caso ocorra um erro ao salvar ou carregar os todos do localStorage, exibir uma mensagem de erro e continuar com a aplicação.
+- **Prevenção de duplicatas**: Verificar se um todo com o mesmo texto já existe antes de adicioná-lo. Se existir, não adicionar o novo todo.
+- **Limite de tamanho de texto**: Limitar o tamanho do texto do todo a 100 caracteres. Se o texto for maior, truncá-lo e exibir uma mensagem de aviso.
+- **Tratamento de erros de UUID**: Caso ocorra um erro ao gerar um UUID para um todo, usar um identificador temporário e exibir uma mensagem de erro.
+- **Prevenção de exclusão acidental**: Exibir uma confirmação antes de excluir um todo para evitar exclusões acidentais.
+- **Tratamento de erros de filtro**: Caso ocorra um erro ao aplicar um filtro, exibir uma mensagem de erro e continuar com a aplicação.
+- **Prevenção de sobrecarga de memoria**: Limitar a quantidade de todos armazenados no localStorage para evitar sobrecarga de memória. Se o limite for atingido, exibir uma mensagem de aviso e parar de armazenar novos todos.
