@@ -1,22 +1,24 @@
+description: "Deprecated - use the superpowers:brainstorming skill instead"
 # Introdução
-description: "Você DEVE usar isso antes de qualquer trabalho criativo - criar recursos, construir componentes, adicionar funcionalidades ou modificar comportamentos. Explora requisitos e design antes da implementação."
-disable-model-invocation: true
+Tell your human partner that this command is deprecated and will be removed in the next major release. They should ask you to use the "superpowers brainstorming" skill instead.
 
-# Invocação das Habilidades
-Invoke a habilidade de brainstorming e siga-a exatamente como apresentada a você.
+# Instruções
+Para utilizar a habilidade correta, siga os passos abaixo:
+1. Informe ao seu parceiro humano que este comando está depreciado.
+2. Explique que ele será removido na próxima versão major.
+3. Sugira a utilização da habilidade "superpowers brainstorming" como alternativa.
 
 # ⚠️ Tratamento de Exceções e Edge Cases
-## Tratamento de Erros
-- **Erro de Invocação**: Caso a invocação da habilidade de brainstorming falhe, verifique se a habilidade está corretamente configurada e se os parâmetros de entrada estão válidos.
-- **Erro de Formatação**: Se o formato do input não estiver de acordo com o esperado, o sistema deve retornar uma mensagem de erro clara e concisa, indicando o problema e como corrigi-lo.
-- **Exceção de Tempo de Execução**: Em caso de exceções durante a execução, o sistema deve capturar a exceção, registrar o erro e fornecer uma resposta significativa ao usuário, indicando a ocorrência de um problema e as etapas para resolução.
+### Casos de Uso Inválidos
+- **Comando Desconhecido**: Caso o usuário insira um comando desconhecido, mostre uma mensagem de erro amigável indicando que o comando não é reconhecido e sugira a utilização da habilidade "superpowers brainstorming".
+- **Parâmetros Incorretos**: Se o usuário fornecer parâmetros incorretos, mostre uma mensagem de erro explicando como os parâmetros devem ser utilizados corretamente.
+- **Uso Excessivo**: Implemente um limite de uso para evitar abusos. Se o limite for atingido, mostre uma mensagem informando que o limite diário foi alcançado e sugira alternativas.
 
-## Edge Cases
-- **Input Vazio**: Se o usuário não fornecer nenhum input, o sistema deve solicitar que o usuário forneça as informações necessárias para prosseguir.
-- **Input Inválido**: Se o input fornecido não estiver de acordo com os requisitos (por exemplo, formato incorreto, dados faltantes), o sistema deve informar ao usuário sobre o problema e como corrigi-lo.
-- **Sobrecarga de Sistema**: Em caso de sobrecarga do sistema devido a uma grande quantidade de requisições simultâneas, o sistema deve implementar mecanismos de controle de fluxo para evitar falhas, como fila de requisições ou limitação de acesso.
+### Tratamento de Erros
+- **Mensagens de Erro**: Todas as mensagens de erro devem ser claras, concisas e fornecer orientações sobre como resolver o problema.
+- **Logs de Erro**: Registre todos os erros ocorridos para análise posterior e melhoria contínua.
 
-# Segurança
-- **Autenticação**: Todas as requisições devem ser autenticadas para garantir que apenas usuários autorizados possam invocar a habilidade.
-- **Autorização**: O sistema deve verificar as permissões do usuário antes de permitir a invocação da habilidade, garantindo que o usuário tenha as permissões necessárias para realizar a ação solicitada.
-- **Criptografia**: Todas as comunicações entre o cliente e o servidor devem ser criptografadas para proteger os dados contra interceptação e acesso não autorizado.
+### Segurança
+- **Validação de Entrada**: Valide todas as entradas de usuário para evitar injeção de código malicioso.
+- **Autenticação**: Certifique-se de que apenas usuários autorizados possam acessar a habilidade.
+- **Criptografia**: Use criptografia adequada para proteger dados sensíveis.
