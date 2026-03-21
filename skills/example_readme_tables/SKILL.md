@@ -136,18 +136,20 @@ uv run scripts/evaluation_manager.py extract-readme \
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
 
-O tratamento de exceções e edge cases é crucial para garantir a robustez e confiabilidade do script de extração de tabelas de avaliação. Aqui estão alguns exemplos de como lidar com esses casos:
+O tratamento de exceções e edge cases é crucial para garantir a robustez e confiabilidade do extrator de tabelas de avaliação. Aqui estão alguns exemplos de como lidar com esses casos:
 
-* **Tabelas malformadas**: O script deve ser capaz de lidar com tabelas que não seguem a sintaxe markdown padrão. Isso pode incluir tabelas com colunas ou linhas faltantes, ou com células que contenham texto em vez de números.
-* **Valores não numéricos**: O script deve ser capaz de lidar com valores que não são numéricos, como texto ou datas. Isso pode incluir a conversão de valores para um formato numérico, se possível, ou a exclusão deles da tabela de avaliação.
-* **Tabelas vazias**: O script deve ser capaz de lidar com tabelas vazias, ou seja, tabelas que não contenham nenhuma linha ou coluna. Isso pode incluir a criação de uma tabela vazia como resultado, ou a exclusão da tabela da saída.
-* **Erros de parsing**: O script deve ser capaz de lidar com erros de parsing, como erros de sintaxe markdown ou erros de conversão de valores. Isso pode incluir a criação de um log de erros para registrar os problemas encontrados durante a execução do script.
-* **Tabelas com múltiplas páginas**: O script deve ser capaz de lidar com tabelas que se estendem por múltiplas páginas. Isso pode incluir a concatenação das páginas para criar uma tabela única, ou a criação de uma tabela separada para cada página.
+* **Tabelas com estruturas inconsistentes**: O extrator deve ser capaz de lidar com tabelas que têm estruturas inconsistentes, como linhas ou colunas faltantes.
+* **Valores não numéricos**: O extrator deve ser capaz de lidar com valores não numéricos, como texto ou datas, e ignorá-los ou convertê-los para um formato apropriado.
+* **Tabelas com muitas colunas**: O extrator deve ser capaz de lidar com tabelas que têm muitas colunas e identificar as colunas relevantes para a extração de dados.
+* **Tabelas com muitas linhas**: O extrator deve ser capaz de lidar com tabelas que têm muitas linhas e processá-las de forma eficiente.
+* **Erros de sintaxe**: O extrator deve ser capaz de lidar com erros de sintaxe, como tabelas malformadas ou faltantes, e relatar erros de forma clara e útil.
+* **Segurança**: O extrator deve ser capaz de lidar com questões de segurança, como a proteção contra injeção de código malicioso ou a exposição de dados sensíveis.
 
-Para lidar com esses casos, o script pode incluir mecanismos de tratamento de exceções, como:
+Para lidar com esses casos, o extrator pode implementar as seguintes estratégias:
 
-* **Try-except**: O script pode usar blocos try-except para capturar erros e exceções durante a execução, e lidar com eles de forma apropriada.
-* **Validação de dados**: O script pode incluir validação de dados para garantir que os valores extraídos sejam numéricos e válidos.
-* **Logging**: O script pode incluir logging para registrar erros e problemas encontrados durante a execução, para que possam ser investigados e corrigidos posteriormente.
+* **Validação de entrada**: Verificar a entrada para garantir que ela esteja no formato correto e contenha os dados necessários.
+* **Tratamento de erros**: Implementar mecanismos de tratamento de erros para lidar com erros de sintaxe, valores não numéricos e outras exceções.
+* **Normalização de dados**: Normalizar os dados extraídos para garantir que eles estejam no formato correto e sejam consistentes.
+* **Verificação de segurança**: Verificar a entrada e os dados extraídos para garantir que eles não contenham código malicioso ou dados sensíveis.
 
-Ao incluir esses mecanismos, o script pode ser mais robusto e confiável, e pode lidar com uma variedade de casos de uso e edge cases.
+Ao implementar essas estratégias, o extrator pode garantir que ele seja robusto, confiável e seguro, e forneça dados precisos e úteis para os usuários.
