@@ -56,11 +56,11 @@ type Filter = 'all' | 'active' | 'completed';
 8. Empty state shows helpful message
 9. All tests pass
 ## ⚠️ Tratamento de Exceções e Edge Cases
-- **Validação de entrada**: Verificar se o texto do todo é vazio antes de adicioná-lo. Se estiver vazio, exibir uma mensagem de erro.
-- **Tratamento de erros de localStorage**: Caso ocorra um erro ao salvar ou carregar os todos do localStorage, exibir uma mensagem de erro e continuar com a aplicação.
-- **Prevenção de duplicatas**: Verificar se um todo com o mesmo texto já existe antes de adicioná-lo. Se existir, não adicionar o novo todo.
-- **Limite de tamanho de texto**: Limitar o tamanho do texto do todo a 100 caracteres. Se o texto for maior, truncá-lo e exibir uma mensagem de aviso.
-- **Tratamento de erros de UUID**: Caso ocorra um erro ao gerar um UUID para um todo, usar um identificador temporário e exibir uma mensagem de erro.
-- **Prevenção de exclusão acidental**: Exibir uma confirmação antes de excluir um todo para evitar exclusões acidentais.
-- **Tratamento de erros de filtro**: Caso ocorra um erro ao aplicar um filtro, exibir uma mensagem de erro e continuar com a aplicação.
-- **Prevenção de sobrecarga de memoria**: Limitar a quantidade de todos armazenados no localStorage para evitar sobrecarga de memória. Se o limite for atingido, exibir uma mensagem de aviso e parar de armazenar novos todos.
+- **Validação de entrada**: Verificar se o texto do todo é vazio antes de adicioná-lo à lista.
+- **Tratamento de erros de localStorage**: Lidar com erros que podem ocorrer ao ler ou escrever dados no localStorage.
+- **Prevenção de duplicatas**: Verificar se um todo com o mesmo texto já existe antes de adicioná-lo à lista.
+- **Limite de tamanho de texto**: Definir um limite de tamanho para o texto do todo e truncá-lo se necessário.
+- **Tratamento de erros de filtro**: Lidar com erros que podem ocorrer ao aplicar filtros à lista de todos.
+- **Prevenção de exclusão acidental**: Solicitar confirmação antes de excluir um todo.
+- **Tratamento de erros de inicialização**: Lidar com erros que podem ocorrer ao inicializar a aplicação, como falha ao carregar dados do localStorage.
+- **Testes de unidade e integração**: Implementar testes para garantir que a aplicação funcione corretamente em diferentes cenários.
