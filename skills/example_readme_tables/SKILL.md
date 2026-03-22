@@ -136,20 +136,54 @@ uv run scripts/evaluation_manager.py extract-readme \
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
 
-O tratamento de exceções e edge cases é crucial para garantir a robustez e confiabilidade do extrator de tabelas de avaliação. Aqui estão alguns exemplos de como lidar com esses casos:
+O tratamento de exceções e edge cases é crucial para garantir a robustez e confiabilidade do script de extração. Aqui estão alguns exemplos de como lidar com esses casos:
 
-* **Tabelas com estruturas inconsistentes**: O extrator deve ser capaz de lidar com tabelas que têm estruturas inconsistentes, como linhas ou colunas faltantes.
-* **Valores não numéricos**: O extrator deve ser capaz de lidar com valores não numéricos, como texto ou datas, e ignorá-los ou convertê-los para um formato apropriado.
-* **Tabelas com muitas colunas**: O extrator deve ser capaz de lidar com tabelas que têm muitas colunas e identificar as colunas relevantes para a extração de dados.
-* **Tabelas com muitas linhas**: O extrator deve ser capaz de lidar com tabelas que têm muitas linhas e processá-las de forma eficiente.
-* **Erros de sintaxe**: O extrator deve ser capaz de lidar com erros de sintaxe, como tabelas malformadas ou faltantes, e relatar erros de forma clara e útil.
-* **Segurança**: O extrator deve ser capaz de lidar com questões de segurança, como a proteção contra injeção de código malicioso ou a exposição de dados sensíveis.
+* **Tabelas malformadas**: O script deve ser capaz de lidar com tabelas que não seguem a sintaxe markdown padrão. Isso pode ser feito usando bibliotecas de parsing de markdown que possam lidar com erros de sintaxe.
+* **Valores não numéricos**: O script deve ser capaz de lidar com valores que não são numéricos, como texto ou datas. Isso pode ser feito usando funções de parsing que possam lidar com diferentes tipos de dados.
+* **Tabelas vazias**: O script deve ser capaz de lidar com tabelas vazias, ou seja, tabelas que não contêm nenhuma linha ou coluna. Isso pode ser feito usando condições que verifiquem se a tabela está vazia antes de tentar extrair os dados.
+* **Erros de conexão**: O script deve ser capaz de lidar com erros de conexão, como timeouts ou erros de rede. Isso pode ser feito usando mecanismos de retry e timeout que possam lidar com esses erros.
+* **Erros de permissão**: O script deve ser capaz de lidar com erros de permissão, como falta de permissão para acessar o repositório ou o arquivo. Isso pode ser feito usando condições que verifiquem se o script tem permissão para acessar o recurso antes de tentar extrair os dados.
 
-Para lidar com esses casos, o extrator pode implementar as seguintes estratégias:
+Exemplos de código que lidam com esses casos:
 
-* **Validação de entrada**: Verificar a entrada para garantir que ela esteja no formato correto e contenha os dados necessários.
-* **Tratamento de erros**: Implementar mecanismos de tratamento de erros para lidar com erros de sintaxe, valores não numéricos e outras exceções.
-* **Normalização de dados**: Normalizar os dados extraídos para garantir que eles estejam no formato correto e sejam consistentes.
-* **Verificação de segurança**: Verificar a entrada e os dados extraídos para garantir que eles não contenham código malicioso ou dados sensíveis.
+```python
+import pandas as pd
 
-Ao implementar essas estratégias, o extrator pode garantir que ele seja robusto, confiável e seguro, e forneça dados precisos e úteis para os usuários.
+def extract_table(table):
+    try:
+        # Tentar parsear a tabela
+        df = pd.read_csv(table, sep='|')
+        return df
+    except pd.errors.EmptyDataError:
+        # Lidar com tabelas vazias
+        print("Tabela vazia")
+        return None
+    except pd.errors.ParserError:
+        # Lidar com tabelas malformadas
+        print("Tabela malformada")
+        return None
+
+def extract_values(table):
+    try:
+        # Tentar extrair os valores
+        values = table.split('|')
+        return values
+    except ValueError:
+        # Lidar com valores não numéricos
+        print("Valores não numéricos")
+        return None
+
+def run_extractor(repo_id, task_type):
+    try:
+        # Tentar executar o script
+        uv.run scripts/evaluation_manager.py extract-readme \
+          --repo-id repo_id \
+          --task-type task_type
+    except ConnectionError:
+        # Lidar com erros de conexão
+        print("Erro de conexão")
+        return None
+    except PermissionError:
+        # Lidar com erros de permissão
+        print("Erro de permissão")
+        return None
