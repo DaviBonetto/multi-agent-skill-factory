@@ -19,7 +19,7 @@ jobs:
           fetch-depth: 0
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "3.11"
           cache: "pip"
@@ -63,7 +63,7 @@ jobs:
               git add "skills/$skill_folder/SKILL.md"
               
               # Only commit if there are changes for this specific skill
-              if ! git diff-index --quiet HEAD; then
+              if ! git diff --staged --quiet; then
                 git commit -m "feat(skills): add $skill_folder skill"
               fi
             done
