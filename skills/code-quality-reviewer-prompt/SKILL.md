@@ -26,17 +26,25 @@ Task tool (superpowers:code-reviewer):
 **Code reviewer returns:** Strengths, Issues (Critical/Important/Minor), Assessment
 
 ⚠️ Tratamento de Exceções e Edge Cases
-### Tratamento de Exceções
-- Verificar se o código lida corretamente com exceções, como erros de sintaxe, erros de tipo, erros de runtime, etc.
-- Verificar se o código tem mecanismos de tratamento de exceções adequados, como try-catch blocks, para evitar que o programa crash ou entre em um estado inconsistente.
-- Verificar se o código registra corretamente as exceções, para que possam ser analisadas e resolvidas posteriormente.
+- Verificar se o código lida corretamente com exceções e erros, incluindo:
+  - Tratamento de erros de entrada e saída
+  - Manipulação de exceções para evitar crashes inesperados
+  - Uso de mecanismos de logging para registrar eventos importantes
+- Verificar se o código é robusto o suficiente para lidar com:
+  - Entradas inválidas ou malformadas
+  - Condições de bordo, como valores limite ou extremos
+  - Casos de uso não previstos ou imprevisíveis
+- Verificar se o código segue as melhores práticas de segurança, incluindo:
+  - Validaçaõ de entrada de usuário
+  - Proteção contra injeção de código
+  - Uso de criptografia para proteger dados sensíveis
+- Verificar se o código é escalável e pode lidar com:
+  - Grandes volumes de dados
+  - Alta carga de trabalho
+  - Condições de rede adversas
 
-### Edge Cases
-- Verificar se o código lida corretamente com casos de bordo, como entradas inválidas, condições de limite, etc.
-- Verificar se o código tem testes adequados para cobrir esses casos de bordo.
-- Verificar se o código é robusto o suficiente para lidar com diferentes tipos de entrada e saída, incluindo dados inválidos ou inconsistentes.
-
-### Segurança
-- Verificar se o código segue as melhores práticas de segurança, como validação de entrada, sanitização de saída, etc.
-- Verificar se o código usa bibliotecas e frameworks seguros e atualizados.
-- Verificar se o código tem mecanismos de autenticação e autorização adequados, para evitar acessos não autorizados.
+**Segurança**
+- Verificar se o código segue as políticas de segurança da empresa
+- Verificar se o código usa bibliotecas e dependências seguras e atualizadas
+- Verificar se o código tem mecanismos de autenticação e autorização adequados
+- Verificar se o código protege contra ataques comuns, como SQL Injection e Cross-Site Scripting (XSS)
