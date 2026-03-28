@@ -30,34 +30,19 @@ We'll announce the XP tiers for this quest soon.
 - [Training Methods](../../hf-llm-trainer/references/training_methods.md) — Method selection guide
 - [Hardware Guide](../../hf-llm-trainer/references/hardware_guide.md) — GPU selection
 
-## Segurança
-
-Para garantir a segurança dos modelos e dos dados, é importante seguir as melhores práticas de segurança, incluindo:
-- Utilizar autenticação e autorização adequadas para acessar os modelos e os dados.
-- Utilizar criptografia para proteger os dados em trânsito e em repouso.
-- Realizar testes de segurança regulares para identificar e corrigir vulnerabilidades.
-
 ## ⚠️ Tratamento de Exceções e Edge Cases
 
-Ao trabalhar com fine-tuning de modelos, é importante considerar os seguintes edge cases e exceções:
-- **Dados insuficientes**: O que acontece quando os dados de treinamento são insuficientes para o modelo?
-  - Solução: Utilizar técnicas de aumento de dados ou coletar mais dados.
-- **Dados ruídosos**: O que acontece quando os dados de treinamento contêm ruídos ou erros?
-  - Solução: Utilizar técnicas de pré-processamento de dados para limpar e filtrar os dados.
-- **Modelo não converge**: O que acontece quando o modelo não converge durante o treinamento?
-  - Solução: Ajustar os hiperparâmetros do modelo ou utilizar técnicas de regularização.
-- **Erros de execução**: O que acontece quando ocorrem erros durante a execução do modelo?
-  - Solução: Utilizar try-except para capturar e tratar os erros, e realizar logs para debugar o problema.
-- **Segurança**: O que acontece quando o modelo é utilizado para propósitos mal-intencionados?
-  - Solução: Implementar controles de segurança, como autenticação e autorização, para garantir que o modelo seja utilizado de forma ética e segura.
+Ao trabalhar com fine-tuning de modelos, é importante considerar os seguintes casos de bordo e exceções:
+* **Dados insuficientes**: Certifique-se de que você tem dados suficientes para treinar o modelo. Se os dados forem insuficientes, o modelo pode não ser capaz de aprender padrões significativos.
+* **Dados desequilibrados**: Se os dados estiverem desequilibrados, o modelo pode ser tendencioso em relação à classe majoritária. Use técnicas de oversampling ou undersampling para equilibrar os dados.
+* **Parâmetros de treinamento**: Certifique-se de que os parâmetros de treinamento estejam configurados corretamente. Parâmetros como taxa de aprendizado, tamanho do lote e número de épocas podem afetar significativamente o desempenho do modelo.
+* **Erros de inicialização**: Certifique-se de que o modelo esteja sendo inicializado corretamente. Erros de inicialização podem levar a resultados inconsistentes ou NaN (Not a Number).
+* **Erros de convergência**: Certifique-se de que o modelo esteja convergindo corretamente. Erros de convergência podem levar a resultados inconsistentes ou NaN.
+* **Segurança**: Certifique-se de que o modelo esteja sendo treinado em um ambiente seguro. Use técnicas de criptografia e autenticação para proteger os dados e o modelo.
+* **Monitoramento**: Certifique-se de que o modelo esteja sendo monitorado corretamente. Use ferramentas de monitoramento para detectar erros ou anomalias durante o treinamento.
 
-Exemplos de código para tratamento de exceções:
-```python
-try:
-    # Código de treinamento do modelo
-except Exception as e:
-    # Tratamento do erro
-    print(f"Erro ocorreu: {e}")
-    # Logs para debugar o problema
-```
-Lembre-se de que a segurança e o tratamento de exceções são fundamentais para garantir a confiabilidade e a eficácia dos modelos de machine learning.
+Além disso, é importante considerar as seguintes práticas de segurança:
+* **Validação de dados**: Certifique-se de que os dados sejam válidos e consistentes antes de treinar o modelo.
+* **Autenticação**: Certifique-se de que apenas usuários autorizados possam acessar o modelo e os dados.
+* **Criptografia**: Certifique-se de que os dados e o modelo sejam criptografados para proteger contra acessos não autorizados.
+* **Backups**: Certifique-se de que os dados e o modelo sejam backups regularmente para evitar perda de dados em caso de falha.
