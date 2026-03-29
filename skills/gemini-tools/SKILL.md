@@ -1,4 +1,5 @@
 # Gemini CLI Tool Mapping
+
 Skills use Claude Code tool names. When you encounter these in a skill, use your platform equivalent:
 
 | Skill references | Gemini CLI equivalent |
@@ -16,9 +17,11 @@ Skills use Claude Code tool names. When you encounter these in a skill, use your
 | `Task` tool (dispatch subagent) | No equivalent — Gemini CLI does not support subagents |
 
 ## No subagent support
+
 Gemini CLI has no equivalent to Claude Code's `Task` tool. Skills that rely on subagent dispatch (`subagent-driven-development`, `dispatching-parallel-agents`) will fall back to single-session execution via `executing-plans`.
 
 ## Additional Gemini CLI tools
+
 These tools are available in Gemini CLI but have no Claude Code equivalent:
 
 | Tool | Purpose |
@@ -30,18 +33,59 @@ These tools are available in Gemini CLI but have no Claude Code equivalent:
 | `enter_plan_mode` / `exit_plan_mode` | Switch to read-only research mode before making changes |
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-Para garantir a robustez e segurança da skill, é fundamental tratar exceções e edge cases. Aqui estão algumas diretrizes:
 
-* **Tratamento de erros**: Todas as chamadas de API e operações de sistema devem ser encapsuladas em try-catch para capturar e tratar erros de forma adequada.
-* **Validação de entrada**: Todas as entradas de usuário devem ser validadas para evitar ataques de injeção de código ou outros tipos de ataques.
-* **Tratamento de casos limite**: Casos limite, como arquivos vazios ou diretórios inexistentes, devem ser tratados de forma adequada para evitar erros ou comportamentos inesperados.
-* **Segurança**: Todas as operações que envolvem acesso a arquivos ou sistemas devem ser realizadas com permissões adequadas e segurança para evitar acessos não autorizados.
-* **Testes**: A skill deve ser testada exhaustivamente para garantir que todos os casos de uso sejam cobertos e que a skill funcione corretamente em diferentes ambientes e condições.
+### Erros de sintaxe
 
-Exemplos de tratamento de exceções e edge cases:
+*   Verifique se os comandos estão corretamente formatados e se os parâmetros estão sendo passados corretamente.
+*   Trate erros de sintaxe como exceções e forneça mensagens de erro claras e concisas.
 
-* `try`-`catch` para capturar erros de leitura de arquivos: `try { read_file('arquivo.txt') } catch (e) { console.error('Erro ao ler arquivo:', e) }`
-* Validação de entrada de usuário: `if (typeof userInput === 'string' && userInput.trim() !== '') { // processar entrada } else { console.error('Entrada inválida') }`
-* Tratamento de casos limite: `if (fileExists('arquivo.txt')) { // processar arquivo } else { console.error('Arquivo não existe') }`
+### Erros de permissão
 
-Ao seguir essas diretrizes e exemplos, é possível garantir que a skill seja robusta, segura e funcione corretamente em diferentes situações.
+*   Verifique se o usuário tem as permissões necessárias para executar os comandos.
+*   Trate erros de permissão como exceções e forneça mensagens de erro claras e concisas.
+
+### Erros de arquivo
+
+*   Verifique se os arquivos existem e se podem ser lidos ou escritos.
+*   Trate erros de arquivo como exceções e forneça mensagens de erro claras e concisas.
+
+### Edge cases
+
+*   Verifique se os comandos funcionam corretamente com entradas inválidas ou edge cases.
+*   Trate edge cases como exceções e forneça mensagens de erro claras e concisas.
+
+### Exemplos de tratamento de exceções
+
+```markdown
+try:
+    # Código que pode gerar exceção
+    read_file("arquivo.txt")
+except FileNotFoundError:
+    # Tratamento de exceção
+    print("Arquivo não encontrado")
+except PermissionError:
+    # Tratamento de exceção
+    print("Permissão negada")
+```
+
+### Segurança
+
+*   Verifique se os comandos estão sendo executados de forma segura e se os dados estão sendo tratados corretamente.
+*   Use criptografia e autenticação para proteger os dados e os comandos.
+
+### Exemplos de segurança
+
+```markdown
+import hashlib
+
+# Criptografia de senha
+senha = "minha_senha"
+senha_criptografada = hashlib.sha256(senha.encode()).hexdigest()
+
+# Autenticação
+if senha_criptografada == "senha_criptografada_armazenada":
+    # Acesso concedido
+    print("Acesso concedido")
+else:
+    # Acesso negado
+    print("Acesso negado")
