@@ -56,14 +56,28 @@ Task tool (general-purpose):
     **Verify by reading code, not by trusting report.**
 
     Report:
-    - Spec compliant (if everything matches after code inspection)
-    - Issues found: [list specifically what's missing or extra, with file:line references]
+    - ✅ Spec compliant (if everything matches after code inspection)
+    - ❌ Issues found: [list specifically what's missing or extra, with file:line references]
 
-    Tratamento de Exceções e Edge Cases
-    - **Caso de uso não previsto:** Se o implementador apresentar um caso de uso não previsto, verifique se ele está dentro do escopo da especificação e se foi implementado corretamente.
-    - **Exceções de segurança:** Verifique se o implementador tratou corretamente as exceções de segurança, como injeção de código, cross-site scripting (XSS) e outros tipos de ataques.
-    - **Tratamento de erros:** Verifique se o implementador tratou corretamente os erros, como erros de sintaxe, erros de lógica e outros tipos de erros.
-    - **Limites de recursos:** Verifique se o implementador respeitou os limites de recursos, como memória, processamento e outros recursos.
-    - **Compatibilidade:** Verifique se o implementador garantir a compatibilidade com diferentes plataformas, navegadores e dispositivos.
-    - **Legibilidade e manutenção:** Verifique se o código é legível e fácil de manter, com comentários claros e concisos.
-    - **Testes:** Verifique se o implementador realizou testes adequados, como testes unitários, testes de integração e testes de sistema.
+    ⚠️ Tratamento de Exceções e Edge Cases
+    - **Caso de Uso Inválido:** Se o relatório do implementador for inválido ou não forneceu informações suficientes, verifique se é possível obter as informações necessárias por outros meios.
+    - **Código Incompleto:** Se o código fornecido estiver incompleto, verifique se é possível completá-lo com base nas especificações do projeto.
+    - **Especificação Ambígua:** Se as especificações do projeto forem ambíguas ou contraditórias, verifique se é possível esclarecer as dùvidas com o cliente ou o gerente do projeto.
+    - **Ferramentas e Tecnologias Desatualizadas:** Se as ferramentas ou tecnologias utilizadas no projeto estiverem desatualizadas, verifique se é possível atualizá-las ou substituí-las por alternativas mais recentes.
+    - **Problemas de Segurança:** Se forem encontrados problemas de segurança no código, verifique se é possível corrigi-los e implementar medidas de segurança adicionais para prevenir futuros problemas.
+    - **Limitações de Recursos:** Se houver limitações de recursos (como memória, processamento, etc.) que afetem a implementação, verifique se é possível otimizar o código para trabalhar dentro dessas limitações.
+
+[WARNINGS]
+- Seja rigoroso. A skill deve estar pronta para um ambiente de produção (Senior level).
+- Status deve ser "PASS" se for adequado, ou "FAIL" caso o markdown falhe em ser direto, coeso ou exiba código com falhas notórias.
+- Se for FAIL, a propriedade 'fixed_markdown' deve conter a versão corrigida (se for possível corrigir facilmente). Caso não consiga, devolva a string vazia ou o markdown da forma que conseguiu salvar.
+- Se for PASS, repita o markdown original em 'fixed_markdown'.
+- RETORNE APENAS JSON. Nenhuma palavra a mais.
+
+[RETURN]
+Retorne API JSON com o schema exato:
+{
+  "status": "PASS" ou "FAIL",
+  "reasoning": "Breve justificativa",
+  "fixed_markdown": "... conteudo final stringified ..."
+}
