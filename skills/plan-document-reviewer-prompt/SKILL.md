@@ -4,8 +4,6 @@ Use this template when dispatching a plan document reviewer subagent.
 
 **Purpose:** Verify the plan is complete, matches the spec, and has proper task decomposition.
 
-**Dispatch after:** The complete plan is written.
-
 ```
 Task tool (general-purpose):
   description: "Review plan document"
@@ -47,11 +45,11 @@ Task tool (general-purpose):
 
     ⚠️ Tratamento de Exceções e Edge Cases
 
-    *   **Planos incompletos:** Se o plano estiver incompleto, verifique se os principais componentes estão presentes, como objetivos, escopo, cronograma e recursos necessários. Se algum desses componentes estiver faltando, registre como um problema.
-    *   **Conflitos de especificação:** Se houver conflitos entre a especificação e o plano, avalie se o plano atende às necessidades principais da especificação. Se não, isso deve ser reportado como um problema.
-    *   **Tarefas mal definidas:** Se as tarefas não estiverem claramente definidas ou forem ambíguas, isso pode causar problemas durante a implementação. Certifique-se de que as tarefas tenham objetivos claros e passos bem definidos.
-    *   **Problemas de segurança:** Se o plano não considerar aspectos de segurança importantes, como proteção de dados ou autenticação de usuários, isso deve ser tratado como um problema crítico.
-    *   **Dependências não declaradas:** Se o plano depende de recursos ou serviços externos que não estão claramente declarados, isso pode levar a problemas durante a implementação. Verifique se todas as dependências estão documentadas e acessíveis.
-    *   **Cenários de bordo:** Considere cenários de bordo, como o que acontece se um recurso necessário não estiver disponível, ou se houver uma falha no sistema. O plano deve ter estratégias para lidar com esses cenários.
-
-**Reviewer returns:** Status, Issues (if any), Recommendations
+    *   **Planos incompletos:** Se o plano estiver incompleto, verifique se há uma justificativa clara para a falta de informações. Se não houver, solicite ao autor do plano que forneça as informações necessárias.
+    *   **Specs contraditórias:** Se a especificação contiver informações contraditórias, solicite esclarecimentos ao autor da especificação antes de prosseguir com a revisão.
+    *   **Tarefas ambíguas:** Se as tarefas forem ambíguas ou não tiverem limites claros, solicite ao autor do plano que forneça mais detalhes ou esclarecimentos.
+    *   **Problemas de segurança:** Se durante a revisão forem identificados problemas de segurança, como a falta de autenticação ou autorização, informe imediatamente o autor do plano e solicite que sejam tomadas medidas para corrigir esses problemas.
+    *   **Erros de formatação:** Se houver erros de formatação no plano, como links quebrados ou imagens faltantes, informe o autor do plano para que possam ser corrigidos.
+    *   **Dependências não declaradas:** Se durante a revisão forem identificadas dependências não declaradas, como bibliotecas ou serviços externos, solicite ao autor do plano que as declare explicitamente.
+    *   **Cenários de bordo:** Considere cenários de bordo, como o que acontece se um serviço externo estiver indisponível ou se houver uma falha de rede. Certifique-se de que o plano aborde esses cenários adequadamente.
+    *   **Revisão de segurança:** Realize uma revisão de segurança do plano, verificando se há possíveis vulnerabilidades ou riscos de segurança. Se encontrar algum, informe o autor do plano e solicite que sejam tomadas medidas para mitigá-los.
