@@ -30,19 +30,25 @@ We'll announce the XP tiers for this quest soon.
 - [Training Methods](../../hf-llm-trainer/references/training_methods.md) — Method selection guide
 - [Hardware Guide](../../hf-llm-trainer/references/hardware_guide.md) — GPU selection
 
+## Segurança
+
+Para garantir a segurança dos modelos e dos dados, é importante seguir as melhores práticas de segurança, incluindo:
+- Autenticação e autorização adequadas para acessar os modelos e os dados
+- Uso de criptografia para proteger os dados em trânsito e em repouso
+- Implementação de controles de acesso e auditoria para detectar e prevenir acessos não autorizados
+
 ## ⚠️ Tratamento de Exceções e Edge Cases
 
 Ao trabalhar com fine-tuning de modelos, é importante considerar os seguintes casos de bordo e exceções:
-* **Dados insuficientes**: Certifique-se de que você tem dados suficientes para treinar o modelo. Se os dados forem insuficientes, o modelo pode não ser capaz de aprender padrões significativos.
-* **Dados desequilibrados**: Se os dados estiverem desequilibrados, o modelo pode ser tendencioso em relação à classe majoritária. Use técnicas de oversampling ou undersampling para equilibrar os dados.
-* **Parâmetros de treinamento**: Certifique-se de que os parâmetros de treinamento estejam configurados corretamente. Parâmetros como taxa de aprendizado, tamanho do lote e número de épocas podem afetar significativamente o desempenho do modelo.
-* **Erros de inicialização**: Certifique-se de que o modelo esteja sendo inicializado corretamente. Erros de inicialização podem levar a resultados inconsistentes ou NaN (Not a Number).
-* **Erros de convergência**: Certifique-se de que o modelo esteja convergindo corretamente. Erros de convergência podem levar a resultados inconsistentes ou NaN.
-* **Segurança**: Certifique-se de que o modelo esteja sendo treinado em um ambiente seguro. Use técnicas de criptografia e autenticação para proteger os dados e o modelo.
-* **Monitoramento**: Certifique-se de que o modelo esteja sendo monitorado corretamente. Use ferramentas de monitoramento para detectar erros ou anomalias durante o treinamento.
+- **Dados insuficientes**: O que acontece quando os dados de treinamento são insuficientes ou de baixa qualidade?
+- **Modelos não convergentes**: O que fazer quando o modelo não converge durante o treinamento?
+- **Erros de inicialização**: Como lidar com erros de inicialização do modelo ou do ambiente de treinamento?
+- **Problemas de escalabilidade**: Como lidar com problemas de escalabilidade quando se trabalha com grandes conjuntos de dados ou modelos complexos?
+- **Ataques de força bruta**: Como proteger os modelos e os dados contra ataques de força bruta ou outros tipos de ataques cibernéticos?
 
-Além disso, é importante considerar as seguintes práticas de segurança:
-* **Validação de dados**: Certifique-se de que os dados sejam válidos e consistentes antes de treinar o modelo.
-* **Autenticação**: Certifique-se de que apenas usuários autorizados possam acessar o modelo e os dados.
-* **Criptografia**: Certifique-se de que os dados e o modelo sejam criptografados para proteger contra acessos não autorizados.
-* **Backups**: Certifique-se de que os dados e o modelo sejam backups regularmente para evitar perda de dados em caso de falha.
+Para lidar com esses casos, é importante implementar estratégias de tratamento de exceções e edge cases, incluindo:
+- **Verificação de dados**: Verificar a qualidade e a consistência dos dados de treinamento
+- **Monitoramento do treinamento**: Monitorar o processo de treinamento para detectar problemas ou anomalias
+- **Implementação de fallbacks**: Implementar fallbacks ou planos de contingência para lidar com erros ou problemas inesperados
+- **Treinamento de modelos robustos**: Treinar modelos robustos que possam lidar com variados tipos de dados e condições
+- **Atualizações regulares**: Realizar atualizações regulares dos modelos e do ambiente de treinamento para garantir a segurança e a estabilidade.
