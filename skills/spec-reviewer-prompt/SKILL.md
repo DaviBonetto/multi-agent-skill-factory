@@ -56,28 +56,25 @@ Task tool (general-purpose):
     **Verify by reading code, not by trusting report.**
 
     Report:
-    - ✅ Spec compliant (if everything matches after code inspection)
-    - ❌ Issues found: [list specifically what's missing or extra, with file:line references]
+    - Spec compliant (if everything matches after code inspection)
+    - Issues found: [list specifically what's missing or extra, with file:line references]
 
     ⚠️ Tratamento de Exceções e Edge Cases
-    - **Caso de Uso Inválido:** Se o relatório do implementador for inválido ou não forneceu informações suficientes, verifique se é possível obter as informações necessárias por outros meios.
-    - **Código Incompleto:** Se o código fornecido estiver incompleto, verifique se é possível completá-lo com base nas especificações do projeto.
-    - **Especificação Ambígua:** Se as especificações do projeto forem ambíguas ou contraditórias, verifique se é possível esclarecer as dùvidas com o cliente ou o gerente do projeto.
-    - **Ferramentas e Tecnologias Desatualizadas:** Se as ferramentas ou tecnologias utilizadas no projeto estiverem desatualizadas, verifique se é possível atualizá-las ou substituí-las por alternativas mais recentes.
-    - **Problemas de Segurança:** Se forem encontrados problemas de segurança no código, verifique se é possível corrigi-los e implementar medidas de segurança adicionais para prevenir futuros problemas.
-    - **Limitações de Recursos:** Se houver limitações de recursos (como memória, processamento, etc.) que afetem a implementação, verifique se é possível otimizar o código para trabalhar dentro dessas limitações.
+    ---------------------------
 
-[WARNINGS]
-- Seja rigoroso. A skill deve estar pronta para um ambiente de produção (Senior level).
-- Status deve ser "PASS" se for adequado, ou "FAIL" caso o markdown falhe em ser direto, coeso ou exiba código com falhas notórias.
-- Se for FAIL, a propriedade 'fixed_markdown' deve conter a versão corrigida (se for possível corrigir facilmente). Caso não consiga, devolva a string vazia ou o markdown da forma que conseguiu salvar.
-- Se for PASS, repita o markdown original em 'fixed_markdown'.
-- RETORNE APENAS JSON. Nenhuma palavra a mais.
+    Além das verificações acima, considere os seguintes casos de bordo e exceções:
 
-[RETURN]
-Retorne API JSON com o schema exato:
-{
-  "status": "PASS" ou "FAIL",
-  "reasoning": "Breve justificativa",
-  "fixed_markdown": "... conteudo final stringified ..."
-}
+    * **Código não disponível**: Se o código não estiver disponível para revisão, informe o problema e solicite o código.
+    * **Código parcialmente disponível**: Se apenas parte do código estiver disponível, revise a parte disponível e solicite o restante.
+    * **Requisitos ambíguos**: Se os requisitos forem ambíguos ou não claros, solicite esclarecimentos antes de proceder com a revisão.
+    * **Implementação parcial**: Se a implementação for parcial, verifique se o que foi implementado está correto e solicite a conclusão da implementação.
+    * **Erros de compilação**: Se o código não compilar, informe os erros de compilação e solicite correções.
+    * **Erros de execução**: Se o código executar com erros, informe os erros de execução e solicite correções.
+    * **Segurança**: Verifique se a implementação segue as práticas de segurança adequadas, como validação de entrada, tratamento de erros e proteção contra ataques comuns.
+    * **Desempenho**: Verifique se a implementação é eficiente em termos de desempenho, considerando fatores como tempo de execução, uso de memória e recursos.
+
+# Exemplo de Relatório
+## Relatório de Revisão
+- **Spec compliant**: (se tudo estiver correto)
+- **Issues found**: (lista de problemas encontrados, com referèncias de arquivo e linha)
+- **Recomendações**: (recomendações para melhorias ou correções)
