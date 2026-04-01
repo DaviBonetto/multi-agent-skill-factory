@@ -60,21 +60,15 @@ Task tool (general-purpose):
     - Issues found: [list specifically what's missing or extra, with file:line references]
 
     ⚠️ Tratamento de Exceções e Edge Cases
-    ---------------------------
-
-    Além das verificações acima, considere os seguintes casos de bordo e exceções:
-
-    * **Código não disponível**: Se o código não estiver disponível para revisão, informe o problema e solicite o código.
-    * **Código parcialmente disponível**: Se apenas parte do código estiver disponível, revise a parte disponível e solicite o restante.
-    * **Requisitos ambíguos**: Se os requisitos forem ambíguos ou não claros, solicite esclarecimentos antes de proceder com a revisão.
-    * **Implementação parcial**: Se a implementação for parcial, verifique se o que foi implementado está correto e solicite a conclusão da implementação.
-    * **Erros de compilação**: Se o código não compilar, informe os erros de compilação e solicite correções.
-    * **Erros de execução**: Se o código executar com erros, informe os erros de execução e solicite correções.
-    * **Segurança**: Verifique se a implementação segue as práticas de segurança adequadas, como validação de entrada, tratamento de erros e proteção contra ataques comuns.
-    * **Desempenho**: Verifique se a implementação é eficiente em termos de desempenho, considerando fatores como tempo de execução, uso de memória e recursos.
-
-# Exemplo de Relatório
-## Relatório de Revisão
-- **Spec compliant**: (se tudo estiver correto)
-- **Issues found**: (lista de problemas encontrados, com referèncias de arquivo e linha)
-- **Recomendações**: (recomendações para melhorias ou correções)
+    -------------------------------
+    Além das verificações padrão, é importante considerar os seguintes casos de bordo e exceções:
+    - **Código não executável**: Se o código não for executável devido a erros de sintaxe ou outros problemas, verifique se o implementador forneceu explicações ou soluções alternativas.
+    - **Requisitos ambíguos**: Se os requisitos forem ambíguos ou abertos a interpretação, verifique se o implementador forneceu justificativas para suas escolhas de design e implementação.
+    - **Dependências não declaradas**: Verifique se o implementador declarou todas as dependências necessárias para o código funcionar corretamente.
+    - **Problemas de segurança**: Verifique se o código apresenta vulnerabilidades de segurança conhecidas ou potenciais, como injeção de código ou exposição de dados sensíveis.
+    - **Desempenho e escalabilidade**: Verifique se o código é otimizado para desempenho e escalabilidade, considerando fatores como complexidade algorítmica, uso de recursos e concorrência.
+    - **Testes e validação**: Verifique se o implementador forneceu testes e validação adequados para garantir que o código atende aos requisitos e funciona corretamente.
+```
+Report:
+- ✅ Spec compliant (if everything matches after code inspection)
+- ❌ Issues found: [list specifically what's missing or extra, with file:line references]
