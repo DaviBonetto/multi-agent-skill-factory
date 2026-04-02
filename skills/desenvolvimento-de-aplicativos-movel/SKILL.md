@@ -1,108 +1,72 @@
 ---
-name: Desenvolvimento de Aplicativos Móvel
-description: Ensina como desenvolver aplicativos móveis para Android e iOS utilizando tecnologias modernas como React Native e Flutter
+name: Desenvolvimento de Aplicativos Móvel com React Native
+description: Esta habilidade ensina como desenvolver aplicativos móveis utilizando React Native, incluindo design de interface de usuário, integração com APIs e publicação em lojas de aplicativos.
 ---
 
 ## Objetivo
-O objetivo deste guia é fornecer uma visão geral completa sobre o desenvolvimento de aplicativos móveis para Android e iOS, utilizando tecnologias modernas como React Native e Flutter. Com isso, os desenvolvedores poderão criar aplicativos móveis de alta qualidade, escaláveis e eficientes.
+O objetivo desta habilidade é capacitar os desenvolvedores a criar aplicativos móveis robustos e escaláveis utilizando o framework React Native, abordando desde o design de interface de usuário até a publicação em lojas de aplicativos.
 
 ## Pré-requisitos
-Para seguir este guia, é necessário ter conhecimento em:
-* Programação em JavaScript (para React Native) ou Dart (para Flutter)
-* Desenvolvimento de interfaces de usuário
-* Conhecimento básico de sistemas operacionais Android e iOS
-* Ferramentas de desenvolvimento como Node.js, npm, yarn, Android Studio e Xcode
+Para iniciar este curso, é necessário ter conhecimento básico em:
+- Programação em JavaScript
+- React
+- Conceitos de desenvolvimento móvel
+
+Além disso, é recomendado ter familiaridade com:
+- Ferramentas de linha de comando
+- Git para versionamento de código
 
 ## Passo a Passo Técnico / Exemplos de Código
-### Configurando o Ambiente de Desenvolvimento
-Para começar a desenvolver aplicativos móveis, é necessário configurar o ambiente de desenvolvimento. Isso inclui:
-* Instalar o Node.js e o npm (para React Native) ou o Dart e o Flutter
-* Instalar o Android Studio e o Xcode
-* Configurar o emulador ou dispositivo físico para testar o aplicativo
-
-### Criando um Aplicativo Móvel com React Native
-```javascript
-import React from 'react';
-import { View, Text } from 'react-native';
-
-const App = () => {
-  return (
-    <View>
-      <Text>Olá, Mundo!</Text>
-    </View>
-  );
-};
-
-export default App;
+### Configurando o Ambiente
+1. Instalar o Node.js e o npm (Node Package Manager) em sua máquina.
+2. Instalar o React Native CLI utilizando o comando:
+```bash
+npm install -g react-native-cli
+```
+3. Criar um novo projeto React Native:
+```bash
+npx react-native init NomeDoSeuApp
 ```
 
-### Criando um Aplicativo Móvel com Flutter
-```dart
-import 'package:flutter/material.dart';
+### Desenvolvendo o Aplicativo
+1. Estruturar o aplicativo com componentes funcionais e de classe.
+2. Implementar navegação entre telas utilizando o React Navigation.
+3. Consumir APIs para obter e enviar dados.
 
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'Olá, Mundo!',
-      home: Scaffold(
-        body: Center(
-          child: Text('Olá, Mundo!'),
-        ),
-      ),
-    );
-  }
-}
-```
-
-## Validação
-Para validar o aplicativo móvel, é necessário testá-lo em diferentes dispositivos e plataformas. Isso inclui:
-* Testar o aplicativo em emuladores e dispositivos físicos
-* Verificar a compatibilidade com diferentes versões de sistemas operacionais
-* Realizar testes de desempenho e segurança
-* Coletar feedback de usuários e realizar melhorias contínuas.
-
-## Tratamento de Exceções e Edge Cases
-Para garantir a robustez e a segurança do aplicativo móvel, é importante tratar exceções e edge cases. Isso inclui:
-* Tratar erros de rede e conexão
-* Lidar com problemas de permissão e acesso a recursos do dispositivo
-* Implementar mecanismos de segurança para proteger dados sensíveis
-* Testar o aplicativo em diferentes condições de rede e hardware
-* Implementar um sistema de logging e monitoramento para detectar e resolver problemas
-
-Exemplos de tratamento de exceções em React Native:
+Exemplo de consumo de API:
 ```javascript
 import React, { useState, useEffect } from 'react';
 import { View, Text } from 'react-native';
 
 const App = () => {
-  const [error, setError] = useState(null);
+  const [dados, setDados] = useState([]);
+  const [erro, setErro] = useState(null);
 
   useEffect(() => {
-    try {
-      // Código que pode lançar uma exceção
-    } catch (error) {
-      setError(error);
-    }
+    fetch('https://api.example.com/dados')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(response.statusText);
+        }
+        return response.json();
+      })
+      .then(data => setDados(data))
+      .catch(erro => setErro(erro.message));
   }, []);
 
-  if (error) {
+  if (erro) {
     return (
       <View>
-        <Text>Erro: {error.message}</Text>
+        <Text>Erro: {erro}</Text>
       </View>
     );
   }
 
   return (
     <View>
-      <Text>Olá, Mundo!</Text>
+      {dados.map(item => (
+        <Text key={item.id}>{item.nome}</Text>
+      ))}
     </View>
   );
 };
@@ -110,56 +74,24 @@ const App = () => {
 export default App;
 ```
 
-Exemplos de tratamento de exceções em Flutter:
-```dart
-import 'package:flutter/material.dart';
+### Publicação em Lojas de Aplicativos
+1. Preparar o aplicativo para distribuição, ajustando o arquivo `android/app/src/main/AndroidManifest.xml` e `ios/Info.plist`.
+2. Criar um arquivo `.apk` para Android e `.ipa` para iOS.
+3. Publicar o aplicativo nas lojas Google Play Store e Apple App Store.
 
-void main() {
-  runApp(const MyApp());
-}
+## Validação
+Para validar o conhecimento adquirido, é necessário desenvolver um aplicativo móvel completo que inclua:
+- Design de interface de usuário atraente e responsivo
+- Integração com API para obter e enviar dados
+- Navegação entre telas
+- Publicação em lojas de aplicativos
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+O aplicativo deve ser testado em dispositivos físicos e emuladores para garantir compatibilidade e desempenho.
 
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'Olá, Mundo!',
-      home: Scaffold(
-        body: Center(
-          child: Text('Olá, Mundo!'),
-        ),
-      ),
-    );
-  }
-}
-
-class MyWidget extends StatefulWidget {
-  @override
-  _MyWidgetState createState() => _MyWidgetState();
-}
-
-class _MyWidgetState extends State<MyWidget> {
-  String? _error;
-
-  @override
-  void initState() {
-    super.initState();
-    try {
-      // Código que pode lançar uma exceção
-    } catch (e) {
-      setState(() {
-        _error = e.toString();
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (_error != null) {
-      return Text('Erro: $_error');
-    }
-
-    return const Text('Olá, Mundo!');
-  }
-}
+## ⚠️ Tratamento de Exceções e Edge Cases
+- **Tratamento de erros de rede**: Implementar tratamento de erros de rede para lidar com situações de perda de conexão ou respostas inválidas do servidor.
+- **Validação de dados**: Validar os dados recebidos das APIs para garantir que sejam válidos e consistentes.
+- **Tratamento de exceções**: Implementar tratamento de exceções para lidar com situações de erro inesperado, como erros de sintaxe ou erros de runtime.
+- **Compatibilidade com diferentes dispositivos**: Testar o aplicativo em diferentes dispositivos e plataformas para garantir compatibilidade e desempenho.
+- **Segurança**: Implementar medidas de segurança para proteger os dados dos usuários, como criptografia e autenticação.
+- **Acessibilidade**: Implementar recursos de acessibilidade para garantir que o aplicativo seja acessível a usuários com deficiência.
