@@ -1,147 +1,117 @@
 ---
-name: huggingface-datasets
-description: Use this skill for Hugging Face Dataset Viewer API workflows that fetch subset/split metadata, paginate rows, search text, apply filters, download parquet URLs, and read size or statistics.
+name: requesting-code-review
+description: Use when completing tasks, implementing major features, or before merging to verify work meets requirements
 ---
 
-# Hugging Face Dataset Viewer
+# Requesting Code Review
 
-Use this skill to execute read-only Dataset Viewer API calls for dataset exploration and extraction.
+Dispatch superpowers:code-reviewer subagent to catch issues before they cascade. The reviewer gets precisely crafted context for evaluation — never your session's history. This keeps the reviewer focused on the work product, not your thought process, and preserves your own context for continued work.
 
-## Core workflow
+**Core principle:** Review early, review often.
 
-1. Optionally validate dataset availability with `/is-valid`.
-2. Resolve `config` + `split` with `/splits`.
-3. Preview with `/first-rows`.
-4. Paginate content with `/rows` using `offset` and `length` (max 100).
-5. Use `/search` for text matching and `/filter` for row predicates.
-6. Retrieve parquet links via `/parquet` and totals/metadata via `/size` and `/statistics`.
+## When to Request Review
 
-## Defaults
+**Mandatory:**
+- After each task in subagent-driven development
+- After completing major feature
+- Before merge to main
 
-- Base URL: `https://datasets-server.huggingface.co`
-- Default API method: `GET`
-- Query params should be URL-encoded.
-- `offset` is 0-based.
-- `length` max is usually `100` for row-like endpoints.
-- Gated/private datasets require `Authorization: Bearer <HF_TOKEN>`.
+**Optional but valuable:**
+- When stuck (fresh perspective)
+- Before refactoring (baseline check)
+- After fixing complex bug
 
-## Dataset Viewer
+## How to Request
 
-- `Validate dataset`: `/is-valid?dataset=<namespace/repo>`
-- `List subsets and splits`: `/splits?dataset=<namespace/repo>`
-- `Preview first rows`: `/first-rows?dataset=<namespace/repo>&config=<config>&split=<split>`
-- `Paginate rows`: `/rows?dataset=<namespace/repo>&config=<config>&split=<split>&offset=<int>&length=<int>`
-- `Search text`: `/search?dataset=<namespace/repo>&config=<config>&split=<split>&query=<text>&offset=<int>&length=<int>`
-- `Filter with predicates`: `/filter?dataset=<namespace/repo>&config=<config>&split=<split>&where=<predicate>&orderby=<sort>&offset=<int>&length=<int>`
-- `List parquet shards`: `/parquet?dataset=<namespace/repo>`
-- `Get size totals`: `/size?dataset=<namespace/repo>`
-- `Get column statistics`: `/statistics?dataset=<namespace/repo>&config=<config>&split=<split>`
-- `Get Croissant metadata (if available)`: `/croissant?dataset=<namespace/repo>`
-
-Pagination pattern:
-
+**1. Get git SHAs:**
 ```bash
-curl "https://datasets-server.huggingface.co/rows?dataset=stanfordnlp/imdb&config=plain_text&split=train&offset=0&length=100"
-curl "https://datasets-server.huggingface.co/rows?dataset=stanfordnlp/imdb&config=plain_text&split=train&offset=100&length=100"
+BASE_SHA=$(git rev-parse HEAD~1)  # or origin/main
+HEAD_SHA=$(git rev-parse HEAD)
 ```
 
-When pagination is partial, use response fields such as `num_rows_total`, `num_rows_per_page`, and `partial` to drive continuation logic.
+**2. Dispatch code-reviewer subagent:**
 
-Search/filter notes:
+Use Task tool with superpowers:code-reviewer type, fill template at `code-reviewer.md`
 
-- `/search` matches string columns (full-text style behavior is internal to the API).
-- `/filter` requires predicate syntax in `where` and optional sort in `orderby`.
-- Keep filtering and searches read-only and side-effect free.
+**Placeholders:**
+- `{WHAT_WAS_IMPLEMENTED}` - What you just built
+- `{PLAN_OR_REQUIREMENTS}` - What it should do
+- `{BASE_SHA}` - Starting commit
+- `{HEAD_SHA}` - Ending commit
+- `{DESCRIPTION}` - Brief summary
 
-## Querying Datasets
+**3. Act on feedback:**
+- Fix Critical issues immediately
+- Fix Important issues before proceeding
+- Note Minor issues for later
+- Push back if reviewer is wrong (with reasoning)
 
-Use `npx parquetlens` with Hub parquet alias paths for SQL querying.
+## Example
 
-Parquet alias shape:
+```
+[Just completed Task 2: Add verification function]
 
-```text
-hf://datasets/<namespace>/<repo>@~parquet/<config>/<split>/<shard>.parquet
+You: Let me request code review before proceeding.
+
+BASE_SHA=$(git log --oneline | grep "Task 1" | head -1 | awk '{print $1}')
+HEAD_SHA=$(git rev-parse HEAD)
+
+[Dispatch superpowers:code-reviewer subagent]
+  WHAT_WAS_IMPLEMENTED: Verification and repair functions for conversation index
+  PLAN_OR_REQUIREMENTS: Task 2 from docs/superpowers/plans/deployment-plan.md
+  BASE_SHA: a7981ec
+  HEAD_SHA: 3df7661
+  DESCRIPTION: Added verifyIndex() and repairIndex() with 4 issue types
+
+[Subagent returns]:
+  Strengths: Clean architecture, real tests
+  Issues:
+    Important: Missing progress indicators
+    Minor: Magic number (100) for reporting interval
+  Assessment: Ready to proceed
+
+You: [Fix progress indicators]
+[Continue to Task 3]
 ```
 
-Derive `<config>`, `<split>`, and `<shard>` from Dataset Viewer `/parquet`:
+## Integration with Workflows
 
-```bash
-curl -s "https://datasets-server.huggingface.co/parquet?dataset=cfahlgren1/hub-stats" 
-  | jq -r '.parquet_files[] | "hf://datasets/\(.dataset)@~parquet/\(.config)/\(.split)/\(.filename)"'
-```
+**Subagent-Driven Development:**
+- Review after EACH task
+- Catch issues before they compound
+- Fix before moving to next task
 
-Run SQL query:
+**Executing Plans:**
+- Review after each batch (3 tasks)
+- Get feedback, apply, continue
 
-```bash
-npx -y -p parquetlens -p @parquetlens/sql parquetlens 
-  "hf://datasets/<namespace>/<repo>@~parquet/<config>/<split>/<shard>.parquet" 
-  --sql "SELECT * FROM data LIMIT 20"
-```
+**Ad-Hoc Development:**
+- Review before merge
+- Review when stuck
 
-### SQL export
+## Red Flags
 
-- CSV: `--sql "COPY (SELECT * FROM data LIMIT 1000) TO 'export.csv' (FORMAT CSV, HEADER, DELIMITER ',')"`
-- JSON: `--sql "COPY (SELECT * FROM data LIMIT 1000) TO 'export.json' (FORMAT JSON)"`
-- Parquet: `--sql "COPY (SELECT * FROM data LIMIT 1000) TO 'export.parquet' (FORMAT PARQUET)"`
+**Never:**
+- Skip review because "it's simple"
+- Ignore Critical issues
+- Proceed with unfixed Important issues
+- Argue with valid technical feedback
 
-## Creating and Uploading Datasets
-
-Use one of these flows depending on dependency constraints.
-
-Zero local dependencies (Hub UI):
-
-- Create dataset repo in browser: `https://huggingface.co/new-dataset`
-- Upload parquet files in the repo "Files and versions" page.
-- Verify shards appear in Dataset Viewer:
-
-```bash
-curl -s "https://datasets-server.huggingface.co/parquet?dataset=<namespace>/<repo>"
-```
-
-Low dependency CLI flow (`npx @huggingface/hub` / `hfjs`):
-
-- Set auth token:
-
-```bash
-export HF_TOKEN=<your_hf_token>
-```
-
-- Upload parquet folder to a dataset repo (auto-creates repo if missing):
-
-```bash
-npx -y @huggingface/hub upload datasets/<namespace>/<repo> ./local/parquet-folder data
-```
-
-- Upload as private repo on creation:
-
-```bash
-npx -y @huggingface/hub upload datasets/<namespace>/<repo> ./local/parquet-folder data --private
-```
-
-After upload, call `/parquet` to discover `<config>/<split>/<shard>` values for querying with `@~parquet`.
+**If reviewer wrong:**
+- Push back with technical reasoning
+- Show code/tests that prove it works
+- Request clarification
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
 
-- **Erro de Autenticação**: Verifique se o token de autenticação está correto e se a conta tem permissão para acessar o dataset.
-- **Dataset Não Encontrado**: Verifique se o nome do dataset está correto e se o dataset existe no repositório.
-- **Parâmetros Inválidos**: Verifique se os parâmetros de consulta estão corretos e se estão dentro dos limites permitidos.
-- **Limite de Paginação**: Verifique se o limite de paginação está dentro do permitido (max 100).
-- **Erro de Conexão**: Verifique se a conexão com o servidor está estável e se há problemas de rede.
-- **Dataset Vazio**: Verifique se o dataset está vazio e se há dados para serem retornados.
-- **Erro de Parse**: Verifique se os dados estão no formato correto e se há erros de parse.
-- **Timeout**: Verifique se o tempo de espera está dentro do permitido e se há problemas de desempenho.
+**Erros comuns:**
+- Falha ao obter SHAs: Verifique se o repositório Git está configurado corretamente e se as permissões estão adequadas.
+- Problemas de comunicação com o subagente: Verifique se o subagente está funcionando corretamente e se as dependências estão atualizadas.
+- Dificuldades em entender o feedback: Peça esclarecimentos ao revisor ou solicite mais informações sobre as issues reportadas.
 
-Exemplos de tratamento de exceções:
+**Edge cases:**
+- Quando o subagente não está disponível: Use um mecanismo de fallback, como um revisor manual, para garantir que o código seja revisado.
+- Quando o código é muito complexo: Divida o código em partes menores e revise cada uma delas separadamente.
+- Quando o prazo é apertado: Priorize as issues mais críticas e importante, e adie as menos importantes para uma revisão posterior.
 
-```bash
-try:
-    response = requests.get(url)
-    response.raise_for_status()
-except requests.exceptions.HTTPError as errh:
-    print(f"HTTP Error: {errh}")
-except requests.exceptions.ConnectionError as errc:
-    print(f"Error de Conexão: {errc}")
-except requests.exceptions.Timeout as errt:
-    print(f"Timeout: {errt}")
-except requests.exceptions.RequestException as err:
-    print(f"Erro de Requisição: {err}")
+See template at: requesting-code-review/code-reviewer.md
