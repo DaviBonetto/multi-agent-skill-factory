@@ -1,79 +1,76 @@
 ---
-name: Arquitetura de Microsserviços
-description: Ensina como projetar e implementar arquiteturas de microsserviços escaláveis e flexíveis
+name: Arquitetura de Microsserviços com Spring Boot e Node.js
+description: Esta habilidade ensina como projetar e implementar arquiteturas de microsserviços utilizando Spring Boot e Node.js, incluindo comunicação entre serviços e gerenciamento de falhas.
 ---
 
 ## Objetivo
-O objetivo deste guia é fornecer uma visão geral de como projetar e implementar arquiteturas de microsserviços escaláveis e flexíveis. Isso inclui entender os conceitos básicos de microsserviços, como eles se diferenciam da arquitetura monolítica tradicional, e como podem ser utilizados para melhorar a escalabilidade e a manutenção de sistemas complexos.
+O objetivo desta habilidade é fornecer conhecimento prático sobre como projetar e implementar arquiteturas de microsserviços utilizando Spring Boot e Node.js, permitindo que os desenvolvedores criem sistemas escaláveis e resilientes.
 
 ## Pré-requisitos
-Para seguir este guia, é necessário ter conhecimentos básicos em:
-- Desenvolvimento de software
-- Arquitetura de sistemas
-- Protocolos de comunicação (como HTTP, gRPC, etc.)
-- Linguagens de programação (como Java, Python, Node.js, etc.)
-- Ferramentas de orquestração de contêineres (como Docker, Kubernetes, etc.)
+Para aproveitar ao máximo esta habilidade, é recomendado que os participantes tenham conhecimento em:
+* Desenvolvimento de aplicações em Java com Spring Boot
+* Desenvolvimento de aplicações em JavaScript com Node.js
+* Conceitos básicos de arquitetura de microsserviços
 
 ## Passo a Passo Técnico / Exemplos de Código
-### 1. Definição de Microsserviços
-Um microsserviço é um componente de software que fornece uma funcionalidade específica e pode ser desenvolvido, testado e implantado de forma independente. Para definir um microsserviço, é necessário:
-- Identificar as funcionalidades do sistema que podem ser isoladas
-- Definir as interfaces de comunicação entre os microsserviços
-- Escolher a tecnologia e a linguagem de programação adequadas para cada microsserviço
+### Projetando a Arquitetura de Microsserviços
+1. **Definir os Serviços**: Identifique os serviços que compõem a arquitetura de microsserviços, considerando as responsabilidades e as funcionalidades de cada serviço.
+2. **Comunicação entre Serviços**: Escolha um mecanismo de comunicação adequado, como REST ou mensageria, para permitir a comunicação entre os serviços.
+3. **Gerenciamento de Falhas**: Implemente estratégias de gerenciamento de falhas, como retry, circuit breaker e fallback, para garantir a resiliência do sistema.
 
-### 2. Projeto de Arquitetura
-A arquitetura de microsserviços deve ser projetada para ser escalável, flexível e tolerante a falhas. Isso pode ser alcançado por meio da utilização de:
-- **API Gateway**: um ponto de entrada único para o sistema
-- **Service Registry**: um registro de todos os microsserviços disponíveis
-- **Load Balancer**: um balanceador de carga para distribuir o tráfego entre os microsserviços
+### Exemplo de Código em Spring Boot
+```java
+// Exemplo de um serviço em Spring Boot que expõe uma API REST
+@RestController
+@RequestMapping("/users")
+public class UserController {
+    @GetMapping
+    public List<User> getUsers() {
+        // Lógica para recuperar os usuários
+    }
+}
+```
 
-### 3. Implementação de Microsserviços
-A implementação de microsserviços pode ser feita utilizando diferentes linguagens de programação e tecnologias. Por exemplo, em Node.js, um microsserviço pode ser implementado utilizando o framework Express.js:
+### Exemplo de Código em Node.js
 ```javascript
+// Exemplo de um serviço em Node.js que expõe uma API REST
 const express = require('express');
 const app = express();
 
 app.get('/users', (req, res) => {
-  try {
     // Lógica para recuperar os usuários
-    const users = [{ id: 1, name: 'João' }, { id: 2, name: 'Maria' }];
-    res.json(users);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Erro ao recuperar os usuários' });
-  }
-});
-
-app.listen(3000, () => {
-  console.log('Microsserviço de usuários rodando na porta 3000');
 });
 ```
 
 ## Validação
-A validação da arquitetura de microsserviços é fundamental para garantir que o sistema esteja funcionando corretamente e atendendo aos requisitos. Isso pode ser feito por meio da realização de testes unitários, testes de integração e testes de desempenho. Além disso, é importante monitorar o sistema em tempo real para detectar e corrigir problemas rapidamente.
+Para validar a implementação da arquitetura de microsserviços, é importante realizar testes de:
+* Funcionalidade: Verificar se os serviços estão funcionando corretamente e se a comunicação entre eles está ocorrendo como esperado.
+* Desempenho: Avaliar o desempenho do sistema, considerando fatores como tempo de resposta e capacidade de processamento.
+* Resiliência: Testar a capacidade do sistema de lidar com falhas e erros, garantindo que os serviços possam se recuperar e continuar funcionando corretamente.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-Para garantir a robustez e a confiabilidade do sistema, é fundamental tratar as exceções e os casos de bordo (edge cases) de forma adequada. Alguns exemplos incluem:
-- **Tratamento de erros de rede**: lidar com erros de conexão, timeouts e outros problemas de rede que possam ocorrer durante a comunicação entre os microsserviços.
-- **Tratamento de erros de dados**: lidar com erros de dados inválidos ou inconsistentes que possam ser recebidos ou enviados pelos microsserviços.
-- **Tratamento de falhas de microsserviços**: lidar com falhas de microsserviços individuais, garantindo que o sistema como um todo continue funcionando corretamente.
-- **Tratamento de sobrecarga**: lidar com situações de sobrecarga, garantindo que o sistema não fique sobrecarregado e continue funcionando de forma eficiente.
-- **Tratamento de segurança**: lidar com ameaças de segurança, como ataques de força bruta, injeção de SQL, cross-site scripting (XSS), etc.
+Para garantir a robustez e a confiabilidade do sistema, é fundamental considerar os seguintes casos de bordo e exceções:
+* **Erros de Comunicação**: Implemente mecanismos para lidar com erros de comunicação entre serviços, como timeouts, conexões perdidas, etc.
+* **Erros de Negócio**: Trate erros de negócio, como dados inválidos, operações não permitidas, etc.
+* **Sobrecarga de Tráfego**: Implemente estratégias para lidar com sobrecarga de tráfego, como balanceamento de carga, cache, etc.
+* **Falhas de Infraestrutura**: Considere falhas de infraestrutura, como falhas de banco de dados, falhas de rede, etc.
+* **Segurança**: Implemente medidas de segurança para proteger o sistema contra ataques e acessos não autorizados.
 
-Exemplo de tratamento de exceções em Node.js:
+Exemplos de código para tratamento de exceções em Spring Boot:
+```java
+// Exemplo de tratamento de exceção em Spring Boot
+@RestControllerAdvice
+public class ErrorHandler {
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> handleException(Exception e) {
+        // Lógica para tratar a exceção
+    }
+}
+```
+
+Exemplos de código para tratamento de exceções em Node.js:
 ```javascript
-app.get('/users', (req, res) => {
-  try {
-    // Lógica para recuperar os usuários
-    const users = [{ id: 1, name: 'João' }, { id: 2, name: 'Maria' }];
-    res.json(users);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Erro ao recuperar os usuários' });
-  }
-});
-
+// Exemplo de tratamento de exceção em Node.js
 app.use((err, req, res, next) => {
-  console.error(err);
-  res.status(500).json({ message: 'Erro interno do servidor' });
+    // Lógica para tratar a exceção
 });
