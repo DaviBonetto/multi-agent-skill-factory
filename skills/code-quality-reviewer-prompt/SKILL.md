@@ -27,24 +27,28 @@ Task tool (superpowers:code-reviewer):
 
 ⚠️ Tratamento de Exceções e Edge Cases
 - Verificar se o código lida corretamente com exceções e erros, incluindo:
-  - Tratamento de erros de entrada e saída
-  - Manipulação de exceções para evitar crashes inesperados
-  - Uso de mecanismos de logging para registrar eventos importantes
-- Verificar se o código é robusto o suficiente para lidar com:
-  - Entradas inválidas ou malformadas
-  - Condições de bordo, como valores limite ou extremos
-  - Casos de uso não previstos ou imprevisíveis
+  - Tratamento de erros de sintaxe e semântica
+  - Manipulação de dados inválidos ou inconsistentes
+  - Lidar com condições de bordo, como valores nulos ou vazios
+  - Implementação de mecanismos de retry ou fallback para operações que podem falhar
+- Verificar se o código é robusto o suficiente para lidar com diferentes cenários de entrada e saída, incluindo:
+  - Dados malformados ou corrompidos
+  - Condições de concorrência ou paralelismo
+  - Limitações de recursos, como memória ou processamento
 - Verificar se o código segue as melhores práticas de segurança, incluindo:
-  - Validaçaõ de entrada de usuário
-  - Proteção contra injeção de código
-  - Uso de criptografia para proteger dados sensíveis
-- Verificar se o código é escalável e pode lidar com:
-  - Grandes volumes de dados
-  - Alta carga de trabalho
-  - Condições de rede adversas
+  - Validar e sanitizar entradas de usuário
+  - Proteger contra injeção de código ou ataques de cross-site scripting (XSS)
+  - Implementar autenticação e autorização adequadas
+  - Criptografar dados sensíveis em trânsito e em repouso
 
-**Segurança**
-- Verificar se o código segue as políticas de segurança da empresa
-- Verificar se o código usa bibliotecas e dependências seguras e atualizadas
-- Verificar se o código tem mecanismos de autenticação e autorização adequados
-- Verificar se o código protege contra ataques comuns, como SQL Injection e Cross-Site Scripting (XSS)
+**Exemplos de Edge Cases:**
+- Lidar com datas e horários em diferentes fusos horários
+- Manipular números decimais com precisão variável
+- Tratar de strings com caracteres especiais ou não ASCII
+- Lidar com arquivos ou streams de dados corrompidos ou truncados
+
+**Recomendações:**
+- Utilizar bibliotecas e frameworks de teste para garantir a cobertura de código e a robustez
+- Implementar logging e monitoramento para detectar e diagnosticar problemas
+- Realizar revisões de código regulares para garantir a qualidade e a segurança do código
+- Manter a documentação atualizada e acessível para todos os membros da equipe
