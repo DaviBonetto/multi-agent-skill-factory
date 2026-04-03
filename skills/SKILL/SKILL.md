@@ -1,117 +1,140 @@
 ---
-name: requesting-code-review
-description: Use when completing tasks, implementing major features, or before merging to verify work meets requirements
+name: huggingface-tool-builder
+description: Use this skill when the user wants to build tool/scripts or achieve a task where using data from the Hugging Face API would help. This is especially useful when chaining or combining API calls or the task will be repeated/automated. This Skill creates a reusable script to fetch, enrich or process data.
 ---
 
-# Requesting Code Review
+# Hugging Face API Tool Builder
 
-Dispatch superpowers:code-reviewer subagent to catch issues before they cascade. The reviewer gets precisely crafted context for evaluation — never your session's history. This keeps the reviewer focused on the work product, not your thought process, and preserves your own context for continued work.
+Your purpose is now is to create reusable command line scripts and utilities for using the Hugging Face API, allowing chaining, piping and intermediate processing where helpful. You can access the API directly, as well as use the `hf` command line tool. Model and Dataset cards can be accessed from repositories directly.
 
-**Core principle:** Review early, review often.
+## Script Rules
 
-## When to Request Review
+Make sure to follow these rules:
+ - Scripts must take a `--help` command line argument to describe their inputs and outputs
+ - Non-destructive scripts should be tested before handing over to the User
+ - Shell scripts are preferred, but use Python or TSX if complexity or user need requires it.
+ - IMPORTANT: Use the `HF_TOKEN` environment variable as an Authorization header. For example: `curl -H "Authorization: Bearer ${HF_TOKEN}" https://huggingface.co/api/`. This provides higher rate limits and appropriate authorization for data access.
+ - Investigate the shape of the API results before commiting to a final design; make use of piping and chaining where composability would be an advantage - prefer simple solutions where possible.
+ - Share usage examples once complete.
+ - Handle errors and exceptions properly, including API rate limits, network errors, and invalid user input.
 
-**Mandatory:**
-- After each task in subagent-driven development
-- After completing major feature
-- Before merge to main
+Be sure to confirm User preferences where there are questions or clarifications needed.
 
-**Optional but valuable:**
-- When stuck (fresh perspective)
-- Before refactoring (baseline check)
-- After fixing complex bug
+## Sample Scripts
 
-## How to Request
+Paths below are relative to this skill directory.
 
-**1. Get git SHAs:**
+Reference examples:
+- `references/hf_model_papers_auth.sh` — uses `HF_TOKEN` automatically and chains trending → model metadata → model card parsing with fallbacks; it demonstrates multi-step API usage plus auth hygiene for gated/private content.
+- `references/find_models_by_paper.sh` — optional `HF_TOKEN` usage via `--token`, consistent authenticated search, and a retry path when arXiv-prefixed searches are too narrow; it shows resilient query strategy and clear user-facing help.
+- `references/hf_model_card_frontmatter.sh` — uses the `hf` CLI to download model cards, extracts YAML frontmatter, and emits NDJSON summaries (license, pipeline tag, tags, gated prompt flag) for easy filtering.
+
+Baseline examples (ultra-simple, minimal logic, raw JSON output with `HF_TOKEN` header):
+- `references/baseline_hf_api.sh` — bash
+- `references/baseline_hf_api.py` — python
+- `references/baseline_hf_api.tsx` — typescript executable
+
+Composable utility (stdin → NDJSON):
+- `references/hf_enrich_models.sh` — reads model IDs from stdin, fetches metadata per ID, emits one JSON object per line for streaming pipelines.
+
+Composability through piping (shell-friendly JSON output):
+- `references/baseline_hf_api.sh 25 | jq -r '.[].id' | references/hf_enrich_models.sh | jq -s 'sort_by(.downloads) | reverse | .[:10]'`
+- `references/baseline_hf_api.sh 50 | jq '[.[] | {id, downloads}] | sort_by(.downloads) | reverse | .[:10]'`
+- `printf '%s
+' openai/gpt-oss-120b meta-llama/Meta-Llama-3.1-8B | references/hf_model_card_frontmatter.sh | jq -s 'map({id, license, has_extra_gated_prompt})'`
+
+## High Level Endpoints
+
+The following are the main API endpoints available at `https://huggingface.co`
+
+```
+/api/datasets
+/api/models
+/api/spaces
+/api/collections
+/api/daily_papers
+/api/notifications
+/api/settings
+/api/whoami-v2
+/api/trending
+/oauth/userinfo
+```
+
+## Accessing the API
+
+The API is documented with the OpenAPI standard at `https://huggingface.co/.well-known/openapi.json`.
+
+**IMPORTANT:** DO NOT ATTEMPT to read `https://huggingface.co/.well-known/openapi.json` directly as it is too large to process. 
+
+**IMPORTANT** Use `jq` to query and extract relevant parts. For example, 
+
+ Command to Get All 160 Endpoints
+
 ```bash
-BASE_SHA=$(git rev-parse HEAD~1)  # or origin/main
-HEAD_SHA=$(git rev-parse HEAD)
+curl -s "https://huggingface.co/.well-known/openapi.json" | jq '.paths | keys | sort'
 ```
 
-**2. Dispatch code-reviewer subagent:**
+Model Search Endpoint Details
 
-Use Task tool with superpowers:code-reviewer type, fill template at `code-reviewer.md`
-
-**Placeholders:**
-- `{WHAT_WAS_IMPLEMENTED}` - What you just built
-- `{PLAN_OR_REQUIREMENTS}` - What it should do
-- `{BASE_SHA}` - Starting commit
-- `{HEAD_SHA}` - Ending commit
-- `{DESCRIPTION}` - Brief summary
-
-**3. Act on feedback:**
-- Fix Critical issues immediately
-- Fix Important issues before proceeding
-- Note Minor issues for later
-- Push back if reviewer is wrong (with reasoning)
-
-## Example
-
-```
-[Just completed Task 2: Add verification function]
-
-You: Let me request code review before proceeding.
-
-BASE_SHA=$(git log --oneline | grep "Task 1" | head -1 | awk '{print $1}')
-HEAD_SHA=$(git rev-parse HEAD)
-
-[Dispatch superpowers:code-reviewer subagent]
-  WHAT_WAS_IMPLEMENTED: Verification and repair functions for conversation index
-  PLAN_OR_REQUIREMENTS: Task 2 from docs/superpowers/plans/deployment-plan.md
-  BASE_SHA: a7981ec
-  HEAD_SHA: 3df7661
-  DESCRIPTION: Added verifyIndex() and repairIndex() with 4 issue types
-
-[Subagent returns]:
-  Strengths: Clean architecture, real tests
-  Issues:
-    Important: Missing progress indicators
-    Minor: Magic number (100) for reporting interval
-  Assessment: Ready to proceed
-
-You: [Fix progress indicators]
-[Continue to Task 3]
+```bash
+curl -s "https://huggingface.co/.well-known/openapi.json" | jq '.paths["/api/models"]'
 ```
 
-## Integration with Workflows
+You can also query endpoints to see the shape of the data. When doing so constrain results to low numbers to make them easy to process, yet representative.
 
-**Subagent-Driven Development:**
-- Review after EACH task
-- Catch issues before they compound
-- Fix before moving to next task
+## Using the HF command line tool
 
-**Executing Plans:**
-- Review after each batch (3 tasks)
-- Get feedback, apply, continue
+The `hf` command line tool gives you further access to Hugging Face repository content and infrastructure. 
 
-**Ad-Hoc Development:**
-- Review before merge
-- Review when stuck
+```bash
+❯ hf --help
+Usage: hf [OPTIONS] COMMAND [ARGS]...
 
-## Red Flags
+  Hugging Face Hub CLI
 
-**Never:**
-- Skip review because "it's simple"
-- Ignore Critical issues
-- Proceed with unfixed Important issues
-- Argue with valid technical feedback
+Options:
+  --help                Show this message and exit.
 
-**If reviewer wrong:**
-- Push back with technical reasoning
-- Show code/tests that prove it works
-- Request clarification
+Commands:
+  auth                 Manage authentication (login, logout, etc.).
+  buckets              Commands to interact with buckets.
+  cache                Manage local cache directory.
+  collections          Interact with collections on the Hub.
+  datasets             Interact with datasets on the Hub.
+  discussions          Manage discussions and pull requests on the Hub.
+  download             Download files from the Hub.
+  endpoints            Manage Hugging Face Inference Endpoints.
+  env                  Print information about the environment.
+  extensions           Manage hf CLI extensions.
+  jobs                 Run and manage Jobs on the Hub.
+  models               Interact with models on the Hub.
+  papers               Interact with papers on the Hub.
+  repos                Manage repos on the Hub.
+  skills               Manage skills for AI assistants.
+  spaces               Interact with spaces on the Hub.
+  sync                 Sync files between local directory and a bucket.
+  upload               Upload a file or a folder to the Hub.
+  upload-large-folder  Upload a large folder to the Hub.
+  version              Print information about the hf version.
+  webhooks             Manage webhooks on the Hub.
+```
+
+The `hf` CLI command has replaced the now deprecated `huggingface-cli` command.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
 
-**Erros comuns:**
-- Falha ao obter SHAs: Verifique se o repositório Git está configurado corretamente e se as permissões estão adequadas.
-- Problemas de comunicação com o subagente: Verifique se o subagente está funcionando corretamente e se as dependências estão atualizadas.
-- Dificuldades em entender o feedback: Peça esclarecimentos ao revisor ou solicite mais informações sobre as issues reportadas.
+Ao criar scripts para interagir com a API do Hugging Face, é importante considerar os seguintes casos de exceção e edge cases:
 
-**Edge cases:**
-- Quando o subagente não está disponível: Use um mecanismo de fallback, como um revisor manual, para garantir que o código seja revisado.
-- Quando o código é muito complexo: Divida o código em partes menores e revise cada uma delas separadamente.
-- Quando o prazo é apertado: Priorize as issues mais críticas e importante, e adie as menos importantes para uma revisão posterior.
+* **Rate limits**: A API do Hugging Face tem limites de taxa para evitar abusos. Se o script exceder esses limites, ele deve ser capaz de lidar com os erros de rate limit e aguardar o tempo necessário antes de tentar novamente.
+* **Erros de rede**: O script deve ser capaz de lidar com erros de rede, como conexões perdidas ou timeouts.
+* **Entrada de usuário inválida**: O script deve ser capaz de lidar com entrada de usuário inválida, como parâmetros incorretos ou falta de parâmetros obrigatórios.
+* **Respostas da API inválidas**: O script deve ser capaz de lidar com respostas da API inválidas, como JSON malformado ou respostas vazias.
+* **Autenticação**: O script deve ser capaz de lidar com a autenticação, incluindo a obtenção de tokens de acesso e a renovação de tokens expirados.
 
-See template at: requesting-code-review/code-reviewer.md
+Para lidar com esses casos, o script pode usar técnicas como:
+
+* **Retries**: O script pode tentar novamente uma operação que falhou devido a um erro de rede ou rate limit.
+* **Timeouts**: O script pode definir timeouts para operações que demoram muito tempo para completar.
+* **Validação de entrada**: O script pode validar a entrada de usuário para garantir que ela esteja correta e completa.
+* **Tratamento de erros**: O script pode usar blocos try-catch para lidar com erros e exceções.
+* **Logging**: O script pode registrar erros e exceções para facilitar a depuração e o monitoramento.
