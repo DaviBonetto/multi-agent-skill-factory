@@ -1,24 +1,16 @@
----
+# SKILL
+## Descrição
 description: "Deprecated - use the superpowers:executing-plans skill instead"
----
-# Introdução
+
 Tell your human partner that this command is deprecated and will be removed in the next major release. They should ask you to use the "superpowers executing-plans" skill instead.
 
-# Uso
-Para utilizar essa habilidade, basta informar ao seu parceiro humano que o comando está depreciado e será removido na próxima versão major. Eles devem solicitar que você use a habilidade "superpowers executing-plans" em vez disso.
+## Uso
+Para utilizar esta habilidade, basta informar ao seu parceiro humano que o comando está depreciado e será removido na próxima versão major. Eles devem solicitar que você use a habilidade "superpowers executing-plans" em vez disso.
 
-# ⚠️ Tratamento de Exceções e Edge Cases
-### Casos de Uso Inválidos
-- Se o usuário não tiver permissão para executar a habilidade "superpowers executing-plans", uma mensagem de erro deve ser exibida informando sobre a falta de permissão.
-- Se a habilidade "superpowers executing-plans" não estiver disponível, uma mensagem de erro deve ser exibida informando sobre a indisponibilidade da habilidade.
-- Se o usuário tentar utilizar essa habilidade de forma indevida, uma mensagem de erro deve ser exibida com orientações sobre o uso correto.
-
-### Tratamento de Erros
-- Todos os erros devem ser registrados em um log de erros para análise posterior.
-- Em caso de erro, o sistema deve permanecer estável e não afetar outras habilidades.
-- O usuário deve receber uma mensagem de erro clara e concisa, informando sobre o problema e como resolvê-lo.
-
-### Segurança
-- A habilidade deve ser projetada para evitar ataques de injeção de comandos ou SQL.
-- Todas as entradas de usuário devem ser validadas e sanitizadas para evitar vulnerabilidades de segurança.
-- A habilidade deve ser executada com permissões mínimas necessárias para evitar danos ao sistema em caso de erro ou ataque.
+## ⚠️ Tratamento de Exceções e Edge Cases
+- **Caso de Uso Não Esperado**: Se o usuário tentar utilizar esta habilidade de forma inesperada, como passar parâmetros adicionais, o sistema deve retornar uma mensagem de erro clara indicando o uso correto da habilidade.
+- **Mensagem de Depreciação**: A mensagem de depreciação deve ser clara e concisa, indicando a versão em que a habilidade será removida e a alternativa recomendada.
+- **Compatibilidade com Versões Anteriores**: O sistema deve garantir que a habilidade continue funcionando corretamente até a sua remoção na próxima versão major, para evitar interrupções nos fluxos de trabalho existentes.
+- **Documentação Atualizada**: A documentação relacionada a esta habilidade deve ser atualizada para refletir seu status de depreciação e direcionar os usuários para a habilidade recomendada.
+- **Testes de Regressão**: Devem ser realizados testes de regressão para garantir que a remoção da habilidade não afete outras partes do sistema de forma inesperada.
+- **Comunicação com os Usuários**: Os usuários devem ser notificados sobre a depreciação da habilidade e a data prevista para sua remoção, para que possam se preparar para a transição.
