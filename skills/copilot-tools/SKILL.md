@@ -53,16 +53,12 @@ Copilot CLI supports persistent async shell sessions, which have no direct Claud
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
 
-Ao utilizar as ferramentas do Copilot CLI, é importante considerar os seguintes casos de exceção e edge cases:
-
-* **Erros de sintaxe**: Verifique se os comandos estão corretamente formatados e se os parâmetros estão sendo passados corretamente.
-* **Comandos não suportados**: Certifique-se de que os comandos utilizados são suportados pela plataforma e pela versão do Copilot CLI.
-* **Parâmetros inválidos**: Verifique se os parâmetros passados para os comandos são válidos e estão dentro dos limites esperados.
-* **Sessões assíncronas**: Ao utilizar sessões assíncronas, certifique-se de que os comandos sejam executados corretamente e que os resultados sejam processados adequadamente.
-* **Limites de recursos**: Verifique se os recursos necessários para executar os comandos estão disponíveis e não excedem os limites estabelecidos.
-* **Segurança**: Certifique-se de que os comandos sejam executados de forma segura e que os dados sejam protegidos contra acessos não autorizados.
-* **Dependências**: Verifique se as dependências necessárias para executar os comandos estão instaladas e configuradas corretamente.
-* **Timeouts**: Defina timeouts adequados para os comandos para evitar que eles fiquem executando indefinidamente.
-* **Logs e debug**: Utilize logs e ferramentas de debug para identificar e resolver problemas rapidamente.
-
-Ao considerar esses casos de exceção e edge cases, é possível garantir que as skills sejam executadas de forma confiável e eficiente, minimizando erros e problemas.
+* **Erros de sintaxe**: Ao usar o `bash` com comandos malformados, o sistema deve retornar um erro de sintaxe e não executar o comando.
+* **Comandos não encontrados**: Se um comando não for encontrado, o sistema deve retornar um erro de comando não encontrado e não tentar executar um comando desconhecido.
+* **Permissões insuficientes**: Se o usuário não tiver permissões suficientes para executar um comando, o sistema deve retornar um erro de permissão e não executar o comando.
+* **Limites de recursos**: O sistema deve ter limites de recursos (como memória e CPU) para evitar que comandos consumam todos os recursos do sistema.
+* **Tempo de execução**: O sistema deve ter um tempo de execução máximo para comandos para evitar que comandos fiquem executando indefinidamente.
+* **Entrada inválida**: O sistema deve validar a entrada do usuário para evitar que comandos sejam executados com entrada inválida.
+* **Conexão de rede**: O sistema deve lidar com erros de conexão de rede ao usar o `web_fetch` e outros comandos que dependem da conexão de rede.
+* **Agentes não disponíveis**: Se um agente não estiver disponível, o sistema deve retornar um erro de agente não disponível e não tentar executar o comando.
+* **Sessões de shell assíncronas**: O sistema deve lidar com erros de sessões de shell assíncronas, como a falta de recursos para criar uma nova sessão ou a perda de conexão com uma sessão existente.
