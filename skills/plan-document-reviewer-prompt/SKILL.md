@@ -4,6 +4,8 @@ Use this template when dispatching a plan document reviewer subagent.
 
 **Purpose:** Verify the plan is complete, matches the spec, and has proper task decomposition.
 
+**Dispatch after:** The complete plan is written.
+
 ```
 Task tool (general-purpose):
   description: "Review plan document"
@@ -45,11 +47,11 @@ Task tool (general-purpose):
 
     ⚠️ Tratamento de Exceções e Edge Cases
 
-    *   **Planos incompletos:** Se o plano estiver incompleto, verifique se há uma justificativa clara para a falta de informações. Se não houver, solicite ao autor do plano que forneça as informações necessárias.
-    *   **Specs contraditórias:** Se a especificação contiver informações contraditórias, solicite esclarecimentos ao autor da especificação antes de prosseguir com a revisão.
-    *   **Tarefas ambíguas:** Se as tarefas forem ambíguas ou não tiverem limites claros, solicite ao autor do plano que forneça mais detalhes ou esclarecimentos.
-    *   **Problemas de segurança:** Se durante a revisão forem identificados problemas de segurança, como a falta de autenticação ou autorização, informe imediatamente o autor do plano e solicite que sejam tomadas medidas para corrigir esses problemas.
-    *   **Erros de formatação:** Se houver erros de formatação no plano, como links quebrados ou imagens faltantes, informe o autor do plano para que possam ser corrigidos.
-    *   **Dependências não declaradas:** Se durante a revisão forem identificadas dependências não declaradas, como bibliotecas ou serviços externos, solicite ao autor do plano que as declare explicitamente.
-    *   **Cenários de bordo:** Considere cenários de bordo, como o que acontece se um serviço externo estiver indisponível ou se houver uma falha de rede. Certifique-se de que o plano aborde esses cenários adequadamente.
-    *   **Revisão de segurança:** Realize uma revisão de segurança do plano, verificando se há possíveis vulnerabilidades ou riscos de segurança. Se encontrar algum, informe o autor do plano e solicite que sejam tomadas medidas para mitigá-los.
+    *   **Planos incompletos ou vazios:** Se o plano estiver vazio ou não contiver informações suficientes, o revisor deve retornar um status de "Issues Found" e especificar que o plano está incompleto.
+    *   **Especificações ausentes ou inacessíveis:** Se a especificação não estiver disponível ou for inacessível, o revisor deve retornar um status de "Issues Found" e solicitar a disponibilização da especificação.
+    *   **Tarefas mal definidas ou contraditórias:** Se as tarefas estiverem mal definidas ou forem contraditórias, o revisor deve retornar um status de "Issues Found" e especificar as tarefas problemáticas.
+    *   **Problemas de formatação ou legibilidade:** Se o plano tiver problemas de formatação ou legibilidade que impeçam a compreensão, o revisor deve retornar um status de "Issues Found" e sugerir melhorias.
+    *   **Conflitos de interesse ou viés:** Se o revisor identificar conflitos de interesse ou viés no plano, deve retornar um status de "Issues Found" e especificar as preocupações.
+    *   **Falta de clareza ou ambiguidade:** Se o plano contiver seções ambíguas ou não claras, o revisor deve retornar um status de "Issues Found" e solicitar esclarecimentos.
+
+**Reviewer returns:** Status, Issues (if any), Recommendations
