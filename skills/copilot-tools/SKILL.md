@@ -53,12 +53,20 @@ Copilot CLI supports persistent async shell sessions, which have no direct Claud
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
 
-* **Erros de sintaxe**: Ao usar o `bash` com comandos malformados, o sistema deve retornar um erro de sintaxe e não executar o comando.
-* **Comandos não encontrados**: Se um comando não for encontrado, o sistema deve retornar um erro de comando não encontrado e não tentar executar um comando desconhecido.
-* **Permissões insuficientes**: Se o usuário não tiver permissões suficientes para executar um comando, o sistema deve retornar um erro de permissão e não executar o comando.
-* **Limites de recursos**: O sistema deve ter limites de recursos (como memória e CPU) para evitar que comandos consumam todos os recursos do sistema.
-* **Tempo de execução**: O sistema deve ter um tempo de execução máximo para comandos para evitar que comandos fiquem executando indefinidamente.
-* **Entrada inválida**: O sistema deve validar a entrada do usuário para evitar que comandos sejam executados com entrada inválida.
-* **Conexão de rede**: O sistema deve lidar com erros de conexão de rede ao usar o `web_fetch` e outros comandos que dependem da conexão de rede.
-* **Agentes não disponíveis**: Se um agente não estiver disponível, o sistema deve retornar um erro de agente não disponível e não tentar executar o comando.
-* **Sessões de shell assíncronas**: O sistema deve lidar com erros de sessões de shell assíncronas, como a falta de recursos para criar uma nova sessão ou a perda de conexão com uma sessão existente.
+Ao utilizar as ferramentas do Copilot CLI, é importante considerar os seguintes casos de exceção e edge cases:
+
+* **Erros de sintaxe**: Verifique se os comandos estão corretamente formatados e se os parâmetros estão sendo passados corretamente.
+* **Comandos não suportados**: Certifique-se de que os comandos utilizados são suportados pela versão do Copilot CLI que está sendo utilizada.
+* **Agentes não disponíveis**: Verifique se os agentes necessários estão instalados e configurados corretamente.
+* **Sessões assíncronas**: Tenha cuidado ao trabalhar com sessões assíncronas, pois elas podem afetar o comportamento do sistema.
+* **Limites de recursos**: Esteja ciente dos limites de recursos do sistema, como memória e processamento, para evitar sobrecarga.
+* **Segurança**: Sempre verifique a segurança dos comandos e parâmetros utilizados, especialmente ao trabalhar com dados sensíveis.
+* **Dependências**: Certifique-se de que todas as dependências necessárias estão instaladas e configuradas corretamente.
+* **Versões incompatíveis**: Verifique se as versões do Copilot CLI e dos agentes são compatíveis entre si.
+
+Além disso, é importante ter um plano de tratamento de exceções e edge cases, incluindo:
+
+* **Log de erros**: Registre todos os erros e exceções para facilitar a depuração.
+* **Notificação de erros**: Notifique os usuários e administradores sobre erros e exceções.
+* **Recuperação de erros**: Tenha um plano para recuperar de erros e exceções, incluindo a possibilidade de reexecutar comandos ou restaurar o estado do sistema.
+* **Testes**: Realize testes regulares para garantir que o sistema esteja funcionando corretamente e para detectar possíveis erros e exceções.
