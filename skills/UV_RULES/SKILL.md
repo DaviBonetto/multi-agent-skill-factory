@@ -15,15 +15,15 @@ Use estas regras para scripts Python neste repositório:
 3. **Não documente `pip install -r requirements.txt` para scripts do repositório** a menos que haja um motivo específico de fallback. O uso normal não deve exigir instalação manual.
 4. **Não instrua os usuários a `source .venv/bin/activate` para scripts de habilidade.** `uv run` deve ser suficiente.
 5. **Se um exemplo de instalação manual for realmente necessário, use `uv pip install ...`**, não `uv add`, a menos que você esteja editando intencionalmente um ambiente gerenciado pelo projeto.
-6. **Para trabalhos UV do Hugging Face Jobs, use `hf jobs uv run ...`**.
+6. **Para Hugging Face Jobs UV workloads, use `hf jobs uv run ...`**.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
 ### Tratamento de Erros
-- **Verifique a versão do Python**: Certifique-se de que a versão do Python utilizada é compatível com as dependências especificadas.
-- **Trate exceções de dependência**: Implemente tratamento de exceções para lidar com situações em que as dependências não podem ser resolvidas ou instaladas.
-- **Manipule erros de execução**: Use try-except para capturar e tratar erros que ocorrem durante a execução dos scripts.
+- **Verifique se o Python está instalado**: Antes de executar scripts, certifique-se de que o Python está instalado e configurado corretamente no sistema.
+- **Trate erros de dependência**: Se uma dependência especificada não estiver disponível, o script deve lidar com isso de forma elegante, fornecendo mensagens de erro claras e instruções sobre como resolver o problema.
+- **Lidar com versões incompatíveis do Python**: Se um script exigir uma versão específica do Python e a versão instalada for incompatível, o script deve informar o usuário sobre a versão necessária e, se possível, fornecer instruções sobre como atualizar ou instalar a versão correta.
 
 ### Edge Cases
-- **Scripts com dependências circulares**: Tenha cuidado com scripts que dependem de outros scripts que, por sua vez, dependem do primeiro script, criando um ciclo de dependência.
-- **Uso de ambientes virtuais**: Certifique-se de que o uso de ambientes virtuais não interfira com a execução dos scripts ou com a resolução de dependências.
-- **Compatibilidade entre sistemas operacionais**: Teste os scripts em diferentes sistemas operacionais para garantir compatibilidade e trate quaisquer exceções que possam surgir devido a diferenças entre os sistemas.
+- **Execução em Ambientes Virtuais**: Certifique-se de que os scripts sejam executados corretamente dentro de ambientes virtuais, lidando com possíveis problemas de isolamento de dependências.
+- **Compartilhamento de Scripts**: Se os scripts forem compartilhados entre diferentes projetos ou repositórios, considere a possibilidade de manter uma versão centralizada das dependências e scripts para facilitar a manutenção e atualização.
+- **Compatibilidade entre Sistemas Operacionais**: Teste os scripts em diferentes sistemas operacionais para garantir compatibilidade e lidar com quaisquer problemas específicos de plataforma que possam surgir.
