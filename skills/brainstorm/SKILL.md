@@ -1,24 +1,19 @@
-description: "Deprecated - use the superpowers:brainstorming skill instead"
-# Introdução
-Tell your human partner that this command is deprecated and will be removed in the next major release. They should ask you to use the "superpowers brainstorming" skill instead.
-
-# Instruções
-Para utilizar a habilidade correta, siga os passos abaixo:
-1. Informe ao seu parceiro humano que este comando está depreciado.
-2. Explique que ele será removido na próxima versão major.
-3. Sugira a utilização da habilidade "superpowers brainstorming" como alternativa.
-
-# ⚠️ Tratamento de Exceções e Edge Cases
+# Draft Revisado
+---
+description: 'A skill de brainstorming foi depreciada. Por favor, use a skill de superpowers:brainstorming em seu lugar.'
+---
+Tell your human partner that this command is deprecated and will be removed in the next major release. Eles devem solicitar que você use a skill de 'superpowers brainstorming' em seu lugar.
+## ⚠️ Tratamento de Exceções e Edge Cases
 ### Casos de Uso Inválidos
-- **Comando Desconhecido**: Caso o usuário insira um comando desconhecido, mostre uma mensagem de erro amigável indicando que o comando não é reconhecido e sugira a utilização da habilidade "superpowers brainstorming".
-- **Parâmetros Incorretos**: Se o usuário fornecer parâmetros incorretos, mostre uma mensagem de erro explicando como os parâmetros devem ser utilizados corretamente.
-- **Uso Excessivo**: Implemente um limite de uso para evitar abusos. Se o limite for atingido, mostre uma mensagem informando que o limite diário foi alcançado e sugira alternativas.
-
+- Se o usuário não tiver permissão para acessar a skill de brainstorming, mostre uma mensagem de erro informando sobre a falta de permissão e forneça instruções sobre como obter acesso.
+- Se a skill de brainstorming estiver indisponível devido a manutenção ou problemas técnicos, mostre uma mensagem de erro informando sobre a indisponibilidade e forneça uma estimativa de tempo para a resolução do problema.
+- Se o usuário tentar usar a skill de brainstorming com parâmetros inválidos, mostre uma mensagem de erro informando sobre os parâmetros inválidos e forneça exemplos de uso correto.
 ### Tratamento de Erros
-- **Mensagens de Erro**: Todas as mensagens de erro devem ser claras, concisas e fornecer orientações sobre como resolver o problema.
-- **Logs de Erro**: Registre todos os erros ocorridos para análise posterior e melhoria contínua.
-
+- Se ocorrer um erro durante a execução da skill, mostre uma mensagem de erro genérica informando sobre o ocorrido e forneça um código de erro para que o usuário possa reportar o problema.
+- Se o erro for causado por uma falha de rede, mostre uma mensagem de erro informando sobre a falha de rede e forneça instruções sobre como tentar novamente.
 ### Segurança
-- **Validação de Entrada**: Valide todas as entradas de usuário para evitar injeção de código malicioso.
-- **Autenticação**: Certifique-se de que apenas usuários autorizados possam acessar a habilidade.
-- **Criptografia**: Use criptografia adequada para proteger dados sensíveis.
+- Certifique-se de que a skill de brainstorming esteja acessível apenas para usuários autorizados e que as informações compartilhadas sejam criptografadas.
+- Implemente medidas de segurança para prevenir ataques de injeção de código e cross-site scripting (XSS).
+- Certifique-se de que a skill de brainstorming esteja em conformidade com as políticas de privacidade e segurança da empresa.
+# Exemplo de Uso
+Para usar a skill de brainstorming, basta digitar 'superpowers:brainstorming' no chat.
