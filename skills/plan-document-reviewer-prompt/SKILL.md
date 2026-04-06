@@ -47,11 +47,16 @@ Task tool (general-purpose):
 
     ⚠️ Tratamento de Exceções e Edge Cases
 
-    *   **Planos incompletos ou vazios:** Se o plano estiver vazio ou não contiver informações suficientes, o revisor deve retornar um status de "Issues Found" e especificar que o plano está incompleto.
-    *   **Especificações ausentes ou inacessíveis:** Se a especificação não estiver disponível ou for inacessível, o revisor deve retornar um status de "Issues Found" e solicitar a disponibilização da especificação.
-    *   **Tarefas mal definidas ou contraditórias:** Se as tarefas estiverem mal definidas ou forem contraditórias, o revisor deve retornar um status de "Issues Found" e especificar as tarefas problemáticas.
-    *   **Problemas de formatação ou legibilidade:** Se o plano tiver problemas de formatação ou legibilidade que impeçam a compreensão, o revisor deve retornar um status de "Issues Found" e sugerir melhorias.
-    *   **Conflitos de interesse ou viés:** Se o revisor identificar conflitos de interesse ou viés no plano, deve retornar um status de "Issues Found" e especificar as preocupações.
-    *   **Falta de clareza ou ambiguidade:** Se o plano contiver seções ambíguas ou não claras, o revisor deve retornar um status de "Issues Found" e solicitar esclarecimentos.
+    *   **Planos incompletos:** Se o plano estiver incompleto, verifique se há uma justificativa clara para a falta de informações. Se não houver, registre como um problema.
+    *   **Especificações conflitantes:** Se as especificações forem conflitantes, tente resolver o conflito com base nas informações disponíveis. Se não for possível, registre como um problema.
+    *   **Tarefas mal definidas:** Se as tarefas estiverem mal definidas, tente esclarecer as instruções. Se não for possível, registre como um problema.
+    *   **Problemas de segurança:** Se houver problemas de segurança identificados no plano, registre como um problema crítico.
+    *   **Limitações de recursos:** Se o plano exigir recursos que não estão disponíveis, registre como um problema.
+    *   **Dependências não resolvidas:** Se houver dependências não resolvidas no plano, registre como um problema.
+    *   **Riscos não mitigados:** Se houver riscos não mitigados no plano, registre como um problema.
+    *   **Mudanças não documentadas:** Se houver mudanças no plano que não foram documentadas, registre como um problema.
+    *   **Falta de testes:** Se o plano não incluir testes adequados, registre como um problema.
+    *   **Problemas de escalabilidade:** Se o plano não for escalável, registre como um problema.
+    *   **Problemas de manutenção:** Se o plano não for fácil de manter, registre como um problema.
 
 **Reviewer returns:** Status, Issues (if any), Recommendations
