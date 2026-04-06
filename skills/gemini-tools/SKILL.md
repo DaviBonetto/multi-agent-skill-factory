@@ -34,58 +34,22 @@ These tools are available in Gemini CLI but have no Claude Code equivalent:
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
 
-### Erros de sintaxe
+Ao utilizar as ferramentas do Gemini CLI, é importante considerar os seguintes casos de exceção e edge cases:
 
-*   Verifique se os comandos estão corretamente formatados e se os parâmetros estão sendo passados corretamente.
-*   Trate erros de sintaxe como exceções e forneça mensagens de erro claras e concisas.
+* **Arquivos não encontrados**: Ao utilizar `read_file` ou `write_file`, certifique-se de que o arquivo existe e está acessível. Caso contrário, o sistema pode retornar um erro.
+* **Permissões de arquivo**: Ao utilizar `write_file` ou `replace`, certifique-se de que o usuário tem permissão para escrever no arquivo. Caso contrário, o sistema pode retornar um erro de permissão.
+* **Comandos inválidos**: Ao utilizar `run_shell_command`, certifique-se de que o comando é válido e está correto. Caso contrário, o sistema pode retornar um erro.
+* **Pesquisas vazias**: Ao utilizar `grep_search` ou `glob`, certifique-se de que a pesquisa não está vazia. Caso contrário, o sistema pode retornar um resultado vazio.
+* **Erros de sintaxe**: Ao utilizar `activate_skill` ou `tracker_create_task`, certifique-se de que a sintaxe está correta. Caso contrário, o sistema pode retornar um erro de sintaxe.
+* **Limites de tamanho**: Ao utilizar `save_memory` ou `write_todos`, certifique-se de que o tamanho do arquivo não excede o limite permitido. Caso contrário, o sistema pode retornar um erro de tamanho.
+* **Entrada de usuário inválida**: Ao utilizar `ask_user`, certifique-se de que a entrada do usuário é válida e está no formato correto. Caso contrário, o sistema pode retornar um erro de entrada inválida.
+* **Modo de plano**: Ao utilizar `enter_plan_mode` ou `exit_plan_mode`, certifique-se de que o modo de plano está ativado ou desativado corretamente. Caso contrário, o sistema pode retornar um erro de modo de plano.
 
-### Erros de permissão
+Para lidar com esses casos de exceção e edge cases, é recomendável implementar tratamento de erros e exceções em sua skill, utilizando técnicas como:
 
-*   Verifique se o usuário tem as permissões necessárias para executar os comandos.
-*   Trate erros de permissão como exceções e forneça mensagens de erro claras e concisas.
+* Verificação de erros e exceções antes de executar ações
+* Utilização de blocos try-catch para capturar e lidar com erros e exceções
+* Implementação de fallbacks e planos de contingência para lidar com erros e exceções
+* Utilização de logs e registros para monitorar e depurar erros e exceções
 
-### Erros de arquivo
-
-*   Verifique se os arquivos existem e se podem ser lidos ou escritos.
-*   Trate erros de arquivo como exceções e forneça mensagens de erro claras e concisas.
-
-### Edge cases
-
-*   Verifique se os comandos funcionam corretamente com entradas inválidas ou edge cases.
-*   Trate edge cases como exceções e forneça mensagens de erro claras e concisas.
-
-### Exemplos de tratamento de exceções
-
-```markdown
-try:
-    # Código que pode gerar exceção
-    read_file("arquivo.txt")
-except FileNotFoundError:
-    # Tratamento de exceção
-    print("Arquivo não encontrado")
-except PermissionError:
-    # Tratamento de exceção
-    print("Permissão negada")
-```
-
-### Segurança
-
-*   Verifique se os comandos estão sendo executados de forma segura e se os dados estão sendo tratados corretamente.
-*   Use criptografia e autenticação para proteger os dados e os comandos.
-
-### Exemplos de segurança
-
-```markdown
-import hashlib
-
-# Criptografia de senha
-senha = "minha_senha"
-senha_criptografada = hashlib.sha256(senha.encode()).hexdigest()
-
-# Autenticação
-if senha_criptografada == "senha_criptografada_armazenada":
-    # Acesso concedido
-    print("Acesso concedido")
-else:
-    # Acesso negado
-    print("Acesso negado")
+Ao seguir essas práticas, você pode garantir que sua skill seja robusta e confiável, e forneça uma experiência de usuário segura e eficaz.
