@@ -23,6 +23,7 @@ Your coding agent uses `hf_jobs()` to submit training scripts directly to HF inf
 We'll announce the XP tiers for this quest soon.
 
 ## Resources
+
 - [SKILL.md](../../hf-llm-trainer/SKILL.md) — Full skill documentation
 - [SFT Example](../../hf-llm-trainer/scripts/train_sft_example.py) — Production SFT template
 - [DPO Example](../../hf-llm-trainer/scripts/train_dpo_example.py) — Production DPO template
@@ -33,31 +34,35 @@ We'll announce the XP tiers for this quest soon.
 ## Segurança
 
 Para garantir a segurança dos modelos e dos dados, é importante seguir as melhores práticas de segurança, incluindo:
-- Utilizar autenticação e autorização adequadas para acessar os modelos e os dados.
-- Utilizar criptografia para proteger os dados em trânsito e em repouso.
-- Realizar testes de segurança regulares para identificar e corrigir vulnerabilidades.
+- Utilizar autenticação e autorização adequadas para acessar os recursos do HF Jobs
+- Utilizar criptografia para proteger os dados em trânsito e em repouso
+- Realizar testes de segurança regulares para identificar vulnerabilidades
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
 
-Para garantir a robustez e a confiabilidade do modelo, é importante tratar exceções e edge cases, incluindo:
-- **Erros de inicialização**: Tratar erros que ocorrem durante a inicialização do modelo, como falhas de carregamento de dados ou problemas de configuração.
-- **Erros de treinamento**: Tratar erros que ocorrem durante o treinamento do modelo, como divergência de gradientes ou problemas de otimização.
-- **Erros de inferência**: Tratar erros que ocorrem durante a inferência do modelo, como problemas de preprocessamento de dados ou falhas de predição.
-- **Casos de bordo**: Tratar casos de bordo, como entrada de dados inválidos ou outliers, para garantir que o modelo se comporte corretamente em situações inesperadas.
-- **Problemas de escalabilidade**: Tratar problemas de escalabilidade, como aumento de carga ou demanda, para garantir que o modelo possa lidar com grandes volumes de dados e requisições.
+Ao trabalhar com o `hf-llm-trainer`, é importante considerar os seguintes casos de exceção e edge cases:
+- **Erros de conexão**: Em caso de erros de conexão com o HF Jobs, o agente deve tentar reconectar após um período de tempo razoável.
+- **Erros de autenticação**: Em caso de erros de autenticação, o agente deve solicitar as credenciais novamente e tentar autenticar-se novamente.
+- **Erros de processamento**: Em caso de erros de processamento, o agente deve registrar o erro e continuar com a próxima tarefa.
+- **Modelos inválidos**: Em caso de modelos inválidos, o agente deve registrar o erro e solicitar um novo modelo.
+- **Dados inválidos**: Em caso de dados inválidos, o agente deve registrar o erro e solicitar novos dados.
+- **Timeouts**: Em caso de timeouts, o agente deve registrar o erro e tentar novamente após um período de tempo razoável.
+- **Limites de recursos**: Em caso de limites de recursos, o agente deve registrar o erro e solicitar mais recursos.
 
-Exemplos de código para tratamento de exceções e edge cases:
+Exemplos de código para tratamento de exceções:
 ```python
 try:
-    # Código de treinamento do modelo
+    # Código que pode gerar exceção
 except Exception as e:
-    # Tratar erros de treinamento
-    print(f"Erro de treinamento: {e}")
-
-try:
-    # Código de inferência do modelo
-except Exception as e:
-    # Tratar erros de inferência
-    print(f"Erro de inferência: {e}")
+    # Tratamento da exceção
+    print(f"Erro: {e}")
+    # Registro do erro
+    logging.error(f"Erro: {e}")
 ```
-É importante lembrar que o tratamento de exceções e edge cases é uma parte crucial do desenvolvimento de modelos de machine learning e deve ser considerado em todas as etapas do processo.
+Exemplos de código para edge cases:
+```python
+if modelo_invalido:
+    # Tratamento do modelo inválido
+    print("Modelo inválido")
+    # Registro do erro
+    logging.error("Modelo inválido")
