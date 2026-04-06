@@ -25,30 +25,25 @@ Task tool (superpowers:code-reviewer):
 
 **Code reviewer returns:** Strengths, Issues (Critical/Important/Minor), Assessment
 
-⚠️ Tratamento de Exceções e Edge Cases
-- Verificar se o código lida corretamente com exceções e erros, incluindo:
-  - Tratamento de erros de sintaxe e semântica
-  - Manipulação de dados inválidos ou inconsistentes
-  - Lidar com condições de bordo, como valores nulos ou vazios
-  - Implementação de mecanismos de retry ou fallback para operações que podem falhar
-- Verificar se o código é robusto o suficiente para lidar com diferentes cenários de entrada e saída, incluindo:
-  - Dados malformados ou corrompidos
-  - Condições de concorrência ou paralelismo
-  - Limitações de recursos, como memória ou processamento
-- Verificar se o código segue as melhores práticas de segurança, incluindo:
+ Tratamento de Exceções e Edge Cases
+- Verificar se o código lida corretamente com exceções e erros, como:
+  - Tratamento de erros de entrada e saída
+  - Lidar com condições de erro inesperadas
+  - Uso de mecanismos de retry e fallback quando necessário
+- Verificar se o código considera casos de bordo, como:
+  - Valores nulos ou vazios
+  - Valores extremos ou fora do intervalo esperado
+  - Condições de concorrência e paralelismo
+- Verificar se o código segue as melhores práticas de segurança, como:
   - Validar e sanitizar entradas de usuário
-  - Proteger contra injeção de código ou ataques de cross-site scripting (XSS)
-  - Implementar autenticação e autorização adequadas
-  - Criptografar dados sensíveis em trânsito e em repouso
+  - Proteger contra injeção de código e ataques de cross-site scripting (XSS)
+  - Utilizar criptografia e autenticação adequadas quando necessário
 
-**Exemplos de Edge Cases:**
-- Lidar com datas e horários em diferentes fusos horários
-- Manipular números decimais com precisão variável
-- Tratar de strings com caracteres especiais ou não ASCII
-- Lidar com arquivos ou streams de dados corrompidos ou truncados
+**Segurança**
+- Verificar se o código segue as políticas de segurança da empresa
+- Verificar se o código utiliza bibliotecas e dependências seguras e atualizadas
+- Verificar se o código lida corretamente com dados sensíveis, como informações de autenticação e criptografia
 
-**Recomendações:**
-- Utilizar bibliotecas e frameworks de teste para garantir a cobertura de código e a robustez
-- Implementar logging e monitoramento para detectar e diagnosticar problemas
-- Realizar revisões de código regulares para garantir a qualidade e a segurança do código
-- Manter a documentação atualizada e acessível para todos os membros da equipe
+**Code reviewer returns:** Strengths, Issues (Critical/Important/Minor), Assessment, incluindo:
+- Relatório de segurança e tratamento de exceções
+- Recomendações para melhorias de segurança e tratamento de exceções
