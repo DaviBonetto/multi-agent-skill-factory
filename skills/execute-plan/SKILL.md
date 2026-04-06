@@ -1,16 +1,23 @@
-# SKILL
-## Descrição
+---
 description: "Deprecated - use the superpowers:executing-plans skill instead"
-
+---
+# Introdução
 Tell your human partner that this command is deprecated and will be removed in the next major release. They should ask you to use the "superpowers executing-plans" skill instead.
 
-## Uso
-Para utilizar esta habilidade, basta informar ao seu parceiro humano que o comando está depreciado e será removido na próxima versão major. Eles devem solicitar que você use a habilidade "superpowers executing-plans" em vez disso.
+# Uso
+Para utilizar essa habilidade, basta informar ao seu parceiro humano que o comando está depreciado e será removido na próxima versão major. Eles devem solicitar que você use a habilidade "superpowers executing-plans" em vez disso.
 
-## ⚠️ Tratamento de Exceções e Edge Cases
-- **Caso de Uso Não Esperado**: Se o usuário tentar utilizar esta habilidade de forma inesperada, como passar parâmetros adicionais, o sistema deve retornar uma mensagem de erro clara indicando o uso correto da habilidade.
-- **Mensagem de Depreciação**: A mensagem de depreciação deve ser clara e concisa, indicando a versão em que a habilidade será removida e a alternativa recomendada.
-- **Compatibilidade com Versões Anteriores**: O sistema deve garantir que a habilidade continue funcionando corretamente até a sua remoção na próxima versão major, para evitar interrupções nos fluxos de trabalho existentes.
-- **Documentação Atualizada**: A documentação relacionada a esta habilidade deve ser atualizada para refletir seu status de depreciação e direcionar os usuários para a habilidade recomendada.
-- **Testes de Regressão**: Devem ser realizados testes de regressão para garantir que a remoção da habilidade não afete outras partes do sistema de forma inesperada.
-- **Comunicação com os Usuários**: Os usuários devem ser notificados sobre a depreciação da habilidade e a data prevista para sua remoção, para que possam se preparar para a transição.
+# ⚠️ Tratamento de Exceções e Edge Cases
+## Casos de Uso Inválidos
+- Se o usuário não tiver permissão para executar a habilidade "superpowers executing-plans", mostre uma mensagem de erro informando que a permissão é necessária.
+- Se a habilidade "superpowers executing-plans" não estiver disponível, mostre uma mensagem de erro informando que a habilidade não está disponível.
+- Se o usuário tentar usar essa habilidade após a sua remoção, mostre uma mensagem de erro informando que a habilidade foi removida e sugira usar a habilidade "superpowers executing-plans" em vez disso.
+
+## Tratamento de Erros
+- Se ocorrer um erro durante a execução da habilidade, mostre uma mensagem de erro genérica informando que ocorreu um problema e solicite que o usuário tente novamente.
+- Se o erro for específico, mostre uma mensagem de erro detalhada informando o que deu errado e como resolver o problema.
+
+## Segurança
+- Certifique-se de que a habilidade "superpowers executing-plans" seja executada com as permissões necessárias para evitar acessos não autorizados.
+- Valide os inputs do usuário para evitar injeção de comandos ou outros ataques de segurança.
+- Use criptografia adequada para proteger as comunicações entre o sistema e o usuário.
