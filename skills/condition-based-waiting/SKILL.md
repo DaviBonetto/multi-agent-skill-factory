@@ -20,6 +20,9 @@ digraph when_to_use {
 - Tests are flaky (pass sometimes, fail under load)
 - Tests timeout when run in parallel
 - Waiting for async operations to complete
+## Don't use when:
+- Testing actual timing behavior (debounce, throttle intervals)
+- Always document WHY if using arbitrary timeout
 ## Core Pattern
 ```typescript
 // BEFORE: Guessing at timing
@@ -62,9 +65,14 @@ async function waitFor<T>(
   }
 }
 ```
+See `condition-based-waiting-example.ts` in this directory for complete implementation with domain-specific helpers (`waitForEvent`, `waitForEventCount`, `waitForEventMatch`) from actual debugging session.
 ## Common Mistakes
-** Polling too fast:** `setTimeout(check, 1)` - wastes CPU
-** Fix:** Poll every 10ms
+**Polling too fast:** `setTimeout(check, 1)` - wastes CPU
+**Fix:** Poll every 10ms
+**No timeout:** Loop forever if condition never met
+**Fix:** Always include timeout with clear error
+**Stale data:** Cache state before loop
+**Fix:** Call getter inside loop for fresh data
 ## When Arbitrary Timeout IS Correct
 ```typescript
 // Tool ticks every 100ms - need 2 ticks to verify partial output
@@ -72,6 +80,10 @@ await waitForEvent(manager, 'TOOL_STARTED'); // First: wait for condition
 await new Promise(r => setTimeout(r, 200));   // Then: wait for timed behavior
 // 200ms = 2 ticks at 100ms intervals - documented and justified
 ```
+**Requirements:**
+1. First wait for triggering condition
+2. Based on known timing (not guessing)
+3. Comment explaining WHY
 ## Real-World Impact
 From debugging session (2025-10-03):
 - Fixed 15 flaky tests across 3 files
@@ -79,38 +91,22 @@ From debugging session (2025-10-03):
 - Execution time: 40% faster
 - No more race conditions
 ## ⚠️ Tratamento de Exceções e Edge Cases
-### Tratamento de Exceções
-*   Sempre inclua um bloco `try-catch` para capturar e tratar exceções que possam ocorrer durante a execução da função `waitFor`.
-*   Certifique-se de que as exceções sejam tratadas de forma apropriada, seja logando o erro, seja retornando um valor padrão ou seja lançando uma exceção personalizada.
+Além dos casos comuns de uso, é importante considerar os seguintes cenários de edge cases e exceções:
+- **Condição nunca atendida:** Se a condição nunca for atendida, o método `waitFor` lançará um erro de timeout. É importante tratar esse erro e fornecer uma mensagem clara sobre o que deu errado.
+- **Condição atendida parcialmente:** Em alguns casos, a condição pode ser atendida parcialmente, mas não completamente. É importante verificar se a condição foi atendida corretamente e lançar um erro se necessário.
+- **Exceções durante a execução:** Se ocorrer uma exceção durante a execução do método `waitFor`, é importante capturá-la e fornecer uma mensagem clara sobre o que deu errado.
+- **Timeout muito curto:** Se o timeout for muito curto, o método `waitFor` pode não ter tempo suficiente para aguardar a condição ser atendida. É importante ajustar o timeout de acordo com as necessidades específicas do caso de uso.
+- **Condição muito complexa:** Se a condição for muito complexa, o método `waitFor` pode ter dificuldade em avaliá-la corretamente. É importante simplificar a condição sempre que possível e usar métodos de avaliação mais eficientes.
+Exemplo de tratamento de exceções:
 ```typescript
 try {
   await waitFor(() => getResult() !== undefined);
 } catch (error) {
-  console.error('Erro ao esperar pela condição:', error);
-  // Trate a exceção de acordo com as necessidades da sua aplicação
+  if (error instanceof Error && error.message.includes('Timeout')) {
+    console.log('Timeout ocorreu ao aguardar a condição');
+  } else {
+    console.log('Erro ocorreu ao aguardar a condição:', error);
+  }
 }
 ```
-### Edge Cases
-*   **Condição nunca atendida:** Se a condição nunca for atendida, a função `waitFor` entrará em um loop infinito. Para evitar isso, é importante incluir um timeout e lançar uma exceção quando o timeout for alcançado.
-*   **Condição atendida imediatamente:** Se a condição for atendida imediatamente, a função `waitFor` retornará o valor sem esperar. Isso pode ser um problema se a condição for atendida antes que a função `waitFor` seja chamada. Para evitar isso, é importante garantir que a condição seja verificada apenas após a chamada da função `waitFor`.
-*   **Múltiplas condições:** Se houver múltiplas condições que precisam ser atendidas, é importante garantir que a função `waitFor` seja chamada para cada condição separadamente. Isso pode ser feito usando um loop ou uma função recursiva.
-```typescript
-const conditions = [() => getResult1() !== undefined, () => getResult2() !== undefined];
-for (const condition of conditions) {
-  await waitFor(condition);
-}
-```
-### Exemplos de Edge Cases
-*   **Condição que depende de uma variável externa:** Se a condição depende de uma variável externa, é importante garantir que a variável seja atualizada antes de chamar a função `waitFor`.
-*   **Condição que depende de um evento:** Se a condição depende de um evento, é importante garantir que o evento seja ouvido antes de chamar a função `waitFor`.
-```typescript
-// Condição que depende de uma variável externa
-let externalVariable = false;
-await waitFor(() => externalVariable);
-externalVariable = true;
-
-// Condição que depende de um evento
-const eventListener = () => {
-  // Faça algo quando o evento ocorrer
-};
-await waitFor(() => eventListener);
+É importante lembrar que o tratamento de exceções e edge cases é fundamental para garantir a robustez e confiabilidade do código.
