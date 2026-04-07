@@ -1,67 +1,102 @@
-# DevOps com Kubernetes
-## Descrição
-Ensina a implementar práticas DevOps utilizando Kubernetes para orquestração de contêineres
+---
+name: Implementação de DevOps com Kubernetes
+description: Automatiza a implementação de pipelines de DevOps utilizando Kubernetes, Docker e ferramentas de orquestração de contêineres
+---
+
 ## Objetivo
-O objetivo deste guia é fornecer uma visão geral de como implementar práticas DevOps utilizando Kubernetes para orquestração de contêineres. Isso inclui a configuração de um cluster Kubernetes, a implantação de aplicações e a gestão de recursos.
+O objetivo deste guia é fornecer uma abordagem prática para a implementação de DevOps com Kubernetes, utilizando Docker e ferramentas de orquestração de contêineres. Isso permitirá que os desenvolvedores e equipes de operações automatizem a entrega de software de forma eficiente e escalável.
+
 ## Pré-requisitos
-Antes de começar, é necessário ter conhecimento básico em:
-* Contêineres Docker
-* Linha de comando Linux
-* Conceitos básicos de redes e segurança
-Além disso, é recomendado ter:
-* Um cluster Kubernetes funcionando (pode ser local ou na nuvem)
-* Ferramentas como `kubectl` e `docker` instaladas
+Antes de iniciar a implementação, é necessário ter conhecimento em:
+- Docker e contêineres
+- Kubernetes e orquestração de contêineres
+- Ferramentas de versionamento de código, como Git
+- Conhecimento básico em linha de comando e scripts
+
+Além disso, é necessário ter:
+- Um cluster Kubernetes configurado e funcionando
+- Docker instalado e configurado
+- Ferramentas de desenvolvimento, como Git e um editor de código
+
 ## Passo a Passo Técnico / Exemplos de Código
-### Configurando o Cluster Kubernetes
-Para começar, precisamos configurar o nosso cluster Kubernetes. Isso pode ser feito utilizando a ferramenta `kubeadm`:
+### 1. Configuração do Cluster Kubernetes
+Primeiramente, é necessário configurar o cluster Kubernetes. Isso pode ser feito utilizando a ferramenta `kubectl`.
 ```bash
-sudo kubeadm init --pod-network-cidr 10.244.0.0/16
+kubectl cluster-info
 ```
-**Atenção:** Certifique-se de que o seu sistema atenda aos requisitos mínimos para executar um cluster Kubernetes.
-### Implantando uma Aplicação
-Agora que o cluster está configurado, podemos implantar uma aplicação. Vamos usar um exemplo simples de um servidor web:
+### 2. Criação de um Deployment
+Em seguida, crie um arquivo `deployment.yaml` com o seguinte conteúdo:
 ```yml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: web-server
+  name: meu-deployment
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: web-server
+      app: meu-app
   template:
     metadata:
       labels:
-        app: web-server
+        app: meu-app
     spec:
       containers:
-      - name: web-server
-        image: nginx:latest
+      - name: meu-container
+        image: meu-imagem
         ports:
         - containerPort: 80
 ```
-**Observação:** Substitua `nginx:latest` pela versão específica da imagem que você deseja usar.
-### Gerenciando Recursos
-Para gerenciar recursos no Kubernetes, podemos usar a ferramenta `kubectl`. Por exemplo, para listar todos os pods em execução:
+### 3. Aplicação do Deployment
+Aplique o deployment utilizando o comando:
 ```bash
-kubectl get pods
+kubectl apply -f deployment.yaml
 ```
-**Dica:** Use `kubectl get pods -o wide` para obter mais informações sobre os pods.
+### 4. Criação de um Service
+Crie um arquivo `service.yaml` com o seguinte conteúdo:
+```yml
+apiVersion: v1
+kind: Service
+metadata:
+  name: meu-service
+spec:
+  selector:
+    app: meu-app
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80
+  type: LoadBalancer
+```
+### 5. Aplicação do Service
+Aplique o service utilizando o comando:
+```bash
+kubectl apply -f service.yaml
+```
+
 ## Validação
-Para validar a configuração e a implantação da aplicação, podemos verificar se os pods estão em execução e se a aplicação está acessível:
+Para validar a implementação, é possível utilizar o comando `kubectl get` para verificar se os pods e services estão funcionando corretamente.
 ```bash
 kubectl get pods
-kubectl describe pod web-server-<id>
-curl http://localhost:80
+kubectl get services
 ```
-Se tudo estiver configurado corretamente, deveremos ver a página de boas-vindas do servidor web.
+Além disso, é possível acessar o aplicativo utilizando o endereço IP do service.
+```bash
+kubectl get svc meu-service -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'
+```
+
 ## ⚠️ Tratamento de Exceções e Edge Cases
 ### Erros Comuns
-* **Erro de inicialização do cluster:** Verifique se o sistema atende aos requisitos mínimos e se a ferramenta `kubeadm` está instalada corretamente.
-* **Erro de implantação da aplicação:** Verifique se a imagem da aplicação está disponível e se o arquivo de configuração está correto.
-* **Erro de acesso à aplicação:** Verifique se o pod está em execução e se a porta está aberta.
+- **Erro de conexão com o cluster Kubernetes**: Verifique se o cluster está configurado corretamente e se o `kubectl` está conectado ao cluster.
+- **Erro de criação de deployment**: Verifique se o arquivo `deployment.yaml` está correto e se o `kubectl` tem permissão para criar deployments.
+- **Erro de criação de service**: Verifique se o arquivo `service.yaml` está correto e se o `kubectl` tem permissão para criar services.
+
 ### Edge Cases
-* **Implantação em um ambiente de produção:** Certifique-se de que o cluster esteja configurado para alta disponibilidade e que as aplicações estejam escaláveis.
-* **Uso de recursos limitados:** Certifique-se de que as aplicações estejam otimizadas para usar recursos mínimos e que o cluster esteja configurado para gerenciar recursos de forma eficiente.
-* **Segurança:** Certifique-se de que as aplicações estejam seguras e que o cluster esteja configurado para seguir as melhores práticas de segurança.
+- **Cluster Kubernetes com múltiplos namespaces**: Certifique-se de que o `kubectl` esteja configurado para usar o namespace correto.
+- **Imagens de contêineres com permissões restritas**: Certifique-se de que as permissões de execução sejam configuradas corretamente para as imagens de contêineres.
+- **Serviços com múltiplos ports**: Certifique-se de que os ports sejam configurados corretamente no arquivo `service.yaml`.
+
+### Tratamento de Erros
+- **Utilize o comando `kubectl describe` para obter mais informações sobre os erros**: `kubectl describe pod <nome-do-pod>` ou `kubectl describe svc <nome-do-servico>`.
+- **Utilize o comando `kubectl logs` para visualizar os logs dos contêineres**: `kubectl logs <nome-do-pod>`.
+- **Utilize o comando `kubectl exec` para executar comandos dentro dos contêineres**: `kubectl exec <nome-do-pod> -- <comando>`.
