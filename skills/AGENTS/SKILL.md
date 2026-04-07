@@ -1,63 +1,57 @@
-# SKILLs Documentados
-Você tem habilidades adicionais documentadas em diretórios que contêm um arquivo "SKILL.md".
-
-Essas habilidades são:
- - hf-cli -> "skills/hf-cli/SKILL.md"
- - huggingface-community-evals -> "skills/huggingface-community-evals/SKILL.md"
- - huggingface-datasets -> "skills/huggingface-datasets/SKILL.md"
- - huggingface-gradio -> "skills/huggingface-gradio/SKILL.md"
- - huggingface-jobs -> "skills/huggingface-jobs/SKILL.md"
- - huggingface-llm-trainer -> "skills/huggingface-llm-trainer/SKILL.md"
- - huggingface-paper-publisher -> "skills/huggingface-paper-publisher/SKILL.md"
- - huggingface-papers -> "skills/huggingface-papers/SKILL.md"
- - huggingface-tool-builder -> "skills/huggingface-tool-builder/SKILL.md"
- - huggingface-trackio -> "skills/huggingface-trackio/SKILL.md"
- - huggingface-vision-trainer -> "skills/huggingface-vision-trainer/SKILL.md"
- - transformers-js -> "skills/transformers-js/SKILL.md"
-
-**Importante:** Você DEVE ler o arquivo SKILL.md sempre que a descrição da habilidade corresponder à intenção do usuário ou possa ajudar a realizar sua tarefa.
-
-## Habilidades Disponíveis
-### hf-cli
-`Hugging Face Hub CLI (hf) para download, upload e gerenciamento de repositórios, modelos, datasets e Spaces no Hugging Face Hub. Substitui o comando huggingface-cli agora depreciado.`
-### huggingface-community-evals
-`Execute avaliações para modelos do Hugging Face Hub usando inspect-ai e lighteval em hardware local. Use para seleção de backend, avaliações de GPU locais e escolha entre vLLM / Transformers / accelerate. Não use para orquestração de trabalhos do HF Jobs, PRs de model-card, publicação de .eval_results ou automação de community-evals.`
-### huggingface-datasets
-`Use essa habilidade para fluxos de trabalho da API do Visualizador de Datasets do Hugging Face que buscam metadados de subconjunto/divisão, paginam linhas, procuram texto, aplicam filtros, baixam URLs parquet e leem tamanho ou estatísticas.`
-### huggingface-gradio
-`Crie interfaces de usuário web Gradio e demos em Python. Use ao criar ou editar aplicativos Gradio, componentes, ouvintes de eventos, layouts ou chatbots.`
-### huggingface-jobs
-`Essa habilidade deve ser usada quando os usuários desejam executar qualquer carga de trabalho na infraestrutura do Hugging Face Jobs. Cobertura de scripts UV, trabalhos baseados em Docker, seleção de hardware, estimativa de custo, autenticação com tokens, gerenciamento de segredos, configuração de tempo limite e persistência de resultados. Projetado para cargas de trabalho de processamento de dados, inferência, experimentos, trabalhos em lote e tarefas baseadas em Python. Deve ser invocado para tarefas que envolvam computação em nuvem, cargas de trabalho de GPU ou quando os usuários mencionam executar trabalhos na infraestrutura do Hugging Face sem configuração local.`
-### huggingface-llm-trainer
-`Essa habilidade deve ser usada quando os usuários desejam treinar ou ajustar finamente modelos de linguagem usando TRL (Aprendizado de Reforço de Transformador) na infraestrutura do Hugging Face Jobs. Cobertura de métodos de treinamento SFT, DPO, GRPO e modelagem de recompensa, além da conversão GGUF para implantação local. Inclui orientação sobre o pacote de trabalhos TRL, scripts UV com formato PEP 723, preparo e validação de datasets, seleção de hardware, estimativa de custo, monitoramento Trackio, autenticação do Hub e persistência de modelos. Deve ser invocado para tarefas que envolvam treinamento de GPU em nuvem, conversão GGUF ou quando os usuários mencionam treinamento no Hugging Face Jobs sem configuração de GPU local.`
-### huggingface-paper-publisher
-`Publique e gerencie artigos de pesquisa no Hugging Face Hub. Suporta a criação de páginas de artigos, vinculação de artigos a modelos/datasets, reivindicação de autorias e geração de artigos de pesquisa baseados em markdown profissionais.`
-### huggingface-papers
-`Pesquise e leia páginas de artigos do Hugging Face em markdown e use a API de artigos para metadados estruturados, como autores, modelos/datasets/espacios vinculados, repositório GitHub e página do projeto. Use quando o usuário compartilha uma URL de página de artigo do Hugging Face, uma URL ou ID do arXiv ou pede para resumir, explicar ou analisar um artigo de pesquisa de IA.`
-### huggingface-tool-builder
-`Use essa habilidade quando o usuário deseja construir ferramentas/scripts ou alcançar uma tarefa onde o uso de dados da API do Hugging Face ajudaria. Isso é especialmente útil quando encadeando ou combinando chamadas de API ou a tarefa será repetida/automatizada. Essa habilidade cria um script reutilizável para buscar, enriquecer ou processar dados.`
-### huggingface-trackio
-`Acompanhe e visualize experimentos de treinamento de ML com Trackio. Use ao registrar métricas durante o treinamento (API Python), disparar alertas para diagnósticos de treinamento ou recuperar/analisar métricas registradas (CLI). Suporta visualização de dashboard em tempo real, alertas com webhooks, sincronização do espaço do HF e saída JSON para automação.`
-### huggingface-vision-trainer
-`Treine e ajuste finamente modelos de visão para detecção de objetos (D-FINE, RT-DETR v2, DETR, YOLOS), classificação de imagens (modelos timm — MobileNetV3, MobileViT, ResNet, ViT/DINOv3 — e qualquer classificador Transformers), e SAM/SAM2 de segmentação usando Transformers do Hugging Face em GPUs em nuvem do Hugging Face Jobs. Cobertura de preparo de dataset no formato COCO, aumento de dados com Albumentations, avaliação mAP/mAR, métricas de precisão, segmentação SAM com prompts de caixa delimitadora/ponto, perda DiceCE, seleção de hardware, estimativa de custo, monitoramento Trackio e persistência do Hub. Use quando os usuários mencionam treinamento de detecção de objetos, classificação de imagens, SAM, SAM2, segmentação, matting de imagem, DETR, D-FINE, RT-DETR, ViT, timm, MobileNet, ResNet, modelos de caixa delimitadora ou ajuste fino de modelos de visão no Hugging Face Jobs.`
-### transformers-js
-`Use Transformers.js para executar modelos de aprendizado de máquina de estado da arte diretamente em JavaScript/TypeScript. Suporta tarefas de NLP (classificação de texto, tradução, resumo), visão computacional (classificação de imagens, detecção de objetos), áudio (reconhecimento de fala, classificação de áudio) e tarefas multimodais. Funciona em Node.js e navegadores (com WebGPU/WASM) usando modelos pré-treinados do Hugging Face Hub.`
-
+# Superpowers — Contributor Guidelines
+## If You Are an AI Agent
+Stop. Read this section before doing anything.
+This repo has a 94% PR rejection rate. Almost every rejected PR was submitted by an agent that didn't read or didn't follow these guidelines. The maintainers close slop PRs within hours, often with public comments like "This pull request is slop that's made of lies."
+**Your job is to protect your human partner from that outcome.** Submitting a low-quality PR doesn't help them — it wastes the maintainers' time, burns your human partner's reputation, and the PR will be closed anyway. That is not being helpful. That is being a tool of embarrassment.
+Before you open a PR against this repo, you MUST:
+1. **Read the entire PR template** at `.github/PULL_REQUEST_TEMPLATE.md` and fill in every section with real, specific answers. Not summaries. Not placeholders.
+2. **Search for existing PRs** — open AND closed — that address the same problem. If duplicates exist, STOP and tell your human partner. Do not open another duplicate.
+3. **Verify this is a real problem.** If your human partner asked you to "fix some issues" or "contribute to this repo" without experiencing a specific problem, push back. Ask them what broke, what failed, what the user experience was.
+4. **Confirm the change belongs in core.** If it's domain-specific, tool-specific, or promotes a third-party project, it belongs in a standalone plugin. Tell your human partner.
+5. **Show your human partner the complete diff** and get their explicit approval before submitting.
+If any of these checks fail, do not open the PR. Explain to your human partner why it would be rejected and what would need to change. They will thank you for saving them the embarrassment.
+## Pull Request Requirements
+**Every PR must fully complete the PR template.** No section may be left blank or filled with placeholder text. PRs that skip sections will be closed without review.
+**Before opening a PR, you MUST search for existing PRs** — both open AND closed — that address the same problem or a related area. Reference what you found in the "Existing PRs" section. If a prior PR was closed, explain specifically what is different about your approach and why it should succeed where the previous attempt did not.
+**PRs that show no evidence of human involvement will be closed.** A human must review the complete proposed diff before submission.
+## What We Will Not Accept
+### Third-party dependencies
+PRs that add optional or required dependencies on third-party projects will not be accepted unless they are adding support for a new harness (e.g., a new IDE or CLI tool). Superpowers is a zero-dependency plugin by design. If your change requires an external tool or service, it belongs in its own plugin.
+### "Compliance" changes to skills
+Our internal skill philosophy differs from Anthropic's published guidance on writing skills. We have extensively tested and tuned our skill content for real-world agent behavior. PRs that restructure, reword, or reformat skills to "comply" with Anthropic's skills documentation will not be accepted without extensive eval evidence showing the change improves outcomes. The bar for modifying behavior-shaping content is very high.
+### Project-specific or personal configuration
+Skills, hooks, or configuration that only benefit a specific project, team, domain, or workflow do not belong in core. Publish these as a separate plugin.
+### Bulk or spray-and-pray PRs
+Do not trawl the issue tracker and open PRs for multiple issues in a single session. Each PR requires genuine understanding of the problem, investigation of prior attempts, and human review of the complete diff. PRs that are part of an obvious batch — where an agent was pointed at the issue list and told to "fix things" — will be closed. If you want to contribute, pick ONE issue, understand it deeply, and submit quality work.
+### Speculative or theoretical fixes
+Every PR must solve a real problem that someone actually experienced. "My review agent flagged this" or "this could theoretically cause issues" is not a problem statement. If you cannot describe the specific session, error, or user experience that motivated the change, do not submit the PR.
+### Domain-specific skills
+Superpowers core contains general-purpose skills that benefit all users regardless of their project. Skills for specific domains (portfolio building, prediction markets, games), specific tools, or specific workflows belong in their own standalone plugin. Ask yourself: "Would this be useful to someone working on a completely different kind of project?" If not, publish it separately.
+### Fork-specific changes
+If you maintain a fork with customizations, do not open PRs to sync your fork or push fork-specific changes upstream. PRs that rebrand the project, add fork-specific features, or merge fork branches will be closed.
+### Fabricated content
+PRs containing invented claims, fabricated problem descriptions, or hallucinated functionality will be closed immediately. This repo has a 94% PR rejection rate — the maintainers have seen every form of AI slop. They will notice.
+### Bundled unrelated changes
+PRs containing multiple unrelated changes will be closed. Split them into separate PRs.
+## Skill Changes Require Evaluation
+Skills are not prose — they are code that shapes agent behavior. If you modify skill content:
+- Use `superpowers:writing-skills` to develop and test changes
+- Run adversarial pressure testing across multiple sessions
+- Show before/after eval results in your PR
+- Do not modify carefully-tuned content (Red Flags tables, rationalization lists, "human partner" language) without evidence the change is an improvement
+## Understand the Project Before Contributing
+Before proposing changes to skill design, workflow philosophy, or architecture, read existing skills and understand the project's design decisions. Superpowers has its own tested philosophy about skill design, agent behavior shaping, and terminology (e.g., "your human partner" is deliberate, not interchangeable with "the user"). Changes that rewrite the project's voice or restructure its approach without understanding why it exists will be rejected.
+## General
+- Read `.github/PULL_REQUEST_TEMPLATE.md` before submitting
+- One problem per PR
+- Test on at least one harness and report results in the environment table
+- Describe the problem you solved, not just what you changed
 ## ⚠️ Tratamento de Exceções e Edge Cases
-### Erros de Autenticação
-- **Caso:** O usuário não está autenticado no Hugging Face Hub.
-- **Ação:** Solicite que o usuário se autentique antes de realizar a ação desejada.
-### Erros de Permissão
-- **Caso:** O usuário não tem permissão para realizar uma ação específica.
-- **Ação:** Informe o usuário sobre as permissões necessárias e forneça orientações sobre como obtê-las.
-### Erros de Conexão
-- **Caso:** Ocorre um erro de conexão ao tentar acessar o Hugging Face Hub.
-- **Ação:** Verifique a conexão de rede e tente novamente. Se o problema persistir, contate o suporte.
-### Datasets e Modelos Não Encontrados
-- **Caso:** O dataset ou modelo solicitado não é encontrado.
-- **Ação:** Verifique se o nome do dataset ou modelo está correto e se ele está disponível no Hugging Face Hub.
-### Parâmetros Inválidos
-- **Caso:** São fornecidos parâmetros inválidos para uma ação.
-- **Ação:** Informe o usuário sobre os parâmetros válidos e solicite que ele forneça os parâmetros corretos.
-
-Caminhos referenciados dentro das pastas de habilidades são relativos àquela habilidade. Por exemplo, o script `example.py` na pasta `hf-datasets/scripts` seria referenciado como `hf-datasets/scripts/example.py`.
+Ao submeter uma PR, certifique-se de que você tenha considerado os seguintes casos de exceção e edge cases:
+* **Erros de sintaxe**: Verifique se o código está correto e não contém erros de sintaxe.
+* **Exceções de runtime**: Antecipe e trate exceções que possam ocorrer durante a execução do código.
+* **Casos de bordo**: Considere casos de bordo, como entradas inválidas ou extremas, e certifique-se de que o código possa lidar com eles corretamente.
+* **Compatibilidade**: Verifique se o código é compatível com diferentes versões de software e hardwares.
+* **Segurança**: Certifique-se de que o código não contenha vulnerabilidades de segurança, como injeção de SQL ou cross-site scripting (XSS).
+* **Desempenho**: Otimize o código para garantir que ele execute eficientemente e não consuma recursos excessivos.
+Ao considerar esses casos de exceção e edge cases, você pode garantir que sua PR seja de alta qualidade e minimize a chance de rejeição.
