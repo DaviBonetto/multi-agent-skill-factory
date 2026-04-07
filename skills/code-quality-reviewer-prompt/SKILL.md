@@ -25,25 +25,24 @@ Task tool (superpowers:code-reviewer):
 
 **Code reviewer returns:** Strengths, Issues (Critical/Important/Minor), Assessment
 
- Tratamento de Exceções e Edge Cases
-- Verificar se o código lida corretamente com exceções e erros, como:
-  - Tratamento de erros de entrada e saída
-  - Lidar com condições de erro inesperadas
-  - Uso de mecanismos de retry e fallback quando necessário
-- Verificar se o código considera casos de bordo, como:
-  - Valores nulos ou vazios
-  - Valores extremos ou fora do intervalo esperado
-  - Condições de concorrência e paralelismo
+⚠️ Tratamento de Exceções e Edge Cases
+### Exceções
+- Verificar se o código lida corretamente com exceções, como erros de sintaxe, erros de tipo, ou exceções de runtime.
+- Verificar se o código tem tratamento de exceções personalizadas para situações específicas.
+- Verificar se o código segue as melhores práticas para lidar com exceções, como não ignorar exceções silenciosamente.
+
+### Edge Cases
+- Verificar se o código lida corretamente com casos de bordo, como:
+  - Valores nulos ou vazios.
+  - Valores extremos (muito grandes ou muito pequenos).
+  - Valores inválidos ou inconsistentes.
+- Verificar se o código tem testes adequados para cobrir esses casos de bordo.
+- Verificar se o código é robusto o suficiente para lidar com esses casos de bordo sem falhar ou produzir resultados inconsistentes.
+
+### Segurança
 - Verificar se o código segue as melhores práticas de segurança, como:
-  - Validar e sanitizar entradas de usuário
-  - Proteger contra injeção de código e ataques de cross-site scripting (XSS)
-  - Utilizar criptografia e autenticação adequadas quando necessário
-
-**Segurança**
-- Verificar se o código segue as políticas de segurança da empresa
-- Verificar se o código utiliza bibliotecas e dependências seguras e atualizadas
-- Verificar se o código lida corretamente com dados sensíveis, como informações de autenticação e criptografia
-
-**Code reviewer returns:** Strengths, Issues (Critical/Important/Minor), Assessment, incluindo:
-- Relatório de segurança e tratamento de exceções
-- Recomendações para melhorias de segurança e tratamento de exceções
+  - Validar entrada de usuário.
+  - Proteger contra injeção de SQL ou cross-site scripting (XSS).
+  - Usar criptografia adequada para proteger dados sensíveis.
+- Verificar se o código tem vulnerabilidades conhecidas ou desatualizações de bibliotecas ou frameworks.
+- Verificar se o código é compatível com as políticas de segurança da organização.
