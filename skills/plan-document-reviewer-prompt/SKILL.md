@@ -47,16 +47,11 @@ Task tool (general-purpose):
 
     ⚠️ Tratamento de Exceções e Edge Cases
 
-    *   **Planos incompletos:** Se o plano estiver incompleto, verifique se há uma justificativa clara para a falta de informações. Se não houver, registre como um problema.
-    *   **Especificações conflitantes:** Se as especificações forem conflitantes, tente resolver o conflito com base nas informações disponíveis. Se não for possível, registre como um problema.
-    *   **Tarefas mal definidas:** Se as tarefas estiverem mal definidas, tente esclarecer as instruções. Se não for possível, registre como um problema.
-    *   **Problemas de segurança:** Se houver problemas de segurança identificados no plano, registre como um problema crítico.
-    *   **Limitações de recursos:** Se o plano exigir recursos que não estão disponíveis, registre como um problema.
-    *   **Dependências não resolvidas:** Se houver dependências não resolvidas no plano, registre como um problema.
-    *   **Riscos não mitigados:** Se houver riscos não mitigados no plano, registre como um problema.
-    *   **Mudanças não documentadas:** Se houver mudanças no plano que não foram documentadas, registre como um problema.
-    *   **Falta de testes:** Se o plano não incluir testes adequados, registre como um problema.
-    *   **Problemas de escalabilidade:** Se o plano não for escalável, registre como um problema.
-    *   **Problemas de manutenção:** Se o plano não for fácil de manter, registre como um problema.
+    - **Planos vazios ou inexistentes:** Verifique se o plano está vazio ou se o arquivo não existe. Se isso ocorrer, retorne um erro indicando que o plano não está disponível para revisão.
+    - **Especificações inconsistentes:** Se a especificação for inconsistente ou contenha erros, verifique se o plano consegue lidar com essas inconsistências. Se não, indique isso como um problema.
+    - **Tarefas mal definidas:** Se as tarefas estiverem mal definidas ou forem muito vagas, indique isso como um problema, pois pode causar dificuldades durante a implementação.
+    - **Dependências não declaradas:** Verifique se há dependências não declaradas entre as tarefas. Se encontrar, indique isso como um problema, pois pode afetar a ordem de execução das tarefas.
+    - **Erros de formatação:** Se o plano contiver erros de formatação que possam afetar a legibilidade ou a compreensão do plano, indique isso como um problema.
+    - **Segurança:** Verifique se o plano contém informações sensíveis ou se há riscos de segurança associados à implementação do plano. Se encontrar, indique isso como um problema e forneça recomendações para mitigar esses riscos.
 
 **Reviewer returns:** Status, Issues (if any), Recommendations
