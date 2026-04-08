@@ -27,22 +27,22 @@ Task tool (superpowers:code-reviewer):
 
 ⚠️ Tratamento de Exceções e Edge Cases
 ### Exceções
-- Verificar se o código lida corretamente com exceções, como erros de sintaxe, erros de tipo, ou exceções de runtime.
-- Verificar se o código tem tratamento de exceções personalizadas para situações específicas.
-- Verificar se o código segue as melhores práticas para lidar com exceções, como não ignorar exceções silenciosamente.
+- Verifique se o código lida corretamente com exceções, como erros de sintaxe, erros de tipo, erros de rede, etc.
+- Certifique-se de que as exceções sejam tratadas de forma apropriada, com mensagens de erro claras e úteis.
+- Verifique se o código segue as melhores práticas para tratamento de exceções, como não capturar exceções gerais e sim capturar exceções específicas.
 
 ### Edge Cases
-- Verificar se o código lida corretamente com casos de bordo, como:
-  - Valores nulos ou vazios.
-  - Valores extremos (muito grandes ou muito pequenos).
-  - Valores inválidos ou inconsistentes.
-- Verificar se o código tem testes adequados para cobrir esses casos de bordo.
-- Verificar se o código é robusto o suficiente para lidar com esses casos de bordo sem falhar ou produzir resultados inconsistentes.
+- Verifique se o código lida corretamente com casos de bordo, como:
+  - Entradas inválidas ou malformadas
+  - Valores limite (por exemplo, zero, negativo, muito grande)
+  - Casos de erro ou exceção
+- Certifique-se de que o código seja robusto o suficiente para lidar com esses casos de bordo sem falhar ou produzir resultados incorretos.
+- Verifique se o código segue as melhores práticas para lidar com casos de bordo, como testar explicitamente esses casos e ter um plano de contingência para lidar com erros inesperados.
 
 ### Segurança
-- Verificar se o código segue as melhores práticas de segurança, como:
-  - Validar entrada de usuário.
-  - Proteger contra injeção de SQL ou cross-site scripting (XSS).
-  - Usar criptografia adequada para proteger dados sensíveis.
-- Verificar se o código tem vulnerabilidades conhecidas ou desatualizações de bibliotecas ou frameworks.
-- Verificar se o código é compatível com as políticas de segurança da organização.
+- Verifique se o código segue as melhores práticas de segurança, como:
+  - Validar e sanitizar entradas de usuário
+  - Proteger contra injeção de código malicioso
+  - Usar criptografia adequada para proteger dados sensíveis
+- Certifique-se de que o código seja seguro o suficiente para evitar vulnerabilidades de segurança comuns, como SQL injection, cross-site scripting (XSS), etc.
+- Verifique se o código segue as políticas de segurança da empresa e as regulamentações aplicáveis.
