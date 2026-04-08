@@ -23,7 +23,6 @@ Your coding agent uses `hf_jobs()` to submit training scripts directly to HF inf
 We'll announce the XP tiers for this quest soon.
 
 ## Resources
-
 - [SKILL.md](../../hf-llm-trainer/SKILL.md) — Full skill documentation
 - [SFT Example](../../hf-llm-trainer/scripts/train_sft_example.py) — Production SFT template
 - [DPO Example](../../hf-llm-trainer/scripts/train_dpo_example.py) — Production DPO template
@@ -31,38 +30,15 @@ We'll announce the XP tiers for this quest soon.
 - [Training Methods](../../hf-llm-trainer/references/training_methods.md) — Method selection guide
 - [Hardware Guide](../../hf-llm-trainer/references/hardware_guide.md) — GPU selection
 
-## Segurança
-
-Para garantir a segurança dos modelos e dos dados, é importante seguir as melhores práticas de segurança, incluindo:
-- Utilizar autenticação e autorização adequadas para acessar os recursos do HF Jobs
-- Utilizar criptografia para proteger os dados em trânsito e em repouso
-- Realizar testes de segurança regulares para identificar vulnerabilidades
+## Segurança e Conformidade
+- Certifique-se de que todos os dados utilizados sejam devidamente anonimizados e estejam em conformidade com as políticas de privacidade.
+- Utilize autenticação e autorização adequadas ao acessar recursos da HF.
+- Mantenha seus modelos e dados atualizados e seguros.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-
-Ao trabalhar com o `hf-llm-trainer`, é importante considerar os seguintes casos de exceção e edge cases:
-- **Erros de conexão**: Em caso de erros de conexão com o HF Jobs, o agente deve tentar reconectar após um período de tempo razoável.
-- **Erros de autenticação**: Em caso de erros de autenticação, o agente deve solicitar as credenciais novamente e tentar autenticar-se novamente.
-- **Erros de processamento**: Em caso de erros de processamento, o agente deve registrar o erro e continuar com a próxima tarefa.
-- **Modelos inválidos**: Em caso de modelos inválidos, o agente deve registrar o erro e solicitar um novo modelo.
-- **Dados inválidos**: Em caso de dados inválidos, o agente deve registrar o erro e solicitar novos dados.
-- **Timeouts**: Em caso de timeouts, o agente deve registrar o erro e tentar novamente após um período de tempo razoável.
-- **Limites de recursos**: Em caso de limites de recursos, o agente deve registrar o erro e solicitar mais recursos.
-
-Exemplos de código para tratamento de exceções:
-```python
-try:
-    # Código que pode gerar exceção
-except Exception as e:
-    # Tratamento da exceção
-    print(f"Erro: {e}")
-    # Registro do erro
-    logging.error(f"Erro: {e}")
-```
-Exemplos de código para edge cases:
-```python
-if modelo_invalido:
-    # Tratamento do modelo inválido
-    print("Modelo inválido")
-    # Registro do erro
-    logging.error("Modelo inválido")
+- **Erro de Conexão**: Em caso de falha na conexão com a infraestrutura da HF, tente reiniciar o processo de treinamento ou verifique a estabilidade da sua conexão de internet.
+- **Modelo Não Convergente**: Se o modelo não convergir durante o treinamento, ajuste os hiperparâmetros ou verifique a qualidade dos dados de treinamento.
+- **Exceções de Memória**: Em caso de exceções de memória, reduza o tamanho do lote ou utilize um GPU com mais memória.
+- **Divergência de Modelo**: Se o modelo divergir durante o treinamento, verifique a estabilidade do otimizador e ajuste os hiperparâmetros se necessário.
+- **Problemas de Dados**: Em caso de problemas com os dados, como dados faltantes ou inconsistentes, verifique a integridade dos dados e ajuste-os se necessário.
+- **Limitações de Recursos**: Se você estiver enfrentando limitações de recursos, como falta de memória ou capacidade de processamento, considere utilizar recursos de nuvem mais potentes ou otimizar o uso de recursos.
