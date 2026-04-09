@@ -1,94 +1,72 @@
 ---
 name: Arquitetura de Sistemas Distribuídos
-description: Ensina como projetar e implementar sistemas distribuídos escaláveis
+description: Aborda conceitos e práticas para o design de sistemas distribuídos escaláveis e tolerantes a falhas
 ---
 
 ## Objetivo
-O objetivo deste guia é fornecer uma visão geral abrangente sobre como projetar e implementar sistemas distribuídos escaláveis. Isso inclui entender os princípios fundamentais da arquitetura de sistemas distribuídos, como lidar com a comunicação entre os componentes, gerenciar a escalabilidade e garantir a confiabilidade dos sistemas.
+O objetivo deste guia é fornecer uma visão geral abrangente sobre arquitetura de sistemas distribuídos, cobrindo conceitos fundamentais, práticas recomendadas e exemplos de implementação. Isso ajudará os desenvolvedores a projetar sistemas distribuídos escaláveis e tolerantes a falhas.
 
 ## Pré-requisitos
-Para aproveitar ao máximo este guia, é recomendável ter conhecimento prévio em:
+Antes de mergulhar nos detalhes da arquitetura de sistemas distribuídos, é essencial ter conhecimento básico em:
 - Programação em linguagens como Java, Python ou C++
-- Conceitos básicos de redes de computadores
-- Experiência com sistemas operacionais e gerenciamento de processos
-- Noções de banco de dados e armazenamento de dados
+- Conceitos de redes de computadores e protocolos de comunicação
+- Sistemas operacionais e gerenciamento de processos
 
 ## Passo a Passo Técnico / Exemplos de Código
-### 1. Definição da Arquitetura
-A arquitetura de sistemas distribuídos pode ser definida como um conjunto de componentes que trabalham juntos para alcançar um objetivo comum. Isso pode incluir:
-- **Servidores**: Responsáveis por fornecer serviços específicos.
-- **Clientes**: Responsáveis por solicitar serviços aos servidores.
-- **Comunicação**: Meios pelos quais os componentes se comunicam, como TCP/IP, HTTP, etc.
+### 1. Introdução ao Design de Sistemas Distribuídos
+Um sistema distribuído é um conjunto de computadores conectados que trabalham juntos para alcançar um objetivo comum. O design de tais sistemas envolve considerar a escalabilidade, a tolerância a falhas, a segurança e a performance.
 
-### 2. Implementação de um Sistema Distribuído
-Um exemplo simples de sistema distribuído pode ser um serviço de gerenciamento de estoque. Neste exemplo, podemos ter:
-- **Servidor de Estoque**: Armazena informações sobre o estoque atual.
-- **Clientes**: Aplicativos que solicitam informações de estoque ou atualizam o estoque.
+### 2. Arquiteturas de Sistemas Distribuídos
+Existem várias arquiteturas para sistemas distribuídos, incluindo:
+- **Arquitetura Cliente-Servidor**: Um cliente envia requisições para um servidor, que processa e responde.
+- **Arquitetura Peer-to-Peer**: Todos os nós atuam como iguais, compartilhando recursos sem a necessidade de um servidor central.
 
+### 3. Implementação de um Sistema Distribuído
+Um exemplo simples de um sistema distribuído pode ser implementado usando Python e a biblioteca `socket` para comunicação entre processos:
 ```python
 import socket
 
-# Servidor de Estoque
-def start_server():
-    host = '127.0.0.1'
-    port = 12345
+# Criação de um socket
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-    # Criar socket
-    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+# Conexão ao servidor
+server_address = ('localhost', 12345)
+try:
+    sock.connect(server_address)
+except ConnectionRefusedError:
+    print("Erro: Conexão recusada. Verifique se o servidor está executando.")
+    exit(1)
 
-    # Bind
-    server_socket.bind((host, port))
+# Envio de uma mensagem
+message = "Olá, servidor!"
+try:
+    sock.sendall(message.encode())
+except BrokenPipeError:
+    print("Erro: Conexão fechada inesperadamente.")
+    exit(1)
 
-    # Listen
-    server_socket.listen(5)
-    print(f"Servidor de Estoque escutando em {host}:{port}")
+# Recebimento da resposta
+try:
+    data = sock.recv(1024)
+    print("Resposta do servidor:", data.decode())
+except ConnectionResetError:
+    print("Erro: Conexão resetada pelo servidor.")
+    exit(1)
 
-    while True:
-        try:
-            client_socket, address = server_socket.accept()
-            print(f"Conexão de {address} estabelecida.")
-
-            # Tratar requisições
-            request = client_socket.recv(1024).decode()
-            print(f"Requisição: {request}")
-
-            # Responder
-            response = "Estoque atualizado com sucesso!"
-            client_socket.send(response.encode())
-
-            client_socket.close()
-        except socket.error as e:
-            print(f"Erro de socket: {e}")
-        except Exception as e:
-            print(f"Erro geral: {e}")
-
-start_server()
+# Fechamento da conexão
+sock.close()
 ```
 
 ## Validação
-Para validar a implementação do sistema distribuído, é importante testar todos os componentes e garantir que eles estejam funcionando corretamente. Isso pode incluir:
-- **Testes Unitários**: Testar cada componente individualmente.
-- **Testes de Integração**: Testar a integração entre os componentes.
-- **Testes de Desempenho**: Testar o desempenho do sistema sob diferentes cargas.
+Para validar o design e a implementação de um sistema distribuído, é crucial realizar testes abrangentes, considerando:
+- **Escalabilidade**: Testar o sistema com um número crescente de usuários ou carga de trabalho.
+- **Tolerância a Falhas**: Simular falhas em diferentes componentes do sistema e verificar a capacidade de recuperação.
+- **Desempenho**: Medir o tempo de resposta e a eficiência do sistema sob diferentes condições.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-Além da implementação básica, é crucial considerar os seguintes casos de bordo e exceções:
-- **Conexões Perdidas**: Implementar mecanismos para detectar e lidar com conexões perdidas entre o cliente e o servidor.
-- **Sobrecarga do Servidor**: Desenvolver estratégias para lidar com a sobrecarga do servidor, como balanceamento de carga ou escalabilidade automática.
-- **Erros de Comunicação**: Tratar erros de comunicação entre os componentes, como pacotes perdidos ou corrompidos.
-- **Segurança**: Implementar medidas de segurança, como criptografia e autenticação, para proteger a comunicação e os dados armazenados.
-
-Exemplo de tratamento de exceções:
-```python
-try:
-    # Código que pode gerar exceção
-    client_socket, address = server_socket.accept()
-except socket.error as e:
-    # Tratar erro de socket
-    print(f"Erro de socket: {e}")
-except Exception as e:
-    # Tratar erro geral
-    print(f"Erro geral: {e}")
-```
-
-Ao seguir estes passos e exemplos, é possível projetar e implementar sistemas distribuídos escaláveis e confiáveis. Lembre-se de que a arquitetura de sistemas distribuídos é um campo amplo e em constante evolução, então, é importante continuar aprendendo e se atualizando sobre as melhores práticas e tecnologias mais recentes.
+Além dos exemplos de tratamento de exceções apresentados no código, é importante considerar os seguintes casos:
+- **Conexão Perdida**: Implementar mecanismos de reconexão automática e timeout para lidar com conexões perdidas.
+- **Sobrecarga do Servidor**: Implementar limites de carga e mecanismos de escalonamento para lidar com picos de demanda.
+- **Ataques de Segurança**: Implementar medidas de segurança, como autenticação e criptografia, para proteger o sistema contra ataques mal-intencionados.
+- **Erros de Sincronização**: Implementar mecanismos de sincronização e bloqueio para lidar com acessos concorrentes a recursos compartilhados.
+- **Falhas de Hardware**: Implementar mecanismos de redundância e failover para lidar com falhas de hardware.
