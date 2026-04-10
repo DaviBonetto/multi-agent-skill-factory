@@ -1,279 +1,205 @@
-# Svelte Todo List - Implementation Plan
+# Go Fractals CLI - Implementation Plan
 
 Execute this plan using the `superpowers:subagent-driven-development` skill.
 
 ## Context
 
-Building a todo list app with Svelte. See `design.md` for full specification.
+Building a CLI tool that generates ASCII fractals. See `design.md` for full specification.
 
 ## Tasks
 
 ### Task 1: Project Setup
 
-Create the Svelte project with Vite.
+Create the Go module and directory structure.
 
 **Do:**
-- Run `npm create vite@latest . -- --template svelte-ts`
-- Install dependencies with `npm install`
-- Verify dev server works
-- Clean up default Vite template content from App.svelte
-- Handle potential errors during installation and setup
+- Initialize `go.mod` with module name `github.com/superpowers-test/fractals`
+- Create directory structure: `cmd/fractals/`, `internal/sierpinski/`, `internal/mandelbrot/`, `internal/cli/`
+- Create minimal `cmd/fractals/main.go` that prints "fractals cli"
+- Add `github.com/spf13/cobra` dependency
 
 **Verify:**
-- `npm run dev` starts server
-- App shows minimal "Svelte Todos" heading
-- `npm run build` succeeds
-- Error handling: verify that the app can recover from common errors such as network issues or dependency installation failures
+- `go build ./cmd/fractals` succeeds
+- `./fractals` prints "fractals cli"
 
----
+### Task 2: CLI Framework with Help
 
-### Task 2: Todo Store
-
-Create the Svelte store for todo state management.
+Set up Cobra root command with help output.
 
 **Do:**
-- Create `src/lib/store.ts`
-- Define `Todo` interface with id, text, completed
-- Create writable store with initial empty array
-- Export functions: `addTodo(text)`, `toggleTodo(id)`, `deleteTodo(id)`, `clearCompleted()`
-- Create `src/lib/store.test.ts` with tests for each function
-- Implement error handling for store operations (e.g., handling duplicate todo IDs)
+- Create `internal/cli/root.go` with root command
+- Configure help text showing available subcommands
+- Wire root command into `main.go`
 
 **Verify:**
-- Tests pass: `npm run test` (install vitest if needed)
-- Error handling: verify that store operations handle errors correctly (e.g., duplicate IDs, invalid input)
+- `./fractals --help` shows usage with "sierpinski" and "mandelbrot" listed as available commands
+- `./fractals` (no args) shows help
 
----
+### Task 3: Sierpinski Algorithm
 
-### Task 3: localStorage Persistence
-
-Add persistence layer for todos.
+Implement the Sierpinski triangle generation algorithm.
 
 **Do:**
-- Create `src/lib/storage.ts`
-- Implement `loadTodos(): Todo[]` and `saveTodos(todos: Todo[])`
-- Handle JSON parse errors gracefully (return empty array)
-- Integrate with store: load on init, save on change
-- Add tests for load/save/error handling
-- Implement error handling for storage operations (e.g., handling storage quota exceeded errors)
+- Create `internal/sierpinski/sierpinski.go`
+- Implement `Generate(size, depth int, char rune) []string` that returns lines of the triangle
+- Use recursive midpoint subdivision algorithm
+- Create `internal/sierpinski/sierpinski_test.go` with tests:
+  - Small triangle (size=4, depth=2) matches expected output
+  - Size=1 returns single character
+  - Depth=0 returns filled triangle
 
 **Verify:**
+- `go test ./internal/sierpinski/...` passes
+
+### Task 4: Sierpinski CLI Integration
+
+Wire the Sierpinski algorithm to a CLI subcommand.
+
+**Do:**
+- Create `internal/cli/sierpinski.go` with `sierpinski` subcommand
+- Add flags: `--size` (default 32), `--depth` (default 5), `--char` (default '*')
+- Call `sierpinski.Generate()` and print result to stdout
+
+**Verify:**
+- `./fractals sierpinski` outputs a triangle
+- `./fractals sierpinski --size 16 --depth 3` outputs smaller triangle
+- `./fractals sierpinski --help` shows flag documentation
+
+### Task 5: Mandelbrot Algorithm
+
+Implement the Mandelbrot set ASCII renderer.
+
+**Do:**
+- Create `internal/mandelbrot/mandelbrot.go`
+- Implement `Render(width, height, maxIter int, char string) []string`
+- Map complex plane region (-2.5 to 1.0 real, -1.0 to 1.0 imaginary) to output dimensions
+- Map iteration count to character gradient ".:-=+*#%@" (or single char if provided)
+- Create `internal/mandelbrot/mandelbrot_test.go` with tests:
+  - Output dimensions match requested width/height
+  - Known point inside set (0,0) maps to max-iteration character
+  - Known point outside set (2,0) maps to low-iteration character
+
+**Verify:**
+- `go test ./internal/mandelbrot/...` passes
+
+### Task 6: Mandelbrot CLI Integration
+
+Wire the Mandelbrot algorithm to a CLI subcommand.
+
+**Do:**
+- Create `internal/cli/mandelbrot.go` with `mandelbrot` subcommand
+- Add flags: `--width` (default 80), `--height` (default 24), `--iterations` (default 100), `--char` (default "")
+- Call `mandelbrot.Render()` and print result to stdout
+
+**Verify:**
+- `./fractals mandelbrot` outputs recognizable Mandelbrot set
+- `./fractals mandelbrot --width 40 --height 12` outputs smaller version
+- `./fractals mandelbrot --help` shows flag documentation
+
+### Task 7: Character Set Configuration
+
+Ensure `--char` flag works consistently across both commands.
+
+**Do:**
+- Verify Sierpinski `--char` flag passes character to algorithm
+- For Mandelbrot, `--char` should use single character instead of gradient
+- Add tests for custom character output
+
+**Verify:**
+- `./fractals sierpinski --char '#'` uses '#' character
+- `./fractals mandelbrot --char '.'` uses '.' for all filled points
 - Tests pass
-- Manual test: add todo, refresh page, todo persists
-- Error handling: verify that storage operations handle errors correctly (e.g., storage quota exceeded, JSON parse errors)
 
----
+### Task 8: Input Validation and Error Handling
 
-### Task 4: TodoInput Component
-
-Create the input component for adding todos.
+Add validation for invalid inputs.
 
 **Do:**
-- Create `src/lib/TodoInput.svelte`
-- Text input bound to local state
-- Add button calls `addTodo()` and clears input
-- Enter key also submits
-- Disable Add button when input is empty
-- Add component tests
-- Implement error handling for input validation (e.g., handling empty input)
+- Sierpinski: size must be > 0, depth must be >= 0
+- Mandelbrot: width/height must be > 0, iterations must be > 0
+- Return clear error messages for invalid inputs
+- Add tests for error cases
 
 **Verify:**
-- Tests pass
-- Component renders input and button
-- Error handling: verify that input validation handles errors correctly (e.g., empty input)
+- `./fractals sierpinski --size 0` prints error, exits non-zero
+- `./fractals mandelbrot --width -1` prints error, exits non-zero
+- Error messages are clear and helpful
 
----
+### Task 9: Integration Tests
 
-### Task 5: TodoItem Component
-
-Create the single todo item component.
+Add integration tests that invoke the CLI.
 
 **Do:**
-- Create `src/lib/TodoItem.svelte`
-- Props: `todo: Todo`
-- Checkbox toggles completion (calls `toggleTodo`)
-- Text with strikethrough when completed
-- Delete button (X) calls `deleteTodo`
-- Add component tests
-- Implement error handling for todo item rendering (e.g., handling missing todo data)
+- Create `cmd/fractals/main_test.go` or `test/integration_test.go`
+- Test full CLI invocation for both commands
+- Verify output format and exit codes
+- Test error cases return non-zero exit
 
 **Verify:**
-- Tests pass
-- Component renders checkbox, text, delete button
-- Error handling: verify that todo item rendering handles errors correctly (e.g., missing todo data)
+- `go test ./...` passes all tests including integration tests
 
----
+### Task 10: README
 
-### Task 6: TodoList Component
-
-Create the list container component.
-
-**Do:**
-- Create `src/lib/TodoList.svelte`
-- Props: `todos: Todo[]`
-- Renders TodoItem for each todo
-- Shows "No todos yet" when empty
-- Add component tests
-- Implement error handling for list rendering (e.g., handling empty list)
-
-**Verify:**
-- Tests pass
-- Component renders list of TodoItems
-- Error handling: verify that list rendering handles errors correctly (e.g., empty list)
-
----
-
-### Task 7: FilterBar Component
-
-Create the filter and status bar component.
-
-**Do:**
-- Create `src/lib/FilterBar.svelte`
-- Props: `todos: Todo[]`, `filter: Filter`, `onFilterChange: (f: Filter) => void`
-- Show count: "X items left" (incomplete count)
-- Three filter buttons: All, Active, Completed
-- Active filter is visually highlighted
-- "Clear completed" button (hidden when no completed todos)
-- Add component tests
-- Implement error handling for filter rendering (e.g., handling invalid filter state)
-
-**Verify:**
-- Tests pass
-- Component renders count, filters, clear button
-- Error handling: verify that filter rendering handles errors correctly (e.g., invalid filter state)
-
----
-
-### Task 8: App Integration
-
-Wire all components together in App.svelte.
-
-**Do:**
-- Import all components and store
-- Add filter state (default: 'all')
-- Compute filtered todos based on filter state
-- Render: heading, TodoInput, TodoList, FilterBar
-- Pass appropriate props to each component
-- Implement error handling for app integration (e.g., handling missing components)
-
-**Verify:**
-- App renders all components
-- Adding todos works
-- Toggling works
-- Deleting works
-- Error handling: verify that app integration handles errors correctly (e.g., missing components)
-
----
-
-### Task 9: Filter Functionality
-
-Ensure filtering works end-to-end.
-
-**Do:**
-- Verify filter buttons change displayed todos
-- 'all' shows all todos
-- 'active' shows only incomplete todos
-- 'completed' shows only completed todos
-- Clear completed removes completed todos and resets filter if needed
-- Add integration tests
-- Implement error handling for filter functionality (e.g., handling invalid filter state)
-
-**Verify:**
-- Filter tests pass
-- Manual verification of all filter states
-- Error handling: verify that filter functionality handles errors correctly (e.g., invalid filter state)
-
----
-
-### Task 10: Styling and Polish
-
-Add CSS styling for usability.
-
-**Do:**
-- Style the app to match the design mockup
-- Completed todos have strikethrough and muted color
-- Active filter button is highlighted
-- Input has focus styles
-- Delete button appears on hover (or always on mobile)
-- Responsive layout
-- Implement error handling for styling issues (e.g., handling CSS syntax errors)
-
-**Verify:**
-- App is visually usable
-- Styles don't break functionality
-- Error handling: verify that styling issues handle errors correctly (e.g., CSS syntax errors)
-
----
-
-### Task 11: End-to-End Tests
-
-Add Playwright tests for full user flows.
-
-**Do:**
-- Install Playwright: `npm init playwright@latest`
-- Create `tests/todo.spec.ts`
-- Test flows:
-  - Add a todo
-  - Complete a todo
-  - Delete a todo
-  - Filter todos
-  - Clear completed
-  - Persistence (add, reload, verify)
-- Implement error handling for end-to-end tests (e.g., handling test failures)
-
-**Verify:**
-- `npx playwright test` passes
-- Error handling: verify that end-to-end tests handle errors correctly (e.g., test failures)
-
----
-
-### Task 12: README
-
-Document the project.
+Document usage and examples.
 
 **Do:**
 - Create `README.md` with:
   - Project description
-  - Setup: `npm install`
-  - Development: `npm run dev`
-  - Testing: `npm test` and `npx playwright test`
-  - Build: `npm run build`
-- Implement error handling for README documentation (e.g., handling invalid Markdown syntax)
+  - Installation: `go install ./cmd/fractals`
+  - Usage examples for both commands
+  - Example output (small samples)
 
 **Verify:**
-- README accurately describes the project
-- Instructions work
-- Error handling: verify that README documentation handles errors correctly (e.g., invalid Markdown syntax)
+- README accurately describes the tool
+- Examples in README actually work
 
----
+## ⚠️ Tratamento de Exceções e Edge Cases
 
-### ⚠️ Tratamento de Exceções e Edge Cases
+### Exceções
 
-Implementar tratamento de exceções e edge cases para garantir a robustez e confiabilidade do aplicativo.
+*   Trate exceções de forma apropriada, garantindo que o programa não entre em um estado inconsistente.
+*   Use `err` como tipo de retorno para funções que podem falhar.
+*   Implemente tratamento de exceções personalizado para cada tipo de erro.
 
-**Do:**
-- Implementar tratamento de exceções para cada componente e função
-- Testar edge cases para garantir que o aplicativo funcione corretamente em diferentes cenários
-- Implementar logging e monitoramento para detectar e resolver problemas
+### Edge Cases
 
-**Verify:**
-- O aplicativo funciona corretamente em diferentes cenários
-- Exceções são tratadas e logadas corretamente
-- Edge cases são testados e funcionam como esperado
+*   Defina casos de bordo para cada comando e algoritmo.
+*   Verifique se os casos de bordo são tratados corretamente.
+*   Adicione testes para casos de bordo.
 
----
+### Exemplos de Tratamento de Exceções e Edge Cases
 
-### Edge Cases e Exceções Específicas
+*   No comando Sierpinski:
+    *   Trate o caso em que o tamanho é menor ou igual a zero.
+    *   Trate o caso em que a profundidade é menor que zero.
+*   No comando Mandelbrot:
+    *   Trate o caso em que a largura ou altura é menor ou igual a zero.
+    *   Trate o caso em que o número de iterações é menor ou igual a zero.
 
-- **TodoItem**: lidar com casos em que o todo não tem texto ou ID
-- **TodoList**: lidar com casos em que a lista de todos está vazia
-- **FilterBar**: lidar com casos em que o filtro está inválido ou não está definido
-- **App**: lidar com casos em que o aplicativo não consegue carregar ou renderizar corretamente
+### Testes para Exceções e Edge Cases
 
-**Do:**
-- Implementar tratamento de exceções para cada um desses casos
-- Testar esses casos para garantir que o aplicativo funcione corretamente
+*   Adicione testes para cada caso de bordo e exceção.
+*   Verifique se os testes passam e se os erros são tratados corretamente.
 
-**Verify:**
-- O aplicativo funciona corretamente em cada um desses casos
-- Exceções são tratadas e logadas corretamente
+### Código de Exemplo
+
+```go
+func GenerateSierpinski(size int, depth int, char rune) ([]string, error) {
+    if size <= 0 {
+        return nil, errors.New("tamanho deve ser maior que zero")
+    }
+    if depth < 0 {
+        return nil, errors.New("profundidade deve ser maior ou igual a zero")
+    }
+    // Implementação do algoritmo Sierpinski
+}
+
+func RenderMandelbrot(width int, height int, maxIter int, char string) ([]string, error) {
+    if width <= 0 || height <= 0 {
+        return nil, errors.New("largura e altura devem ser maiores que zero")
+    }
+    if maxIter <= 0 {
+        return nil, errors.New("número de iterações deve ser maior que zero")
+    }
+    // Implementação do algoritmo Mandelbrot
+}
