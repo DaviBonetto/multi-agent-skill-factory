@@ -47,11 +47,13 @@ Task tool (general-purpose):
 
     ⚠️ Tratamento de Exceções e Edge Cases
 
-    - **Planos vazios ou inexistentes:** Verifique se o plano está vazio ou se o arquivo não existe. Se isso ocorrer, retorne um erro indicando que o plano não está disponível para revisão.
-    - **Especificações inconsistentes:** Se a especificação for inconsistente ou contenha erros, verifique se o plano consegue lidar com essas inconsistências. Se não, indique isso como um problema.
-    - **Tarefas mal definidas:** Se as tarefas estiverem mal definidas ou forem muito vagas, indique isso como um problema, pois pode causar dificuldades durante a implementação.
-    - **Dependências não declaradas:** Verifique se há dependências não declaradas entre as tarefas. Se encontrar, indique isso como um problema, pois pode afetar a ordem de execução das tarefas.
-    - **Erros de formatação:** Se o plano contiver erros de formatação que possam afetar a legibilidade ou a compreensão do plano, indique isso como um problema.
-    - **Segurança:** Verifique se o plano contém informações sensíveis ou se há riscos de segurança associados à implementação do plano. Se encontrar, indique isso como um problema e forneça recomendações para mitigar esses riscos.
+    * **Planos incompletos:** Se o plano estiver incompleto, verificar se os principais componentes estão presentes e se há uma estrutura lógica.
+    * **Especificações conflitantes:** Se as especificações forem conflitantes, verificar se há uma versão mais recente ou se há necessidade de esclarecimento.
+    * **Tarefas mal definidas:** Se as tarefas estiverem mal definidas, verificar se há uma forma clara de executá-las e se há recursos necessários disponíveis.
+    * **Problemas de segurança:** Se houver problemas de segurança, verificar se há medidas de segurança adequadas em vigor e se há necessidade de atualização.
+    * **Erros de formatação:** Se houver erros de formatação, verificar se o plano está em um formato legível e se há necessidade de correção.
+    * **Falta de documentação:** Se houver falta de documentação, verificar se há uma forma clara de acessar a documentação necessária e se há necessidade de criação de documentação adicional.
+    * **Dependências não resolvidas:** Se houver dependências não resolvidas, verificar se há uma forma clara de resolver as dependências e se há necessidade de atualização.
+    * **Problemas de compatibilidade:** Se houver problemas de compatibilidade, verificar se há uma forma clara de resolver os problemas de compatibilidade e se há necessidade de atualização.
 
 **Reviewer returns:** Status, Issues (if any), Recommendations
