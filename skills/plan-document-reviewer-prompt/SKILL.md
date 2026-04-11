@@ -47,13 +47,14 @@ Task tool (general-purpose):
 
     ⚠️ Tratamento de Exceções e Edge Cases
 
-    * **Planos incompletos:** Se o plano estiver incompleto, verificar se os principais componentes estão presentes e se há uma estrutura lógica.
-    * **Especificações conflitantes:** Se as especificações forem conflitantes, verificar se há uma versão mais recente ou se há necessidade de esclarecimento.
-    * **Tarefas mal definidas:** Se as tarefas estiverem mal definidas, verificar se há uma forma clara de executá-las e se há recursos necessários disponíveis.
-    * **Problemas de segurança:** Se houver problemas de segurança, verificar se há medidas de segurança adequadas em vigor e se há necessidade de atualização.
-    * **Erros de formatação:** Se houver erros de formatação, verificar se o plano está em um formato legível e se há necessidade de correção.
-    * **Falta de documentação:** Se houver falta de documentação, verificar se há uma forma clara de acessar a documentação necessária e se há necessidade de criação de documentação adicional.
-    * **Dependências não resolvidas:** Se houver dependências não resolvidas, verificar se há uma forma clara de resolver as dependências e se há necessidade de atualização.
-    * **Problemas de compatibilidade:** Se houver problemas de compatibilidade, verificar se há uma forma clara de resolver os problemas de compatibilidade e se há necessidade de atualização.
+    *   **Planos incompletos:** Se o plano estiver incompleto, verifique se há uma explicação clara sobre o que falta e como será completado.
+    *   **Especificações contraditórias:** Se as especificações forem contraditórias, verifique se há uma explicação clara sobre como resolver a contradição.
+    *   **Tarefas vagas:** Se as tarefas forem vagas, verifique se há uma explicação clara sobre como torná-las mais específicas.
+    *   **Problemas de segurança:** Se houver problemas de segurança, verifique se há uma explicação clara sobre como resolvê-los.
+    *   **Dependências não declaradas:** Se houver dependências não declaradas, verifique se há uma explicação clara sobre como declará-las.
+    *   **Erros de sintaxe:** Se houver erros de sintaxe, verifique se há uma explicação clara sobre como corrigi-los.
+    *   **Inconsistências:** Se houver inconsistências, verifique se há uma explicação clara sobre como resolvê-las.
+    *   **Falta de documentação:** Se houver falta de documentação, verifique se há uma explicação clara sobre como documentar.
+    *   **Problemas de desempenho:** Se houver problemas de desempenho, verifique se há uma explicação clara sobre como resolvê-los.
 
 **Reviewer returns:** Status, Issues (if any), Recommendations
