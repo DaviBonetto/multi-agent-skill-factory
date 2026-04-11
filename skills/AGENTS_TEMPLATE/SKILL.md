@@ -6,7 +6,7 @@ Essas habilidades são:
  - {{name}} -> "{{path}}/SKILL.md"
 {{/skills}}
 
-**IMPORTANTE**: Você DEVE ler o arquivo SKILL.md sempre que a descrição da habilidade corresponder à intenção do usuário ou possa ajudar a realizar sua tarefa.
+**Importante**: Você DEVE ler o arquivo SKILL.md sempre que a descrição da habilidade corresponder à intenção do usuário ou possa ajudar a realizar sua tarefa.
 
 ## Habilidades Disponíveis
 {{#skills}}
@@ -17,9 +17,18 @@ Essas habilidades são:
 Os caminhos referenciados dentro das pastas de habilidades são relativos àquela habilidade. Por exemplo, o script `scripts/example.py` do hf-datasets seria referenciado como `hf-datasets/scripts/example.py`.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-No tratamento de habilidades, é fundamental considerar casos de bordo e exceções para garantir a robustez e a segurança do sistema. Aqui estão alguns pontos a serem considerados:
-* **Erro de Arquivo Não Encontrado**: Se o arquivo "SKILL.md" não for encontrado no diretório especificado, o sistema deve retornar um erro claro e conciso, indicando a falta do arquivo.
-* **Descrição de Habilidade Vazia**: Se a descrição de uma habilidade estiver vazia, o sistema deve lidar com isso de forma a não causar erros ou comportamentos inesperados.
-* **Caminhos Relativos**: Ao trabalhar com caminhos relativos dentro das pastas de habilidades, é crucial garantir que o sistema possa resolver esses caminhos corretamente, independentemente do local de onde a habilidade é acessada.
-* **Injeção de Código**: Para prevenir injeção de código malicioso através das descrições de habilidades ou caminhos de arquivos, o sistema deve sanitizar e validar todas as entradas de usuário.
-* **Permissões de Arquivo**: O sistema deve verificar as permissões de arquivo para garantir que os arquivos necessários possam ser lidos e executados conforme necessário, sem violar as políticas de segurança.
+### Erros de Arquivo
+- **Arquivo não encontrado**: Se o arquivo "SKILL.md" não for encontrado no diretório especificado, uma mensagem de erro será exibida informando que o arquivo não foi encontrado.
+- **Permissão de leitura**: Se o arquivo "SKILL.md" não tiver permissão de leitura, uma mensagem de erro será exibida informando que não é possível ler o arquivo.
+
+### Erros de Formatação
+- **Formatação inválida**: Se a formatação do arquivo "SKILL.md" for inválida, uma mensagem de erro será exibida informando que a formatação é inválida.
+- **Campos obrigatórios**: Se os campos obrigatórios (como `name` e `description`) não forem preenchidos, uma mensagem de erro será exibida informando que os campos são obrigatórios.
+
+### Segurança
+- **Injeção de código**: Para evitar injeção de código, todos os inputs de usuário serão sanitizados e validados antes de serem processados.
+- **Dados sensíveis**: Todos os dados sensíveis serão criptografados e armazenados de forma segura para evitar acessos não autorizados.
+
+### Edge Cases
+- **Nenhum resultado encontrado**: Se nenhuma habilidade corresponder à intenção do usuário, uma mensagem será exibida informando que nenhuma habilidade foi encontrada.
+- **Múltiplos resultados**: Se múltiplas habilidades corresponderem à intenção do usuário, uma lista de habilidades será exibida para que o usuário possa selecionar a mais apropriada.
