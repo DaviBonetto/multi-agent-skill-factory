@@ -1,96 +1,103 @@
 ---
-name: Desenvolvimento de Aplicativos Móveis
-description: Ensina a criar aplicativos móveis para Android e iOS utilizando tecnologias como React Native e Flutter
+name: Desenvolvimento de Aplicativos Móveis com React Native
+description: Essa habilidade ensina como criar aplicativos móveis cross-plataforma utilizando React Native, incluindo boas práticas de desenvolvimento e otimização de desempenho.
 ---
 
 ## Objetivo
-O objetivo deste guia é fornecer uma visão geral do desenvolvimento de aplicativos móveis para Android e iOS, utilizando tecnologias como React Native e Flutter. Ao final deste guia, você estará apto a criar aplicativos móveis para ambas as plataformas.
+O objetivo desta habilidade é capacitar os desenvolvedores a criar aplicativos móveis cross-plataforma utilizando React Native, com foco em boas práticas de desenvolvimento e otimização de desempenho. Ao final desta habilidade, os desenvolvedores serão capazes de criar aplicativos móveis robustos e escaláveis para várias plataformas.
 
 ## Pré-requisitos
-Antes de iniciar o desenvolvimento de aplicativos móveis, é necessário ter conhecimento em:
-* Programação em JavaScript (para React Native)
-* Programação em Dart (para Flutter)
-* Conhecimento básico de HTML e CSS
-* Ambiente de desenvolvimento configurado (Android Studio, Visual Studio Code, etc.)
+Antes de começar, é necessário ter conhecimento em:
+* Desenvolvimento de aplicativos móveis
+* React e JavaScript
+* Ferramentas de desenvolvimento móvel, como o Android Studio ou o Xcode
+* Conhecimento básico de Git e versionamento de código
 
 ## Passo a Passo Técnico / Exemplos de Código
-### Configurando o Ambiente
-Para começar a desenvolver aplicativos móveis, é necessário configurar o ambiente de desenvolvimento. Isso inclui:
-* Instalar o Android Studio ou o Visual Studio Code
-* Instalar o SDK do Android ou o SDK do iOS
-* Configurar o emulador ou o dispositivo físico para testar o aplicativo
+### Instalação do React Native
+Para começar, é necessário instalar o React Native. Isso pode ser feito utilizando o comando:
+```bash
+npm install -g react-native-cli
+```
+### Criação de um novo projeto
+Em seguida, crie um novo projeto React Native utilizando o comando:
+```bash
+npx react-native init NomeDoProjeto
+```
+### Estrutura do Projeto
+A estrutura do projeto React Native é a seguinte:
+* `android`: pasta contendo o código Android
+* `ios`: pasta contendo o código iOS
+* `node_modules`: pasta contendo as dependências do projeto
+* `App.js`: arquivo principal do aplicativo
 
-### Criando um Aplicativo com React Native
-```javascript
-import React from 'react';
-import { View, Text } from 'react-native';
+### Desenvolvimento do Aplicativo
+Agora, é possível começar a desenvolver o aplicativo. Por exemplo, para criar uma tela de login, você pode utilizar o seguinte código:
+```jsx
+import React, { useState } from 'react';
+import { View, Text, TextInput, Button } from 'react-native';
 
-const App = () => {
+const LoginScreen = () => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleLogin = () => {
+    try {
+      // Lógica de login aqui
+    } catch (error) {
+      console.error('Erro ao realizar login:', error);
+    }
+  };
+
   return (
     <View>
-      <Text>Olá, Mundo!</Text>
+      <Text>Login</Text>
+      <TextInput
+        placeholder="Username"
+        value={username}
+        onChangeText={(text) => setUsername(text)}
+      />
+      <TextInput
+        placeholder="Password"
+        secureTextEntry={true}
+        value={password}
+        onChangeText={(text) => setPassword(text)}
+      />
+      <Button title="Login" onPress={handleLogin} />
     </View>
   );
 };
 
-export default App;
+export default LoginScreen;
 ```
-### Criando um Aplicativo com Flutter
-```dart
-import 'package:flutter/material.dart';
-
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Olá, Mundo!',
-      home: Scaffold(
-        body: Center(
-          child: Text('Olá, Mundo!'),
-        ),
-      ),
-    );
-  }
-}
-```
+### Otimização de Desempenho
+Para otimizar o desempenho do aplicativo, é importante utilizar técnicas como:
+* Utilizar o `shouldComponentUpdate` para evitar renderizações desnecessárias
+* Utilizar o `React.memo` para memoizar componentes
+* Utilizar o `useCallback` para memoizar funções
 
 ## Validação
-Para validar o aplicativo, é necessário testá-lo em diferentes dispositivos e plataformas. Isso inclui:
-* Testar o aplicativo em emuladores ou dispositivos físicos
-* Verificar se o aplicativo está funcionando corretamente em diferentes resoluções e tamanhos de tela
-* Verificar se o aplicativo está funcionando corretamente em diferentes versões do sistema operacional
+Para validar o aplicativo, é importante realizar testes unitários e de integração. Isso pode ser feito utilizando frameworks como o Jest e o Enzyme. Além disso, é importante realizar testes de desempenho e de usabilidade para garantir que o aplicativo atenda às necessidades dos usuários.
 
-## Tratamento de Exceções e Edge Cases
-Além da validação, é importante considerar os seguintes casos de exceção e edge cases:
-* **Erros de sintaxe**: Verificar se o código está sintaticamente correto e se há erros de compilação.
-* **Erros de execução**: Tratar erros de execução, como erros de rede, erros de banco de dados, etc.
-* **Casos de bordo**: Considerar casos de bordo, como:
- + **Tela girada**: Verificar se o aplicativo se adapta corretamente à rotação da tela.
- + **Conexão de rede perdida**: Verificar se o aplicativo se comporta corretamente quando a conexão de rede é perdida.
- + **Dispositivo com recursos limitados**: Verificar se o aplicativo se comporta corretamente em dispositivos com recursos limitados, como memória ou processamento.
-* **Segurança**: Considerar a segurança do aplicativo, incluindo:
- + **Autenticação e autorização**: Implementar um sistema de autenticação e autorização adequado.
- + **Criptografia**: Utilizar criptografia adequada para proteger os dados sensíveis.
- + **Atualizações de segurança**: Manter o aplicativo atualizado com as últimas atualizações de segurança.
+## ⚠️ Tratamento de Exceções e Edge Cases
+É importante tratar exceções e edge cases para garantir a robustez do aplicativo. Alguns exemplos incluem:
+* Tratamento de erros de rede: ao realizar requisições de rede, é importante tratar erros de conexão, timeout, etc.
+* Tratamento de erros de banco de dados: ao realizar operações de banco de dados, é importante tratar erros de conexão, query, etc.
+* Tratamento de erros de permissão: ao realizar operações que requerem permissão, é importante tratar erros de permissão negada, etc.
+* Tratamento de edge cases: é importante tratar edge cases, como por exemplo, quando o usuário insere um valor inválido em um campo de texto.
 
-## Exemplos de Código de Tratamento de Exceções
-```javascript
+Exemplo de tratamento de exceção:
+```jsx
 try {
-  // Código que pode gerar uma exceção
+  // Código que pode lançar uma exceção
 } catch (error) {
-  // Tratar a exceção
-  console.error(error);
+  console.error('Erro:', error);
+  // Tratamento da exceção
 }
 ```
-```dart
-try {
-  // Código que pode gerar uma exceção
-} catch (e) {
-  // Tratar a exceção
-  print(e);
+Exemplo de tratamento de edge case:
+```jsx
+if (username.length < 3) {
+  console.error('Username inválido');
+  // Tratamento do edge case
 }
-```
