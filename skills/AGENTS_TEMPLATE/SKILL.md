@@ -6,7 +6,7 @@ Essas habilidades são:
  - {{name}} -> "{{path}}/SKILL.md"
 {{/skills}}
 
-**Importante**: Você DEVE ler o arquivo SKILL.md sempre que a descrição da habilidade corresponder à intenção do usuário ou possa ajudar a realizar sua tarefa.
+**Importante:** Você DEVE ler o arquivo SKILL.md sempre que a descrição das habilidades corresponder à intenção do usuário ou possa ajudar a realizar sua tarefa.
 
 ## Habilidades Disponíveis
 {{#skills}}
@@ -18,17 +18,16 @@ Os caminhos referenciados dentro das pastas de habilidades são relativos àquel
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
 ### Erros de Arquivo
-- **Arquivo não encontrado**: Se o arquivo "SKILL.md" não for encontrado no diretório especificado, uma mensagem de erro será exibida informando que o arquivo não foi encontrado.
-- **Permissão de leitura**: Se o arquivo "SKILL.md" não tiver permissão de leitura, uma mensagem de erro será exibida informando que não é possível ler o arquivo.
+- **Arquivo não encontrado:** Se o arquivo "SKILL.md" não for encontrado no diretório especificado, uma mensagem de erro será exibida informando o caminho incorreto.
+- **Permissão de leitura:** Se o arquivo "SKILL.md" não tiver permissão de leitura, uma mensagem de erro será exibida solicitando permissão de leitura.
 
 ### Erros de Formatação
-- **Formatação inválida**: Se a formatação do arquivo "SKILL.md" for inválida, uma mensagem de erro será exibida informando que a formatação é inválida.
-- **Campos obrigatórios**: Se os campos obrigatórios (como `name` e `description`) não forem preenchidos, uma mensagem de erro será exibida informando que os campos são obrigatórios.
-
-### Segurança
-- **Injeção de código**: Para evitar injeção de código, todos os inputs de usuário serão sanitizados e validados antes de serem processados.
-- **Dados sensíveis**: Todos os dados sensíveis serão criptografados e armazenados de forma segura para evitar acessos não autorizados.
+- **Formatação inválida:** Se a formatação do arquivo "SKILL.md" for inválida, uma mensagem de erro será exibida solicitando a correção da formatação.
 
 ### Edge Cases
-- **Nenhum resultado encontrado**: Se nenhuma habilidade corresponder à intenção do usuário, uma mensagem será exibida informando que nenhuma habilidade foi encontrada.
-- **Múltiplos resultados**: Se múltiplas habilidades corresponderem à intenção do usuário, uma lista de habilidades será exibida para que o usuário possa selecionar a mais apropriada.
+- **Nenhum arquivo "SKILL.md" encontrado:** Se nenhum arquivo "SKILL.md" for encontrado nos diretórios, uma mensagem será exibida informando que nenhuma habilidade foi encontrada.
+- **Descrição de habilidade vazia:** Se a descrição de uma habilidade estiver vazia, uma mensagem será exibida solicitando a adição de uma descrição para a habilidade.
+
+### Segurança
+- **Validação de entrada:** Todas as entradas de usuário serão validadas para evitar ataques de injeção de código ou outros tipos de ataques maliciosos.
+- **Autenticação e autorização:** Acesso às habilidades será restrito com base em autenticação e autorização, garantindo que apenas usuários autorizados possam acessar e executar as habilidades.
