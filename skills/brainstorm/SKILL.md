@@ -1,18 +1,24 @@
 # SKILL
 ## Descrição
-A skill de brainstorming foi substituída pela superpowers:brainstorming. Por favor, utilize a nova skill.
+description: "Deprecated - use the superpowers:brainstorming skill instead"
+
+Tell your human partner that this command is deprecated and will be removed in the next major release. They should ask you to use the "superpowers brainstorming" skill instead.
+
+## Uso
+Para utilizar esta skill, basta informar ao seu parceiro humano que o comando está depreciado e será removido na próxima versão major. Eles devem solicitar que você use a skill "superpowers brainstorming" ao invés.
+
 ## ⚠️ Tratamento de Exceções e Edge Cases
-### Casos de Uso
-* Se o usuário não tiver permissão para acessar a skill de brainstorming, mostre uma mensagem de erro informando que a skill está indisponível.
-* Se a skill de brainstorming estiver indisponível devido a problemas técnicos, mostre uma mensagem de erro informando que a skill está temporariamente indisponível.
-* Se o usuário tentar usar a skill de brainstorming com parâmetros inválidos, mostre uma mensagem de erro informando que os parâmetros são inválidos.
+### Casos de Uso Inválidos
+- Se o usuário não tiver permissão para utilizar a skill "superpowers brainstorming", mostre uma mensagem de erro informando sobre a falta de permissão.
+- Se a skill "superpowers brainstorming" não estiver disponível, mostre uma mensagem de erro informando sobre a indisponibilidade da skill.
+- Se o usuário tentar utilizar esta skill após a sua remoção, mostre uma mensagem de erro informando que a skill foi removida e direcione-o para a skill "superpowers brainstorming".
+
 ### Tratamento de Erros
-* Implemente um mecanismo de tratamento de erros para lidar com exceções inesperadas, como erros de rede ou problemas de banco de dados.
-* Registre os erros em um log para que possam ser analisados e resolvidos posteriormente.
+- Verifique se o usuário está autenticado antes de tentar utilizar a skill.
+- Verifique se a skill "superpowers brainstorming" está disponível antes de tentar redirecionar o usuário.
+- Trate quaisquer erros que ocorram durante a execução da skill e mostre mensagens de erro amigáveis ao usuário.
+
 ### Segurança
-* Verifique se a skill de brainstorming está sendo acessada de forma segura, utilizando protocolos de autenticação e autorização adequados.
-* Implemente medidas de segurança para prevenir ataques de injeção de código ou outras vulnerabilidades de segurança.
-### Exemplos de Edge Cases
-* O usuário tenta usar a skill de brainstorming com um grande volume de dados, causando um erro de capacidade de processamento.
-* O usuário tenta usar a skill de brainstorming com parâmetros que não estão dentro do escopo da skill, causando um erro de validação.
-* O usuário tenta usar a skill de brainstorming em um dispositivo ou plataforma não suportada, causando um erro de compatibilidade.
+- Verifique se o usuário tem permissão para acessar a skill "superpowers brainstorming" antes de redirecioná-lo.
+- Utilize protocolos de segurança adequados para proteger as informações do usuário durante a transição para a skill "superpowers brainstorming".
+- Certifique-se de que a skill "superpowers brainstorming" esteja configurada corretamente e seja segura para uso.
