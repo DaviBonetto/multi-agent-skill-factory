@@ -25,24 +25,26 @@ Task tool (superpowers:code-reviewer):
 
 **Code reviewer returns:** Strengths, Issues (Critical/Important/Minor), Assessment
 
-⚠️ Tratamento de Exceções e Edge Cases
-### Exceções
-- Verifique se o código lida corretamente com exceções, como erros de sintaxe, erros de tipo, erros de rede, etc.
-- Certifique-se de que as exceções sejam tratadas de forma apropriada, com mensagens de erro claras e úteis.
-- Verifique se o código segue as melhores práticas para tratamento de exceções, como não capturar exceções gerais e sim capturar exceções específicas.
+ Tratamento de Exceções e Edge Cases
+- Verifique se o código lida corretamente com exceções e erros, incluindo:
+  - Tratamento de erros de entrada e saída
+  - Manipulação de exceções de forma apropriada
+  - Uso de mecanismos de logging para registrar erros e exceções
+- Verifique se o código considera casos de bordo, incluindo:
+  - Valores de entrada inválidos ou inconsistentes
+  - Condições de erro ou exceção não esperadas
+  - Comportamento em casos de limite ou extremos (por exemplo, valores muito grandes ou muito pequenos)
+- Verifique se o código é robusto o suficiente para lidar com:
+  - Condições de concorrência ou paralelismo
+  - Problemas de desempenho ou escalabilidade
+  - Questões de segurança, como injeção de código ou vazamento de dados
 
-### Edge Cases
-- Verifique se o código lida corretamente com casos de bordo, como:
-  - Entradas inválidas ou malformadas
-  - Valores limite (por exemplo, zero, negativo, muito grande)
-  - Casos de erro ou exceção
-- Certifique-se de que o código seja robusto o suficiente para lidar com esses casos de bordo sem falhar ou produzir resultados incorretos.
-- Verifique se o código segue as melhores práticas para lidar com casos de bordo, como testar explicitamente esses casos e ter um plano de contingência para lidar com erros inesperados.
-
-### Segurança
-- Verifique se o código segue as melhores práticas de segurança, como:
-  - Validar e sanitizar entradas de usuário
-  - Proteger contra injeção de código malicioso
-  - Usar criptografia adequada para proteger dados sensíveis
-- Certifique-se de que o código seja seguro o suficiente para evitar vulnerabilidades de segurança comuns, como SQL injection, cross-site scripting (XSS), etc.
-- Verifique se o código segue as políticas de segurança da empresa e as regulamentações aplicáveis.
+**Segurança**
+- Verifique se o código segue as melhores práticas de segurança, incluindo:
+  - Uso de criptografia adequada para proteger dados sensíveis
+  - Validação e sanitização de entrada de usuário
+  - Uso de mecanismos de autenticação e autorização adequados
+- Verifique se o código está livre de vulnerabilidades conhecidas, incluindo:
+  - Vulnerabilidades de injeção de código
+  - Vulnerabilidades de cross-site scripting (XSS)
+  - Vulnerabilidades de cross-site request forgery (CSRF)
