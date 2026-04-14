@@ -1,50 +1,45 @@
-# Desenvolvimento de Microserviços
-Guia prático para projetar e implementar sistemas baseados em microserviços utilizando tecnologias como Docker e Kubernetes
+---
+name: Desenvolvimento de Microserviços
+description: Esta habilidade ensina como projetar e implementar microserviços escaláveis e seguros utilizando tecnologias modernas como Docker e Kubernetes.
+---
+
 ## Objetivo
-O objetivo deste guia é fornecer uma abordagem prática para o desenvolvimento de microserviços, utilizando tecnologias como Docker e Kubernetes. Com isso, os desenvolvedores poderão projetar e implementar sistemas escaláveis e eficientes.
+O objetivo desta habilidade é capacitar os desenvolvedores a projetar e implementar microserviços escaláveis e seguros, utilizando tecnologias modernas como Docker e Kubernetes. Com isso, os desenvolvedores poderão criar sistemas distribuídos robustos e flexíveis, que atendam às necessidades de escalabilidade e segurança dos aplicativos modernos.
+
 ## Pré-requisitos
-Antes de começar, é necessário ter conhecimento em:
-- Desenvolvimento de software
-- Conceitos de arquitetura de microserviços
-- Ferramentas de containerização (Docker)
-- Orquestração de contêineres (Kubernetes)
+Para aproveitar ao máximo esta habilidade, é recomendado que os desenvolvedores tenham conhecimento prévio em:
+* Desenvolvimento de software em linguagens como Java, Python ou C#
+* Conceitos básicos de rede e segurança
+* Ferramentas de gerenciamento de contêineres como Docker
+* Orquestração de contêineres com Kubernetes
+
 ## Passo a Passo Técnico / Exemplos de Código
-### 1. Configuração do Ambiente
-Para começar, você precisará ter o Docker e o Kubernetes instalados em sua máquina. Você pode seguir os passos abaixo para configurar o ambiente:
-```bash
-# Instalar o Docker
-sudo apt-get update
-sudo apt-get install docker.io
-# Instalar o Kubernetes
-sudo snap install microk8s --classic
-```
-### 2. Criação de um Microserviço
-Aqui está um exemplo de como criar um microserviço simples em Python:
-```python
-from flask import Flask
-app = Flask(__name__)
-@app.route("/")
-def hello():
-    try:
-        return "Olá, Mundo!"
-    except Exception as e:
-        return str(e), 500
-if __name__ == "__main__":
-    app.run()
-```
-### 3. Containerização do Microserviço
-Para containerizar o microserviço, você precisará criar um arquivo `Dockerfile` com as seguintes instruções:
-```dockerfile
-FROM python:3.9-slim
-WORKDIR /app
-COPY requirements.txt .
-RUN pip install -r requirements.txt
-COPY . .
-CMD ["python", "app.py"]
-```
-### 4. Orquestração do Microserviço
-Para orquestrar o microserviço, você precisará criar um arquivo `deployment.yaml` com as seguintes instruções:
+Aqui está um exemplo de como criar um microserviço simples utilizando Docker e Kubernetes:
 ```yml
+# Dockerfile
+FROM python:3.9-slim
+
+# Set working directory to /app
+WORKDIR /app
+
+# Copy requirements file
+COPY requirements.txt .
+
+# Install dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy application code
+COPY . .
+
+# Expose port 8000
+EXPOSE 8000
+
+# Run command when container starts
+CMD ["python", "app.py"] 
+```
+
+```yml
+# deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -63,21 +58,67 @@ spec:
       - name: microservico
         image: microservico:latest
         ports:
-        - containerPort: 80
-      restartPolicy: Always
+        - containerPort: 8000
 ```
+Para implantar o microserviço, execute os seguintes comandos:
+```bash
+docker build -t microservico .
+docker tag microservico:latest <seu-usuario>/microservico:latest
+docker push <seu-usuario>/microservico:latest
+kubectl apply -f deployment.yaml
+```
+
 ## Validação
-Para validar a implementação do microserviço, você pode seguir os passos abaixo:
-1. Verificar se o microserviço está rodando corretamente: `kubectl get pods`
-2. Verificar se o microserviço está respondendo corretamente: `curl http://localhost:80`
-3. Verificar se o microserviço está escalando corretamente: `kubectl scale deployment microservico --replicas=5`
+Para validar a implantação do microserviço, você pode utilizar ferramentas como `kubectl` para verificar o status dos pods e serviços:
+```bash
+kubectl get pods
+kubectl get svc
+```
+Além disso, você pode utilizar ferramentas de monitoramento como Prometheus e Grafana para monitorar o desempenho do microserviço.
+
 ## ⚠️ Tratamento de Exceções e Edge Cases
-### Tratamento de Exceções
-- **Erro de Conexão**: Caso ocorra um erro de conexão ao tentar acessar o microserviço, você pode implementar um mecanismo de retry com backoff exponencial para tentar novamente.
-- **Erro de Deserialização**: Caso ocorra um erro de deserialização ao processar uma requisição, você pode implementar um mecanismo de logging para registrar o erro e retornar uma resposta de erro ao cliente.
-### Edge Cases
-- **Requisições Mal Formadas**: Caso o microserviço receba uma requisição mal formada, você pode implementar um mecanismo de validação para verificar se a requisição está correta antes de processá-la.
-- **Sobrecarga de Tráfego**: Caso o microserviço receba uma grande quantidade de requisições simultaneamente, você pode implementar um mecanismo de rate limiting para evitar que o microserviço seja sobrecarregado.
-- **Falha de Componentes**: Caso um componente do microserviço falhe, você pode implementar um mecanismo de circuit breaker para evitar que o microserviço continue tentando acessar o componente falho.
-- **Segurança**: Caso o microserviço precise lidar com dados sensíveis, você pode implementar mecanismos de segurança, como autenticação e autorização, para proteger os dados.
-- **Monitoramento**: Caso o microserviço precise ser monitorado, você pode implementar mecanismos de logging e monitoramento para registrar e visualizar as métricas do microserviço.
+Ao trabalhar com microserviços, é importante considerar os seguintes casos de bordo e exceções:
+* **Falha de rede**: Em caso de falha de rede, o microserviço pode não ser capaz de se comunicar com outros serviços. Para lidar com isso, é importante implementar mecanismos de retry e timeout.
+* **Falha de dependência**: Se uma dependência do microserviço falhar, o serviço pode não ser capaz de funcionar corretamente. É importante monitorar as dependências e implementar mecanismos de fallback.
+* **Sobrecarga de tráfego**: Em caso de sobrecarga de tráfego, o microserviço pode não ser capaz de lidar com a demanda. É importante implementar mecanismos de escalabilidade e load balancing.
+* **Segurança**: É importante considerar a segurança do microserviço, incluindo a autenticação e autorização de usuários, criptografia de dados e proteção contra ataques de malware.
+* **Monitoramento e logging**: É importante monitorar o desempenho do microserviço e registrar logs para identificar problemas e melhorar a qualidade do serviço.
+
+Exemplos de código para lidar com esses casos de bordo e exceções:
+```python
+import logging
+import time
+
+# Implementação de retry e timeout
+def fazer_requisicao(url):
+    tentativas = 0
+    while tentativas < 3:
+        try:
+            resposta = requests.get(url)
+            return resposta
+        except requests.exceptions.RequestException as e:
+            logging.error(f"Erro ao fazer requisição: {e}")
+            tentativas += 1
+            time.sleep(1)
+    return None
+
+# Implementação de fallback
+def get_dados():
+    try:
+        # Tenta obter dados de uma fonte primária
+        dados = obter_dados_primarios()
+        return dados
+    except Exception as e:
+        # Se a fonte primária falhar, tenta obter dados de uma fonte secundária
+        logging.error(f"Erro ao obter dados primários: {e}")
+        dados = obter_dados_secundarios()
+        return dados
+
+# Implementação de escalabilidade
+def handle_request(request):
+    # Verifica se o serviço está sobrecarregado
+    if request_count > 100:
+        # Se estiver sobrecarregado, redireciona a requisição para outro serviço
+        return redirect("outro_servico")
+    # Se não estiver sobrecarregado, lida com a requisição normalmente
+    return handle_request_normalmente(request)
