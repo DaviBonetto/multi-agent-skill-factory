@@ -47,14 +47,20 @@ Task tool (general-purpose):
 
     ⚠️ Tratamento de Exceções e Edge Cases
 
-    *   **Planos vazios ou inexistentes:** Se o plano estiver vazio ou não for encontrado, o revisor deve retornar um status de "Issues Found" com uma descrição do problema.
-    *   **Especificações inconsistentes:** Se a especificação for inconsistente ou contiver erros, o revisor deve retornar um status de "Issues Found" com uma descrição do problema.
-    *   **Tarefas mal definidas:** Se as tarefas estiverem mal definidas ou forem vagas, o revisor deve retornar um status de "Issues Found" com uma descrição do problema.
-    *   **Problemas de segurança:** Se o plano contiver problemas de segurança, como a falta de autenticação ou autorização, o revisor deve retornar um status de "Issues Found" com uma descrição do problema.
-    *   **Limitações de recursos:** Se o plano exigir recursos excessivos ou não estiver otimizado, o revisor deve retornar um status de "Issues Found" com uma descrição do problema.
-    *   **Incompatibilidade com tecnologias:** Se o plano for incompatível com as tecnologias utilizadas, o revisor deve retornar um status de "Issues Found" com uma descrição do problema.
-    *   **Falta de documentação:** Se o plano não tiver documentação suficiente, o revisor deve retornar um status de "Issues Found" com uma descrição do problema.
-    *   **Problemas de escalabilidade:** Se o plano não for escalável, o revisor deve retornar um status de "Issues Found" com uma descrição do problema.
-    *   **Falta de testes:** Se o plano não tiver testes suficientes, o revisor deve retornar um status de "Issues Found" com uma descrição do problema.
+    **Cenários de Erro:**
+    - Planos vazios ou inexistentes: Verifique se o arquivo do plano está presente e não está vazio.
+    - Especificações ausentes: Certifique-se de que as especificações estejam disponíveis e acessíveis.
+    - Tarefas mal definidas: Verifique se as tarefas têm metas claras e estão bem decompostas.
+    - Conflitos de dependência: Identifique possíveis conflitos entre tarefas ou dependências.
+
+    **Tratamento de Exceções:**
+    - Se o plano estiver vazio ou inexistente, retorne um erro e solicite que o plano seja revisado.
+    - Se as especificações estiverem ausentes, solicite que as especificações sejam fornecidas antes de prosseguir.
+    - Se as tarefas estiverem mal definidas, solicite que as tarefas sejam revisadas e melhoradas.
+    - Se houver conflitos de dependência, identifique e documente os conflitos e sugira soluções.
+
+    **Segurança:**
+    - Verifique se o plano contém informações confidenciais ou sensíveis e certifique-se de que elas estejam devidamente protegidas.
+    - Certifique-se de que as tarefas e os passos estejam alinhados com as políticas de segurança da organização.
 
 **Reviewer returns:** Status, Issues (if any), Recommendations
