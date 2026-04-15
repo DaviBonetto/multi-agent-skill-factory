@@ -26,25 +26,29 @@ Task tool (superpowers:code-reviewer):
 **Code reviewer returns:** Strengths, Issues (Critical/Important/Minor), Assessment
 
  Tratamento de Exceções e Edge Cases
-- Verifique se o código lida corretamente com exceções e erros, incluindo:
-  - Tratamento de erros de entrada e saída
-  - Manipulação de exceções de forma apropriada
-  - Uso de mecanismos de logging para registrar erros e exceções
-- Verifique se o código considera casos de bordo, incluindo:
-  - Valores de entrada inválidos ou inconsistentes
-  - Condições de erro ou exceção não esperadas
-  - Comportamento em casos de limite ou extremos (por exemplo, valores muito grandes ou muito pequenos)
-- Verifique se o código é robusto o suficiente para lidar com:
-  - Condições de concorrência ou paralelismo
-  - Problemas de desempenho ou escalabilidade
-  - Questões de segurança, como injeção de código ou vazamento de dados
+- Verificar se o código lida corretamente com exceções e erros, como:
+  - Tratamento de erros de rede e conexão
+  - Tratamento de erros de banco de dados
+  - Tratamento de erros de segurança, como injeção de SQL ou cross-site scripting (XSS)
+- Verificar se o código é robusto o suficiente para lidar com entradas inválidas ou edge cases, como:
+  - Entradas vazias ou nulas
+  - Entradas com formato inválido
+  - Entradas com valores extremos
+- Verificar se o código é seguro contra ataques comuns, como:
+  - Injeção de código
+  - Cross-site request forgery (CSRF)
+  - Ataques de negação de serviço (DoS)
+- Verificar se o código segue as melhores práticas de segurança, como:
+  - Uso de criptografia adequada
+  - Uso de autenticação e autorização adequadas
+  - Uso de logs e monitoramento adequados
 
 **Segurança**
-- Verifique se o código segue as melhores práticas de segurança, incluindo:
-  - Uso de criptografia adequada para proteger dados sensíveis
-  - Validação e sanitização de entrada de usuário
-  - Uso de mecanismos de autenticação e autorização adequados
-- Verifique se o código está livre de vulnerabilidades conhecidas, incluindo:
-  - Vulnerabilidades de injeção de código
-  - Vulnerabilidades de cross-site scripting (XSS)
-  - Vulnerabilidades de cross-site request forgery (CSRF)
+- Verificar se o código segue as políticas de segurança da empresa
+- Verificar se o código é compatível com as regulamentações de segurança aplicáveis
+- Verificar se o código é seguro contra ataques de segurança conhecidos
+
+**Code reviewer returns:** Strengths, Issues (Critical/Important/Minor), Assessment, incluindo:
+- Relatório de segurança
+- Relatório de tratamento de exceções e edge cases
+- Recomendações para melhorias de segurança e robustez
