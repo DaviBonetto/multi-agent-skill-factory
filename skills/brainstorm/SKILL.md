@@ -1,24 +1,11 @@
 # SKILL
 ## Descrição
-description: "Deprecated - use the superpowers:brainstorming skill instead"
-
-Tell your human partner that this command is deprecated and will be removed in the next major release. They should ask you to use the "superpowers brainstorming" skill instead.
-
+description: 'Essa skill está deprecada. Use a skill superpowers:brainstorming em seu lugar.'
 ## Uso
-Para utilizar esta skill, basta informar ao seu parceiro humano que o comando está depreciado e será removido na próxima versão major. Eles devem solicitar que você use a skill "superpowers brainstorming" ao invés.
-
+Para utilizar a skill superpowers:brainstorming, basta chamar o comando 'superpowers brainstorming'.
 ## ⚠️ Tratamento de Exceções e Edge Cases
-### Casos de Uso Inválidos
-- Se o usuário não tiver permissão para utilizar a skill "superpowers brainstorming", mostre uma mensagem de erro informando sobre a falta de permissão.
-- Se a skill "superpowers brainstorming" não estiver disponível, mostre uma mensagem de erro informando sobre a indisponibilidade da skill.
-- Se o usuário tentar utilizar esta skill após a sua remoção, mostre uma mensagem de erro informando que a skill foi removida e direcione-o para a skill "superpowers brainstorming".
-
-### Tratamento de Erros
-- Verifique se o usuário está autenticado antes de tentar utilizar a skill.
-- Verifique se a skill "superpowers brainstorming" está disponível antes de tentar redirecionar o usuário.
-- Trate quaisquer erros que ocorram durante a execução da skill e mostre mensagens de erro amigáveis ao usuário.
-
-### Segurança
-- Verifique se o usuário tem permissão para acessar a skill "superpowers brainstorming" antes de redirecioná-lo.
-- Utilize protocolos de segurança adequados para proteger as informações do usuário durante a transição para a skill "superpowers brainstorming".
-- Certifique-se de que a skill "superpowers brainstorming" esteja configurada corretamente e seja segura para uso.
+- **Caso de Uso Inválido**: Se o usuário tentar utilizar essa skill em uma versão onde ela já foi removida, o sistema deve retornar uma mensagem de erro clara, indicando que a skill está depreciada e não está mais disponível.
+- **Dependência em Versões Antigas**: Se o usuário estiver utilizando uma versão antiga do sistema que ainda suporta essa skill, mas ela está marcada como depreciada, o sistema deve exibir um aviso sobre a depreciação e recomendar a utilização da skill 'superpowers brainstorming' como substituta.
+- **Comportamento em Ambientes de Teste**: Em ambientes de teste, a skill deve ser capaz de simular seu comportamento de forma consistente, permitindo que os testes sejam realizados sem interferir com o funcionamento normal do sistema.
+- **Documentação e Comunicação**: A documentação da skill deve refletir claramente seu status de depreciação, incluindo a data prevista para sua remoção e as instruções para migrar para a skill recomendada.
+- **Manuseio de Erros**: Em caso de erros durante a execução da skill, o sistema deve lidar com esses erros de forma a minimizar o impacto no usuário, fornecendo mensagens de erro claras e úteis para o diagnóstico e resolução do problema.
