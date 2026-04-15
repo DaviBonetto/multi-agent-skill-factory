@@ -1,4 +1,4 @@
-# SKILLs Documentados
+# Introdução às Habilidades Adicionais
 Você tem habilidades adicionais documentadas em diretórios que contêm um arquivo "SKILL.md".
 
 Essas habilidades são:
@@ -6,7 +6,7 @@ Essas habilidades são:
  - {{name}} -> "{{path}}/SKILL.md"
 {{/skills}}
 
-**Importante:** Você DEVE ler o arquivo SKILL.md sempre que a descrição das habilidades corresponder à intenção do usuário ou possa ajudar a realizar sua tarefa.
+**Importante:** Você DEVE ler o arquivo SKILL.md sempre que a descrição da habilidade corresponder à intenção do usuário ou possa ajudar a realizar sua tarefa.
 
 ## Habilidades Disponíveis
 {{#skills}}
@@ -18,16 +18,17 @@ Os caminhos referenciados dentro das pastas de habilidades são relativos àquel
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
 ### Erros de Arquivo
-- **Arquivo não encontrado:** Se o arquivo "SKILL.md" não for encontrado no diretório especificado, uma mensagem de erro será exibida informando o caminho incorreto.
-- **Permissão de leitura:** Se o arquivo "SKILL.md" não tiver permissão de leitura, uma mensagem de erro será exibida solicitando permissão de leitura.
+- **Arquivo "SKILL.md" não encontrado:** Verifique se o arquivo "SKILL.md" existe no diretório especificado e se o caminho está correto.
+- **Conteúdo inválido no arquivo "SKILL.md":** Certifique-se de que o arquivo "SKILL.md" contenha informações válidas e bem formatadas.
 
-### Erros de Formatação
-- **Formatação inválida:** Se a formatação do arquivo "SKILL.md" for inválida, uma mensagem de erro será exibida solicitando a correção da formatação.
-
-### Edge Cases
-- **Nenhum arquivo "SKILL.md" encontrado:** Se nenhum arquivo "SKILL.md" for encontrado nos diretórios, uma mensagem será exibida informando que nenhuma habilidade foi encontrada.
-- **Descrição de habilidade vazia:** Se a descrição de uma habilidade estiver vazia, uma mensagem será exibida solicitando a adição de uma descrição para a habilidade.
+### Erros de Caminho
+- **Caminho relativo incorreto:** Verifique se os caminhos relativos dentro das pastas de habilidades estão corretos e se correspondem aos arquivos ou diretórios existentes.
+- **Caminho absoluto não suportado:** Lembre-se de que apenas caminhos relativos são suportados dentro das pastas de habilidades.
 
 ### Segurança
-- **Validação de entrada:** Todas as entradas de usuário serão validadas para evitar ataques de injeção de código ou outros tipos de ataques maliciosos.
-- **Autenticação e autorização:** Acesso às habilidades será restrito com base em autenticação e autorização, garantindo que apenas usuários autorizados possam acessar e executar as habilidades.
+- **Validação de Entradas:** Sempre valide as entradas de usuário para evitar injeção de código malicioso ou outros ataques.
+- **Uso de Dependências:** Certifique-se de que todas as dependências utilizadas estejam atualizadas e sejam de fontes confiáveis para evitar vulnerabilidades de segurança.
+
+### Outros Casos de Borda
+- **Múltiplas Habilidades com o Mesmo Nome:** Em caso de habilidades com o mesmo nome, verifique se as descrições são claras o suficiente para distinguir entre elas.
+- **Habilidades Desatualizadas:** Regularmente verifique e atualize as habilidades para garantir que elas permaneçam relevantes e funcionais.
