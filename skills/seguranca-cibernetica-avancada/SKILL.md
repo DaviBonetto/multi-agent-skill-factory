@@ -1,84 +1,66 @@
 ---
 name: Segurança Cibernética Avançada
-description: Ensina técnicas avançadas de segurança cibernética para proteger sistemas contra ameaças
+description: Ensina proteger sistemas contra ataques cibernéticos
 ---
 
 ## Objetivo
-O objetivo deste guia é fornecer conhecimentos avançados em segurança cibernética para proteger sistemas contra ameaças. Isso inclui técnicas para identificar e mitigar vulnerabilidades, implementar medidas de segurança eficazes e garantir a integridade dos dados.
+O objetivo deste guia é fornecer conhecimentos avançados em segurança cibernética, permitindo que os profissionais protejam sistemas contra ataques cibernéticos de forma eficaz. Isso inclui entender as ameaças atuais, implementar medidas de segurança robustas e garantir a confidencialidade, integridade e disponibilidade dos dados.
 
 ## Pré-requisitos
-Para aproveitar ao máximo este guia, é recomendado que os participantes tenham conhecimento básico em:
-- Conceitos de segurança cibernética
-- Sistemas operacionais (Windows, Linux, etc.)
-- Redes de computadores
-- Programação básica (Python, C++, etc.)
+Para aproveitar ao máximo este guia, é recomendado que os participantes tenham:
+- Conhecimento básico em segurança de redes e sistemas
+- Experiência em administração de sistemas operacionais (Windows, Linux, etc.)
+- Familiaridade com conceitos de criptografia e autenticação
 
 ## Passo a Passo Técnico / Exemplos de Código
-### Identificação de Vulnerabilidades
-1. **Análise de Código**: Utilize ferramentas como o `OWASP ZAP` para identificar vulnerabilidades em aplicações web.
-2. **Testes de Penetração**: Realize testes de penetração para simular ataques e identificar pontos fracos nos sistemas.
-3. **Análise de Logs**: Aprenda a analisar logs de sistema para detectar atividades suspeitas.
+### Implementação de Firewall
+1. **Instalação do Firewall**: Utilize um firewall de código aberto como o `ufw` no Linux.
+   ```bash
+   sudo apt-get update
+   sudo apt-get install ufw
+   ```
+2. **Configuração do Firewall**: Permita o tráfego na porta 22 para SSH e bloqueie todas as outras portas.
+   ```bash
+   sudo ufw allow ssh
+   sudo ufw enable
+   ```
+3. **Verificação do Firewall**: Verifique as regras do firewall.
+   ```bash
+   sudo ufw status
+   ```
 
-### Implementação de Medidas de Segurança
-```python
-import hashlib
-
-# Exemplo de como hashar senhas
-def hash_senha(senha):
-    try:
-        return hashlib.sha256(senha.encode()).hexdigest()
-    except TypeError:
-        return "Erro: Senha deve ser uma string"
-
-# Exemplo de autenticação básica
-class Autenticacao:
-    def __init__(self, usuario, senha):
-        self.usuario = usuario
-        self.senha = hash_senha(senha)
-
-    def autenticar(self, senha):
-        try:
-            return self.senha == hash_senha(senha)
-        except Exception as e:
-            return f"Erro: {str(e)}"
-
-# Exemplo de tratamento de exceção em autenticação
-try:
-    autenticacao = Autenticacao("usuario", "senha")
-    if autenticacao.autenticar("senha"):
-        print("Autenticação bem-sucedida")
-    else:
-        print("Autenticação falhou")
-except Exception as e:
-    print(f"Erro: {str(e)}")
-```
-
-### Garantia de Integridade de Dados
-1. **Criptografia**: Utilize algoritmos de criptografia como o `AES` para proteger dados sensíveis.
-2. **Backups**: Faça backups regulares dos dados e armazene-os em locais seguros.
+### Implementação de Autenticação de Dois Fatores
+1. **Instalação do Módulo de Autenticação**: Utilize um módulo como o `google-authenticator` para autenticação de dois fatores.
+   ```bash
+   sudo apt-get install libpam-google-authenticator
+   ```
+2. **Configuração da Autenticação de Dois Fatores**: Configure a autenticação de dois fatores para os usuários.
+   ```bash
+   google-authenticator
+   ```
+3. **Integração com o SSH**: Edite o arquivo de configuração do SSH para exigir autenticação de dois fatores.
+   ```bash
+   sudo nano /etc/pam.d/sshd
+   ```
 
 ## Validação
-Para validar os conhecimentos adquiridos, é recomendado que os participantes:
-- Participem de desafios de segurança cibernética
-- Realizem projetos práticos de implementação de medidas de segurança
-- Acompanhem as últimas notícias e atualizações em segurança cibernética para estar sempre preparados para as novas ameaças.
+Para validar a implementação das medidas de segurança, execute os seguintes passos:
+- **Teste de Penetração**: Realize testes de penetração para identificar vulnerabilidades.
+- **Análise de Logs**: Monitore os logs do sistema para detectar atividades suspeitas.
+- **Auditoria de Segurança**: Realize auditorias de segurança regulares para garantir a conformidade com as políticas de segurança.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-- **Tratamento de Erros**: Sempre utilize try-except para tratar erros inesperados e evitar que o sistema crash.
-- **Validação de Entradas**: Valide todas as entradas de usuário para evitar ataques de injeção de código.
-- **Edge Cases**: Considere todos os casos possíveis, incluindo entradas vazias, nulas ou inválidas.
-- **Exceções de Rede**: Trate exceções de rede, como perda de conexão ou timeout, para garantir a estabilidade do sistema.
-- **Exceções de Banco de Dados**: Trate exceções de banco de dados, como erros de consulta ou perda de conexão, para garantir a integridade dos dados.
+### Erros Comuns
+- **Erro de Instalação do Firewall**: Se o firewall não for instalado corretamente, verifique se o repositório está atualizado e se o pacote está disponível.
+- **Erro de Configuração do Firewall**: Se as regras do firewall não forem configuradas corretamente, verifique se as portas estão sendo bloqueadas ou permitidas corretamente.
+- **Erro de Autenticação de Dois Fatores**: Se a autenticação de dois fatores não for configurada corretamente, verifique se o módulo está instalado e se a configuração está correta.
 
-Exemplo de tratamento de exceção em uma consulta de banco de dados:
-```python
-import sqlite3
+### Edge Cases
+- **Sistemas Legados**: Se estiver trabalhando com sistemas legados, verifique se o firewall e a autenticação de dois fatores são compatíveis com o sistema operacional.
+- **Redes Complexas**: Se estiver trabalhando com redes complexas, verifique se as regras do firewall estão sendo aplicadas corretamente em todos os dispositivos da rede.
+- **Usuários com Privilégios Elevados**: Se estiver trabalhando com usuários com privilégios elevados, verifique se a autenticação de dois fatores está sendo exigida para todos os usuários, independentemente do nível de privilégio.
 
-try:
-    conn = sqlite3.connect("banco_de_dados.db")
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM tabela")
-    resultados = cursor.fetchall()
-    conn.close()
-except sqlite3.Error as e:
-    print(f"Erro: {str(e)}")
+### Melhores Práticas
+- **Atualize Regularmente**: Atualize regularmente o sistema operacional e os pacotes para garantir que as últimas vulnerabilidades sejam corrigidas.
+- **Monitore os Logs**: Monitore regularmente os logs do sistema para detectar atividades suspeitas e identificar possíveis vulnerabilidades.
+- **Realize Auditorias de Segurança**: Realize auditorias de segurança regulares para garantir a conformidade com as políticas de segurança e identificar possíveis vulnerabilidades.
