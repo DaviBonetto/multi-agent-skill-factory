@@ -1,89 +1,50 @@
 ---
-name: Segurança de Dados em Nuvem
-description: Melhores práticas para proteger dados sensíveis em ambientes de nuvem
+name: Segurança de Dados em Nuvem com AWS
+description: Esta habilidade aborda como proteger dados em ambientes de nuvem, utilizando serviços da AWS como IAM, Cognito e Inspector para garantir a segurança e conformidade.
 ---
-
 ## Objetivo
-O objetivo desta habilidade é fornecer conhecimento sobre as melhores práticas para proteger dados sensíveis em ambientes de nuvem, incluindo criptografia e autenticação, visando garantir a segurança e integridade dos dados armazenados em nuvem.
-
+O objetivo desta habilidade é capacitar os profissionais a proteger dados em ambientes de nuvem utilizando serviços da AWS, garantindo a segurança e conformidade. Isso inclui entender como configurar e utilizar serviços como IAM, Cognito e Inspector para proteger dados em nuvem.
 ## Pré-requisitos
-- Conhecimento básico em segurança de dados
-- Experiência com ambientes de nuvem (AWS, Azure, Google Cloud, etc.)
-- Familiaridade com conceitos de criptografia e autenticação
-
+Para aproveitar ao máximo esta habilidade, é recomendado que os participantes tenham:
+- Conhecimento básico em computação em nuvem
+- Experiência com a plataforma AWS
+- Entendimento de conceitos de segurança de dados
 ## Passo a Passo Técnico / Exemplos de Código
-### Criptografia de Dados
-A criptografia é um método eficaz para proteger dados sensíveis. Existem dois tipos principais de criptografia: simétrica e assimétrica.
-#### Exemplo de Criptografia Simétrica em Python
+### Configurando o IAM
+1. Acesse o console da AWS e navegue até o serviço IAM.
+2. Crie um novo usuário e atribua permissões específicas para acessar recursos em nuvem.
+```bash
+aws iam create-user --user-name exemplo_usuario
+aws iam attach-user-policy --user-name exemplo_usuario --policy-arn arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess
+```
+**Tratamento de Erros**: Certifique-se de que o usuário tenha as permissões necessárias para executar as ações desejadas. Caso ocorra um erro de permissão, verifique as políticas de IAM e ajuste-as conforme necessário.
+### Utilizando o Cognito
+1. Acesse o console da AWS e navegue até o serviço Cognito.
+2. Crie um novo pool de identidade e configure as opções de autenticação.
 ```python
-from cryptography.fernet import Fernet
-
-# Gera uma chave simétrica
-chave = Fernet.generate_key()
-
-# Cria um objeto Fernet com a chave
-cipher_suite = Fernet(chave)
-
-# Dados a serem criptografados
-dados = b"Meus dados secretos"
-
-# Criptografa os dados
-dados_criptografados = cipher_suite.encrypt(dados)
-
-print("Dados Criptografados:", dados_criptografados)
-
-# Descriptografa os dados
-try:
-  dados_descriptografados = cipher_suite.decrypt(dados_criptografados)
-  print("Dados Descriptografados:", dados_descriptografados)
-except Exception as e:
-  print("Erro ao descriptografar:", str(e))
+import boto3
+cognito_idp = boto3.client('cognito-idp')
+response = cognito_idp.create_user_pool(
+   PoolName='exemplo_pool',
+   AliasAttributes=['email']
+)
 ```
-
-### Autenticação
-A autenticação é crucial para garantir que apenas usuários autorizados acessem os dados.
-#### Exemplo de Autenticação com JWT em Node.js
-```javascript
-const jwt = require('jsonwebtoken');
-
-// Dados do usuário
-const usuario = {
-  id: 1,
-  nome: "João",
-  email: "joao@example.com"
-};
-
-// Chave secreta para assinatura do token
-const chaveSecreta = "minhachavesecreta";
-
-// Gera o token JWT
-const token = jwt.sign(usuario, chaveSecreta, { expiresIn: '1h' });
-
-console.log("Token JWT:", token);
-
-// Verifica o token
-jwt.verify(token, chaveSecreta, (err, decoded) => {
-  if (err) {
-    console.log("Token inválido:", err);
-  } else {
-    console.log("Token válido. Dados do usuário:", decoded);
-  }
-});
+**Tratamento de Exceções**: Em caso de erro ao criar o pool de identidade, verifique se o nome do pool já está em uso ou se as configurações de autenticação estão corretas.
+### Utilizando o Inspector
+1. Acesse o console da AWS e navegue até o serviço Inspector.
+2. Crie uma nova avaliação e configure as opções de segurança.
+```bash
+aws inspector create-assessment-template --assessment-template-name exemplo_template
+aws inspector start-assessment-run --assessment-template-arn arn:aws:inspector:REGION:ACCOUNT_ID:assessment-template/exemplo_template
 ```
-
+**Tratamento de Erros**: Se ocorrer um erro ao criar a avaliação, verifique se as configurações de segurança estão corretas e se o template de avaliação está válido.
 ## Validação
-Para validar a implementação das melhores práticas de segurança de dados em nuvem, é importante realizar testes regulares, incluindo:
-- Testes de penetração para identificar vulnerabilidades
-- Análise de logs para detectar atividades suspeitas
-- Auditorias de segurança para garantir o cumprimento das políticas de segurança
-- Treinamento contínuo da equipe para manter os conhecimentos atualizados sobre as melhores práticas de segurança.
-
+Para validar a implementação da segurança de dados em nuvem com AWS, é importante:
+- Verificar as configurações de IAM e Cognito para garantir que as permissões e autenticações estejam corretas.
+- Executar avaliações regulares com o Inspector para identificar vulnerabilidades e melhorar a segurança.
+- Monitorar os logs e relatórios de segurança para detectar atividades suspeitas e tomar medidas corretivas.
 ## ⚠️ Tratamento de Exceções e Edge Cases
-No desenvolvimento de sistemas de segurança de dados em nuvem, é fundamental considerar os seguintes casos de bordo e exceções:
-- **Chave de criptografia perdida ou comprometida**: Implementar um processo de recuperação de chaves ou recriação de chaves simétricas e assimétricas.
-- **Token de autenticação expirado**: Implementar um mecanismo de refresh token para evitar a expiração do token de autenticação.
-- **Ataques de força bruta**: Implementar um sistema de detecção de ataques de força bruta e limitar o número de tentativas de login.
-- **Injeção de SQL**: Utilizar prepared statements e parameterized queries para evitar injeção de SQL.
-- **Cross-Site Scripting (XSS)**: Utilizar técnicas de sanitização e validação de entrada para evitar ataques de XSS.
-- **Erros de configuração**: Realizar auditorias regulares de configuração para garantir que as configurações de segurança estejam corretas.
-- **Falhas de hardware ou software**: Implementar um plano de recuperação de desastres para garantir a disponibilidade dos dados em caso de falhas de hardware ou software.
+- **Erro de Autenticação**: Em caso de erro de autenticação, verifique se as credenciais de acesso estão corretas e se as políticas de IAM estão configuradas corretamente.
+- **Vulnerabilidades de Segurança**: Em caso de vulnerabilidades de segurança detectadas pelo Inspector, execute as recomendações de segurança para corrigir as vulnerabilidades e melhorar a segurança.
+- **Limites de Recursos**: Verifique se os limites de recursos da AWS estão sendo respeitados e ajuste as configurações conforme necessário para evitar erros de recursos esgotados.
+- **Interrupções de Serviço**: Em caso de interrupções de serviço da AWS, verifique o status do serviço e execute as ações necessárias para minimizar o impacto na segurança e disponibilidade dos dados.
