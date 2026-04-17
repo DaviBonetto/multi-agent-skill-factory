@@ -34,18 +34,29 @@ These tools are available in Gemini CLI but have no Claude Code equivalent:
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
 
-Ao utilizar as ferramentas do Gemini CLI, é importante considerar os seguintes casos de exceção e edge cases:
+### Erros de sintaxe
 
-* **Erros de permissão**: Ao tentar ler ou escrever arquivos, é possível que ocorram erros de permissão. Nesse caso, o sistema deve retornar um erro claro e conciso, indicando a causa do problema.
-* **Arquivos não encontrados**: Ao tentar ler ou escrever arquivos, é possível que o arquivo não seja encontrado. Nesse caso, o sistema deve retornar um erro claro e conciso, indicando a causa do problema.
-* **Comandos inválidos**: Ao tentar executar comandos, é possível que o comando seja inválido. Nesse caso, o sistema deve retornar um erro claro e conciso, indicando a causa do problema.
-* **Exceções de tipo**: Ao tentar executar operações, é possível que ocorram exceções de tipo. Nesse caso, o sistema deve retornar um erro claro e conciso, indicando a causa do problema.
-* **Limites de recursos**: Ao tentar executar operações, é possível que os limites de recursos sejam atingidos. Nesse caso, o sistema deve retornar um erro claro e conciso, indicando a causa do problema.
-* **Subagentes**: Como o Gemini CLI não suporta subagentes, é importante considerar como as skills que dependem de subagentes serão executadas. Nesse caso, as skills devem ser adaptadas para usar a execução de sessão única via `executing-plans`.
+*   Certifique-se de que todos os comandos estejam corretamente formatados e que não haja erros de sintaxe.
+*   Em caso de erros de sintaxe, o sistema deve retornar uma mensagem de erro clara e concisa.
 
-Para lidar com esses casos de exceção e edge cases, é recomendado:
+### Erros de permissão
 
-* **Validar inputs**: Validar os inputs antes de executar operações para evitar erros de permissão, arquivos não encontrados, comandos inválidos, exceções de tipo e limites de recursos.
-* **Tratar erros**: Tratar erros de forma clara e concisa, retornando mensagens de erro claras e concisas para o usuário.
-* **Adaptar skills**: Adaptar skills que dependem de subagentes para usar a execução de sessão única via `executing-plans`.
-* **Monitorar recursos**: Monitorar os recursos do sistema para evitar que os limites sejam atingidos.
+*   Verifique se o usuário tem as permissões necessárias para executar os comandos.
+*   Em caso de erros de permissão, o sistema deve retornar uma mensagem de erro indicando a falta de permissão.
+
+### Erros de arquivo
+
+*   Verifique se os arquivos necessários estão presentes e acessíveis.
+*   Em caso de erros de arquivo, o sistema deve retornar uma mensagem de erro indicando o problema com o arquivo.
+
+### Edge cases
+
+*   **Arquivos vazios**: Em caso de arquivos vazios, o sistema deve retornar uma mensagem de erro ou um resultado padrão.
+*   **Arquivos muito grandes**: Em caso de arquivos muito grandes, o sistema deve ser capaz de lidar com eles de forma eficiente ou retornar uma mensagem de erro.
+*   **Comandos inválidos**: Em caso de comandos inválidos, o sistema deve retornar uma mensagem de erro clara e concisa.
+
+### Segurança
+
+*   **Validação de entrada**: Certifique-se de que todas as entradas sejam validadas para evitar ataques de injeção de código.
+*   **Uso de permissões**: Certifique-se de que as permissões sejam usadas de forma segura para evitar acessos não autorizados.
+*   **Criptografia**: Certifique-se de que todos os dados sensíveis sejam criptografados para proteger a privacidade dos usuários.
