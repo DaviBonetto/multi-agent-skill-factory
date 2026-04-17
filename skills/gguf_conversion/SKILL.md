@@ -1,2 +1,2 @@
 # GGUF Conversion Guide
-... (conteúdo do arquivo SKILL.md)
+... (restante do conteúdo do arquivo SKILL.md)
