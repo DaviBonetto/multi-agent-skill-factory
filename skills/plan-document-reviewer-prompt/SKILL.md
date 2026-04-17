@@ -47,20 +47,11 @@ Task tool (general-purpose):
 
     ⚠️ Tratamento de Exceções e Edge Cases
 
-    **Cenários de Erro:**
-    - Planos vazios ou inexistentes: Verifique se o arquivo do plano está presente e não está vazio.
-    - Especificações ausentes: Certifique-se de que as especificações estejam disponíveis e acessíveis.
-    - Tarefas mal definidas: Verifique se as tarefas têm metas claras e estão bem decompostas.
-    - Conflitos de dependência: Identifique possíveis conflitos entre tarefas ou dependências.
-
-    **Tratamento de Exceções:**
-    - Se o plano estiver vazio ou inexistente, retorne um erro e solicite que o plano seja revisado.
-    - Se as especificações estiverem ausentes, solicite que as especificações sejam fornecidas antes de prosseguir.
-    - Se as tarefas estiverem mal definidas, solicite que as tarefas sejam revisadas e melhoradas.
-    - Se houver conflitos de dependência, identifique e documente os conflitos e sugira soluções.
-
-    **Segurança:**
-    - Verifique se o plano contém informações confidenciais ou sensíveis e certifique-se de que elas estejam devidamente protegidas.
-    - Certifique-se de que as tarefas e os passos estejam alinhados com as políticas de segurança da organização.
+    - **Planos vazios ou inexistentes:** Verifique se o arquivo do plano está vazio ou se não existe. Se isso ocorrer, retorne um status de "Issues Found" com uma descrição do problema.
+    - **Especificações inconsistentes:** Se a especificação for inconsistente ou contiver erros, retorne um status de "Issues Found" com uma descrição do problema.
+    - **Tarefas mal definidas:** Se as tarefas estiverem mal definidas ou forem vagas, retorne um status de "Issues Found" com uma descrição do problema.
+    - **Conflitos de dependência:** Verifique se há conflitos de dependência entre as tarefas. Se isso ocorrer, retorne um status de "Issues Found" com uma descrição do problema.
+    - **Problemas de segurança:** Verifique se o plano contém problemas de segurança, como a falta de autenticação ou autorização. Se isso ocorrer, retorne um status de "Issues Found" com uma descrição do problema.
+    - **Limitações de recursos:** Verifique se o plano está dentro das limitações de recursos, como tempo, orçamento e pessoal. Se isso não ocorrer, retorne um status de "Issues Found" com uma descrição do problema.
 
 **Reviewer returns:** Status, Issues (if any), Recommendations
