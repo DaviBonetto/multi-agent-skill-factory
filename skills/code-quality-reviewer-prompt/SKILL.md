@@ -26,29 +26,25 @@ Task tool (superpowers:code-reviewer):
 **Code reviewer returns:** Strengths, Issues (Critical/Important/Minor), Assessment
 
  Tratamento de Exceções e Edge Cases
-- Verificar se o código lida corretamente com exceções e erros, como:
-  - Tratamento de erros de rede e conexão
-  - Tratamento de erros de banco de dados
-  - Tratamento de erros de segurança, como injeção de SQL ou cross-site scripting (XSS)
-- Verificar se o código é robusto o suficiente para lidar com entradas inválidas ou edge cases, como:
-  - Entradas vazias ou nulas
-  - Entradas com formato inválido
-  - Entradas com valores extremos
-- Verificar se o código é seguro contra ataques comuns, como:
-  - Injeção de código
-  - Cross-site request forgery (CSRF)
-  - Ataques de negação de serviço (DoS)
-- Verificar se o código segue as melhores práticas de segurança, como:
-  - Uso de criptografia adequada
-  - Uso de autenticação e autorização adequadas
-  - Uso de logs e monitoramento adequados
+- Verificar se o código lida corretamente com exceções e erros, incluindo:
+  - Tratamento de erros de entrada e saída
+  - Manipulação de exceções personalizadas
+  - Uso de blocos try-catch para evitar crashes inesperados
+- Verificar se o código considera casos de bordo, incluindo:
+  - Entradas inválidas ou malformadas
+  - Condições de limite (por exemplo, arrays vazios, valores nulos)
+  - Comportamento em diferentes ambientes e configurações
+- Verificar se o código segue as melhores práticas de segurança, incluindo:
+  - Validação de entrada de usuário
+  - Proteção contra injeção de código
+  - Uso de criptografia e autenticação adequadas
 
 **Segurança**
 - Verificar se o código segue as políticas de segurança da empresa
-- Verificar se o código é compatível com as regulamentações de segurança aplicáveis
-- Verificar se o código é seguro contra ataques de segurança conhecidos
+- Verificar se o código utiliza bibliotecas e frameworks seguras e atualizadas
+- Verificar se o código armazena dados sensíveis de forma segura
 
 **Code reviewer returns:** Strengths, Issues (Critical/Important/Minor), Assessment, incluindo:
 - Relatório de segurança
 - Relatório de tratamento de exceções e edge cases
-- Recomendações para melhorias de segurança e robustez
+- Recomendações para melhorias de segurança e código
