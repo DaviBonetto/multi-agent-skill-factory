@@ -1,115 +1,65 @@
-# Arquitetura de Microsserviços com Kubernetes
-description: Esta habilidade ensina como projetar e implementar arquiteturas de microsserviços, utilizando Kubernetes para orquestrar e gerenciar contêiners Docker.
+---
+name: Arquitetura de Microsserviços
+description: Ensina projetar sistemas com arquitetura de microsserviços
+---
+
 ## Objetivo
-O objetivo desta habilidade é capacitar os desenvolvedores a projetar e implementar arquiteturas de microsserviços escaláveis e eficientes, utilizando Kubernetes como orquestrador de contêineres Docker. Ao final desta habilidade, os participantes serão capazes de:
-* Projetar arquiteturas de microsserviços
-* Implementar e orquestrar contêineres Docker com Kubernetes
-* Gerenciar e monitorar aplicações em um ambiente de microsserviços
+O objetivo deste guia é fornecer uma visão geral da arquitetura de microsserviços e como projetar sistemas escaláveis e flexíveis utilizando essa abordagem. Ao final deste guia, você será capaz de entender os conceitos fundamentais da arquitetura de microsserviços e como aplicá-los em projetos reais.
+
 ## Pré-requisitos
-Para participar desta habilidade, é necessário ter conhecimentos básicos em:
+Para seguir este guia, é recomendado que você tenha conhecimento básico em:
 * Desenvolvimento de software
-* Contêineres Docker
-* Kubernetes (conceitos básicos)
-* Arquitetura de software
+* Arquitetura de sistemas
+* Linguagens de programação (como Java, Python ou C#)
+* Ferramentas de gerenciamento de containers (como Docker)
+
 ## Passo a Passo Técnico / Exemplos de Código
-### 1. Preparação do Ambiente
-Para começar, é necessário ter o Docker e o Kubernetes instalados no seu ambiente de desenvolvimento. Você pode utilizar ferramentas como o Minikube para criar um cluster Kubernetes local.
-```bash
-curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && chmod +x minikube && sudo mv minikube /usr/local/bin/
-minikube start
-```
-### 2. Criação de um Microsserviço
-Crie um novo microsserviço utilizando uma linguagem de programação de sua escolha (por exemplo, Python com Flask).
+Aqui estão os passos para projetar um sistema com arquitetura de microsserviços:
+1. **Definir os microsserviços**: Identifique as funcionalidades do sistema e defina os microsserviços que serão responsáveis por cada uma delas.
+2. **Escolher a linguagem de programação**: Escolha a linguagem de programação mais adequada para cada microsserviço.
+3. **Implementar os microsserviços**: Implemente cada microsserviço utilizando a linguagem de programação escolhida.
+4. **Utilizar containers**: Utilize ferramentas de gerenciamento de containers (como Docker) para criar e gerenciar os containers para cada microsserviço.
+5. **Implementar a comunicação entre os microsserviços**: Implemente a comunicação entre os microsserviços utilizando protocolos de comunicação (como HTTP ou gRPC).
+
+Exemplo de código em Python para um microsserviço de autenticação:
 ```python
-from flask import Flask, jsonify
+from flask import Flask, request, jsonify
+from flask_sqlalchemy import SQLAlchemy
+
 app = Flask(__name__)
-@app.route('/api/hello', methods=['GET'])
-def hello():
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
+db = SQLAlchemy(app)
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    password = db.Column(db.String(120), nullable=False)
+
+@app.route("/login", methods=["POST"])
+def login():
     try:
-        return jsonify({'message': 'Hello, World!'})
+        username = request.json["username"]
+        password = request.json["password"]
+        user = User.query.filter_by(username=username).first()
+        if user and user.password == password:
+            return jsonify({"token": "token_de_autenticação"})
+        else:
+            return jsonify({"error": "credenciais_inválidas"}), 401
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
-if __name__ == '__main__':
+        return jsonify({"error": str(e)}), 500
+
+if __name__ == "__main__":
     app.run(debug=True)
 ```
-### 3. Criação de um Contêiner Docker
-Crie um contêiner Docker para o seu microsserviço.
-```dockerfile
-FROM python:3.9-slim
-WORKDIR /app
-COPY app.py .
-RUN pip install flask
-CMD ["python", "app.py"]
-```
-### 4. Orquestração com Kubernetes
-Crie um arquivo de configuração para o Kubernetes (por exemplo, `deployment.yaml`).
-```yml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: hello-deployment
-spec:
-  replicas: 3
-  selector:
-    matchLabels:
-      app: hello
-  template:
-    metadata:
-      labels:
-        app: hello
-    spec:
-      containers:
-      - name: hello
-        image: hello:latest
-        ports:
-        - containerPort: 5000
-      restartPolicy: Always
-```
 ## Validação
-Para validar a implementação, você pode utilizar ferramentas como o `kubectl` para verificar o status do deployment e dos pods.
-```bash
-kubectl get deployments
-kubectl get pods
-```
-Além disso, você pode testar a funcionalidade do microsserviço utilizando ferramentas como o `curl`.
-```bash
-curl http://localhost:5000/api/hello
-```
+Para validar o sistema, é importante realizar testes unitários e de integração para cada microsserviço. Além disso, é importante realizar testes de desempenho e escalabilidade para garantir que o sistema possa lidar com um grande volume de requisições.
+
 ## ⚠️ Tratamento de Exceções e Edge Cases
-### Tratamento de Erros
-Para tratar erros no microsserviço, você pode utilizar try-except blocks para capturar exceções e retornar respostas de erro personalizadas.
-```python
-from flask import Flask, jsonify
-app = Flask(__name__)
-@app.route('/api/hello', methods=['GET'])
-def hello():
-    try:
-        return jsonify({'message': 'Hello, World!'})
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-```
-### Edge Cases
-Alguns exemplos de edge cases que você deve considerar:
-* **Conexão de rede perdida**: O que acontece se a conexão de rede for perdida durante a comunicação entre os microsserviços?
-* **Timeout**: O que acontece se um microsserviço não responder dentro de um tempo determinado?
-* **Erros de serialização**: O que acontece se houver erros de serialização ao enviar ou receber dados entre os microsserviços?
-Para lidar com esses edge cases, você pode utilizar técnicas como:
-* **Retentativa**: Tente novamente a operação após um tempo determinado.
-* **Timeout**: Defina um tempo limite para a operação e retorne um erro se não for concluída dentro desse tempo.
-* **Validação de dados**: Verifique se os dados enviados ou recebidos estão corretos e válidos.
-```python
-from flask import Flask, jsonify
-import time
-app = Flask(__name__)
-@app.route('/api/hello', methods=['GET'])
-def hello():
-    try:
-        # Tente novamente a operação após 1 segundo se houver erro
-        for i in range(3):
-            try:
-                return jsonify({'message': 'Hello, World!'})
-            except Exception as e:
-                time.sleep(1)
-        return jsonify({'error': 'Falha ao executar a operação'}), 500
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+Além dos passos técnicos, é importante considerar os seguintes casos de exceção e edge cases:
+* **Tratamento de erros**: Implemente um mecanismo de tratamento de erros para lidar com exceções e erros inesperados.
+* **Validação de entrada**: Valide as entradas dos usuários para evitar ataques de injeção de SQL ou cross-site scripting (XSS).
+* **Autenticação e autorização**: Implemente um mecanismo de autenticação e autorização para garantir que apenas usuários autorizados possam acessar os microsserviços.
+* **Gerenciamento de dependências**: Gerencie as dependências entre os microsserviços para evitar problemas de compatibilidade e atualização.
+* **Monitoramento e logging**: Implemente um mecanismo de monitoramento e logging para detectar e diagnosticar problemas no sistema.
+* **Recuperação de falhas**: Implemente um mecanismo de recuperação de falhas para garantir que o sistema possa se recuperar de falhas e continuar funcionando corretamente.
+* **Segurança**: Implemente medidas de segurança para proteger o sistema contra ataques e vulnerabilidades, como firewalls, criptografia e atualizações de segurança regulares.
