@@ -1,20 +1,16 @@
-# Draft Revisado
----
-description: "Deprecated - use the superpowers:writing-plans skill instead"
----
-
-Tell your human partner that this command is deprecated and will be removed in the next major release. They should ask you to use the "superpowers writing-plans" skill instead.
-
-## Tratamento de Exceções e Edge Cases
+# SKILL
+## Descrição
+description: "Habilidade de escrita de planos, substituindo a habilidade deprecada."
+## Uso
+Para utilizar esta habilidade, basta informar ao seu parceiro humano que você está utilizando a habilidade "superpowers writing-plans".
+## ⚠️ Tratamento de Exceções e Edge Cases
 ### Casos de Uso Inválidos
-- **Parâmetros Inválidos**: Caso o usuário forneça parâmetros inválidos ou inconsistentes, o sistema deve retornar uma mensagem de erro clara e concisa, indicando os parâmetros corretos e como utilizá-los.
-- **Comando Desconhecido**: Se o usuário tentar utilizar um comando desconhecido ou não suportado, o sistema deve informar que o comando não é reconhecido e sugerir comandos alternativos disponíveis.
-- **Dependências não Atendidas**: Se a skill "superpowers:writing-plans" não estiver disponível devido a dependências não atendidas, o sistema deve notificar o usuário sobre as dependências necessárias e como resolvê-las.
-
+- Se o usuário não tiver permissão para utilizar a habilidade "superpowers writing-plans", mostre uma mensagem de erro informando sobre a falta de permissão.
+- Se a habilidade "superpowers writing-plans" não estiver disponível, mostre uma mensagem de erro informando sobre a indisponibilidade da habilidade.
 ### Tratamento de Erros
-- **Mensagens de Erro Personalizadas**: O sistema deve fornecer mensagens de erro personalizadas para cada tipo de erro, ajudando o usuário a entender o que deu errado e como corrigir.
-- **Logs de Erro**: Todos os erros devem ser registrados em logs para análise posterior, permitindo a identificação de padrões de erro e melhorias contínuas.
-
+- Se ocorrer um erro durante a execução da habilidade, mostre uma mensagem de erro genérica informando que ocorreu um problema e solicite que o usuário tente novamente.
+- Se o erro for específico, mostre uma mensagem de erro detalhada informando sobre o problema e sugira uma solução.
 ### Segurança
-- **Validação de Entrada**: Todas as entradas de usuário devem ser validadas para prevenir ataques de injeção de código ou outras vulnerabilidades de segurança.
-- **Autenticação e Autorização**: Acesso às skills deve ser controlado por mecanismos de autenticação e autorização, garantindo que apenas usuários autorizados possam utilizar as skills disponíveis.
+- Verifique se o usuário tem permissão para utilizar a habilidade antes de executá-la.
+- Valide os dados de entrada para garantir que sejam válidos e seguros.
+- Utilize protocolos de segurança adequados para proteger as comunicações entre o usuário e a habilidade.
