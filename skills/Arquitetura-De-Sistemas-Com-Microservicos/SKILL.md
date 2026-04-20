@@ -1,123 +1,112 @@
 ---
 name: Arquitetura de Sistemas com Microserviços
-description: Esta skill ensina como projetar e implementar sistemas utilizando arquitetura de microserviços.
+description: Esta skill ensina como projetar e implementar sistemas de microserviços escaláveis e seguros
 ---
 
 ## Objetivo
-O objetivo desta skill é capacitar os desenvolvedores a projetar e implementar sistemas escaláveis e flexíveis utilizando arquitetura de microserviços. Ao final desta skill, os participantes serão capazes de entender os conceitos fundamentais de microserviços, como serviços independentes, comunicação entre serviços e gerenciamento de dados.
+O objetivo desta habilidade é fornecer conhecimento e práticas para projetar e implementar sistemas de microserviços escaláveis e seguros. Isso inclui entender os conceitos fundamentais de microserviços, como comunicação entre serviços, gerenciamento de dados, escalabilidade e segurança.
 
 ## Pré-requisitos
-Para participar desta skill, é necessário ter conhecimento básico em:
-* Desenvolvimento de software
-* Arquitetura de sistemas
-* Linguagens de programação (como Java, Python ou C#)
-* Ferramentas de gerenciamento de containers (como Docker)
+Para aproveitar ao máximo esta habilidade, é recomendado que os participantes tenham:
+- Conhecimento básico em programação (preferencialmente em linguagens como Java, Python ou C#)
+- Experiência com desenvolvimento de software
+- Familiaridade com conceitos de arquitetura de software
+- Conhecimento básico de redes e protocolos de comunicação
 
 ## Passo a Passo Técnico / Exemplos de Código
 ### 1. Introdução aos Microserviços
-Os microserviços são serviços independentes que se comunicam entre si para fornecer uma funcionalidade completa. Cada microserviço é responsável por uma tarefa específica e pode ser desenvolvido, testado e implantado de forma independente.
+Os microserviços são uma abordagem de arquitetura de software que envolve dividir uma aplicação em serviços menores, independentes e escaláveis. Cada serviço é responsável por uma funcionalidade específica e se comunica com os outros serviços através de APIs.
 
-### 2. Desenvolvimento de Microserviços
-Para desenvolver um microserviço, é necessário:
-* Definir a funcionalidade do microserviço
-* Escolher a linguagem de programação e o framework
-* Implementar a lógica de negócios
-* Implementar a comunicação entre microserviços
+### 2. Projetando Microserviços
+Ao projetar microserviços, é importante considerar fatores como:
+- **Comunicação entre serviços**: Utilizar protocolos de comunicação como HTTP, gRPC ou mensagem (MQTT, RabbitMQ)
+- **Gerenciamento de dados**: Utilizar bancos de dados relacionais ou NoSQL, dependendo das necessidades do serviço
+- **Escalabilidade**: Utilizar contêineres (Docker) e orquestração (Kubernetes) para escalabilidade e gerenciamento de serviços
 
-Exemplo de código em Python utilizando o framework Flask:
+Exemplo de comunicação entre serviços utilizando REST:
 ```python
-from flask import Flask, jsonify
+import requests
 
-app = Flask(__name__)
-
-@app.route('/users', methods=['GET'])
-def get_users():
+# Serviço de produtos
+def get_product(id):
     try:
-        users = [{'id': 1, 'name': 'John'}, {'id': 2, 'name': 'Jane'}]
-        return jsonify(users)
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        response = requests.get(f'http://localhost:8000/products/{id}')
+        response.raise_for_status()
+        return response.json()
+    except requests.exceptions.RequestException as e:
+        print(f"Erro ao obter produto: {e}")
+        return None
 
-if __name__ == '__main__':
-    app.run()
+# Serviço de pedidos
+def create_order(product_id, quantity):
+    try:
+        product = get_product(product_id)
+        if product is None:
+            print("Produto não encontrado")
+            return None
+        # Cria o pedido com base nas informações do produto
+        order = {'product_id': product_id, 'quantity': quantity}
+        response = requests.post('http://localhost:8001/orders', json=order)
+        response.raise_for_status()
+        return response.json()
+    except requests.exceptions.RequestException as e:
+        print(f"Erro ao criar pedido: {e}")
+        return None
 ```
 
-### 3. Comunicação entre Microserviços
-A comunicação entre microserviços pode ser feita utilizando:
-* API RESTful
-* Mensageria (como RabbitMQ ou Apache Kafka)
-* Geração de eventos
+### 3. Implementando Segurança
+A segurança é um aspecto crítico em sistemas de microserviços. Isso inclui:
+- **Autenticação**: Utilizar mecanismos de autenticação como OAuth, JWT ou Basic Auth
+- **Autorização**: Utilizar mecanismos de autorização como RBAC (Role-Based Access Control)
 
-Exemplo de código em Java utilizando a API RESTful:
-```java
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+Exemplo de autenticação utilizando JWT:
+```python
+import jwt
 
-@RestController
-public class UserController {
-    @GetMapping("/users")
-    public List<User> getUsers() {
-        try {
-            List<User> users = new ArrayList<>();
-            users.add(new User(1, "John"));
-            users.add(new User(2, "Jane"));
-            return users;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-}
+# Gera um token de autenticação
+def generate_token(user_id):
+    payload = {'user_id': user_id}
+    token = jwt.encode(payload, 'secret_key', algorithm='HS256')
+    return token
+
+# Verifica a autenticação de um pedido
+def authenticate_request(request):
+    token = request.headers.get('Authorization')
+    try:
+        payload = jwt.decode(token, 'secret_key', algorithms=['HS256'])
+        return payload['user_id']
+    except jwt.ExpiredSignatureError:
+        print("Token expirado")
+        return None
+    except jwt.InvalidTokenError:
+        print("Token inválido")
+        return None
 ```
 
 ## Validação
-Para validar a implementação de microserviços, é necessário:
-* Testar cada microserviço individualmente
-* Testar a comunicação entre microserviços
-* Monitorar o desempenho do sistema
-
-Exemplo de teste em Python utilizando o framework Pytest:
-```python
-import pytest
-from app import app
-
-def test_get_users():
-    client = app.test_client()
-    response = client.get('/users')
-    assert response.status_code == 200
-    assert len(response.json) == 2
-
-def test_get_users_error():
-    client = app.test_client()
-    response = client.get('/users-error')
-    assert response.status_code == 500
-```
+Para validar a implementação de um sistema de microserviços, é importante realizar testes unitários, de integração e de carga. Além disso, é fundamental monitorar o desempenho e a segurança do sistema em produção, utilizando ferramentas como Prometheus, Grafana e ELK Stack.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-É importante tratar as exceções e edge cases para garantir a robustez e a confiabilidade do sistema. Alguns exemplos de tratamento de exceções e edge cases incluem:
-* Tratamento de erros de conexão de banco de dados
-* Tratamento de erros de comunicação entre microserviços
-* Tratamento de erros de lógica de negócios
-* Tratamento de casos de bordo, como:
- + Lidar com dados inválidos ou inconsistentes
- + Lidar com situações de concorrência
- + Lidar com situações de falha de hardware ou software
+É importante tratar exceções e edge cases para garantir a robustez e a confiabilidade do sistema. Alguns exemplos incluem:
+- **Tratamento de erros de rede**: Utilizar timeouts e retries para lidar com erros de rede
+- **Tratamento de erros de banco de dados**: Utilizar transações e rollback para lidar com erros de banco de dados
+- **Tratamento de erros de autenticação**: Utilizar mecanismos de autenticação robustos e lidar com erros de autenticação de forma segura
+- **Tratamento de edge cases**: Considerar casos de bordo, como pedidos com quantidade zero ou produtos não existentes, e lidar com eles de forma apropriada
 
-Exemplo de tratamento de exceções em Python:
+Exemplo de tratamento de exceções:
 ```python
 try:
-    # Código que pode gerar uma exceção
-    users = [{'id': 1, 'name': 'John'}, {'id': 2, 'name': 'Jane'}]
+    # Código que pode gerar exceções
+    product = get_product(product_id)
 except Exception as e:
-    # Tratamento da exceção
-    return jsonify({'error': str(e)}), 500
+    # Tratamento de exceções
+    print(f"Erro ao obter produto: {e}")
+    return None
 ```
-
-Exemplo de tratamento de edge cases em Java:
-```java
-if (users == null || users.isEmpty()) {
-    // Tratamento do caso de bordo: lista de usuários vazia
-    return new ArrayList<>();
-} else {
-    // Tratamento do caso normal
-    return users;
-}
+Exemplo de tratamento de edge cases:
+```python
+if quantity <= 0:
+    # Tratamento de edge case: quantidade não positiva
+    print("Quantidade deve ser positiva")
+    return None
+```
