@@ -34,18 +34,37 @@ These tools are available in Gemini CLI but have no Claude Code equivalent:
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
 
-Ao utilizar as ferramentas do Gemini CLI, é importante considerar os seguintes casos de exceção e edge cases:
+### Erros de sintaxe
 
-* **Erros de permissão**: Ao tentar ler ou escrever arquivos, é possível que ocorram erros de permissão. Nesse caso, o sistema deve retornar um erro claro e conciso, indicando a causa do problema.
-* **Arquivos não encontrados**: Ao tentar ler ou escrever arquivos, é possível que o arquivo não seja encontrado. Nesse caso, o sistema deve retornar um erro claro e conciso, indicando a causa do problema.
-* **Comandos inválidos**: Ao tentar executar comandos, é possível que o comando seja inválido. Nesse caso, o sistema deve retornar um erro claro e conciso, indicando a causa do problema.
-* **Limites de recursos**: Ao tentar executar comandos ou acessar arquivos, é possível que os recursos do sistema sejam limitados. Nesse caso, o sistema deve retornar um erro claro e conciso, indicando a causa do problema.
-* **Subagent dispatch**: Como o Gemini CLI não suporta subagent dispatch, é importante considerar como as skills que dependem dessa funcionalidade serão afetadas. Nesse caso, as skills devem ser adaptadas para usar a execução de planos em vez de subagent dispatch.
+*   Verifique se os comandos estão corretamente formatados e se os parâmetros estão sendo passados corretamente.
+*   Em caso de erros de sintaxe, o sistema deve retornar uma mensagem de erro clara e concisa, indicando a linha e a coluna onde o erro ocorreu.
 
-Além disso, é importante considerar as seguintes medidas de segurança:
+### Erros de permissão
 
-* **Validação de entrada**: Todas as entradas de usuário devem ser validadas para evitar ataques de injeção de código ou outros tipos de ataques.
-* **Autenticação e autorização**: Todas as ações que requerem autenticação e autorização devem ser protegidas por mecanismos de segurança adequados.
-* **Criptografia**: Todas as comunicações que requerem criptografia devem ser protegidas por mecanismos de criptografia adequados.
+*   Verifique se o usuário tem permissão para executar o comando solicitado.
+*   Em caso de erros de permissão, o sistema deve retornar uma mensagem de erro indicando que o usuário não tem permissão para executar o comando.
 
-Ao considerar esses casos de exceção e edge cases, é possível criar skills mais robustas e seguras que possam ser utilizadas em uma variedade de situações.
+### Erros de arquivo
+
+*   Verifique se o arquivo solicitado existe e se é possível ler ou escrever nele.
+*   Em caso de erros de arquivo, o sistema deve retornar uma mensagem de erro indicando o problema com o arquivo.
+
+### Erros de rede
+
+*   Verifique se a conexão de rede está estável e se é possível se comunicar com o servidor remoto.
+*   Em caso de erros de rede, o sistema deve retornar uma mensagem de erro indicando o problema com a conexão de rede.
+
+### Edge Cases
+
+*   **Comandos vazios**: Verifique se o comando está vazio ou se não contém parâmetros suficientes.
+*   **Parâmetros inválidos**: Verifique se os parâmetros passados são válidos e se atendem aos requisitos do comando.
+*   **Comandos desconhecidos**: Verifique se o comando solicitado é válido e se está registrado no sistema.
+*   **Sobrecarga de trabalho**: Verifique se o sistema está sobrecarregado e se é possível executar o comando solicitado.
+
+### Segurança
+
+*   **Validação de entrada**: Verifique se os dados de entrada são válidos e se atendem aos requisitos de segurança.
+*   **Autenticação**: Verifique se o usuário está autenticado e se tem permissão para executar o comando solicitado.
+*   **Criptografia**: Verifique se os dados sensíveis estão criptografados e se são transmitidos de forma segura.
+
+Ao tratar esses casos, é fundamental garantir que o sistema seja robusto, seguro e fácil de usar, proporcionando uma experiência satisfatória para os usuários.
