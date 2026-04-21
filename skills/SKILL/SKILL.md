@@ -1,86 +1,258 @@
----
-name: executing-plans
-description: Use quando você tem um plano de implementação escrito para executar em uma sessão separada com pontos de verificação de revisão
----
+# Hugging Face Paper Pages
+Hugging Face Paper pages (hf.co/papers) is a platform built on top of arXiv (arxiv.org), specifically for research papers in the field of artificial intelligence (AI) and computer science. Hugging Face users can submit their paper at hf.co/papers/submit, which features it on the Daily Papers feed (hf.co/papers). Each day, users can upvote papers and comment on papers. Each paper page allows authors to:
+- claim their paper (by clicking their name on the `authors` field). This makes the paper page appear on their Hugging Face profile.
+- link the associated model checkpoints, datasets and Spaces by including the HF paper or arXiv URL in the model card, dataset card or README of the Space
+- link the Github repository and/or project page URLs
+- link the HF organization. This also makes the paper page appear on the Hugging Face organization page.
 
-# Executando Planos
+Whenever someone mentions a HF paper or arXiv abstract/PDF URL in a model card, dataset card or README of a Space repository, the paper will be automatically indexed. Note that not all papers indexed on Hugging Face are also submitted to daily papers. The latter is more a manner of promoting a research paper. Papers can only be submitted to daily papers up until 14 days after their publication date on arXiv.
 
-## Visão Geral
+The Hugging Face team has built an easy-to-use API to interact with paper pages. Content of the papers can be fetched as markdown, or structured metadata can be returned such as author names, linked models/datasets/spaces, linked Github repo and project page.
 
-Carregue o plano, revise criticamente, execute todas as tarefas e informe quando concluído.
+## When to Use
 
-**Anuncie no início:** "Estou usando a habilidade de executar planos para implementar este plano."
+- User shares a Hugging Face paper page URL (e.g. `https://huggingface.co/papers/2602.08025`)
+- User shares a Hugging Face markdown paper page URL (e.g. `https://huggingface.co/papers/2602.08025.md`)
+- User shares an arXiv URL (e.g. `https://arxiv.org/abs/2602.08025` or  `https://arxiv.org/pdf/2602.08025`)
+- User mentions a arXiv ID (e.g. `2602.08025`)
+- User asks you to summarize, explain, or analyze an AI research paper
 
-**Nota:** Informe ao seu parceiro humano que Superpowers funciona muito melhor com acesso a subagentes. A qualidade do seu trabalho será significativamente maior se executado em uma plataforma com suporte a subagentes (como Claude Code ou Codex). Se subagentes estiverem disponíveis, use superpowers:subagent-driven-development em vez desta habilidade.
+## Parsing the paper ID
 
-## O Processo
+It's recommended to parse the paper ID (arXiv ID) from whatever the user provides:
 
-### Etapa 1: Carregar e Revisar Plano
-1. Leia o arquivo do plano
-2. Revise criticamente - identifique quaisquer dúvidas ou preocupações sobre o plano
-3. Se houver preocupações: Levante-as com seu parceiro humano antes de começar
-4. Se não houver preocupações: Crie TodoWrite e prossiga
+| Input | Paper ID |
+| --- | --- |
+| `https://huggingface.co/papers/2602.08025` | `2602.08025` |
+| `https://huggingface.co/papers/2602.08025.md` | `2602.08025` |
+| `https://arxiv.org/abs/2602.08025` | `2602.08025` |
+| `https://arxiv.org/pdf/2602.08025` | `2602.08025` |
+| `2602.08025v1` | `2602.08025v1` |
+| `2602.08025` | `2602.08025` |
 
-### Etapa 2: Executar Tarefas
+This allows you to provide the paper ID into any of the hub API endpoints mentioned below.
 
-Para cada tarefa:
-1. Marque como em_progresso
-2. Siga cada etapa exatamente (plano tem etapas pequenas)
-3. Execute verificações como especificado
-4. Marque como concluída
+### Fetch the paper page as markdown
 
-### Etapa 3: Concluir Desenvolvimento
+The content of a paper can be fetched as markdown like so:
 
-Depois que todas as tarefas forem concluídas e verificadas:
-- Anuncie: "Estou usando a habilidade de concluir um ramo de desenvolvimento para concluir este trabalho."
-- **HABILIDADE SUB-REQUERIDA:** Use superpowers:finishing-a-development-branch
-- Siga essa habilidade para verificar testes, apresentar opções, executar escolha
+```bash
+curl -s "https://huggingface.co/papers/{PAPER_ID}.md"
+```
 
-## Quando Parar e Pedir Ajuda
+This should return the Hugging Face paper page as markdown. This relies on the HTML version of the paper at https://arxiv.org/html/{PAPER_ID}.
 
-**PARE de executar imediatamente quando:**
-- Encontrar um bloqueador (dependência faltando, teste falha, instrução não clara)
-- Plano tem lacunas críticas que impedem o início
-- Você não entender uma instrução
-- Verificação falha repetidamente
+There are 2 exceptions:
+- Not all arXiv papers have an HTML version. If the HTML version of the paper does not exist, then the content falls back to the HTML of the Hugging Face paper page.
+- If it results in a 404, it means the paper is not yet indexed on hf.co/papers. See [Error handling](#error-handling) for info.
 
-**Peça esclarecimento em vez de adivinhar.**
+Alternatively, you can request markdown from the normal paper page URL, like so:
 
-## Quando Revisitar Etapas Anteriores
+```bash
+curl -s -H "Accept: text/markdown" "https://huggingface.co/papers/{PAPER_ID}"
+```
 
-**Retorne à Revisão (Etapa 1) quando:**
-- Parceiro atualiza o plano com base em seu feedback
-- Abordagem fundamental precisa ser re pensada
+### Paper Pages API Endpoints
 
-**Não force através de bloqueadores** - pare e peça.
+All endpoints use the base URL `https://huggingface.co`.
 
-## Lembre-se
-- Revise o plano criticamente primeiro
-- Siga as etapas do plano exatamente
-- Não pule verificações
-- Faça referência a habilidades quando o plano disser para fazer
-- Pare quando bloqueado, não adivinhe
-- Nunca inicie a implementação no ramo principal sem consentimento explícito do usuário
+#### Get structured metadata
 
-## Integração
+Fetch the paper metadata as JSON using the Hugging Face REST API:
 
-**Habilidades de fluxo de trabalho necessárias:**
-- **superpowers:using-git-worktrees** - OBRIGATÓRIO: Configure o espaço de trabalho isolado antes de começar
-- **superpowers:writing-plans** - Cria o plano que esta habilidade executa
-- **superpowers:finishing-a-development-branch** - Conclua o desenvolvimento após todas as tarefas
+```bash
+curl -s "https://huggingface.co/api/papers/{PAPER_ID}"
+```
 
-⚠️ Tratamento de Exceções e Edge Cases
-### Tratamento de Erros
-- **Erro de Carregamento do Plano:** Se o arquivo do plano não for encontrado ou não puder ser carregado, informe o erro e peça ajuda.
-- **Erro de Execução de Tarefas:** Se uma tarefa não puder ser executada devido a um erro, informe o erro e peça ajuda.
-- **Erro de Verificação:** Se uma verificação falhar, informe o erro e peça ajuda.
+This returns structured metadata that can include:
+
+- authors (names and Hugging Face usernames, in case they have claimed the paper)
+- media URLs (uploaded when submitting the paper to Daily Papers)
+- summary (abstract) and AI-generated summary
+- project page and GitHub repository
+- organization and engagement metadata (number of upvotes)
+
+To find models linked to the paper, use:
+
+```bash
+curl https://huggingface.co/api/models?filter=arxiv:{PAPER_ID}
+```
+
+To find datasets linked to the paper, use:
+
+```bash
+curl https://huggingface.co/api/datasets?filter=arxiv:{PAPER_ID}
+```
+
+To find spaces linked to the paper, use:
+
+```bash
+curl https://huggingface.co/api/spaces?filter=arxiv:{PAPER_ID}
+```
+
+#### Claim paper authorship
+
+Claim authorship of a paper for a Hugging Face user:
+
+```bash
+curl "https://huggingface.co/api/settings/papers/claim" \
+  --request POST \
+  --header "Content-Type: application/json" \
+  --header "Authorization: Bearer $HF_TOKEN" \
+  --data '{
+    "paperId": "{PAPER_ID}",
+    "claimAuthorId": "{AUTHOR_ENTRY_ID}",
+    "targetUserId": "{USER_ID}"
+  }'
+```
+
+- Endpoint: `POST /api/settings/papers/claim`
+- Body:
+  - `paperId` (string, required): arXiv paper identifier being claimed
+  - `claimAuthorId` (string): author entry on the paper being claimed, 24-char hex ID
+  - `targetUserId` (string): HF user who should receive the claim, 24-char hex ID
+- Response: paper authorship claim result, including the claimed paper ID
+
+#### Get daily papers
+
+Fetch the Daily Papers feed:
+
+```bash
+curl -s -H "Authorization: Bearer $HF_TOKEN" \
+  "https://huggingface.co/api/daily_papers?p=0&limit=20&date=2017-07-21&sort=publishedAt"
+```
+
+- Endpoint: `GET /api/daily_papers`
+- Query parameters:
+  - `p` (integer): page number
+  - `limit` (integer): number of results, between 1 and 100
+  - `date` (string): RFC 3339 full-date, for example `2017-07-21`
+  - `week` (string): ISO week, for example `2024-W03`
+  - `month` (string): month value, for example `2024-01`
+  - `submitter` (string): filter by submitter
+  - `sort` (enum): `publishedAt` or `trending`
+- Response: list of daily papers
+
+#### List papers
+
+List arXiv papers sorted by published date:
+
+```bash
+curl -s -H "Authorization: Bearer $HF_TOKEN" \
+  "https://huggingface.co/api/papers?cursor={CURSOR}&limit=20"
+```
+
+- Endpoint: `GET /api/papers`
+- Query parameters:
+  - `cursor` (string): pagination cursor
+  - `limit` (integer): number of results, between 1 and 100
+- Response: list of papers
+
+#### Search papers
+
+Perform hybrid semantic and full-text search on papers:
+
+```bash
+curl -s -H "Authorization: Bearer $HF_TOKEN" \
+  "https://huggingface.co/api/papers/search?q=vision+language&limit=20"
+```
+
+This searches over the paper title, authors, and content.
+
+- Endpoint: `GET /api/papers/search`
+- Query parameters:
+  - `q` (string): search query, max length 250
+  - `limit` (integer): number of results, between 1 and 120
+- Response: matching papers
+
+#### Index a paper
+
+Insert a paper from arXiv by ID. If the paper is already indexed, only its authors can re-index it:
+
+```bash
+curl "https://huggingface.co/api/papers/index" \
+  --request POST \
+  --header "Content-Type: application/json" \
+  --header "Authorization: Bearer $HF_TOKEN" \
+  --data '{
+    "arxivId": "{ARXIV_ID}"
+  }'
+```
+
+- Endpoint: `POST /api/papers/index`
+- Body:
+  - `arxivId` (string, required): arXiv ID to index, for example `2301.00001`
+- Pattern: `^\d{4}\.\d{4,5}$`
+- Response: empty JSON object on success
+
+#### Update paper links
+
+Update the project page, GitHub repository, or submitting organization for a paper. The requester must be the paper author, the Daily Papers submitter, or a papers admin:
+
+```bash
+curl "https://huggingface.co/api/papers/{PAPER_OBJECT_ID}/links" \
+  --request POST \
+  --header "Content-Type: application/json" \
+  --header "Authorization: Bearer $HF_TOKEN" \
+  --data '{
+    "projectPage": "https://example.com",
+    "githubRepo": "https://github.com/org/repo",
+    "organizationId": "{ORGANIZATION_ID}"
+  }'
+```
+
+- Endpoint: `POST /api/papers/{paperId}/links`
+- Path parameters:
+  - `paperId` (string, required): Hugging Face paper object ID
+- Body:
+  - `githubRepo` (string, nullable): GitHub repository URL
+  - `organizationId` (string, nullable): organization ID, 24-char hex ID
+  - `projectPage` (string, nullable): project page URL
+- Response: empty JSON object on success
+
+## Error Handling
+
+- **404 on `https://huggingface.co/papers/{PAPER_ID}` or `md` endpoint**: the paper is not indexed on Hugging Face paper pages yet.
+- **404 on `/api/papers/{PAPER_ID}`**: the paper may not be indexed on Hugging Face paper pages yet.
+- **Paper ID not found**: verify the extracted arXiv ID, including any version suffix
+
+### Fallbacks
+
+If the Hugging Face paper page does not contain enough detail for the user's question:
+
+- Check the regular paper page at `https://huggingface.co/papers/{PAPER_ID}`
+- Fall back to the arXiv page or PDF for the original source:
+  - `https://arxiv.org/abs/{PAPER_ID}`
+  - `https://arxiv.org/pdf/{PAPER_ID}`
+
+## Notes
+
+- No authentication is required for public paper pages.
+- Write endpoints such as claim authorship, index paper, and update paper links require `Authorization: Bearer $HF_TOKEN`.
+- Prefer the `.md` endpoint for reliable machine-readable output.
+- Prefer `/api/papers/{PAPER_ID}` when you need structured JSON fields instead of page markdown.
+
+## ⚠️ Tratamento de Exceções e Edge Cases
+
+### Exceções de Rede
+
+*   **Conexão de rede instável**: Implemente retry com backoff para lidar com falhas de conexão de rede.
+*   **Timeout**: Defina um tempo limite razoável para as requisições e lidar com timeouts.
+
+### Exceções de API
+
+*   **Respostas inválidas**: Verifique se as respostas da API estão no formato esperado e lidar com respostas inválidas.
+*   **Erros de autenticação**: Lidar com erros de autenticação e solicitar reautenticação se necessário.
+
+### Exceções de Dados
+
+*   **Dados inválidos**: Verifique se os dados recebidos estão válidos e lidar com dados inválidos.
+*   **Dados faltantes**: Lidar com dados faltantes e solicitar os dados novamente se necessário.
 
 ### Edge Cases
-- **Plano Vazio:** Se o plano estiver vazio, informe que o plano está vazio e peça ajuda.
-- **Tarefa sem Etapas:** Se uma tarefa não tiver etapas, informe que a tarefa não tem etapas e peça ajuda.
-- **Verificação sem Especificação:** Se uma verificação não tiver especificação, informe que a verificação não tem especificação e peça ajuda.
 
-### Segurança
-- **Validação de Entradas:** Valide todas as entradas para garantir que sejam válidas e seguras.
-- **Controle de Acesso:** Garanta que o acesso ao plano e às tarefas seja controlado e seguro.
-- **Registro de Atividades:** Registre todas as atividades para garantir a auditoria e a segurança.
+*   **Papers não indexados**: Lidar com papers que não estão indexados no Hugging Face.
+*   **Papers com IDs inválidos**: Lidar com papers que têm IDs inválidos.
+*   **Requisições malformadas**: Lidar com requisições malformadas e retornar erros apropriados.
+
+Ao lidar com essas exceções e edge cases, é possível criar uma experiência mais robusta e confiável para os usuários.
