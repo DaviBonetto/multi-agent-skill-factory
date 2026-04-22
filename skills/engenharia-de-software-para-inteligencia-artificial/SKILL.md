@@ -1,116 +1,142 @@
 ---
 name: Engenharia de Software para Inteligência Artificial
-description: Ensina como desenvolver soluções de software que incorporam técnicas de inteligência artificial e aprendizado de máquina
+description: Aborda a criação de sistemas de inteligência artificial utilizando técnicas de machine learning e deep learning
 ---
 
 ## Objetivo
-O objetivo deste guia é fornecer uma visão abrangente sobre como desenvolver soluções de software que incorporam técnicas de inteligência artificial (IA) e aprendizado de máquina (ML), visando capacitar desenvolvedores a criar sistemas inteligentes e eficazes.
+O objetivo deste guia é fornecer uma visão geral da engenharia de software para inteligência artificial, abordando as técnicas de machine learning e deep learning utilizadas na criação de sistemas de inteligência artificial.
 
 ## Pré-requisitos
-Para seguir este guia, é recomendado que os desenvolvedores tenham conhecimento em:
-- Programação em linguagens como Python, Java ou C++
-- Conceitos básicos de inteligência artificial e aprendizado de máquina
-- Familiaridade com bibliotecas e frameworks de IA e ML, como TensorFlow, PyTorch ou Scikit-learn
+Para seguir este guia, é necessário ter conhecimento em:
+* Programação em linguagens como Python ou R
+* Conceitos básicos de inteligência artificial e machine learning
+* Familiaridade com bibliotecas de machine learning como scikit-learn ou TensorFlow
 
 ## Passo a Passo Técnico / Exemplos de Código
-### Etapa 1: Definição do Problema e Seleção do Modelo
-Defina claramente o problema que você deseja resolver com IA/ML e selecione o modelo mais adequado para sua aplicação. Por exemplo, para classificação de imagens, você pode usar um modelo de rede neural convolucional (CNN).
+### Passo 1: Preparação do Ambiente
+Para começar a trabalhar com inteligência artificial, é necessário preparar o ambiente de desenvolvimento. Isso inclui:
+* Instalar a linguagem de programação escolhida (por exemplo, Python)
+* Instalar bibliotecas de machine learning (por exemplo, scikit-learn ou TensorFlow)
+* Configurar o ambiente de desenvolvimento (por exemplo, Jupyter Notebook ou IDE)
 
 ```python
-# Exemplo de importação de bibliotecas para um modelo de CNN em PyTorch
-import torch
-import torch.nn as nn
-import torchvision
-import torchvision.transforms as transforms
+# Exemplo de instalação de bibliotecas em Python
+import pip
+try:
+    pip.main(['install', 'scikit-learn'])
+    pip.main(['install', 'tensorflow'])
+except Exception as e:
+    print(f"Erro ao instalar bibliotecas: {e}")
 ```
 
-### Etapa 2: Preparação dos Dados
-Coletar e preparar os dados para treinamento, validação e teste. Isso inclui limpeza, pré-processamento e split dos dados.
+### Passo 2: Coleta e Preparação de Dados
+A coleta e preparação de dados é um passo fundamental na criação de sistemas de inteligência artificial. Isso inclui:
+* Coletar dados relevantes para o problema em questão
+* Preparar os dados para serem utilizados no treinamento do modelo (por exemplo, normalização, transformação de variáveis)
 
 ```python
-# Exemplo de pré-processamento de dados usando PyTorch
-transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
-trainset = torchvision.datasets.CIFAR10(root='./data', train=True, download=True, transform=transform)
-trainloader = torch.utils.data.DataLoader(trainset, batch_size=64, shuffle=True)
+# Exemplo de coleta e preparação de dados em Python
+import pandas as pd
+from sklearn.preprocessing import StandardScaler
+
+try:
+    # Carregar os dados
+    df = pd.read_csv('dados.csv')
+    
+    # Preparar os dados
+    scaler = StandardScaler()
+    df[['coluna1', 'coluna2']] = scaler.fit_transform(df[['coluna1', 'coluna2']])
+except FileNotFoundError:
+    print("Arquivo de dados não encontrado.")
+except Exception as e:
+    print(f"Erro ao preparar os dados: {e}")
 ```
 
-### Etapa 3: Implementação e Treinamento do Modelo
-Implemente o modelo escolhido e treine-o com os dados preparados. Ajuste hiperparâmetros conforme necessário para melhorar o desempenho.
+### Passo 3: Treinamento do Modelo
+O treinamento do modelo é o passo onde o sistema de inteligência artificial aprende a partir dos dados. Isso inclui:
+* Escolher o algoritmo de machine learning a ser utilizado (por exemplo, regressão linear, árvore de decisão)
+* Treinar o modelo utilizando os dados preparados
 
 ```python
-# Exemplo de definição e treinamento de um modelo de CNN
-class Net(nn.Module):
-    def __init__(self):
-        super(Net, self).__init__()
-        self.conv1 = nn.Conv2d(3, 6, 5)
-        self.pool = nn.MaxPool2d(2, 2)
-        self.conv2 = nn.Conv2d(6, 16, 5)
-        self.fc1 = nn.Linear(16 * 5 * 5, 120)
-        self.fc2 = nn.Linear(120, 84)
-        self.fc3 = nn.Linear(84, 10)
+# Exemplo de treinamento de um modelo em Python
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
 
-    def forward(self, x):
-        x = self.pool(nn.functional.relu(self.conv1(x)))
-        x = self.pool(nn.functional.relu(self.conv2(x)))
-        x = x.view(-1, 16 * 5 * 5)
-        x = nn.functional.relu(self.fc1(x))
-        x = nn.functional.relu(self.fc2(x))
-        x = self.fc3(x)
-        return x
-
-net = Net()
-criterion = nn.CrossEntropyLoss()
-optimizer = torch.optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
-
-for epoch in range(10):  # loop over the dataset multiple times
-    for i, data in enumerate(trainloader, 0):
-        inputs, labels = data
-        optimizer.zero_grad()
-        outputs = net(inputs)
-        loss = criterion(outputs, labels)
-        loss.backward()
-        optimizer.step()
+try:
+    # Dividir os dados em treinamento e teste
+    X_train, X_test, y_train, y_test = train_test_split(df[['coluna1', 'coluna2']], df['coluna3'], test_size=0.2, random_state=42)
+    
+    # Treinar o modelo
+    modelo = LinearRegression()
+    modelo.fit(X_train, y_train)
+except Exception as e:
+    print(f"Erro ao treinar o modelo: {e}")
 ```
 
 ## Validação
-Após o treinamento, valide o modelo com o conjunto de dados de teste para avaliar seu desempenho. Use métricas como precisão, recall, F1-score, etc., dependendo do tipo de problema.
+A validação é o passo onde o sistema de inteligência artificial é testado para garantir que esteja funcionando corretamente. Isso inclui:
+* Testar o modelo utilizando os dados de teste
+* Avaliar o desempenho do modelo (por exemplo, métricas de precisão, recall, F1-score)
 
 ```python
-# Exemplo de validação do modelo
-correct = 0
-total = 0
-with torch.no_grad():
-    for data in testloader:
-        images, labels = data
-        outputs = net(images)
-        _, predicted = torch.max(outputs.data, 1)
-        total += labels.size(0)
-        correct += (predicted == labels).sum().item()
+# Exemplo de validação de um modelo em Python
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 
-print('Accuracy of the network on the 10000 test images: %d %%' % (
-    100 * correct / total))
+try:
+    # Testar o modelo
+    y_pred = modelo.predict(X_test)
+    
+    # Avaliar o desempenho do modelo
+    print('Acurácia:', accuracy_score(y_test, y_pred))
+    print('Relatório de classificação:')
+    print(classification_report(y_test, y_pred))
+    print('Matriz de confusão:')
+    print(confusion_matrix(y_test, y_pred))
+except Exception as e:
+    print(f"Erro ao validar o modelo: {e}")
+```
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-Ao trabalhar com IA e ML, é importante considerar os seguintes casos de bordo e exceções:
-- **Dados ausentes ou inconsistentes**: Verifique se os dados estão completos e consistentes antes de treinar o modelo.
-- **Overfitting e underfitting**: Ajuste os hiperparâmetros do modelo para evitar overfitting e underfitting.
-- **Erros de inicialização**: Verifique se as variáveis e os modelos estão sendo inicializados corretamente.
-- **Erros de tipo**: Verifique se os tipos de dados estão sendo usados corretamente.
-- **Exceções de memória**: Verifique se o modelo está consumindo memória de forma eficiente.
-- **Erros de rede**: Verifique se a rede neural está sendo treinada corretamente e se os pesos estão sendo atualizados corretamente.
+É fundamental tratar exceções e edge cases para garantir a robustez do sistema de inteligência artificial. Isso inclui:
+* Tratar erros de instalação de bibliotecas
+* Tratar erros de carregamento de dados
+* Tratar erros de treinamento do modelo
+* Tratar erros de validação do modelo
+* Considerar edge cases, como:
+ + Dados faltantes ou inconsistentes
+ + Dados com ruído ou outliers
+ + Dados com distribuição não uniforme
+ + Modelos com complexidade alta ou baixa
+ + Hyperparâmetros mal ajustados
 
-Exemplos de tratamento de exceções em Python:
+Exemplos de tratamento de exceções e edge cases:
+
 ```python
+# Tratar erros de instalação de bibliotecas
 try:
-    # Código que pode gerar uma exceção
-    inputs, labels = data
-    outputs = net(inputs)
-    loss = criterion(outputs, labels)
-except RuntimeError as e:
-    # Tratamento da exceção
-    print(f"Erro de runtime: {e}")
-except TypeError as e:
-    # Tratamento da exceção
-    print(f"Erro de tipo: {e}")
+    import biblioteca
+except ImportError:
+    print("Biblioteca não instalada.")
+    # Instalar a biblioteca
+
+# Tratar erros de carregamento de dados
+try:
+    df = pd.read_csv('dados.csv')
+except FileNotFoundError:
+    print("Arquivo de dados não encontrado.")
+    # Carregar os dados de outro local
+
+# Tratar erros de treinamento do modelo
+try:
+    modelo.fit(X_train, y_train)
+except Exception as e:
+    print(f"Erro ao treinar o modelo: {e}")
+    # Ajustar os hyperparâmetros do modelo
+
+# Tratar erros de validação do modelo
+try:
+    y_pred = modelo.predict(X_test)
+except Exception as e:
+    print(f"Erro ao validar o modelo: {e}")
+    # Ajustar os hyperparâmetros do modelo
 ```
-Lembre-se de que o tratamento de exceções e edge cases é fundamental para garantir a robustez e a confiabilidade do modelo.
