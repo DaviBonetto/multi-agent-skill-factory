@@ -1,63 +1,82 @@
 ---
-name: Desenvolvimento de Aplicativos Serverless
-description: Ensina como criar e implantar aplicativos serverless utilizando AWS Lambda e outras ferramentas
+name: Desenvolvimento de Aplicativos Serverless com AWS Lambda
+description: Esta skill ensina como desenvolver aplicativos escaláveis e seguros utilizando arquiteturas serverless com AWS Lambda
 ---
 
 ## Objetivo
-O objetivo deste guia é fornecer uma visão geral detalhada sobre como desenvolver e implantar aplicativos serverless utilizando AWS Lambda e outras ferramentas relevantes. Este guia é direcionado a desenvolvedores seniores que buscam aprimorar suas habilidades em desenvolvimento de aplicativos serverless.
+O objetivo desta skill é capacitar os desenvolvedores a criar aplicativos escaláveis e seguros utilizando arquiteturas serverless com AWS Lambda, integrando com outros serviços da AWS para armazenamento, processamento de dados e segurança.
 
 ## Pré-requisitos
-Antes de começar, é necessário ter conhecimento em:
-- Programação em linguagens como Python, Node.js ou Java
-- Conceitos básicos de cloud computing e arquitetura de aplicações
-- Experiência com AWS ou outras plataformas de cloud computing
-- Ferramentas de desenvolvimento como Visual Studio Code, IntelliJ ou similares
+Para iniciar esta skill, é necessário ter conhecimento básico em:
+* Programação em linguagens como Python, Node.js ou Java
+* Conceitos de desenvolvimento de aplicativos web
+* Familiaridade com a plataforma AWS
 
 ## Passo a Passo Técnico / Exemplos de Código
-### Criando um Projeto Serverless com AWS Lambda
-1. **Instalar o AWS CLI**: Certifique-se de que o AWS CLI está instalado e configurado corretamente no seu ambiente de desenvolvimento.
-2. **Criar um novo projeto**: Utilize o comando `aws lambda create-function` para criar uma nova função Lambda.
-   ```bash
-aws lambda create-function --function-name minhaFuncao --runtime python3.9 --role arn:aws:iam::123456789012:role/service-role/lambda-execution-role --handler index.handler --zip-file fileb://funcao.zip
-```
-3. **Desenvolver a função**: Crie um arquivo `index.py` com o seguinte conteúdo:
-   ```python
+### Criando uma Função AWS Lambda
+1. Acesse o console da AWS e navegue até o serviço Lambda.
+2. Clique em "Criar função" e selecione "Autor a partir do zero".
+3. Selecione a linguagem de programação desejada e defina as configurações de execução.
+4. Implemente a lógica da função utilizando o exemplo abaixo em Python:
+```python
 import boto3
-import logging
-
-# Configuração de logging
-logger = logging.getLogger()
-logger.setLevel(logging.INFO)
 
 def lambda_handler(event, context):
     try:
-        print('Função Lambda executada com sucesso!')
+        # Lógica da função
+        print("Função executada com sucesso!")
         return {
             'statusCode': 200,
-            'body': 'Olá, mundo serverless!'
+            'body': 'Função executada com sucesso!'
         }
     except Exception as e:
-        logger.error(f'Erro ao executar a função Lambda: {str(e)}')
+        print(f"Erro: {str(e)}")
         return {
             'statusCode': 500,
-            'body': 'Erro interno do servidor'
+            'body': 'Erro ao executar a função'
         }
 ```
-4. **Implantar a função**: Zip o arquivo `index.py` e faça o upload para a função Lambda criada anteriormente.
-
-### Integração com API Gateway
-1. **Criar um novo recurso**: Acesse o console do AWS e navegue até o serviço API Gateway. Crie um novo recurso e um novo método (por exemplo, GET).
-2. **Integrar com a função Lambda**: Selecione a função Lambda criada anteriormente como o destino para o método criado.
+### Integração com outros serviços da AWS
+1. Configure o armazenamento de dados utilizando o Amazon S3.
+2. Utilize o Amazon DynamoDB para armazenar e processar dados.
+3. Implemente a segurança utilizando o Amazon Cognito e o IAM.
 
 ## Validação
-- **Testar a função Lambda**: Utilize o console do AWS ou o AWS CLI para testar a função Lambda.
-- **Testar a API**: Acesse a URL da API criada e verifique se a resposta é a esperada.
-- **Monitorar os logs**: Utilize o Amazon CloudWatch para monitorar os logs da função Lambda e identificar possíveis erros ou problemas de desempenho.
+Para validar a implementação, execute os seguintes passos:
+1. Teste a função Lambda utilizando o console da AWS.
+2. Verifique a integração com os outros serviços da AWS.
+3. Verifique a segurança e a escalabilidade da aplicação.
+Com esses passos, você terá uma aplicação serverless escalável e segura utilizando AWS Lambda.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-- **Tratamento de erros**: Implemente try-except blocks para capturar e tratar erros que possam ocorrer durante a execução da função Lambda.
-- **Validação de entrada**: Valide as entradas da função Lambda para garantir que elas sejam válidas e consistentes.
-- **Limites de recursos**: Tenha em mente os limites de recursos da função Lambda, como o tempo de execução máximo e o tamanho do pacote de deploy.
-- **Segurança**: Implemente medidas de segurança, como autenticação e autorização, para proteger a função Lambda e a API Gateway.
-- **Testes de carga**: Realize testes de carga para garantir que a função Lambda e a API Gateway possam lidar com um grande volume de requisições.
-- **Monitoramento de desempenho**: Monitore o desempenho da função Lambda e da API Gateway para identificar possíveis problemas de desempenho e otimizar a aplicação.
+### Tratamento de Exceções
+* Utilize try-except para capturar exceções e retornar respostas personalizadas.
+* Registre os erros em um serviço de logging, como o Amazon CloudWatch Logs.
+### Edge Cases
+* **Função Lambda com tempo de execução excessivo**: Verifique se a função está executando dentro do tempo limite estabelecido (300 segundos).
+* **Função Lambda com memória insuficiente**: Verifique se a função está utilizando a quantidade de memória alocada (até 3008 MB).
+* **Integração com serviços da AWS**: Verifique se as credenciais de acesso estão configuradas corretamente e se os serviços estão disponíveis.
+* **Segurança**: Verifique se as permissões de acesso estão configuradas corretamente e se os dados estão sendo criptografados.
+* **Escalabilidade**: Verifique se a função Lambda está escalando corretamente em resposta ao aumento da demanda.
+Exemplos de código para tratamento de exceções e edge cases:
+```python
+import boto3
+import logging
+
+logger = logging.getLogger()
+
+def lambda_handler(event, context):
+    try:
+        # Lógica da função
+        print("Função executada com sucesso!")
+        return {
+            'statusCode': 200,
+            'body': 'Função executada com sucesso!'
+        }
+    except Exception as e:
+        logger.error(f"Erro: {str(e)}")
+        return {
+            'statusCode': 500,
+            'body': 'Erro ao executar a função'
+        }
+```
