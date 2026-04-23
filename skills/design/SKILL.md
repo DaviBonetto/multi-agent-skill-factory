@@ -58,35 +58,10 @@ internal/
 6. Invalid inputs produce clear error messages
 7. All tests pass
 ## ⚠️ Tratamento de Exceções e Edge Cases
-### Exceções
-- **Entradas inválidas**: O programa deve lidar com entradas inválidas, como valores negativos para `--size`, `--width`, `--height`, `--depth` e `--iterations`. Nesses casos, o programa deve exibir uma mensagem de erro clara e sair com um código de status não zero.
-- **Caracteres inválidos**: O programa deve lidar com caracteres inválidos para o flag `--char`. Se o caractere for inválido, o programa deve exibir uma mensagem de erro clara e sair com um código de status não zero.
-- **Tamanho máximo**: O programa deve lidar com tamanhos máximos para `--size`, `--width` e `--height`. Se o tamanho for maior que o máximo permitido, o programa deve exibir uma mensagem de erro clara e sair com um código de status não zero.
-### Edge Cases
-- **Tamanho mínimo**: O programa deve lidar com tamanhos mínimos para `--size`, `--width` e `--height`. Se o tamanho for menor que o mínimo permitido, o programa deve exibir uma mensagem de erro clara e sair com um código de status não zero.
-- **Profundidade mínima**: O programa deve lidar com profundidades mínimas para `--depth`. Se a profundidade for menor que a mínima permitida, o programa deve exibir uma mensagem de erro clara e sair com um código de status não zero.
-- **Iterações mínimas**: O programa deve lidar com iterações mínimas para `--iterations`. Se o número de iterações for menor que o mínimo permitido, o programa deve exibir uma mensagem de erro clara e sair com um código de status não zero.
-### Exemplos de Tratamento de Exceções
-```go
-func main() {
-    // ...
-    if size < 1 {
-        log.Fatal("Tamanho inválido. O tamanho deve ser maior que 0.")
-    }
-    if depth < 1 {
-        log.Fatal("Profundidade inválida. A profundidade deve ser maior que 0.")
-    }
-    if iterations < 1 {
-        log.Fatal("Número de iterações inválido. O número de iterações deve ser maior que 0.")
-    }
-    // ...
-}
-```
-```go
-func sierpinski(size int, depth int, char string) {
-    // ...
-    if len(char) != 1 {
-        log.Fatal("Caractere inválido. O caractere deve ter exatamente 1 caractere.")
-    }
-    // ...
-}
+- **Tratamento de erros de entrada**: Verificar se os valores de entrada estão dentro dos limites válidos (por exemplo, `--size` e `--depth` devem ser números inteiros positivos) e exibir mensagens de erro claras caso contrário.
+- **Tratamento de erros de saída**: Verificar se a saída pode ser escrita corretamente no stdout e tratar erros de escrita, como falta de permissão ou espaço em disco insuficiente.
+- **Edge cases**:
+  - `--size` ou `--width`/`--height` muito grandes: Limitar o tamanho máximo da saída para evitar consumo excessivo de memória.
+  - `--depth` muito grande: Limitar a profundidade máxima da recursão para evitar estouro de pilha.
+  - `--iterations` muito grande: Limitar o número máximo de iterações para evitar consumo excessivo de CPU.
+- **Segurança**: Verificar se a entrada do usuário não pode ser usada para executar comandos arbitrários ou acessar arquivos sensíveis.
