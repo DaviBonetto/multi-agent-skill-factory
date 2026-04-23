@@ -1,4 +1,5 @@
-# UV Rules
+# UV rules
+## Introdução
 Use estas regras para scripts Python neste repositório:
 
 1. **Use PEP 723 inline dependencies** em cada script executável:
@@ -8,38 +9,57 @@ Use estas regras para scripts Python neste repositório:
    # dependencies = ["requests"]
    # ///
    ```
-   Certifique-se de que as dependências sejam especificadas corretamente e que o Python tenha a versão mínima requerida.
+   Certifique-se de que as dependências estejam atualizadas e sejam compatíveis com a versão do Python utilizada.
 
 2. **Execute scripts com `uv run`**, não `python ...`:
    ```bash
    uv run scripts/my_script.py --help
    ```
-   Isso garante que as dependências sejam resolvidas corretamente e que o ambiente seja configurado adequadamente.
+   Isso garante que as dependências sejam carregadas corretamente e que o script seja executado no ambiente adequado.
 
 3. **Não documente `pip install -r requirements.txt` para scripts do repositório** a menos que haja um motivo específico para isso. O uso normal não deve exigir instalação manual.
-   Em casos onde a instalação manual é necessária, certifique-se de fornecer instruções claras e evitar erros comuns.
+   Se houver uma dependência que não possa ser instalada via `uv run`, forneça instruções claras sobre como instalá-la manualmente.
 
 4. **Não instrua os usuários a `source .venv/bin/activate` para scripts de habilidade.** `uv run` deve ser suficiente.
-   Isso ajuda a manter a consistência e evitar problemas de ambiente.
+   Se o script exigir um ambiente virtual específico, certifique-se de que as instruções sejam claras e fáceis de seguir.
 
 5. **Se um exemplo de instalação manual for realmente necessário, use `uv pip install ...`**, não `uv add`, a menos que você esteja editando intencionalmente um ambiente gerenciado pelo projeto.
-   Isso ajuda a manter a segurança e evitar problemas de dependência.
+   Isso garante que as dependências sejam instaladas corretamente e que o script seja executado no ambiente adequado.
 
 6. **Para Hugging Face Jobs UV workloads, use `hf jobs uv run ...`**.
-   Certifique-se de seguir as diretrizes específicas para esses casos para garantir a compatibilidade e a segurança.
+   Certifique-se de que as dependências sejam compatíveis com o ambiente de trabalho e que o script seja executado corretamente.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-### Erros de Dependência
-- **Erro de versão do Python**: Certifique-se de que a versão do Python especificada nas dependências inline seja compatível com a versão instalada no sistema.
-- **Dependências faltantes**: Antes de executar um script, verifique se todas as dependências necessárias estão instaladas e atualizadas.
+### Dependências não encontradas
+Se uma dependência não for encontrada, certifique-se de que ela esteja listada no arquivo `dependencies` e que a versão do Python seja compatível.
+```python
+# /// script
+# requires-python = ">=3.10"
+# dependencies = ["requests"]
+# ///
+```
+Se a dependência ainda não for encontrada, verifique se o arquivo `requirements.txt` está atualizado e se as dependências estão instaladas corretamente.
 
-### Erros de Execução
-- **Parâmetros incorretos**: Forneça ajuda clara e documentação sobre como usar os scripts, incluindo a lista de parâmetros aceitos e exemplos de uso.
-- **Erros de ambiente**: Certifique-se de que o ambiente esteja configurado corretamente antes de executar os scripts, especialmente quando se trata de variáveis de ambiente ou configurações específicas.
+### Erros de execução
+Se ocorrer um erro durante a execução do script, certifique-se de que as dependências estejam instaladas corretamente e que o script esteja sendo executado no ambiente adequado.
+```bash
+uv run scripts/my_script.py --help
+```
+Se o erro persistir, verifique o log de erros para identificar a causa raiz do problema.
 
-### Segurança
-- **Dependências vulneráveis**: Mantenha as dependências atualizadas e verifique regularmente por vulnerabilidades conhecidas.
-- **Dados sensíveis**: Evite expor dados sensíveis, como chaves de API ou credenciais, diretamente nos scripts ou em arquivos de configuração.
-- **Permissões de arquivo**: Certifique-se de que os scripts e arquivos de configuração tenham permissões apropriadas para evitar acessos não autorizados.
+### Ambientes virtuais
+Se o script exigir um ambiente virtual específico, certifique-se de que as instruções sejam claras e fáceis de seguir.
+```bash
+uv pip install ...
+```
+Se o ambiente virtual não for encontrado, verifique se o arquivo `requirements.txt` está atualizado e se as dependências estão instaladas corretamente.
 
-Ao seguir essas diretrizes e considerar os casos de bordo e tratamento de erros, você pode garantir que os scripts Python sejam executados de forma segura e confiável.
+### Compatibilidade com o Python
+Certifique-se de que a versão do Python seja compatível com as dependências e com o script.
+```python
+# /// script
+# requires-python = ">=3.10"
+# dependencies = ["requests"]
+# ///
+```
+Se a versão do Python não for compatível, atualize a versão do Python ou as dependências para garantir a compatibilidade.
