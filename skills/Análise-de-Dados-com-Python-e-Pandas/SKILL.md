@@ -1,84 +1,91 @@
 ---
 name: Análise de Dados com Python e Pandas
-description: Esta skill ensina como analisar e manipular dados utilizando Python e Pandas, incluindo a leitura de datasets, limpeza de dados e criação de visualizações.
+description: Esta skill ensina técnicas avançadas de análise de dados utilizando Python e a biblioteca Pandas
 ---
 
 ## Objetivo
-O objetivo desta skill é fornecer conhecimentos avançados sobre como trabalhar com dados utilizando Python e a biblioteca Pandas. Ao final, você será capaz de ler datasets, limpar e manipular dados, além de criar visualizações para melhor compreensão dos dados.
+O objetivo desta skill é ensinar técnicas avançadas de análise de dados utilizando Python e a biblioteca Pandas, incluindo manipulação de dados, análise estatística e visualização de dados.
 
 ## Pré-requisitos
-Para aproveitar ao máximo esta skill, é recomendado que você tenha conhecimentos básicos em:
-- Programação Python
-- Manipulação de dados
-- Bibliotecas de visualização de dados (opcional)
+Para iniciar esta skill, é necessário ter conhecimento básico em:
+* Programação Python
+* Manipulação de dados
+* Análise estatística
 
 ## Passo a Passo Técnico / Exemplos de Código
-### Instalação das Bibliotecas Necessárias
-Antes de começar, certifique-se de ter Python instalado em sua máquina. Em seguida, instale as bibliotecas necessárias utilizando pip:
+### Instalação da Biblioteca Pandas
+Para começar, é necessário instalar a biblioteca Pandas. Isso pode ser feito utilizando o pip:
 ```bash
-pip install pandas matplotlib
+pip install pandas
 ```
-É importante notar que, dependendo do sistema operacional, pode ser necessário utilizar `pip3` em vez de `pip`. Além disso, se você estiver utilizando um ambiente virtual, certifique-se de ativá-lo antes de instalar as bibliotecas.
-
-### Leitura de Datasets
-Para ler um dataset, utilize o método `read_csv` da biblioteca Pandas:
+### Importação da Biblioteca Pandas
+Em seguida, importe a biblioteca Pandas em seu script Python:
 ```python
 import pandas as pd
-
-# Carregar o dataset
-try:
-    df = pd.read_csv('nome_do_arquivo.csv')
-except FileNotFoundError:
-    print("O arquivo não foi encontrado. Verifique o caminho e tente novamente.")
-except pd.errors.EmptyDataError:
-    print("O arquivo está vazio. Verifique o conteúdo e tente novamente.")
-except pd.errors.ParserError:
-    print("Ocorreu um erro ao parsear o arquivo. Verifique o formato e tente novamente.")
-
-# Visualizar as primeiras linhas do dataset
-if 'df' in locals():
-    print(df.head())
 ```
-
-### Limpeza de Dados
-A limpeza de dados é um passo crucial para garantir a qualidade dos dados. Isso pode incluir a remoção de linhas ou colunas vazias, tratamento de valores faltantes, etc.
+### Carregamento de Dados
+Carregue os dados utilizando a função `read_csv()`:
 ```python
-# Remover linhas com valores faltantes
 try:
-    df_limpo = df.dropna()
-except AttributeError:
-    print("O dataset não foi carregado corretamente. Verifique o código anterior e tente novamente.")
-
-# Visualizar o dataset limpo
-if 'df_limpo' in locals():
-    print(df_limpo.head())
+    df = pd.read_csv('dados.csv')
+except FileNotFoundError:
+    print("Arquivo não encontrado. Verifique o caminho do arquivo.")
+except pd.errors.EmptyDataError:
+    print("Arquivo vazio. Verifique se o arquivo contém dados.")
+except pd.errors.ParserError:
+    print("Erro ao parsear o arquivo. Verifique se o arquivo está no formato correto.")
 ```
-
-### Criação de Visualizações
-Utilize a biblioteca Matplotlib para criar visualizações dos dados:
+### Manipulação de Dados
+Manipule os dados utilizando as funções da biblioteca Pandas, como `groupby()` e `pivot_table()`:
+```python
+try:
+    df_grouped = df.groupby('categoria')['valor'].sum()
+    df_pivot = df.pivot_table(index='categoria', columns='subcategoria', values='valor')
+except KeyError:
+    print("Coluna não encontrada. Verifique se a coluna existe no DataFrame.")
+except ValueError:
+    print("Valor inválido. Verifique se o valor está no formato correto.")
+```
+### Análise Estatística
+Realize análise estatística utilizando as funções da biblioteca Pandas, como `mean()` e `std()`:
+```python
+try:
+    media = df['valor'].mean()
+    desvio_padrao = df['valor'].std()
+except TypeError:
+    print("Tipo de dado inválido. Verifique se o dado é numérico.")
+except ValueError:
+    print("Valor inválido. Verifique se o valor está no formato correto.")
+```
+### Visualização de Dados
+Visualize os dados utilizando bibliotecas como Matplotlib e Seaborn:
 ```python
 import matplotlib.pyplot as plt
+import seaborn as sns
 
-# Criar um gráfico de barras
 try:
-    plt.bar(df['coluna_x'], df['coluna_y'])
+    sns.set()
+    plt.figure(figsize=(10,6))
+    sns.barplot(x='categoria', y='valor', data=df)
     plt.show()
-except KeyError:
-    print("As colunas especificadas não existem no dataset. Verifique os nomes das colunas e tente novamente.")
-except TypeError:
-    print("Os dados não são do tipo correto para a criação do gráfico. Verifique os tipos de dados e tente novamente.")
+except ImportError:
+    print("Biblioteca não instalada. Verifique se a biblioteca está instalada.")
+except ValueError:
+    print("Valor inválido. Verifique se o valor está no formato correto.")
 ```
 
 ## Validação
-Para validar seu conhecimento, pratique com diferentes datasets e tarefas de análise de dados. Alguns pontos a considerar:
-- A capacidade de ler e manipular datasets de diferentes formatos.
-- A habilidade de identificar e tratar valores faltantes ou inconsistentes.
-- A capacidade de criar visualizações significativas a partir dos dados.
+Para validar os resultados, é necessário verificar se os dados foram carregados e manipulados corretamente. Além disso, é importante verificar se as análises estatísticas e visualizações de dados estão corretas e significativas. Isso pode ser feito utilizando técnicas de validação, como:
+* Verificar se os dados estão dentro do esperado
+* Verificar se as análises estatísticas estão corretas
+* Verificar se as visualizações de dados estão claras e significativas
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-Além dos exemplos de tratamento de exceções apresentados nos passos anteriores, é importante considerar os seguintes edge cases:
-- **Arquivos com formato inválido**: Certifique-se de que o arquivo esteja no formato correto (por exemplo, CSV, Excel, etc.) antes de tentar carregá-lo.
-- **Valores faltantes ou inconsistentes**: Implemente estratégias para lidar com valores faltantes ou inconsistentes, como remoção, substituição por média ou mediana, etc.
-- **Tipos de dados inconsistentes**: Verifique os tipos de dados das colunas e certifique-se de que sejam consistentes com as operações que você deseja realizar.
-- **Tamanho do dataset**: Considere o tamanho do dataset e ajuste as operações de acordo, pois datasets muito grandes podem exigir mais recursos computacionais.
-- **Segurança**: Certifique-se de que os dados sejam tratados de forma segura, especialmente se forem sensíveis ou confidenciais. Utilize práticas de segurança adequadas, como criptografia e anonimização, se necessário.
+Além dos exemplos acima, é importante considerar os seguintes casos:
+* **Dados faltantes**: Verifique se os dados estão completos e não contêm valores nulos ou faltantes.
+* **Dados inconsistentes**: Verifique se os dados estão consistentes e não contêm valores inválidos ou inconsistentes.
+* **Erros de tipo**: Verifique se os dados estão no tipo correto e não contêm erros de tipo.
+* **Erros de formato**: Verifique se os dados estão no formato correto e não contêm erros de formato.
+* **Limites de dados**: Verifique se os dados estão dentro dos limites esperados e não contêm valores extremos ou anormais.
+* **Segurança**: Verifique se os dados estão seguros e não contêm informações sensíveis ou confidenciais.
+* **Desempenho**: Verifique se os dados estão sendo processados de forma eficiente e não contêm gargalos ou bottlenecks.
