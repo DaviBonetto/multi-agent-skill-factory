@@ -25,26 +25,18 @@ Task tool (superpowers:code-reviewer):
 
 **Code reviewer returns:** Strengths, Issues (Critical/Important/Minor), Assessment
 
- Tratamento de Exceções e Edge Cases
-- Verificar se o código lida corretamente com exceções e erros, incluindo:
-  - Tratamento de erros de entrada e saída
-  - Manipulação de exceções personalizadas
-  - Uso de blocos try-catch para evitar crashes inesperados
-- Verificar se o código considera casos de bordo, incluindo:
-  - Entradas inválidas ou malformadas
-  - Condições de limite (por exemplo, arrays vazios, valores nulos)
-  - Comportamento em diferentes ambientes e configurações
-- Verificar se o código segue as melhores práticas de segurança, incluindo:
-  - Validação de entrada de usuário
-  - Proteção contra injeção de código
-  - Uso de criptografia e autenticação adequadas
-
-**Segurança**
-- Verificar se o código segue as políticas de segurança da empresa
-- Verificar se o código utiliza bibliotecas e frameworks seguras e atualizadas
-- Verificar se o código armazena dados sensíveis de forma segura
-
-**Code reviewer returns:** Strengths, Issues (Critical/Important/Minor), Assessment, incluindo:
-- Relatório de segurança
-- Relatório de tratamento de exceções e edge cases
-- Recomendações para melhorias de segurança e código
+⚠️ Tratamento de Exceções e Edge Cases
+- Verifique se o código lida corretamente com entradas inválidas ou inexperadas.
+- Verifique se o código tem tratamento de erros adequado para situações como:
+  - Erros de rede
+  - Erros de banco de dados
+  - Erros de permissão
+- Verifique se o código tem mecanismos de segurança para prevenir ataques comuns, como:
+  - Injeção de SQL
+  - Cross-Site Scripting (XSS)
+  - Cross-Site Request Forgery (CSRF)
+- Verifique se o código segue as melhores práticas de segurança, como:
+  - Uso de criptografia adequada
+  - Uso de autenticação e autorização adequadas
+  - Uso de validação de entrada de dados
+- Verifique se o código tem testes unitários e de integração adequados para garantir a robustez e a segurança do código.
