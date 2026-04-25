@@ -36,35 +36,30 @@ These tools are available in Gemini CLI but have no Claude Code equivalent:
 
 ### Erros de sintaxe
 
-*   Verifique se os comandos estão corretamente formatados e se os parâmetros estão sendo passados corretamente.
-*   Em caso de erros de sintaxe, o sistema deve retornar uma mensagem de erro clara e concisa, indicando a linha e a coluna onde o erro ocorreu.
+*   Certifique-se de que os comandos sejam escritos corretamente, pois erros de sintaxe podem causar falhas inesperadas.
+*   Utilize a documentação oficial do Gemini CLI para verificar a sintaxe correta de cada comando.
 
-### Erros de permissão
+### Arquivos e diretórios
 
-*   Verifique se o usuário tem permissão para executar o comando solicitado.
-*   Em caso de erros de permissão, o sistema deve retornar uma mensagem de erro indicando que o usuário não tem permissão para executar o comando.
+*   Ao trabalhar com arquivos e diretórios, certifique-se de que os caminhos sejam corretos e que o usuário tenha permissão para ler ou escrever nos locais especificados.
+*   Utilize o comando `list_directory` para verificar a existência de arquivos e diretórios antes de tentar acessá-los.
 
-### Erros de arquivo
+### Entrada de usuário
 
-*   Verifique se o arquivo solicitado existe e se é possível ler ou escrever nele.
-*   Em caso de erros de arquivo, o sistema deve retornar uma mensagem de erro indicando o problema com o arquivo.
+*   Ao utilizar o comando `ask_user`, certifique-se de que a entrada do usuário seja validada e tratada corretamente para evitar erros.
+*   Utilize try-except para capturar e tratar exceções que possam ocorrer durante a entrada de usuário.
 
-### Erros de rede
+### Gerenciamento de tarefas
 
-*   Verifique se a conexão de rede está estável e se é possível se comunicar com o servidor remoto.
-*   Em caso de erros de rede, o sistema deve retornar uma mensagem de erro indicando o problema com a conexão de rede.
+*   Ao utilizar o comando `tracker_create_task`, certifique-se de que as tarefas sejam criadas e gerenciadas corretamente para evitar conflitos ou perda de dados.
+*   Utilize o comando `tracker_create_task` com parâmetros adequados para garantir que as tarefas sejam criadas com as informações necessárias.
 
-### Edge Cases
+### Modo de plano
 
-*   **Comandos vazios**: Verifique se o comando está vazio ou se não contém parâmetros suficientes.
-*   **Parâmetros inválidos**: Verifique se os parâmetros passados são válidos e se atendem aos requisitos do comando.
-*   **Comandos desconhecidos**: Verifique se o comando solicitado é válido e se está registrado no sistema.
-*   **Sobrecarga de trabalho**: Verifique se o sistema está sobrecarregado e se é possível executar o comando solicitado.
+*   Ao utilizar os comandos `enter_plan_mode` e `exit_plan_mode`, certifique-se de que o modo de plano seja utilizado corretamente para evitar alterações indesejadas.
+*   Utilize o comando `enter_plan_mode` antes de fazer alterações e `exit_plan_mode` após concluir as alterações para garantir que as mudanças sejam feitas de forma controlada.
 
-### Segurança
+### Exceções gerais
 
-*   **Validação de entrada**: Verifique se os dados de entrada são válidos e se atendem aos requisitos de segurança.
-*   **Autenticação**: Verifique se o usuário está autenticado e se tem permissão para executar o comando solicitado.
-*   **Criptografia**: Verifique se os dados sensíveis estão criptografados e se são transmitidos de forma segura.
-
-Ao tratar esses casos, é fundamental garantir que o sistema seja robusto, seguro e fácil de usar, proporcionando uma experiência satisfatória para os usuários.
+*   Utilize try-except para capturar e tratar exceções gerais que possam ocorrer durante a execução dos comandos.
+*   Certifique-se de que as exceções sejam tratadas de forma apropriada para evitar que o programa falhe inesperadamente.
