@@ -47,11 +47,11 @@ Task tool (general-purpose):
 
     ⚠️ Tratamento de Exceções e Edge Cases
 
-    - **Planos vazios ou inexistentes:** Verifique se o arquivo do plano está vazio ou se não existe. Se isso ocorrer, retorne um status de "Issues Found" com uma descrição do problema.
-    - **Especificações inconsistentes:** Se a especificação for inconsistente ou contiver erros, retorne um status de "Issues Found" com uma descrição do problema.
-    - **Tarefas mal definidas:** Se as tarefas estiverem mal definidas ou forem vagas, retorne um status de "Issues Found" com uma descrição do problema.
-    - **Conflitos de dependência:** Verifique se há conflitos de dependência entre as tarefas. Se isso ocorrer, retorne um status de "Issues Found" com uma descrição do problema.
-    - **Problemas de segurança:** Verifique se o plano contém problemas de segurança, como a falta de autenticação ou autorização. Se isso ocorrer, retorne um status de "Issues Found" com uma descrição do problema.
-    - **Limitações de recursos:** Verifique se o plano está dentro das limitações de recursos, como tempo, orçamento e pessoal. Se isso não ocorrer, retorne um status de "Issues Found" com uma descrição do problema.
+    *   **Planos vazios ou inexistentes:** Verifique se o plano está vazio ou se o arquivo não existe. Se for o caso, retorne um erro com a mensagem "Plano vazio ou inexistente".
+    *   **Especificações ausentes:** Verifique se as especificações estão disponíveis. Se não estiverem, retorne um erro com a mensagem "Especificações ausentes".
+    *   **Tarefas mal definidas:** Verifique se as tarefas estão bem definidas e se os passos são claros. Se não estiverem, retorne um erro com a mensagem "Tarefas mal definidas".
+    *   **Inconsistências:** Verifique se há inconsistências no plano, como tarefas contraditórias ou passos que não seguem a lógica. Se encontrar alguma inconsistência, retorne um erro com a mensagem "Inconsistência no plano".
+    *   **Segurança:** Verifique se o plano contém informações sensíveis ou se há riscos de segurança. Se encontrar algum risco, retorne um erro com a mensagem "Risco de segurança detectado".
+    *   **Erros de formatação:** Verifique se o plano está formatado corretamente e se não há erros de sintaxe. Se encontrar algum erro, retorne um erro com a mensagem "Erro de formatação".
 
 **Reviewer returns:** Status, Issues (if any), Recommendations
