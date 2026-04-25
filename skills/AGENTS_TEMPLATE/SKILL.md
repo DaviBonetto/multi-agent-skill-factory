@@ -17,12 +17,18 @@ Essas habilidades são:
 Os caminhos referenciados dentro das pastas de habilidades são relativos àquela habilidade. Por exemplo, o script `scripts/example.py` do hf-datasets seria referenciado como `hf-datasets/scripts/example.py`.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-### Tratamento de Erros
-- **Erro de Arquivo Não Encontrado:** Se o arquivo "SKILL.md" não for encontrado no diretório especificado, uma mensagem de erro será exibida informando o caminho incorreto.
-- **Erro de Permissão:** Se o usuário não tiver permissão para acessar o diretório ou o arquivo "SKILL.md", uma mensagem de erro de permissão será exibida.
-- **Erro de Formatação:** Se o arquivo "SKILL.md" estiver com formatação inválida, uma mensagem de erro será exibida com instruções para corrigir a formatação.
+### Erros de Arquivo
+- **Arquivo "SKILL.md" não encontrado:** Verifique se o arquivo "SKILL.md" existe no diretório especificado e se o caminho está correto.
+- **Conteúdo inválido no arquivo "SKILL.md":** Certifique-se de que o arquivo "SKILL.md" contém informações válidas e está formatado corretamente.
+
+### Erros de Intenção do Usuário
+- **Nenhuma habilidade corresponde à intenção do usuário:** Se nenhuma habilidade corresponder à intenção do usuário, exiba uma mensagem informando que não há habilidades disponíveis para atender à sua necessidade.
+- **Múltiplas habilidades correspondem à intenção do usuário:** Se várias habilidades corresponderem à intenção do usuário, forneça uma lista de opções para que o usuário possa selecionar a mais apropriada.
+
+### Segurança
+- **Validação de Entrada:** Sempre valide as entradas do usuário para evitar ataques de injeção de código ou outros tipos de ataques mal-intencionados.
+- **Autenticação e Autorização:** Implemente mecanismos de autenticação e autorização para garantir que apenas usuários autorizados possam acessar e utilizar as habilidades.
 
 ### Edge Cases
-- **Habilidades com Nomes Idênticos:** Se houver habilidades com nomes idênticos em diretórios diferentes, o sistema priorizará a habilidade listada primeiro.
-- **Caminhos Relativos:** Se os caminhos relativos dentro das pastas de habilidades forem mal definidos, o sistema tentará resolver o caminho absoluto com base no diretório atual.
-- **Descrições de Habilidades Vazias:** Se a descrição de uma habilidade estiver vazia, o sistema exibirá uma mensagem indicando que a descrição não foi fornecida.
+- **Caminhos Relativos:** Certifique-se de que os caminhos relativos sejam resolvidos corretamente, especialmente quando há links ou referências a outros arquivos dentro das pastas de habilidades.
+- **Caracteres Especiais:** Trate caracteres especiais nos nomes de habilidades ou descrições para evitar problemas de interpretação ou exibição.
