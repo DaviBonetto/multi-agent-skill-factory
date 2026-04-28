@@ -47,11 +47,15 @@ Task tool (general-purpose):
 
     ⚠️ Tratamento de Exceções e Edge Cases
 
-    *   **Planos vazios ou inexistentes:** Verifique se o plano está vazio ou se o arquivo não existe. Se for o caso, retorne um erro com a mensagem "Plano vazio ou inexistente".
-    *   **Especificações ausentes:** Verifique se as especificações estão disponíveis. Se não estiverem, retorne um erro com a mensagem "Especificações ausentes".
-    *   **Tarefas mal definidas:** Verifique se as tarefas estão bem definidas e se os passos são claros. Se não estiverem, retorne um erro com a mensagem "Tarefas mal definidas".
-    *   **Inconsistências:** Verifique se há inconsistências no plano, como tarefas contraditórias ou passos que não seguem a lógica. Se encontrar alguma inconsistência, retorne um erro com a mensagem "Inconsistência no plano".
-    *   **Segurança:** Verifique se o plano contém informações sensíveis ou se há riscos de segurança. Se encontrar algum risco, retorne um erro com a mensagem "Risco de segurança detectado".
-    *   **Erros de formatação:** Verifique se o plano está formatado corretamente e se não há erros de sintaxe. Se encontrar algum erro, retorne um erro com a mensagem "Erro de formatação".
+    *   **Planos incompletos:** Se o plano estiver incompleto, verifique se há uma explicação clara sobre o que falta e como será completado.
+    *   **Especificações conflitantes:** Se as especificações forem conflitantes, verifique se há uma explicação clara sobre como resolver o conflito.
+    *   **Tarefas vagas:** Se as tarefas forem vagas, verifique se há uma explicação clara sobre como torná-las mais específicas.
+    *   **Dependências não declaradas:** Se houver dependências não declaradas, verifique se há uma explicação clara sobre como elas afetam o plano.
+    *   **Riscos não identificados:** Se houver riscos não identificados, verifique se há uma explicação clara sobre como mitigá-los.
+    *   **Plano não escalável:** Se o plano não for escalável, verifique se há uma explicação clara sobre como torná-lo mais escalável.
+    *   **Falta de documentação:** Se houver falta de documentação, verifique se há uma explicação clara sobre como documentar o plano.
+    *   **Segurança:** Verifique se o plano atende aos requisitos de segurança e se há medidas para mitigar riscos de segurança.
+    *   **Privacidade:** Verifique se o plano atende aos requisitos de privacidade e se há medidas para proteger a privacidade dos dados.
+    *   **Conformidade:** Verifique se o plano atende às normas e regulamentações aplicáveis e se há medidas para garantir a conformidade.
 
 **Reviewer returns:** Status, Issues (if any), Recommendations
