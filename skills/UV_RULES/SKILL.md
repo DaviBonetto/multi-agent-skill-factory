@@ -8,31 +8,27 @@ Use estas regras para scripts Python neste repositório:
    # dependencies = ["requests"]
    # ///
    ```
-   Certifique-se de que as dependências estejam atualizadas e compatíveis com a versão do Python utilizada.
-
 2. **Execute scripts com `uv run`**, não `python ...`:
    ```bash
-   uv run scripts/my_script.py --help
+   uv run scripts/meu_script.py --help
    ```
-   Isso garante que as dependências sejam carregadas corretamente e que o script seja executado no ambiente adequado.
-
-3. **Não documente `pip install -r requirements.txt` para scripts do repositório** a menos que haja um motivo específico para isso. O uso normal não deve exigir instalação manual.
-   Se houver uma dependência que não possa ser instalada via `uv run`, forneça instruções claras sobre como instalá-la manualmente.
-
+3. **Não documente `pip install -r requirements.txt` para scripts do repositório** a menos que haja um motivo de fallback específico. O uso normal não deve exigir instalação manual.
 4. **Não instrua os usuários a `source .venv/bin/activate` para scripts de habilidade.** `uv run` deve ser suficiente.
-   Se o usuário precisar ativar um ambiente virtual, forneça instruções sobre como fazer isso de forma segura.
+5. **Se um exemplo de instalação manual for realmente necessário, use `uv pip install ...`**, não `uv add`, a menos que você esteja editando intencionalmente um ambiente gerenciado pelo projeto.
+6. **Para trabalhos UV do Hugging Face, use `hf jobs uv run ...`**.
 
-5. **Se um exemplo de instalação manual for necessário, use `uv pip install ...`**, não `uv add`, a menos que você esteja editando intencionalmente um ambiente gerenciado pelo projeto.
-   Isso ajuda a manter a consistência e a segurança das dependências.
+## ⚠️ Tratamento de Exceções e Edge Cases
+### Tratamento de Erros
+- **Erros de Dependência**: Certifique-se de que todas as dependências sejam especificadas corretamente no arquivo de configuração do script. Em caso de erros de dependência, verifique se as versões estão corretas e se as dependências estão instaladas.
+- **Erros de Execução**: Se um script falhar durante a execução, verifique os logs para identificar a causa raiz do problema. Isso pode incluir erros de sintaxe, problemas de permissão ou falhas de rede.
+- **Erros de Ambiente**: Certifique-se de que o ambiente esteja configurado corretamente antes de executar os scripts. Isso inclui a versão do Python e a presença de dependências necessárias.
 
-6. **Para Hugging Face Jobs UV workloads, use `hf jobs uv run ...`**.
-   Certifique-se de que as configurações do Hugging Face estejam corretas e que o workload esteja devidamente configurado.
+### Edge Cases
+- **Compatibilidade de Versão**: Certifique-se de que os scripts sejam compatíveis com diferentes versões do Python e de dependências. Isso pode ser alcançado especificando faixas de versão para as dependências.
+- **Problemas de Permissão**: Em ambientes com restrições de permissão, certifique-se de que os scripts tenham as permissões necessárias para executar. Isso pode incluir a execução de comandos com privilégios elevados ou a configuração de permissões de arquivo.
+- **Limitações de Recursos**: Em ambientes com recursos limitados (como memória ou CPU), otimize os scripts para usar recursos de forma eficiente. Isso pode incluir a otimização de algoritmos ou a utilização de técnicas de processamento em lotes.
 
-⚠️ Tratamento de Exceções e Edge Cases
-----------------------------------------
-
-* **Tratamento de erros**: Certifique-se de que todos os scripts tenham tratamento de erros adequado, incluindo try-except blocks e logging de erros.
-* **Edge cases**: Considere os casos de bordo para cada script, como entrada inválida, falta de dependências ou problemas de permissão.
-* **Dependências conflitantes**: Se houver dependências conflitantes, forneça instruções sobre como resolvê-las.
-* **Problemas de compatibilidade**: Se houver problemas de compatibilidade entre diferentes versões de dependências ou Python, forneça instruções sobre como resolvê-los.
-* **Segurança**: Certifique-se de que todos os scripts sigam as práticas de segurança recomendadas, incluindo a validação de entrada e a proteção contra injeção de código.
+### Segurança
+- **Validação de Entrada**: Sempre valide as entradas dos usuários para evitar injeção de comandos ou outros ataques de segurança.
+- **Uso de Dependências Seguras**: Certifique-se de que todas as dependências sejam obtidas de fontes seguras e confiáveis.
+- **Manuseio de Dados Sensíveis**: Se os scripts lidam com dados sensíveis, certifique-se de que eles sejam manuseados de forma segura, usando técnicas como criptografia e anonimização.
