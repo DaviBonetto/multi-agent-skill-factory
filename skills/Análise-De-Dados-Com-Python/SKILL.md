@@ -1,85 +1,60 @@
 ---
 name: Análise de Dados com Python
-description: Ensina técnicas de análise de dados utilizando bibliotecas Python como Pandas e NumPy
+description: Esta skill ensina como analisar e visualizar dados com Python e bibliotecas como Pandas e Matplotlib
 ---
-
 ## Objetivo
-O objetivo deste guia é fornecer uma introdução prática à análise de dados utilizando Python, focando nas bibliotecas Pandas e NumPy. Ao final, os leitores deverão ser capazes de realizar análises básicas de dados e entender como aplicar essas habilidades em projetos reais.
+O objetivo desta skill é ensinar como analisar e visualizar dados utilizando a linguagem de programação Python e as bibliotecas Pandas e Matplotlib. Ao final desta skill, você será capaz de carregar, manipular e visualizar dados de forma eficiente.
 
 ## Pré-requisitos
-- Conhecimento básico de programação em Python.
-- Instalação do Python e de um ambiente de desenvolvimento (como PyCharm, VSCode, etc.).
-- Instalação das bibliotecas Pandas e NumPy via pip (`pip install pandas numpy`).
+Para seguir esta skill, você deve ter conhecimento básico em programação Python e ter as bibliotecas Pandas e Matplotlib instaladas. Além disso, é recomendado ter um ambiente de desenvolvimento Python configurado, como o Jupyter Notebook ou o PyCharm.
 
 ## Passo a Passo Técnico / Exemplos de Código
-### Instalação das Bibliotecas
-Primeiramente, certifique-se de que as bibliotecas necessárias estão instaladas. Você pode instalar Pandas e NumPy usando pip:
-```bash
-pip install pandas numpy
-```
-
-### Importação das Bibliotecas
-No início de qualquer script Python que utilize essas bibliotecas, você deve importá-las:
+### Carregando Bibliotecas
+Para começar, você precisa carregar as bibliotecas necessárias. Isso pode ser feito da seguinte maneira:
 ```python
 import pandas as pd
-import numpy as np
+import matplotlib.pyplot as plt
 ```
-
-### Carregamento de Dados
-Um exemplo de como carregar um conjunto de dados usando Pandas:
+### Carregando Dados
+Em seguida, você pode carregar os dados utilizando a biblioteca Pandas. Por exemplo, se você tiver um arquivo CSV chamado `dados.csv`, você pode carregá-lo da seguinte maneira:
 ```python
-# Carregando dados de um arquivo CSV
 try:
-    dados = pd.read_csv('nome_do_arquivo.csv')
+    dados = pd.read_csv('dados.csv')
 except FileNotFoundError:
-    print("Arquivo não encontrado. Verifique o caminho e o nome do arquivo.")
+    print("Arquivo não encontrado. Certifique-se de que o arquivo está no diretório correto.")
 except pd.errors.EmptyDataError:
-    print("Arquivo vazio. Verifique se o arquivo contém dados.")
+    print("Arquivo vazio. Certifique-se de que o arquivo contém dados.")
 except pd.errors.ParserError:
-    print("Erro ao parsear o arquivo. Verifique a formatação do arquivo.")
+    print("Erro ao parsear o arquivo. Certifique-se de que o arquivo está no formato correto.")
 ```
-
-### Análise de Dados
-Aqui está um exemplo básico de análise de dados, incluindo a visualização dos primeiros registros do conjunto de dados e a obtenção de informações estatísticas:
+### Visualizando Dados
+Com os dados carregados, você pode visualizá-los utilizando a biblioteca Matplotlib. Por exemplo, você pode criar um gráfico de barras da seguinte maneira:
 ```python
-# Visualizando os primeiros registros
 try:
-    print(dados.head())
-except AttributeError:
-    print("O conjunto de dados está vazio ou não é um DataFrame.")
-
-# Obtenção de informações estatísticas
-try:
-    print(dados.describe())
-except AttributeError:
-    print("O conjunto de dados está vazio ou não é um DataFrame.")
+    plt.bar(dados['coluna_x'], dados['coluna_y'])
+    plt.xlabel('Coluna X')
+    plt.ylabel('Coluna Y')
+    plt.title('Gráfico de Barras')
+    plt.show()
+except KeyError:
+    print("Coluna não encontrada. Certifique-se de que as colunas existem nos dados.")
+except TypeError:
+    print("Tipo de dado incorreto. Certifique-se de que os dados são do tipo correto para o gráfico.")
 ```
-
 ## Validação
-Para validar o conhecimento adquirido, tente realizar as seguintes tarefas:
-- Carregue um conjunto de dados de um arquivo CSV.
-- Mostre os primeiros 10 registros do conjunto de dados.
-- Calcule e mostre a média, mediana e desvio padrão de uma coluna numérica específica do conjunto de dados.
-- Utilize a biblioteca NumPy para realizar operações básicas com arrays, como somar dois arrays ou calcular a média de um array.
+Para validar o seu conhecimento, você pode tentar carregar e visualizar um conjunto de dados próprio. Certifique-se de que os dados estejam no formato correto e que as bibliotecas estejam instaladas e carregadas corretamente. Além disso, você pode tentar criar diferentes tipos de gráficos, como gráficos de linha ou gráficos de pizza, para visualizar os dados de diferentes maneiras.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-Além dos exemplos acima, é importante considerar os seguintes casos:
-- **Arquivos com formato inválido**: Verifique se o arquivo está no formato correto (CSV, JSON, etc.) antes de tentar carregá-lo.
-- **Dados faltantes**: Verifique se o conjunto de dados contém valores faltantes e trate-os de acordo com a necessidade (por exemplo, removendo-os ou substituindo-os por valores padrão).
-- **Tipos de dados inconsistentes**: Verifique se as colunas do conjunto de dados têm tipos de dados consistentes e trate-os de acordo com a necessidade (por exemplo, convertendo todos os valores para um tipo de dados específico).
-- **Operações com arrays**: Ao realizar operações com arrays usando a biblioteca NumPy, certifique-se de que os arrays tenham o mesmo tamanho e tipo de dados para evitar erros.
+Além dos exemplos acima, é importante considerar outros casos de exceção e edge cases, como:
+* Dados faltantes ou nulos
+* Dados com tipos de dados inconsistentes
+* Dados com valores extremos ou outliers
+* Erros de sintaxe ou semântica nos comandos Python
+* Erros de instalação ou configuração das bibliotecas
+* Erros de permissão ou acesso aos arquivos ou recursos
 
-Exemplo de como tratar dados faltantes:
-```python
-# Verificando se o conjunto de dados contém valores faltantes
-if dados.isnull().values.any():
-    print("O conjunto de dados contém valores faltantes.")
-    # Removendo os valores faltantes
-    dados.dropna(inplace=True)
-```
-
-Exemplo de como converter todos os valores de uma coluna para um tipo de dados específico:
-```python
-# Convertendo todos os valores da coluna 'idade' para int
-dados['idade'] = pd.to_numeric(dados['idade'], errors='coerce')
-```
+Para lidar com esses casos, você pode usar técnicas como:
+* Verificar a existência e o tipo de dados antes de processá-los
+* Usar try-except para capturar e tratar exceções
+* Usar funções de validação e limpeza de dados para garantir a consistência e a qualidade dos dados
+* Usar técnicas de visualização de dados para identificar e explorar padrões e anomalias nos dados.
