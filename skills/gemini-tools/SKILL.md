@@ -1,5 +1,4 @@
 # Gemini CLI Tool Mapping
-
 Skills use Claude Code tool names. When you encounter these in a skill, use your platform equivalent:
 
 | Skill references | Gemini CLI equivalent |
@@ -17,11 +16,9 @@ Skills use Claude Code tool names. When you encounter these in a skill, use your
 | `Task` tool (dispatch subagent) | No equivalent — Gemini CLI does not support subagents |
 
 ## No subagent support
-
 Gemini CLI has no equivalent to Claude Code's `Task` tool. Skills that rely on subagent dispatch (`subagent-driven-development`, `dispatching-parallel-agents`) will fall back to single-session execution via `executing-plans`.
 
 ## Additional Gemini CLI tools
-
 These tools are available in Gemini CLI but have no Claude Code equivalent:
 
 | Tool | Purpose |
@@ -33,33 +30,14 @@ These tools are available in Gemini CLI but have no Claude Code equivalent:
 | `enter_plan_mode` / `exit_plan_mode` | Switch to read-only research mode before making changes |
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
+Para garantir a robustez e segurança da skill, é importante considerar os seguintes casos de exceção e edge cases:
 
-### Erros de sintaxe
+* **Erros de sintaxe**: Verificar se os comandos Gemini CLI estão corretamente formatados e se os parâmetros estão sendo passados corretamente.
+* **Arquivos não encontrados**: Tratar o caso de arquivos não encontrados durante a execução de comandos como `read_file` e `write_file`.
+* **Permissões de acesso**: Verificar se o usuário tem permissão para executar os comandos Gemini CLI, especialmente aqueles que envolvem a criação ou edição de arquivos.
+* **Comandos inválidos**: Tratar o caso de comandos inválidos ou desconhecidos, como `Task` tool, que não tem equivalente no Gemini CLI.
+* **Exceções de execução**: Tratar exceções que ocorrem durante a execução de comandos, como erros de sintaxe ou falta de recursos.
+* **Limites de recursos**: Verificar se os recursos disponíveis são suficientes para executar os comandos Gemini CLI, como memória e processamento.
+* **Segurança**: Verificar se os comandos Gemini CLI estão sendo executados de forma segura, sem exposição de informações sensíveis ou vulnerabilidades de segurança.
 
-*   Certifique-se de que os comandos sejam escritos corretamente, pois erros de sintaxe podem causar falhas inesperadas.
-*   Utilize a documentação oficial do Gemini CLI para verificar a sintaxe correta de cada comando.
-
-### Arquivos e diretórios
-
-*   Ao trabalhar com arquivos e diretórios, certifique-se de que os caminhos sejam corretos e que o usuário tenha permissão para ler ou escrever nos locais especificados.
-*   Utilize o comando `list_directory` para verificar a existência de arquivos e diretórios antes de tentar acessá-los.
-
-### Entrada de usuário
-
-*   Ao utilizar o comando `ask_user`, certifique-se de que a entrada do usuário seja validada e tratada corretamente para evitar erros.
-*   Utilize try-except para capturar e tratar exceções que possam ocorrer durante a entrada de usuário.
-
-### Gerenciamento de tarefas
-
-*   Ao utilizar o comando `tracker_create_task`, certifique-se de que as tarefas sejam criadas e gerenciadas corretamente para evitar conflitos ou perda de dados.
-*   Utilize o comando `tracker_create_task` com parâmetros adequados para garantir que as tarefas sejam criadas com as informações necessárias.
-
-### Modo de plano
-
-*   Ao utilizar os comandos `enter_plan_mode` e `exit_plan_mode`, certifique-se de que o modo de plano seja utilizado corretamente para evitar alterações indesejadas.
-*   Utilize o comando `enter_plan_mode` antes de fazer alterações e `exit_plan_mode` após concluir as alterações para garantir que as mudanças sejam feitas de forma controlada.
-
-### Exceções gerais
-
-*   Utilize try-except para capturar e tratar exceções gerais que possam ocorrer durante a execução dos comandos.
-*   Certifique-se de que as exceções sejam tratadas de forma apropriada para evitar que o programa falhe inesperadamente.
+Além disso, é importante implementar mecanismos de logging e monitoramento para detectar e tratar exceções e edge cases de forma eficaz. Isso pode incluir a implementação de try-catch blocks, logging de erros e exceções, e notificação de administradores em caso de erros críticos.
