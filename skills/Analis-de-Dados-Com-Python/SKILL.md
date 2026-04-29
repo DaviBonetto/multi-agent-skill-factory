@@ -1,30 +1,24 @@
 ---
-name: Analis-de-Dados-Com-Python
-description: Ensina como utilizar a linguagem Python para analisar e visualizar dados, utilizando bibliotecas como Pandas e Matplotlib
+name: Análise de Dados com Python
+description: Esta habilidade ensina como utilizar a linguagem Python para análise de dados, incluindo manipulação de dados, visualização e aprendizado de máquina.
 ---
 
 ## Objetivo
-O objetivo deste guia é ensinar como utilizar a linguagem Python para analisar e visualizar dados, utilizando bibliotecas como Pandas e Matplotlib. Com isso, você será capaz de extrair insights valiosos de conjuntos de dados e apresentá-los de forma clara e eficaz.
+O objetivo desta habilidade é capacitar os participantes a utilizar a linguagem Python para análise de dados, abordando tópicos como manipulação de dados, visualização e aprendizado de máquina, proporcionando uma base sólida para trabalhos de análise de dados.
 
 ## Pré-requisitos
-Para seguir este guia, você deve ter conhecimento básico em programação Python e ter instalado as bibliotecas necessárias, incluindo:
-* Python 3.x
-* Pandas
-* Matplotlib
-* NumPy
+Para aproveitar ao máximo esta habilidade, é recomendado que os participantes tenham:
+- Conhecimento básico em programação
+- Experiência com a linguagem Python
+- Familiaridade com bibliotecas como Pandas, NumPy e Matplotlib
 
 ## Passo a Passo Técnico / Exemplos de Código
-### Instalação das Bibliotecas
-Para instalar as bibliotecas necessárias, execute o seguinte comando no terminal:
-```bash
-pip install pandas matplotlib numpy
-```
-### Carregamento de Dados
-Para carregar os dados, você pode usar a biblioteca Pandas. Por exemplo:
+### Manipulação de Dados
+A manipulação de dados é uma etapa crucial na análise. Utilizaremos a biblioteca Pandas para carregar e manipular dados.
 ```python
 import pandas as pd
 
-# Carregue os dados de um arquivo CSV
+# Carregar dados
 try:
     df = pd.read_csv('dados.csv')
 except FileNotFoundError:
@@ -32,90 +26,71 @@ except FileNotFoundError:
 except pd.errors.EmptyDataError:
     print("Arquivo vazio. Verifique se o arquivo contém dados.")
 except pd.errors.ParserError:
-    print("Erro ao parser o arquivo. Verifique se o arquivo está no formato correto.")
-```
-### Análise de Dados
-Com os dados carregados, você pode começar a analisá-los. Por exemplo, você pode calcular a média e o desvio padrão de uma coluna:
-```python
-# Calcule a média e o desvio padrão de uma coluna
-try:
-    media = df['coluna'].mean()
-    desvio_padrao = df['coluna'].std()
+    print("Erro ao parsear o arquivo. Verifique o formato do arquivo.")
 
-    print(f'Média: {media}')
-    print(f'Desvio Padrão: {desvio_padrao}')
-except KeyError:
-    print("Coluna não encontrada. Verifique se a coluna existe no dataframe.")
-except TypeError:
-    print("Tipo de dado incorreto. Verifique se a coluna contém apenas números.")
+# Visualizar as primeiras linhas do dataframe
+if not df.empty:
+    print(df.head())
+else:
+    print("DataFrame vazio.")
 ```
-### Visualização de Dados
-Para visualizar os dados, você pode usar a biblioteca Matplotlib. Por exemplo:
+
+### Visualização
+A visualização dos dados é essencial para entender as tendências e padrões. Utilizaremos a biblioteca Matplotlib para criar gráficos.
 ```python
 import matplotlib.pyplot as plt
 
-# Crie um gráfico de barras
+# Criar um gráfico de barras
 try:
-    plt.bar(df['coluna_x'], df['coluna_y'])
-    plt.xlabel('Coluna X')
-    plt.ylabel('Coluna Y')
+    plt.bar(df['categoria'], df['valor'])
+    plt.xlabel('Categoria')
+    plt.ylabel('Valor')
     plt.title('Gráfico de Barras')
     plt.show()
 except KeyError:
-    print("Coluna não encontrada. Verifique se a coluna existe no dataframe.")
+    print("Coluna não encontrada. Verifique as colunas do DataFrame.")
 except TypeError:
-    print("Tipo de dado incorreto. Verifique se a coluna contém apenas números.")
+    print("Tipo de dado inválido. Verifique o tipo de dado das colunas.")
 ```
+
+### Aprendizado de Máquina
+O aprendizado de máquina permite prever resultados com base em dados históricos. Utilizaremos a biblioteca Scikit-learn para treinar um modelo.
+```python
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+
+# Dividir dados em treino e teste
+try:
+    X_train, X_test, y_train, y_test = train_test_split(df[['feature1', 'feature2']], df['target'], test_size=0.2, random_state=42)
+except ValueError:
+    print("Erro ao dividir os dados. Verifique se as colunas existem e se os dados são suficientes.")
+
+# Treinar o modelo
+try:
+    modelo = LinearRegression()
+    modelo.fit(X_train, y_train)
+except ValueError:
+    print("Erro ao treinar o modelo. Verifique se os dados são válidos e se o modelo é adequado.")
+```
+
 ## Validação
-Para validar os resultados, você pode comparar os valores calculados com os valores esperados. Por exemplo:
+Para validar os resultados, é importante testar o modelo com dados de teste e avaliar seu desempenho utilizando métricas como acurácia, precisão e recall.
 ```python
-# Compare os valores calculados com os valores esperados
+from sklearn.metrics import accuracy_score
+
+# Prever resultados com o modelo treinado
 try:
-    if media == 10.5 and desvio_padrao == 2.1:
-        print('Os valores estão corretos!')
-    else:
-        print('Os valores estão incorretos!')
-except NameError:
-    print("Variáveis não definidas. Verifique se as variáveis foram calculadas anteriormente.")
+    previsoes = modelo.predict(X_test)
+    acuracia = accuracy_score(y_test, previsoes)
+    print(f'Acurácia: {acuracia:.2f}')
+except ValueError:
+    print("Erro ao prever os resultados. Verifique se o modelo está treinado e se os dados são válidos.")
 ```
+
 ## ⚠️ Tratamento de Exceções e Edge Cases
-Além dos exemplos acima, é importante tratar outros casos de exceção e edge cases, como:
-* Tratar erros de tipo de dado, como quando uma coluna contém valores não numéricos.
-* Tratar erros de formato de arquivo, como quando um arquivo CSV está no formato incorreto.
-* Tratar erros de permissão, como quando o programa não tem permissão para ler ou escrever um arquivo.
-* Tratar erros de memória, como quando o programa não tem memória suficiente para carregar um arquivo grande.
-* Tratar erros de rede, como quando o programa não consegue se conectar a um servidor remoto.
-
-Exemplos de como tratar esses casos:
-```python
-# Tratar erros de tipo de dado
-try:
-    media = df['coluna'].mean()
-except TypeError:
-    print("Tipo de dado incorreto. Verifique se a coluna contém apenas números.")
-
-# Tratar erros de formato de arquivo
-try:
-    df = pd.read_csv('dados.csv')
-except pd.errors.ParserError:
-    print("Erro ao parser o arquivo. Verifique se o arquivo está no formato correto.")
-
-# Tratar erros de permissão
-try:
-    with open('dados.csv', 'r') as arquivo:
-        df = pd.read_csv(arquivo)
-except PermissionError:
-    print("Erro de permissão. Verifique se o programa tem permissão para ler o arquivo.")
-
-# Tratar erros de memória
-try:
-    df = pd.read_csv('dados.csv')
-except MemoryError:
-    print("Erro de memória. Verifique se o programa tem memória suficiente para carregar o arquivo.")
-
-# Tratar erros de rede
-try:
-    df = pd.read_csv('https://example.com/dados.csv')
-except requests.exceptions.RequestException:
-    print("Erro de rede. Verifique se o programa consegue se conectar ao servidor remoto.")
-```
+É importante tratar as exceções e edge cases para garantir que o código seja robusto e funcione corretamente em diferentes situações. Alguns exemplos de tratamento de exceções e edge cases incluem:
+- Verificar se os arquivos existem e se os dados são válidos antes de carregá-los.
+- Tratar exceções ao parsear os dados, como erros de formato ou dados vazios.
+- Verificar se as colunas existem e se os dados são do tipo correto antes de criar gráficos ou treinar modelos.
+- Tratar exceções ao treinar o modelo, como erros de divisão de dados ou modelos inválidos.
+- Verificar se os resultados são válidos e se as métricas são calculadas corretamente.
