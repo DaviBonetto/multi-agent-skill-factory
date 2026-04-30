@@ -1,99 +1,74 @@
 ---
 name: Implantacao de Kubernetes
-description: Automatiza a implantação de clusters Kubernetes para ambientes de produção
+description: Esta habilidade ensina como implantar e gerenciar clusters Kubernetes para orquestrar contêineres em ambientes de produção.
 ---
 
-## Objetivo
-O objetivo deste guia é fornecer uma abordagem estruturada para a implantação de clusters Kubernetes em ambientes de produção, visando automatizar o processo e garantir a escalabilidade e a confiabilidade das aplicações.
+## 1. Objetivo
+O objetivo desta habilidade é capacitar os participantes a implantar e gerenciar clusters Kubernetes de forma eficaz, garantindo a orquestração de contêineres em ambientes de produção de maneira escalável e segura.
 
-## Pré-requisitos
-Antes de iniciar a implantação, é necessário atender aos seguintes pré-requisitos:
-- Ter conhecimento avançado em Kubernetes e seus componentes
-- Ter acesso a uma infraestrutura de nuvem ou local com recursos suficientes para a implantação do cluster
-- Ter instalado o cliente `kubectl` e configurado para se comunicar com o cluster
+## 2. Pré-requisitos
+Para aproveitar ao máximo esta habilidade, é recomendado que os participantes tenham conhecimento básico em:
+- Contêineres (Docker, por exemplo)
+- Redes de computadores
+- Sistemas operacionais Linux
+- Conceitos básicos de orquestração de contêineres
 
-## Passo a Passo Técnico / Exemplos de Código
-### Etapa 1: Criação do Cluster
-Para criar um cluster Kubernetes, você pode utilizar a ferramenta `kubeadm`. Primeiro, é necessário instalar o `kubeadm` no nó master:
+## 3. Passo a Passo Técnico / Exemplos de Código
+### 3.1. Instalação do Kubernetes
+Para iniciar a implantação do Kubernetes, é necessário instalar o kubeadm, que é a ferramenta oficial para inicializar um cluster Kubernetes. Isso pode ser feito no Ubuntu/Debian com o seguinte comando:
 ```bash
-sudo apt-get update && sudo apt-get install -y kubeadm
+sudo apt-get update && sudo apt-get install -y apt-transport-https curl
+curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+sudo cat <<EOF | sudo tee /etc/apt/sources.list.d/kubernetes.list
+deb https://apt.kubernetes.io/ kubernetes-xenial main
+EOF
+sudo apt-get update
+sudo apt-get install -y kubeadm
 ```
-Em seguida, initialize o cluster com o comando:
+
+### 3.2. Inicialização do Cluster
+Após a instalação do kubeadm, o próximo passo é inicializar o cluster Kubernetes com o seguinte comando:
 ```bash
 sudo kubeadm init --pod-network-cidr 10.244.0.0/16
 ```
-### Etapa 2: Configuração do Pod Network
-Para configurar o pod network, você pode utilizar a ferramenta `flannel`. Primeiro, é necessário criar um arquivo de configuração para o `flannel`:
-```yml
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: flannel-config
-  namespace: kube-system
-data:
-  cni-conf.json: |
-    {
-      "name": "flannel",
-      "type": "flannel",
-      "delegate": {
-        "isDefaultGateway": true
-      }
-    }
-```
-Em seguida, aplique a configuração com o comando:
+
+### 3.3. Configuração do Ambiente
+Para utilizar o cluster, é necessário configurar o ambiente do usuário para acessar o cluster. Isso pode ser feito copiando o arquivo de configuração do administrador para o diretório do usuário:
 ```bash
-kubectl apply -f flannel-config.yaml
-```
-### Etapa 3: Deploy de Aplicativos
-Para deployar aplicativos no cluster, você pode utilizar a ferramenta `kubectl`. Primeiro, é necessário criar um arquivo de definição para o aplicativo:
-```yml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: meu-aplicativo
-spec:
-  replicas: 3
-  selector:
-    matchLabels:
-      app: meu-aplicativo
-  template:
-    metadata:
-      labels:
-        app: meu-aplicativo
-    spec:
-      containers:
-      - name: meu-aplicativo
-        image: meu-aplicativo:latest
-        ports:
-        - containerPort: 80
-```
-Em seguida, aplique a definição com o comando:
-```bash
-kubectl apply -f meu-aplicativo.yaml
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
 ```
 
-## Validação
-Para validar a implantação do cluster, você pode utilizar a ferramenta `kubectl`. Primeiro, é necessário verificar se o cluster está funcionando corretamente:
+## 4. Validação
+Para validar se o cluster está funcionando corretamente, você pode utilizar o comando `kubectl get nodes` para verificar se os nodes do cluster estão disponíveis:
 ```bash
 kubectl get nodes
 ```
-Em seguida, verifique se o aplicativo está funcionando corretamente:
+Este comando deve retornar uma lista com os nodes do cluster, indicando seu status e capacidade. Além disso, você pode implantar um exemplo de aplicativo, como um pod Nginx, para testar a funcionalidade do cluster:
 ```bash
-kubectl get deployments
+kubectl create deployment nginx --image=nginx
+kubectl expose deployment nginx --type=NodePort --port=80
 ```
-Se tudo estiver funcionando corretamente, o cluster estará pronto para uso em produção.
+Agora, você pode acessar o aplicativo Nginx através do endereço IP do node e da porta exposta. Isso confirma que o cluster Kubernetes está implantado e funcionando corretamente.
 
-## ⚠️ Tratamento de Exceções e Edge Cases
-### Erros de Instalação do Kubeadm
-Se ocorrer um erro durante a instalação do `kubeadm`, verifique se o nó master tem acesso à internet e se o repositório de pacotes está atualizado. Além disso, certifique-se de que o `kubeadm` esteja instalado corretamente e que o comando `kubeadm init` seja executado com privilégios de superusuário.
+## 5. ⚠️ Tratamento de Exceções e Edge Cases
+### 5.1. Erros de Instalação
+- **Erro de conexão com o repositório**: Verifique se a conexão com a internet está estável e se o repositório está acessível.
+- **Erro de permissão**: Verifique se o usuário tem permissão para instalar pacotes e executar comandos com privilégios de root.
 
-### Erros de Configuração do Flannel
-Se ocorrer um erro durante a configuração do `flannel`, verifique se o arquivo de configuração está correto e se o comando `kubectl apply` foi executado com sucesso. Além disso, certifique-se de que o `flannel` esteja instalado corretamente e que o pod network esteja configurado corretamente.
+### 5.2. Erros de Inicialização do Cluster
+- **Erro de inicialização do cluster**: Verifique se o kubeadm está instalado corretamente e se o comando de inicialização está sendo executado com privilégios de root.
+- **Erro de configuração de rede**: Verifique se a configuração de rede está correta e se o cluster está acessível.
 
-### Erros de Deploy de Aplicativos
-Se ocorrer um erro durante o deploy de aplicativos, verifique se o arquivo de definição do aplicativo está correto e se o comando `kubectl apply` foi executado com sucesso. Além disso, certifique-se de que o aplicativo esteja configurado corretamente e que o container esteja funcionando corretamente.
+### 5.3. Erros de Configuração do Ambiente
+- **Erro de permissão ao copiar arquivo de configuração**: Verifique se o usuário tem permissão para copiar o arquivo de configuração do administrador.
+- **Erro de configuração do ambiente**: Verifique se o ambiente do usuário está configurado corretamente para acessar o cluster.
 
-### Edge Cases
-* **Nó master não acessível**: Se o nó master não estiver acessível, o cluster não poderá ser criado ou configurado. Nesse caso, é necessário verificar a conectividade do nó master e garantir que ele esteja funcionando corretamente.
-* **Recursos insuficientes**: Se os recursos do nó master forem insuficientes, o cluster pode não ser criado ou configurado corretamente. Nesse caso, é necessário verificar os recursos do nó master e garantir que eles sejam suficientes para a implantação do cluster.
-* **Problemas de segurança**: Se ocorrerem problemas de segurança durante a implantação do cluster, é necessário verificar as configurações de segurança do cluster e garantir que elas estejam corretas e atualizadas. Além disso, é necessário verificar as permissões de acesso ao cluster e garantir que elas estejam configuradas corretamente.
+### 5.4. Erros de Validação
+- **Erro ao executar comando `kubectl get nodes`**: Verifique se o comando está sendo executado com privilégios de root e se o cluster está acessível.
+- **Erro ao implantar aplicativo**: Verifique se o aplicativo está sendo implantado corretamente e se o cluster está funcionando corretamente.
+
+### 5.5. Segurança
+- **Autenticação e autorização**: Verifique se a autenticação e autorização estão configuradas corretamente para garantir a segurança do cluster.
+- **Atualizações e patches**: Verifique se o cluster está atualizado e se os patches de segurança estão sendo aplicados regularmente.
