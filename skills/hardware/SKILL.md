@@ -26,24 +26,19 @@ llama-cli -m model.gguf -t 8 -p "Hello"
 make LLAMA_OPENBLAS=1
 ```
 ### ⚠️ Tratamento de Exceções e Edge Cases
-#### Erros Comuns
-*   **Erro de Compilação**: Se ocorrer um erro durante a compilação, verifique se as dependências necessárias estão instaladas e se o código fonte está atualizado.
-*   **Erro de Execução**: Se ocorrer um erro durante a execução, verifique se os parâmetros passados estão corretos e se o modelo está carregado corretamente.
-#### Edge Cases
-*   **Modelos Muito Grandes**: Para modelos muito grandes, é recomendável utilizar a opção `--tensor-split` para dividir o modelo em múltiplas GPUs.
-*   **Recursos de Hardware Insuficientes**: Se os recursos de hardware forem insuficientes, é recomendável reduzir o tamanho do modelo ou utilizar um hardware mais potente.
-*   **Problemas de Segurança**: Se ocorrerem problemas de segurança, como vazamento de dados ou acesso não autorizado, é recomendável verificar as permissões de acesso e implementar medidas de segurança adicionais.
-#### Tratamento de Exceções
-*   **Try-Except**: Utilize blocos try-except para capturar e tratar exceções que possam ocorrer durante a execução do código.
-*   **Logging**: Utilize logging para registrar erros e exceções, permitindo uma análise mais detalhada dos problemas ocorridos.
-Exemplo de tratamento de exceções:
-```python
-try:
-    # Código que pode gerar exceções
-    llama_cli = llama_cli.LlamaCLI()
-    llama_cli.run()
-except Exception as e:
-    # Tratamento da exceção
-    print(f"Erro: {e}")
-    logging.error(f"Erro: {e}")
-```
+Antes de executar os comandos, certifique-se de que:
+- O ambiente de desenvolvimento esteja configurado corretamente.
+- As dependências necessárias estejam instaladas.
+- Os modelos de linguagem estejam baixados e configurados corretamente.
+**Tratamento de Erros Comuns:**
+*   **Erro de Compilação:** Verifique se o código fonte está atualizado e se as dependências estão corretas.
+*   **Erro de Execução:** Verifique se o modelo de linguagem está carregado corretamente e se os parâmetros de entrada estão válidos.
+*   **Erro de Memória Insuficiente:** Aumente a quantidade de memória disponível ou otimize o uso de memória do modelo.
+**Edge Cases:**
+*   **Modelos de Linguagem Grandes:** Para modelos de linguagem muito grandes, considere usar a opção de split de tensor para distribuir o processamento entre múltiplas GPUs.
+*   **Entradas de Tamanho Variável:** Ajuste o parâmetro `-ngl` de acordo com o tamanho da entrada para garantir o processamento eficiente.
+*   **Ambientes de Desenvolvimento Diferentes:** Ajuste as configurações de compilação e execução de acordo com as especificações do ambiente de desenvolvimento.
+**Segurança:**
+*   **Atualize Regularmente:** Mantenha o código fonte e as dependências atualizados para garantir a segurança e evitar vulnerabilidades conhecidas.
+*   **Use Autenticação:** Quando necessário, use autenticação para proteger o acesso aos modelos de linguagem e aos dados de treinamento.
+*   **Monitore o Uso de Recursos:** Monitore o uso de recursos do sistema para detectar possíveis abusos ou ataques de força bruta.
