@@ -47,13 +47,13 @@ Task tool (general-purpose):
 
     ⚠️ Tratamento de Exceções e Edge Cases
 
-    *   **Planos incompletos:** Se o plano estiver incompleto, verifique se os principais componentes estão presentes, como introdução, objetivos, escopo, cronograma e recursos necessários. Se algum desses componentes estiver faltando, registre como um problema.
-    *   **Conflitos de especificação:** Se houver conflitos entre a especificação e o plano, tente resolver esses conflitos antes de aprovar o plano. Se não for possível resolver, registre como um problema.
-    *   **Tarefas mal definidas:** Se as tarefas estiverem mal definidas ou forem vagas, tente esclarecer com o autor do plano. Se não for possível esclarecer, registre como um problema.
-    *   **Dependências não declaradas:** Verifique se há dependências não declaradas entre as tarefas. Se houver, registre como um problema.
-    *   **Riscos não identificados:** Verifique se há riscos não identificados no plano. Se houver, registre como um problema.
-    *   **Recursos insuficientes:** Verifique se os recursos necessários para executar o plano estão disponíveis. Se não estiverem, registre como um problema.
-    *   **Prazos irrealistas:** Verifique se os prazos estabelecidos no plano são realistas. Se não forem, registre como um problema.
-    *   **Comunicação inadequada:** Verifique se a comunicação entre as equipes e stakeholders está clara e eficaz. Se não estiver, registre como um problema.
+    * **Planos incompletos:** Se o plano estiver incompleto, verifique se há uma justificativa clara para a falta de informações. Se não houver, registre como um problema.
+    * **Especificações conflitantes:** Se as especificações forem conflitantes, verifique se há uma explicação clara para a discrepância. Se não houver, registre como um problema.
+    * **Tarefas ambíguas:** Se as tarefas forem ambíguas, verifique se há uma explicação clara para a ambiguidade. Se não houver, registre como um problema.
+    * **Erros de formatação:** Se houver erros de formatação no plano, verifique se eles afetam a compreensão do plano. Se sim, registre como um problema.
+    * **Falta de recursos:** Se o plano exigir recursos que não estão disponíveis, verifique se há uma justificativa clara para a falta de recursos. Se não houver, registre como um problema.
+    * **Dependências não declaradas:** Se o plano depende de outros planos ou recursos que não estão declarados, verifique se há uma explicação clara para a dependência. Se não houver, registre como um problema.
+    * **Riscos não identificados:** Se o plano não identificar riscos potenciais, verifique se há uma justificativa clara para a falta de identificação. Se não houver, registre como um problema.
+    * **Mudanças não documentadas:** Se houver mudanças no plano que não foram documentadas, verifique se há uma explicação clara para a mudança. Se não houver, registre como um problema.
 
 **Reviewer returns:** Status, Issues (if any), Recommendations
