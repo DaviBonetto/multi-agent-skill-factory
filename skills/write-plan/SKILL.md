@@ -1,30 +1,18 @@
----
+# Skill: Deprecated Command
+## Descrição
 description: "Deprecated - use the superpowers:writing-plans skill instead"
----
-# Introdução
-Tell your human partner that this command is deprecated and will be removed in the next major release. They should ask you to use the "superpowers writing-plans" skill instead.
 
-# Motivo da Depreciação
-A depreciação desta habilidade se deve à existência de uma habilidade mais avançada e eficaz, a "superpowers writing-plans", que oferece funcionalidades mais robustas e atualizadas.
+Tell your human partner that this command is deprecated and will be removed in the next major release. They should ask you to use the "superpowers writing-plans" skill instead, providing a clear example of its usage, such as: "Para criar um plano de ação, use o comando 'superpowers writing-plans --create-plan <nome_do_plano>'".
 
-# Instruções de Uso
-Para utilizar a habilidade recomendada, siga os passos abaixo:
-1. Peça ao seu parceiro humano para utilizar a habilidade "superpowers writing-plans".
-2. Verifique se a habilidade está atualizada e configurada corretamente.
-3. Se houver alguma dúvida ou problema, consulte a documentação oficial da habilidade.
+## Uso
+Para usar esta skill, basta informar ao seu parceiro humano que o comando está depreciado e será removido na próxima versão major. Eles devem solicitar que você use a skill "superpowers writing-plans" em vez disso, seguindo as instruções de uso adequadas.
 
-# ⚠️ Tratamento de Exceções e Edge Cases
-### Casos de Uso Inválidos
-- **Uso indevido da habilidade**: se o usuário tentar utilizar a habilidade deprecada, mostre uma mensagem de erro clara e concisa, indicando que a habilidade está deprecada e recomendando a utilização da habilidade "superpowers writing-plans".
-- **Parâmetros inválidos**: se o usuário fornecer parâmetros inválidos, mostre uma mensagem de erro com informações sobre os parâmetros válidos e como utilizá-los corretamente.
-- **Problemas de permissão**: se o usuário não tiver permissão para utilizar a habilidade, mostre uma mensagem de erro com informações sobre como obter as permissões necessárias.
+## ⚠️ Tratamento de Exceções e Edge Cases
+### Casos de Uso Especiais
+- **Comando Desconhecido**: Se o usuário informar um comando desconhecido, a skill deve retornar uma mensagem de erro clara e concisa, indicando que o comando não é válido e sugerindo a utilização da skill "superpowers writing-plans", por exemplo: "Comando desconhecido. Por favor, use 'superpowers writing-plans --help' para obter ajuda".
+- **Parâmetros Inválidos**: Se o usuário fornecer parâmetros inválidos, a skill deve tratar esses parâmetros como se não tivessem sido fornecidos e retornar uma mensagem de erro amigável, orientando o usuário sobre como usar a skill corretamente, como: "Parâmetros inválidos. Use 'superpowers writing-plans --create-plan <nome_do_plano>' para criar um novo plano".
+- **Erros de Sistema**: Em caso de erros de sistema, a skill deve registrar o erro e retornar uma mensagem de erro genérica ao usuário, informando que ocorreu um problema interno e que a equipe de suporte será notificada, por exemplo: "Ocorreu um erro interno. Por favor, tente novamente mais tarde ou contate o suporte".
+- **Limitações de Segurança**: A skill deve ser projetada com segurança em mente, garantindo que não haja exposição de informações sensíveis ou vulnerabilidades que possam ser exploradas por ataques mal-intencionados, como utilizar criptografia para proteger dados sensíveis e manter atualizações regulares de segurança.
 
-### Tratamento de Erros
-- **Erros de sintaxe**: se houver erros de sintaxe na entrada do usuário, mostre uma mensagem de erro clara e concisa, indicando o erro e como corrigi-lo.
-- **Erros de execução**: se houver erros durante a execução da habilidade, mostre uma mensagem de erro com informações sobre o erro e como resolvê-lo.
-- **Erros de rede**: se houver erros de rede durante a comunicação com a habilidade, mostre uma mensagem de erro com informações sobre o erro e como resolvê-lo.
-
-### Segurança
-- **Validação de entrada**: valide a entrada do usuário para evitar ataques de injeção de código ou outros tipos de ataques maliciosos.
-- **Autenticação e autorização**: verifique a autenticação e autorização do usuário antes de permitir a utilização da habilidade.
-- **Criptografia**: utilize criptografia para proteger as comunicações entre o usuário e a habilidade.
+## Segurança
+A segurança é uma prioridade para esta skill. Todas as interações com a skill devem ser realizadas via canais seguros, como HTTPS, e os dados dos usuários devem ser tratados de acordo com as políticas de privacidade e segurança da plataforma, como o GDPR ou a LGPD, dependendo da região. Além disso, a skill deve ser regularmente atualizada para refletir as melhores práticas de segurança e proteger contra novas ameaças, como atualizações de bibliotecas e frameworks.
