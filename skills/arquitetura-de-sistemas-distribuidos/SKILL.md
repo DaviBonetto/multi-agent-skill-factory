@@ -1,90 +1,90 @@
 ---
-name: Arquitetura de Sistemas Distribuídos
-description: Ensina como projetar sistemas distribuídos escaláveis e tolerantes a falhas
+name: Arquitetura de Sistemas Distribuídos com ZooKeeper
+description: Ensina como projetar e implementar sistemas distribuídos escaláveis utilizando ZooKeeper
 ---
 
 ## Objetivo
-O objetivo deste guia é fornecer uma visão geral abrangente sobre como projetar sistemas distribuídos escaláveis e tolerantes a falhas. Isso inclui entender os princípios fundamentais da arquitetura de sistemas distribuídos, aprender a identificar os requisitos do sistema e aplicar técnicas de escalabilidade e tolerância a falhas.
+O objetivo deste guia é fornecer uma visão geral de como projetar e implementar sistemas distribuídos escaláveis utilizando ZooKeeper. Isso inclui entender como ZooKeeper pode ser utilizado para gerenciar configurações, coordenar processos e garantir a consistência dos dados em um sistema distribuído.
 
 ## Pré-requisitos
-Para seguir este guia, é recomendado que você tenha conhecimento prévio em:
-- Programação em linguagens como Java, Python ou C++
-- Conceitos básicos de redes de computadores
-- Experiência com sistemas operacionais
-- Conhecimento básico de banco de dados
+Antes de começar, é necessário ter conhecimento básico sobre:
+- Sistemas distribuídos e seus desafios
+- Conceitos de coordenação e gerenciamento de configurações
+- Noções básicas de ZooKeeper e sua arquitetura
+
+Além disso, é recomendado ter experiência prática com linguagens de programação como Java ou Python, pois essas serão utilizadas nos exemplos de código.
 
 ## Passo a Passo Técnico / Exemplos de Código
-### 1. Definição do Sistema
-Primeiro, é crucial definir o sistema que você deseja desenvolver. Isso inclui identificar os requisitos funcionais e não funcionais do sistema, como o tipo de dados que serão processados, a quantidade de usuários esperada e os requisitos de segurança.
+### Instalação do ZooKeeper
+Para começar a trabalhar com ZooKeeper, é necessário instalá-lo. Isso pode ser feito baixando o pacote apropriado para o seu sistema operacional a partir do site oficial do Apache ZooKeeper.
 
-### 2. Escolha da Arquitetura
-Existem várias arquiteturas de sistemas distribuídos, incluindo:
-- Arquitetura Cliente-Servidor
-- Arquitetura Peer-to-Peer
-- Arquitetura de Microsserviços
+```bash
+# Exemplo de instalação no Ubuntu/Debian
+sudo apt-get update
+sudo apt-get install zookeeper
+```
 
-Cada uma dessas arquiteturas tem suas vantagens e desvantagens. A escolha da arquitetura certa depende dos requisitos do sistema.
+### Configuração do ZooKeeper
+Após a instalação, é necessário configurar o ZooKeeper. Isso inclui definir o arquivo de configuração `zoo.cfg` com as configurações desejadas, como o endereço IP e a porta de escuta.
 
-### 3. Implementação
-Após escolher a arquitetura, você pode começar a implementar o sistema. Isso pode incluir escrever código em uma linguagem de programação, configurar servidores e bancos de dados, e testar o sistema.
+```properties
+# Exemplo de configuração em zoo.cfg
+clientPort=2181
+dataDir=/var/lib/zookeeper
+```
 
-```python
-# Exemplo de código em Python para um sistema distribuído simples
-import socket
+### Implementação de um Sistema Distribuído com ZooKeeper
+Agora que o ZooKeeper está configurado, podemos implementar um sistema distribuído que utilize o ZooKeeper para gerenciar configurações e coordenar processos. Isso pode ser feito utilizando uma linguagem de programação como Java ou Python.
 
-def start_server():
-    # Cria um socket
-    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    
-    # Define o endereço e a porta do servidor
-    server_address = ('localhost', 12345)
-    
-    # Liga o servidor ao endereço e porta
-    server_socket.bind(server_address)
-    
-    # Escuta por conexões
-    server_socket.listen(1)
-    
-    print("Servidor iniciado. Aguardando conexões...")
-    
-    while True:
-        try:
-            # Aceita uma conexão
-            connection, client_address = server_socket.accept()
-            
-            # Recebe dados do cliente
-            data = connection.recv(1024)
-            
-            # Processa os dados
-            print("Recebeu:", data.decode())
-            
-            # Envia uma resposta de volta ao cliente
-            connection.sendall(data)
-            
-            # Fecha a conexão
-            connection.close()
-        except socket.error as e:
-            print("Erro de socket:", e)
-        except Exception as e:
-            print("Erro geral:", e)
+```java
+// Exemplo de código em Java para conectar ao ZooKeeper
+import org.apache.zookeeper.ZooKeeper;
 
-start_server()
+public class ZooKeeperClient {
+    public static void main(String[] args) throws Exception {
+        ZooKeeper zk = new ZooKeeper("localhost:2181", 10000, null);
+        System.out.println("Conectado ao ZooKeeper");
+    }
+}
 ```
 
 ## Validação
-Para validar o sistema, você deve testá-lo completamente para garantir que ele atende aos requisitos definidos e funciona corretamente. Isso pode incluir testes unitários, testes de integração e testes de desempenho. Além disso, é importante realizar testes de escalabilidade e tolerância a falhas para garantir que o sistema possa lidar com aumentos na carga e falhas nos componentes.
+Para validar a implementação do sistema distribuído com ZooKeeper, é necessário testar as funcionalidades de coordenação e gerenciamento de configurações. Isso pode ser feito criando testes unitários e de integração que verifiquem se o sistema está funcionando corretamente.
+
+Além disso, é importante monitorar o desempenho do sistema e ajustar as configurações do ZooKeeper conforme necessário para garantir a escalabilidade e a confiabilidade do sistema.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-É fundamental considerar os casos de bordo e exceções que podem ocorrer em um sistema distribuído. Isso inclui:
-- **Conexões perdidas**: O que acontece quando uma conexão entre dois nodos do sistema é perdida?
-- **Falhas de nodo**: Como o sistema lida com a falha de um nodo?
-- **Sobrecarga**: O que acontece quando o sistema está sobrecarregado com muitas requisições?
-- **Dados inconsistentes**: Como o sistema lida com dados inconsistentes ou corrompidos?
-- **Segurança**: Como o sistema protege contra ataques cibernéticos e violações de dados?
+É fundamental tratar as exceções e considerar os casos de bordo (edge cases) para garantir a robustez e a confiabilidade do sistema. Aqui estão alguns exemplos:
 
-Para lidar com esses casos, é importante implementar mecanismos de:
-- **Detecção de falhas**: Para detectar quando um nodo ou conexão falha.
-- **Recuperação de falhas**: Para recuperar de falhas e garantir a continuidade do sistema.
-- **Balanceamento de carga**: Para distribuir a carga de trabalho entre os nodos do sistema.
-- **Validação de dados**: Para garantir a consistência e integridade dos dados.
-- **Segurança**: Para proteger o sistema contra ataques cibernéticos e violações de dados.
+*   **Conexão ao ZooKeeper**: é importante tratar as exceções de conexão ao ZooKeeper, como timeouts ou erros de rede.
+*   **Gerenciamento de configurações**: é necessário tratar as exceções de gerenciamento de configurações, como erros de leitura ou escrita de configurações.
+*   **Coordenação de processos**: é fundamental tratar as exceções de coordenação de processos, como erros de sincronização ou deadlocks.
+
+Exemplo de tratamento de exceções em Java:
+```java
+try {
+    ZooKeeper zk = new ZooKeeper("localhost:2181", 10000, null);
+    System.out.println("Conectado ao ZooKeeper");
+} catch (Exception e) {
+    System.out.println("Erro ao conectar ao ZooKeeper: " + e.getMessage());
+}
+```
+
+Além disso, é importante considerar os casos de bordo, como:
+
+*   **Falha de um nó**: é necessário tratar a falha de um nó no sistema distribuído e garantir que o sistema continue funcionando corretamente.
+*   **Sobrecarga de tráfego**: é fundamental tratar a sobrecarga de tráfego no sistema e garantir que o sistema continue funcionando corretamente.
+
+Exemplo de tratamento de casos de bordo em Java:
+```java
+try {
+    // Código para tratar a falha de um nó
+} catch (Exception e) {
+    System.out.println("Erro ao tratar a falha de um nó: " + e.getMessage());
+}
+
+try {
+    // Código para tratar a sobrecarga de tráfego
+} catch (Exception e) {
+    System.out.println("Erro ao tratar a sobrecarga de tráfego: " + e.getMessage());
+}
