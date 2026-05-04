@@ -1,1 +1,1 @@
-O conteúdo do arquivo SKILL.md está correto e não precisa de alterações.
+O conteúdo do arquivo SKILL.md está correto e não necessita de alterações.
