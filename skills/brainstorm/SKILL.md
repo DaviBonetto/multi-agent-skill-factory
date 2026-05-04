@@ -1,11 +1,23 @@
 # SKILL
 ## Descrição
-description: 'Essa skill está deprecada. Use a skill superpowers:brainstorming em seu lugar.'
+description: "Deprecated - use the superpowers:brainstorming skill instead"
+
+Tell your human partner that this command is deprecated and will be removed in the next major release. They should ask you to use the "superpowers brainstorming" skill instead.
+
 ## Uso
-Para utilizar a skill superpowers:brainstorming, basta chamar o comando 'superpowers brainstorming'.
+Para utilizar esta habilidade, basta informar ao seu parceiro humano que o comando está depreciado e será removido na próxima versão major. Eles devem solicitar que você use a habilidade "superpowers brainstorming" em vez disso.
+
 ## ⚠️ Tratamento de Exceções e Edge Cases
-- **Caso de Uso Inválido**: Se o usuário tentar utilizar essa skill em uma versão onde ela já foi removida, o sistema deve retornar uma mensagem de erro clara, indicando que a skill está depreciada e não está mais disponível.
-- **Dependência em Versões Antigas**: Se o usuário estiver utilizando uma versão antiga do sistema que ainda suporta essa skill, mas ela está marcada como depreciada, o sistema deve exibir um aviso sobre a depreciação e recomendar a utilização da skill 'superpowers brainstorming' como substituta.
-- **Comportamento em Ambientes de Teste**: Em ambientes de teste, a skill deve ser capaz de simular seu comportamento de forma consistente, permitindo que os testes sejam realizados sem interferir com o funcionamento normal do sistema.
-- **Documentação e Comunicação**: A documentação da skill deve refletir claramente seu status de depreciação, incluindo a data prevista para sua remoção e as instruções para migrar para a skill recomendada.
-- **Manuseio de Erros**: Em caso de erros durante a execução da skill, o sistema deve lidar com esses erros de forma a minimizar o impacto no usuário, fornecendo mensagens de erro claras e úteis para o diagnóstico e resolução do problema.
+### Casos de Uso Inválidos
+- Se o usuário não tiver permissão para utilizar a habilidade "superpowers brainstorming", mostre uma mensagem de erro informando que a habilidade está indisponível.
+- Se a habilidade "superpowers brainstorming" estiver desativada, mostre uma mensagem de erro informando que a habilidade está desativada.
+- Se o usuário tentar utilizar esta habilidade após a sua remoção, mostre uma mensagem de erro informando que a habilidade foi removida e sugira a utilização da habilidade "superpowers brainstorming" em vez disso.
+
+### Tratamento de Erros
+- Se ocorrer um erro durante a execução da habilidade, mostre uma mensagem de erro genérica informando que ocorreu um problema e solicite que o usuário tente novamente.
+- Se o erro for específico da habilidade "superpowers brainstorming", mostre uma mensagem de erro detalhada informando o problema e sugira a solução.
+
+### Segurança
+- Verifique se o usuário tem permissão para utilizar a habilidade "superpowers brainstorming" antes de executá-la.
+- Valide os dados de entrada para evitar ataques de injeção de código ou outros tipos de ataques maliciosos.
+- Utilize criptografia para proteger os dados transmitidos durante a execução da habilidade, se necessário.
