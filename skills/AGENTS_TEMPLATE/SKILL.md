@@ -6,7 +6,7 @@ Essas habilidades são:
  - {{name}} -> "{{path}}/SKILL.md"
 {{/skills}}
 
-**Importante**: Você DEVE ler o arquivo SKILL.md sempre que a descrição da habilidade corresponder à intenção do usuário ou possa ajudar a realizar sua tarefa.
+**IMPORTANTE**: Você DEVE ler o arquivo SKILL.md sempre que a descrição da habilidade corresponder à intenção do usuário ou possa ajudar a realizar sua tarefa.
 
 ## Habilidades Disponíveis
 {{#skills}}
@@ -17,11 +17,9 @@ Essas habilidades são:
 Os caminhos referenciados dentro das pastas de habilidades são relativos àquela habilidade. Por exemplo, o script `scripts/example.py` do hf-datasets seria referenciado como `hf-datasets/scripts/example.py`.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-Para garantir a robustez e a segurança das habilidades, é fundamental considerar os seguintes casos:
-* **Erro de Arquivo Não Encontrado**: Se o arquivo "SKILL.md" não for encontrado no diretório especificado, uma mensagem de erro clara deve ser exibida, indicando o caminho incorreto ou a falta do arquivo.
-* **Descrição de Habilidade Vazia**: Se a descrição de uma habilidade estiver vazia, uma mensagem deve ser exibida, solicitando que o usuário forneça uma descrição válida.
-* **Caminho Relativo Inválido**: Se um caminho relativo dentro de uma pasta de habilidade for inválido, uma exceção deve ser lançada, indicando o erro e solicitando a correção do caminho.
-* **Acesso Não Autorizado**: Se um usuário tentar acessar uma habilidade sem as permissões necessárias, uma mensagem de erro de acesso negado deve ser exibida, explicando as razões e as etapas necessárias para obter as permissões adequadas.
-* **Erros de Parseamento**: Em caso de erros durante o parseamento do arquivo "SKILL.md" ou de outros arquivos relacionados, mensagens de erro claras e específicas devem ser exibidas, ajudando o usuário a identificar e corrigir o problema.
-
-Ao considerar esses casos e implementar o tratamento de exceções e edge cases apropriado, as habilidades podem ser tornadas mais robustas, seguras e fáceis de usar.
+No tratamento de habilidades, é fundamental considerar casos de exceção e edge cases para garantir a robustez e a segurança do sistema. Aqui estão alguns pontos a serem considerados:
+* **Erros de Leitura de Arquivos**: Em caso de falha na leitura do arquivo SKILL.md, o sistema deve ser capaz de lidar com o erro de forma adequada, seja exibindo uma mensagem de erro ao usuário ou registrando o erro para análise posterior.
+* **Habilidades Não Encontradas**: Se uma habilidade solicitada não for encontrada, o sistema deve retornar uma resposta clara indicando que a habilidade não está disponível, em vez de simplesmente falhar ou retornar uma resposta vaga.
+* **Caminhos Relativos**: Ao lidar com caminhos relativos dentro das pastas de habilidades, é crucial garantir que o sistema possa resolver esses caminhos corretamente, independentemente do local onde a habilidade é executada.
+* **Segurança**: Todas as entradas de usuário e dados provenientes de fontes externas devem ser validados e sanitizados para prevenir ataques de injeção de código ou outros tipos de vulnerabilidades de segurança.
+* **Limites de Recursos**: O sistema deve ser capaz de lidar com limites de recursos, como memória ou tempo de execução, para evitar que uma habilidade consuma todos os recursos disponíveis e cause problemas de desempenho ou falhas no sistema.
