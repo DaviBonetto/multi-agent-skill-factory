@@ -1,67 +1,152 @@
 ---
-name: Desenvolvimento de Aplicativos Móvel
-description: Ensina desenvolver aplicativos móveis com tecnologias modernas
----
+name: Desenvolvimento de Aplicativos Móvel com React Native
+description: Esta skill ensina a desenvolver aplicativos móveis para Android e iOS utilizando React Native, abordando conceitos como componentes, navegação e integração com APIs, além de tratamento de exceções e edge cases.
 
 ## Objetivo
-O objetivo deste guia é fornecer uma visão geral abrangente do desenvolvimento de aplicativos móveis com tecnologias modernas, visando capacitar os desenvolvedores a criar soluções inovadoras e eficazes para dispositivos móveis.
+O objetivo desta skill é capacitar os desenvolvedores a criar aplicativos móveis para Android e iOS utilizando a tecnologia React Native, abordando conceitos fundamentais como componentes, navegação e integração com APIs, garantindo a robustez e a segurança dos aplicativos.
 
 ## Pré-requisitos
-Para seguir este guia, é recomendado que os desenvolvedores tenham conhecimento prévio em:
-- Programação em linguagens como Java, Swift ou Kotlin
-- Desenvolvimento de aplicativos móveis com frameworks como React Native ou Flutter
-- Conhecimento básico de bancos de dados e APIs
+Para iniciar esta skill, é necessário ter conhecimento prévio em:
+* Desenvolvimento de aplicações web com JavaScript e React
+* Conceitos básicos de programação orientada a objetos
+* Familiaridade com o ecossistema de desenvolvimento de aplicativos móveis
 
 ## Passo a Passo Técnico / Exemplos de Código
-### Configurando o Ambiente de Desenvolvimento
-1. Instalar o Android Studio ou o Xcode, dependendo do sistema operacional e da plataforma de destino.
-2. Configurar o ambiente de desenvolvimento com as ferramentas necessárias, como o SDK do Android ou o iOS SDK.
-
-### Desenvolvendo o Aplicativo
-```java
-// Exemplo de código em Java para Android
-public class MainActivity extends AppCompatActivity {
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-    }
-}
+### Instalação do React Native
+Para começar a desenvolver aplicativos móveis com React Native, é necessário instalar o framework e configurar o ambiente de desenvolvimento. Isso pode ser feito executando o seguinte comando no terminal:
+```bash
+npm install -g react-native-cli
 ```
+### Criação de um Novo Projeto
+Após a instalação, crie um novo projeto React Native executando:
+```bash
+npx react-native init NomeDoProjeto
+```
+### Desenvolvimento de Componentes
+Os componentes são a base para a construção de interfaces de usuário em React Native. Um exemplo de componente simples é:
+```jsx
+import React from 'react';
+import { View, Text } from 'react-native';
 
-### Implementando Funcionalidades
-- Utilizar bibliotecas e frameworks para implementar funcionalidades como autenticação, armazenamento de dados e comunicação em rede.
-- Implementar testes unitários e de integração para garantir a qualidade do aplicativo.
+const MeuComponente = () => {
+  return (
+    <View>
+      <Text>Olá, Mundo!</Text>
+    </View>
+  );
+};
 
+export default MeuComponente;
+```
+### Navegação entre Telas
+A navegação entre telas é fundamental em aplicativos móveis. O React Navigation é uma biblioteca popular para gerenciar a navegação:
+```jsx
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import TelaPrincipal from './TelaPrincipal';
+import TelaSecundaria from './TelaSecundaria';
+
+const Stack = createStackNavigator();
+
+const App = () => {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="TelaPrincipal" component={TelaPrincipal} />
+        <Stack.Screen name="TelaSecundaria" component={TelaSecundaria} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+};
+
+export default App;
+```
+### Integração com APIs
+A integração com APIs é crucial para obter dados dinâmicos. O Axios é uma biblioteca popular para fazer requisições HTTP:
+```jsx
+import axios from 'axios';
+
+const obterDados = async () => {
+  try {
+    const resposta = await axios.get('https://api.exemplo.com/dados');
+    console.log(resposta.data);
+  } catch (erro) {
+    console.error(erro);
+  }
+};
+```
 ## Validação
-- Realizar testes de usabilidade e de desempenho para garantir que o aplicativo atenda aos requisitos e expectativas dos usuários.
-- Utilizar ferramentas de análise de desempenho para identificar e otimizar pontos críticos do aplicativo.
-- Realizar testes de segurança para garantir a proteção dos dados dos usuários e a integridade do aplicativo.
+Para validar o conhecimento adquirido, é recomendado desenvolver um aplicativo móvel completo que aborde os conceitos aprendidos, como componentes, navegação e integração com APIs. Além disso, é importante testar o aplicativo em diferentes dispositivos e plataformas para garantir a compatibilidade e a usabilidade.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-- **Tratamento de Erros**: Implementar mecanismos de tratamento de erros para lidar com exceções inesperadas, como erros de rede, erros de banco de dados, etc.
-- **Edge Cases**: Considerar casos de bordo, como:
-  - **Usuário não autenticado**: Lidar com a situação em que o usuário não está autenticado e tenta acessar recursos restritos.
-  - **Conexão de rede instável**: Lidar com a situação em que a conexão de rede é instável ou não está disponível.
-  - **Dados inválidos**: Lidar com a situação em que os dados recebidos são inválidos ou inconsistentes.
-- **Segurança**: Implementar medidas de segurança para proteger os dados dos usuários, como criptografia, autenticação e autorização.
-- **Testes de Penetração**: Realizar testes de penetração para identificar vulnerabilidades de segurança no aplicativo.
+Para garantir a robustez e a segurança dos aplicativos, é fundamental tratar exceções e edge cases. Aqui estão alguns exemplos:
+* **Tratamento de erros de rede**: ao fazer requisições HTTP, é importante tratar erros de rede, como perda de conexão ou timeouts.
+```jsx
+import axios from 'axios';
 
-## Exemplos de Código para Tratamento de Exceções
-```java
-// Exemplo de código em Java para tratamento de erros
-try {
-    // Código que pode lançar uma exceção
-} catch (Exception e) {
-    // Tratar a exceção
-    Log.e("Erro", e.getMessage());
-}
+const obterDados = async () => {
+  try {
+    const resposta = await axios.get('https://api.exemplo.com/dados');
+    console.log(resposta.data);
+  } catch (erro) {
+    if (erro.response) {
+      // Tratar erros de resposta
+      console.error(erro.response.data);
+    } else if (erro.request) {
+      // Tratar erros de requisição
+      console.error(erro.request);
+    } else {
+      // Tratar erros desconhecidos
+      console.error(erro);
+    }
+  }
+};
 ```
-```java
-// Exemplo de código em Java para lidar com edge cases
-if (usuarioAutenticado) {
-    // Acessar recursos restritos
-} else {
-    // Lidar com a situação em que o usuário não está autenticado
-    Toast.makeText(this, "Você precisa estar autenticado para acessar este recurso", Toast.LENGTH_SHORT).show();
-}
+* **Tratamento de erros de parsing**: ao receber dados em formato JSON, é importante tratar erros de parsing.
+```jsx
+import axios from 'axios';
+
+const obterDados = async () => {
+  try {
+    const resposta = await axios.get('https://api.exemplo.com/dados');
+    const dados = JSON.parse(resposta.data);
+    console.log(dados);
+  } catch (erro) {
+    if (erro instanceof SyntaxError) {
+      // Tratar erros de parsing
+      console.error('Erro de parsing:', erro);
+    } else {
+      // Tratar erros desconhecidos
+      console.error(erro);
+    }
+  }
+};
+```
+* **Tratamento de edge cases**: é importante tratar edge cases, como entrada de usuário inválida ou falta de permissões.
+```jsx
+import React from 'react';
+import { View, Text } from 'react-native';
+
+const MeuComponente = () => {
+  const [entrada, setEntrada] = React.useState('');
+
+  const handleEntrada = (texto) => {
+    if (texto.length > 10) {
+      // Tratar entrada inválida
+      console.error('Entrada inválida');
+    } else {
+      setEntrada(texto);
+    }
+  };
+
+  return (
+    <View>
+      <Text>Olá, Mundo!</Text>
+      <TextInput value={entrada} onChangeText={handleEntrada} />
+    </View>
+  );
+};
+
+export default MeuComponente;
+```
