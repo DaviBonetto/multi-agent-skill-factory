@@ -1,46 +1,99 @@
 ---
 name: Segurança de Dados em Nuvem com AWS
-description: Aborda conceitos e práticas para garantir a segurança de dados em ambientes de nuvem utilizando serviços da AWS
+description: Esta skill ensina a garantir a segurança dos dados armazenados na nuvem utilizando serviços da AWS, como IAM, Cognito e Inspector
 ---
 
 ## Objetivo
-O objetivo deste guia é fornecer uma visão abrangente sobre como garantir a segurança de dados em ambientes de nuvem utilizando serviços da Amazon Web Services (AWS). Isso inclui entender conceitos fundamentais de segurança, configurar serviços de segurança da AWS e implementar práticas recomendadas para proteger os dados em nuvem.
+O objetivo desta skill é capacitar os profissionais a garantir a segurança dos dados armazenados na nuvem utilizando os serviços da Amazon Web Services (AWS), como IAM, Cognito e Inspector. Com isso, os participantes serão capazes de proteger os dados contra acessos não autorizados, vazamentos e outras ameaças de segurança.
 
 ## Pré-requisitos
-Para seguir este guia, é recomendado ter:
-- Conhecimento básico sobre serviços de nuvem e segurança de dados
-- Experiência com a plataforma AWS (ou disposição para aprender)
-- Acesso a uma conta AWS (para experimentar os passos práticos)
+Para participar desta skill, é necessário ter conhecimento básico em:
+* Computação em nuvem
+* Segurança de dados
+* Serviços da AWS (IAM, Cognito, Inspector)
+* Linguagens de programação (opcional)
 
 ## Passo a Passo Técnico / Exemplos de Código
-### 1. Configurando o IAM
-O Identity and Access Management (IAM) é fundamental para a segurança da sua conta AWS. Aqui está um exemplo básico de como criar um usuário com permissões limitadas:
+### Configurando o IAM
+1. Acesse o console da AWS e navegue até o serviço IAM.
+2. Crie um novo usuário e atribua permissões de administrador.
+3. Configure as políticas de segurança para o usuário.
+
 ```bash
 aws iam create-user --user-name meu-usuario
-aws iam attach-user-policy --user-name meu-usuario --policy-arn arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess
+aws iam attach-user-policy --user-name meu-usuario --policy-arn arn:aws:iam::aws:policy/AdministratorAccess
 ```
-### 2. Implementando o S3 com Segurança
-Para armazenar dados em nuvem de forma segura, use o Amazon S3 com buckets configurados para acesso seguro:
-```bash
-aws s3 mb s3://meu-bucket-seguro
-aws s3api put-bucket-policy --bucket meu-bucket-seguro --policy '{"Version":"2012-10-17","Statement":[{"Sid":"AllowSSLRequestsOnly","Effect":"Deny","Principal":"*","Action":"s3:*","Resource":["arn:aws:s3:::meu-bucket-seguro","arn:aws:s3:::meu-bucket-seguro/*"],"Condition":{"Bool":{"aws:SecureTransport":"false"}}}]}' 
+
+### Configurando o Cognito
+1. Acesse o console da AWS e navegue até o serviço Cognito.
+2. Crie um novo pool de identidade e configure as opções de segurança.
+3. Integre o Cognito com o seu aplicativo.
+
+```python
+import boto3
+
+cognito_idp = boto3.client('cognito-idp')
+cognito_idp.create_user_pool(
+    PoolName='meu-pool',
+    AliasAttributes=['email']
+)
 ```
-### 3. Utilizando o AWS KMS
-O AWS Key Management Service (KMS) ajuda a gerenciar chaves de criptografia. Aqui está como criar uma chave:
+
+### Configurando o Inspector
+1. Acesse o console da AWS e navegue até o serviço Inspector.
+2. Crie um novo agente e configure as opções de segurança.
+3. Integre o Inspector com o seu aplicativo.
+
 ```bash
-aws kms create-key --description "MinhaChaveDeCriptografia"
+aws inspector create-assessment-target --assessment-target-name meu-alvo
+aws inspector create-assessment-template --assessment-template-name meu-modelo
 ```
 
 ## Validação
-Para validar a segurança dos seus dados em nuvem, é importante monitorar regularmente as configurações de segurança e os logs de acesso. Utilize serviços como o AWS CloudTrail para auditoria e o AWS CloudWatch para monitoramento. Além disso, realize testes de penetração e avaliações de segurança regulares para identificar e corrigir vulnerabilidades.
+Para validar a configuração da segurança de dados em nuvem com AWS, é necessário:
+1. Verificar as permissões de acesso dos usuários e serviços.
+2. Testar a autenticação e autorização dos usuários.
+3. Realizar um teste de penetração para identificar vulnerabilidades.
+4. Analisar os logs de segurança para detectar atividades suspeitas.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
 ### Tratamento de Erros
-- **Erro de Permissão**: Ao criar um usuário no IAM, certifique-se de que as permissões estejam corretamente configuradas para evitar erros de acesso.
-- **Erro de Conexão**: Ao utilizar o AWS KMS, verifique a conexão de rede e as configurações de segurança para evitar erros de conexão.
-- **Erro de Criptografia**: Ao armazenar dados no S3, certifique-se de que as chaves de criptografia estejam corretamente configuradas para evitar erros de descriptografia.
+* Verifique se o usuário tem permissões suficientes para realizar ações no IAM, Cognito e Inspector.
+* Trate erros de rede e timeouts ao realizar requisições para os serviços da AWS.
+* Implemente retry mechanisms para lidar com erros temporários.
+
+```python
+import boto3
+from botocore.exceptions import ClientError
+
+try:
+    cognito_idp = boto3.client('cognito-idp')
+    cognito_idp.create_user_pool(
+        PoolName='meu-pool',
+        AliasAttributes=['email']
+    )
+except ClientError as e:
+    print(f"Erro ao criar pool de identidade: {e.response['Error']['Code']}")
+```
 
 ### Edge Cases
-- **Uso de Múltiplas Contas AWS**: Ao utilizar múltiplas contas AWS, certifique-se de que as configurações de segurança estejam corretamente sincronizadas para evitar vulnerabilidades.
-- **Uso de Serviços de Terceiros**: Ao utilizar serviços de terceiros com a AWS, certifique-se de que as configurações de segurança estejam corretamente configuradas para evitar vulnerabilidades.
-- **Atualizações de Segurança**: Certifique-se de que as atualizações de segurança estejam corretamente aplicadas para evitar vulnerabilidades conhecidas.
+* Lidar com usuários que não têm permissões para acessar os serviços da AWS.
+* Lidar com pools de identidade que já existem no Cognito.
+* Lidar com agentes que já existem no Inspector.
+
+```python
+import boto3
+
+cognito_idp = boto3.client('cognito-idp')
+try:
+    cognito_idp.describe_user_pool(PoolName='meu-pool')
+    print("Pool de identidade já existe")
+except cognito_idp.exceptions.ResourceNotFoundException:
+    cognito_idp.create_user_pool(
+        PoolName='meu-pool',
+        AliasAttributes=['email']
+    )
+    print("Pool de identidade criado com sucesso")
+```
+
+Com esses passos, você estará capacitado a garantir a segurança dos dados armazenados na nuvem utilizando os serviços da AWS. Além disso, você estará preparado para lidar com erros e edge cases que possam surgir durante a configuração e utilização dos serviços.
