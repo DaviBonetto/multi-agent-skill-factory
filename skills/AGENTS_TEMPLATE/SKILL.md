@@ -6,7 +6,7 @@ Essas habilidades são:
  - {{name}} -> "{{path}}/SKILL.md"
 {{/skills}}
 
-**IMPORTANTE**: Você DEVE ler o arquivo SKILL.md sempre que a descrição da habilidade corresponder à intenção do usuário ou possa ajudar a realizar sua tarefa.
+**Importante:** Você DEVE ler o arquivo SKILL.md sempre que a descrição da habilidade corresponder à intenção do usuário ou possa ajudar a realizar sua tarefa.
 
 ## Habilidades Disponíveis
 {{#skills}}
@@ -17,9 +17,12 @@ Essas habilidades são:
 Os caminhos referenciados dentro das pastas de habilidades são relativos àquela habilidade. Por exemplo, o script `scripts/example.py` do hf-datasets seria referenciado como `hf-datasets/scripts/example.py`.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-No tratamento de habilidades, é fundamental considerar casos de exceção e edge cases para garantir a robustez e a segurança do sistema. Aqui estão alguns pontos a serem considerados:
-* **Erros de Leitura de Arquivos**: Em caso de falha na leitura do arquivo SKILL.md, o sistema deve ser capaz de lidar com o erro de forma adequada, seja exibindo uma mensagem de erro ao usuário ou registrando o erro para análise posterior.
-* **Habilidades Não Encontradas**: Se uma habilidade solicitada não for encontrada, o sistema deve retornar uma resposta clara indicando que a habilidade não está disponível, em vez de simplesmente falhar ou retornar uma resposta vaga.
-* **Caminhos Relativos**: Ao lidar com caminhos relativos dentro das pastas de habilidades, é crucial garantir que o sistema possa resolver esses caminhos corretamente, independentemente do local onde a habilidade é executada.
-* **Segurança**: Todas as entradas de usuário e dados provenientes de fontes externas devem ser validados e sanitizados para prevenir ataques de injeção de código ou outros tipos de vulnerabilidades de segurança.
-* **Limites de Recursos**: O sistema deve ser capaz de lidar com limites de recursos, como memória ou tempo de execução, para evitar que uma habilidade consuma todos os recursos disponíveis e cause problemas de desempenho ou falhas no sistema.
+### Tratamento de Erros
+- **Erro de Arquivo Não Encontrado:** Caso o arquivo "SKILL.md" não seja encontrado no diretório especificado, uma mensagem de erro será exibida indicando que o arquivo não foi encontrado.
+- **Erro de Permissão:** Se o usuário não tiver permissão para acessar o diretório ou o arquivo "SKILL.md", uma mensagem de erro será exibida indicando que não há permissão para acessar o arquivo.
+- **Erro de Formatação:** Se o arquivo "SKILL.md" estiver com formatação inválida, uma mensagem de erro será exibida indicando que o arquivo não pode ser processado devido à formatação inválida.
+
+### Edge Cases
+- **Habilidades com Nomes Iguais:** Caso haja habilidades com nomes iguais em diretórios diferentes, o sistema deve ser capaz de distinguir entre elas com base no caminho do diretório.
+- **Habilidades com Descrições Vazias:** Se uma habilidade tiver uma descrição vazia, o sistema deve exibir uma mensagem indicando que a descrição da habilidade está vazia.
+- **Diretórios Vazios:** Se um diretório estiver vazio e não contiver um arquivo "SKILL.md", o sistema deve ignorar esse diretório e não exibir erros.
