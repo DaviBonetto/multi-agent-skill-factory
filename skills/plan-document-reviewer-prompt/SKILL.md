@@ -47,13 +47,14 @@ Task tool (general-purpose):
 
     ⚠️ Tratamento de Exceções e Edge Cases
 
-    * **Planos incompletos:** Se o plano estiver incompleto, verifique se há uma justificativa clara para a falta de informações. Se não houver, registre como um problema.
-    * **Especificações conflitantes:** Se as especificações forem conflitantes, verifique se há uma explicação clara para a discrepância. Se não houver, registre como um problema.
-    * **Tarefas ambíguas:** Se as tarefas forem ambíguas, verifique se há uma explicação clara para a ambiguidade. Se não houver, registre como um problema.
-    * **Erros de formatação:** Se houver erros de formatação no plano, verifique se eles afetam a compreensão do plano. Se sim, registre como um problema.
-    * **Falta de recursos:** Se o plano exigir recursos que não estão disponíveis, verifique se há uma justificativa clara para a falta de recursos. Se não houver, registre como um problema.
-    * **Dependências não declaradas:** Se o plano depende de outros planos ou recursos que não estão declarados, verifique se há uma explicação clara para a dependência. Se não houver, registre como um problema.
-    * **Riscos não identificados:** Se o plano não identificar riscos potenciais, verifique se há uma justificativa clara para a falta de identificação. Se não houver, registre como um problema.
-    * **Mudanças não documentadas:** Se houver mudanças no plano que não foram documentadas, verifique se há uma explicação clara para a mudança. Se não houver, registre como um problema.
+    *   **Planos vazios ou inexistentes:** Se o plano estiver vazio ou não for encontrado, o revisor deve retornar um status de "Issues Found" com uma descrição do problema.
+    *   **Especificações inconsistentes:** Se a especificação for inconsistente ou contiver erros, o revisor deve retornar um status de "Issues Found" com uma descrição do problema.
+    *   **Tarefas mal definidas:** Se as tarefas estiverem mal definidas ou forem ambíguas, o revisor deve retornar um status de "Issues Found" com uma descrição do problema.
+    *   **Problemas de segurança:** Se o plano contiver problemas de segurança, como a falta de autenticação ou autorização, o revisor deve retornar um status de "Issues Found" com uma descrição do problema.
+    *   **Erros de formatação:** Se o plano contiver erros de formatação, como caracteres especiais não escapados, o revisor deve retornar um status de "Issues Found" com uma descrição do problema.
+    *   **Limitações de recursos:** Se o plano exigir recursos que não estão disponíveis, como hardware ou software específico, o revisor deve retornar um status de "Issues Found" com uma descrição do problema.
+    *   **Dependências não resolvidas:** Se o plano contiver dependências não resolvidas, como bibliotecas ou frameworks não instalados, o revisor deve retornar um status de "Issues Found" com uma descrição do problema.
+    *   **Problemas de escalabilidade:** Se o plano não for escalável, o revisor deve retornar um status de "Issues Found" com uma descrição do problema.
+    *   **Falta de documentação:** Se o plano não contiver documentação suficiente, o revisor deve retornar um status de "Issues Found" com uma descrição do problema.
 
 **Reviewer returns:** Status, Issues (if any), Recommendations
