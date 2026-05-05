@@ -1,109 +1,121 @@
-# Arquitetura de Microsserviços
-name: Arquitetura de Microsserviços
-description: Ensina como projetar e implementar arquiteturas de microsserviços utilizando tecnologias como Docker e Kubernetes
+# Arquitetura de Microsserviços com Docker e Kubernetes
+## Descrição
+Esta skill ensina a projetar e implementar arquiteturas de microsserviços utilizando Docker e Kubernetes, abordando conceitos como orquestração e escalabilidade.
 ## Objetivo
-O objetivo deste guia é fornecer uma visão geral de como projetar e implementar arquiteturas de microsserviços utilizando tecnologias como Docker e Kubernetes, abordando os principais conceitos e práticas para desenvolvedores senior.
+O objetivo desta skill é capacitar os desenvolvedores a projetar e implementar arquiteturas de microsserviços escaláveis e seguras utilizando Docker e Kubernetes. Ao final desta skill, os participantes serão capazes de entender os conceitos fundamentais de microsserviços, orquestração e escalabilidade, e como aplicá-los em projetos reais.
 ## Pré-requisitos
-Antes de começar, é necessário ter conhecimento em:
-- Desenvolvimento de software
-- Conceitos básicos de rede e sistemas operacionais
-- Experiência com Docker e Kubernetes
+Para participar desta skill, é necessário ter conhecimento básico em:
+* Desenvolvimento de software
+* Containers (Docker)
+* Nuvem (preferencialmente AWS, GCP ou Azure)
+* Conhecimento básico em Linux e linha de comando
 ## Passo a Passo Técnico / Exemplos de Código
 ### 1. Introdução ao Docker
-O Docker é uma plataforma de containerização que permite empacotar, distribuir e executar aplicações de forma eficiente. Para começar, você precisará instalar o Docker em sua máquina.
+Docker é uma plataforma de containerização que permite empacotar, enviar e executar aplicativos em contêineres leves e portáteis. Para começar a usar o Docker, é necessário instalar o Docker Desktop ou o Docker Engine em sua máquina.
 ```bash
 # Instalar o Docker no Ubuntu
-sudo apt-get update
-sudo apt-get install docker.io
+sudo apt update
+sudo apt install docker.io
 ```
-### 2. Introdução ao Kubernetes
-O Kubernetes é um sistema de orquestração de containers que automatiza a implantação, o dimensionamento e a gestão de aplicações containerizadas. Para começar, você precisará instalar o Kubernetes em sua máquina.
+### 2. Criação de Imagens Docker
+Uma imagem Docker é uma representação imutável de um aplicativo e suas dependências. Para criar uma imagem Docker, é necessário criar um arquivo `Dockerfile` que contenha as instruções para construir a imagem.
+```dockerfile
+# Exemplo de Dockerfile
+FROM python:3.9-slim
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+COPY . .
+CMD ["python", "app.py"]
+```
+### 3. Introdução ao Kubernetes
+Kubernetes é uma plataforma de orquestração de contêineres que automática a implantação, escalabilidade e gerenciamento de aplicativos em contêineres. Para começar a usar o Kubernetes, é necessário instalar o Minikube ou um cluster de Kubernetes em sua máquina.
 ```bash
-# Instalar o Kubernetes no Ubuntu
-sudo apt-get update
-sudo apt-get install kubeadm
+# Instalar o Minikube no Ubuntu
+curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.22.0/minikube-linux-amd64
+sudo install minikube-linux-amd64 /usr/local/bin/minikube
 ```
-### 3. Projetando a Arquitetura de Microsserviços
-A arquitetura de microsserviços é baseada em serviços independentes que se comunicam entre si. Para projetar essa arquitetura, você precisará definir os serviços e como eles se comunicarão.
-### 4. Implementando a Arquitetura de Microsserviços
-Com o Docker e o Kubernetes instalados, você pode começar a implementar a arquitetura de microsserviços. Isso envolve criar os serviços, configurar a comunicação entre eles e implantá-los no Kubernetes.
+### 4. Criação de Deployments e Services no Kubernetes
+Um deployment é uma forma de gerenciar a implantação de aplicativos em contêineres no Kubernetes. Um service é uma forma de expor um aplicativo para o exterior do cluster.
 ```yml
-# Exemplo de arquivo de configuração do Kubernetes
+# Exemplo de deployment e service
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: meu-servico
+  name: meu-aplicativo
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: meu-servico
+      app: meu-aplicativo
   template:
     metadata:
       labels:
-        app: meu-servico
+        app: meu-aplicativo
     spec:
       containers:
-      - name: meu-servico
-        image: meu-servico:latest
+      - name: meu-aplicativo
+        image: meu-aplicativo:latest
         ports:
         - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: meu-aplicativo
+spec:
+  selector:
+    app: meu-aplicativo
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80
+  type: LoadBalancer
 ```
 ## Validação
-Para validar a implementação da arquitetura de microsserviços, você precisará testar os serviços e garantir que eles estejam funcionando corretamente. Isso pode ser feito utilizando ferramentas de teste como o Postman ou o cURL.
+Para validar a implantação do aplicativo, é necessário verificar se o deployment e o service estão funcionando corretamente. Isso pode ser feito utilizando o comando `kubectl get` para verificar o status do deployment e do service.
 ```bash
-# Exemplo de teste com o cURL
-curl http://meu-servico:80
+# Verificar o status do deployment
+kubectl get deployments
+# Verificar o status do service
+kubectl get services
 ```
 ## ⚠️ Tratamento de Exceções e Edge Cases
-Ao implementar a arquitetura de microsserviços, é importante considerar os seguintes casos de exceção e edge cases:
-* **Falha de comunicação entre serviços**: Em caso de falha de comunicação entre serviços, é importante ter um mecanismo de retry e timeout para garantir que as requisições sejam processadas corretamente.
-* **Erro de instalação do Docker ou Kubernetes**: Em caso de erro de instalação do Docker ou Kubernetes, é importante verificar os logs de erro e seguir as instruções de instalação para resolver o problema.
-* **Problemas de segurança**: É importante considerar os problemas de segurança ao implementar a arquitetura de microsserviços, como a autenticação e autorização de usuários e a proteção de dados sensíveis.
-* **Escalabilidade**: É importante considerar a escalabilidade da arquitetura de microsserviços, garantindo que os serviços possam ser escalados horizontalmente para atender à demanda.
-* **Monitoramento e logging**: É importante ter um mecanismo de monitoramento e logging para garantir que os serviços estejam funcionando corretamente e para identificar problemas rapidamente.
-Exemplos de código para tratamento de exceções e edge cases:
-```python
-# Exemplo de tratamento de exceção em Python
-try:
-    # Código que pode gerar uma exceção
-    response = requests.get('http://meu-servico:80')
-    response.raise_for_status()
-except requests.exceptions.RequestException as e:
-    # Tratamento da exceção
-    print(f"Erro: {e}")
+### 1. Erros de Instalação do Docker
+Se ocorrer um erro durante a instalação do Docker, é necessário verificar se o repositório do Docker está configurado corretamente e se o pacote do Docker está disponível.
+```bash
+# Verificar o repositório do Docker
+sudo apt-cache search docker
+# Verificar a versão do Docker
+sudo apt-cache policy docker.io
 ```
-```yml
-# Exemplo de configuração de retry e timeout no Kubernetes
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: meu-servico
-spec:
-  replicas: 3
-  selector:
-    matchLabels:
-      app: meu-servico
-  template:
-    metadata:
-      labels:
-        app: meu-servico
-    spec:
-      containers:
-      - name: meu-servico
-        image: meu-servico:latest
-        ports:
-        - containerPort: 80
-      restartPolicy: Always
-      livenessProbe:
-        httpGet:
-          path: /health
-          port: 80
-        initialDelaySeconds: 15
-        periodSeconds: 15
-      readinessProbe:
-        httpGet:
-          path: /ready
-          port: 80
-        initialDelaySeconds: 15
-        periodSeconds: 15
+### 2. Erros de Criação de Imagens Docker
+Se ocorrer um erro durante a criação de uma imagem Docker, é necessário verificar se o arquivo `Dockerfile` está correto e se as dependências necessárias estão instaladas.
+```bash
+# Verificar o arquivo Dockerfile
+docker build -t meu-aplicativo .
+# Verificar as dependências
+pip install -r requirements.txt
+```
+### 3. Erros de Implantação no Kubernetes
+Se ocorrer um erro durante a implantação do aplicativo no Kubernetes, é necessário verificar se o deployment e o service estão configurados corretamente e se o cluster do Kubernetes está funcionando corretamente.
+```bash
+# Verificar o status do deployment
+kubectl get deployments
+# Verificar o status do service
+kubectl get services
+# Verificar o log do container
+kubectl logs -f <nome-do-container>
+```
+### 4. Edge Cases de Segurança
+Para garantir a segurança do aplicativo, é necessário considerar os seguintes edge cases:
+* **Autenticação e Autorização**: garantir que apenas usuários autorizados possam acessar o aplicativo.
+* **Criptografia**: garantir que os dados sejam criptografados em trânsito e em repouso.
+* **Atualizações de Segurança**: garantir que o aplicativo e as dependências sejam atualizados regularmente para evitar vulnerabilidades de segurança.
+```bash
+# Verificar a configuração de autenticação e autorização
+kubectl get configmap -n <nome-do-namespace>
+# Verificar a configuração de criptografia
+kubectl get secret -n <nome-do-namespace>
+# Verificar as atualizações de segurança
+kubectl get deployment -n <nome-do-namespace> -o yaml | grep image
