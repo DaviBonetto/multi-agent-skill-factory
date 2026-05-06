@@ -1,4 +1,5 @@
 # Gemini CLI Tool Mapping
+
 Skills use Claude Code tool names. When you encounter these in a skill, use your platform equivalent:
 
 | Skill references | Gemini CLI equivalent |
@@ -13,12 +14,32 @@ Skills use Claude Code tool names. When you encounter these in a skill, use your
 | `Skill` tool (invoke a skill) | `activate_skill` |
 | `WebSearch` | `google_web_search` |
 | `WebFetch` | `web_fetch` |
-| `Task` tool (dispatch subagent) | No equivalent — Gemini CLI does not support subagents |
+| `Task` tool (dispatch subagent) | `@agent-name` (see [Subagent support](#subagent-support)) |
 
-## No subagent support
-Gemini CLI has no equivalent to Claude Code's `Task` tool. Skills that rely on subagent dispatch (`subagent-driven-development`, `dispatching-parallel-agents`) will fall back to single-session execution via `executing-plans`.
+## Subagent support
+
+Gemini CLI supports subagents natively via the `@` syntax. Use the built-in `@generalist` agent to dispatch any task — it has access to all tools and follows the prompt you provide.
+
+When a skill says to dispatch a named agent type, use `@generalist` with the full prompt from the skill's prompt template:
+
+| Skill instruction | Gemini CLI equivalent |
+|-------------------|----------------------|
+| `Task tool (superpowers:implementer)` | `@generalist` with the filled `implementer-prompt.md` template |
+| `Task tool (superpowers:spec-reviewer)` | `@generalist` with the filled `spec-reviewer-prompt.md` template |
+| `Task tool (superpowers:code-reviewer)` | `@code-reviewer` (bundled agent) or `@generalist` with the filled review prompt |
+| `Task tool (superpowers:code-quality-reviewer)` | `@generalist` with the filled `code-quality-reviewer-prompt.md` template |
+| `Task tool (general-purpose)` with inline prompt | `@generalist` with your inline prompt |
+
+### Prompt filling
+
+Skills provide prompt templates with placeholders like `{WHAT_WAS_IMPLEMENTED}` or `[FULL TEXT of task]`. Fill all placeholders and pass the complete prompt as the message to `@generalist`. The prompt template itself contains the agent's role, review criteria, and expected output format — `@generalist` will follow it.
+
+### Parallel dispatch
+
+Gemini CLI supports parallel subagent dispatch. When a skill asks you to dispatch multiple independent subagent tasks in parallel, request all of those `@generalist` or named subagent tasks together in the same prompt. Keep dependent tasks sequential, but do not serialize independent subagent tasks just to preserve a simpler history.
 
 ## Additional Gemini CLI tools
+
 These tools are available in Gemini CLI but have no Claude Code equivalent:
 
 | Tool | Purpose |
@@ -30,14 +51,22 @@ These tools are available in Gemini CLI but have no Claude Code equivalent:
 | `enter_plan_mode` / `exit_plan_mode` | Switch to read-only research mode before making changes |
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-Para garantir a robustez e segurança da skill, é importante considerar os seguintes casos de exceção e edge cases:
 
-* **Erros de sintaxe**: Verificar se os comandos Gemini CLI estão corretamente formatados e se os parâmetros estão sendo passados corretamente.
-* **Arquivos não encontrados**: Tratar o caso de arquivos não encontrados durante a execução de comandos como `read_file` e `write_file`.
-* **Permissões de acesso**: Verificar se o usuário tem permissão para executar os comandos Gemini CLI, especialmente aqueles que envolvem a criação ou edição de arquivos.
-* **Comandos inválidos**: Tratar o caso de comandos inválidos ou desconhecidos, como `Task` tool, que não tem equivalente no Gemini CLI.
-* **Exceções de execução**: Tratar exceções que ocorrem durante a execução de comandos, como erros de sintaxe ou falta de recursos.
-* **Limites de recursos**: Verificar se os recursos disponíveis são suficientes para executar os comandos Gemini CLI, como memória e processamento.
-* **Segurança**: Verificar se os comandos Gemini CLI estão sendo executados de forma segura, sem exposição de informações sensíveis ou vulnerabilidades de segurança.
+Ao utilizar as ferramentas do Gemini CLI, é importante considerar os seguintes casos de exceção e edge cases:
 
-Além disso, é importante implementar mecanismos de logging e monitoramento para detectar e tratar exceções e edge cases de forma eficaz. Isso pode incluir a implementação de try-catch blocks, logging de erros e exceções, e notificação de administradores em caso de erros críticos.
+* **Erros de sintaxe**: Verifique se os comandos estão corretamente formatados e se os parâmetros estão sendo passados corretamente.
+* **Arquivos não encontrados**: Certifique-se de que os arquivos referenciados existem e estão acessíveis.
+* **Permissões insuficientes**: Verifique se você tem as permissões necessárias para executar as ações solicitadas.
+* **Parâmetros vazios**: Verifique se os parâmetros obrigatórios estão sendo passados e não estão vazios.
+* **Conflitos de nomes**: Evite conflitos de nomes entre arquivos, variáveis e funções.
+* **Dependências não resolvidas**: Certifique-se de que todas as dependências necessárias estão resolvidas e disponíveis.
+* **Limites de recursos**: Verifique se os recursos disponíveis (como memória e processamento) são suficientes para executar as ações solicitadas.
+* **Erros de rede**: Verifique se a conexão de rede está estável e funcional.
+* **Timeouts**: Verifique se os timeouts estão configurados corretamente para evitar erros de tempo limite.
+
+Ao lidar com esses casos de exceção e edge cases, é importante:
+
+* **Registrar erros**: Registre os erros e exceções para facilitar a depuração e resolução de problemas.
+* **Proporcionar feedback**: Forneça feedback claro e conciso para o usuário sobre o que deu errado e como corrigir o problema.
+* **Oferecer soluções**: Ofereça soluções ou alternativas para superar os problemas encontrados.
+* **Documentar**: Documente os casos de exceção e edge cases para evitar que eles se repitam no futuro.
