@@ -41,21 +41,20 @@ Copilot CLI supports persistent async shell sessions, which have no direct Claud
 | `fetch_copilot_cli_documentation` | Look up Copilot CLI documentation |
 | GitHub MCP tools (`github-mcp-server-*`) | Native GitHub API access (issues, PRs, code search) |
 
-## Tratamento de Exceções e Edge Cases
+## ⚠️ Tratamento de Exceções e Edge Cases
 
 Ao utilizar as ferramentas do Copilot CLI, é importante considerar os seguintes casos de exceção e edge cases:
 
 * **Erros de sintaxe**: Verifique se os comandos estão corretamente formatados e se os parâmetros estão sendo passados corretamente.
 * **Comandos não suportados**: Certifique-se de que os comandos utilizados são suportados pela plataforma e pela versão do Copilot CLI.
-* **Limites de recursos**: Tenha em mente os limites de recursos (como memória e processamento) ao executar comandos que consomem muitos recursos.
-* **Conflitos de nome**: Evite conflitos de nome entre variáveis e comandos.
-* **Segurança**: Sempre verifique se os comandos estão sendo executados com as permissões necessárias e se os dados estão sendo tratados de forma segura.
-* **Timeouts**: Defina timeouts adequados para comandos que podem demorar muito tempo para serem executados.
-* **Erros de rede**: Trate erros de rede que podem ocorrer ao executar comandos que dependem de conexões de rede.
-* **Dependências**: Verifique se as dependências necessárias estão instaladas e configuradas corretamente.
+* **Limites de recursos**: Tenha em mente os limites de recursos (como memória, CPU, etc.) ao executar comandos que possam consumir muitos recursos.
+* **Conflitos de nome**: Evite conflitos de nome entre variáveis, funções e comandos.
+* **Segurança**: Sempre verifique se os comandos estão sendo executados de forma segura, especialmente quando se trata de operações que envolvem dados sensíveis.
+* **Timeouts**: Defina timeouts adequados para comandos que possam demorar muito tempo para serem executados.
+* **Tratamento de erros**: Implemente um tratamento de erros adequado para lidar com erros inesperados que possam ocorrer durante a execução dos comandos.
 
-Além disso, é importante:
+Além disso, é importante considerar os seguintes edge cases:
 
-* **Testar os comandos**: Teste os comandos antes de executá-los em produção para garantir que eles estão funcionando corretamente.
-* **Monitorar os logs**: Monitore os logs para detectar erros ou problemas que possam ocorrer durante a execução dos comandos.
-* **Documentar os comandos**: Documente os comandos utilizados e os parâmetros passados para facilitar a depuração e manutenção.
+* **Execução de comandos em paralelo**: Certifique-se de que os comandos sejam executados de forma thread-safe e que não haja conflitos entre eles.
+* **Uso de variáveis globais**: Evite o uso de variáveis globais sempre que possível, pois elas podem causar problemas de escopo e conflitos entre comandos.
+* **Manipulação de arquivos**: Tenha cuidado ao manipular arquivos, especialmente quando se trata de operações de leitura e escrita, para evitar perda de dados ou corrupção de arquivos.
