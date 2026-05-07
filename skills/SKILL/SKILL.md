@@ -1,159 +1,81 @@
 ---
-name: huggingface-best
-description: >
-  Use when the user asks about finding the best, top, or recommended model for a task,
-  wants to know what AI model to use, or wants to compare models by benchmark scores.
-  Triggers on: "best model for X", "what model should I use for", "top models for [task]",
-  "which model runs on my laptop/machine/device", "recommend a model for", "what LLM should
-  I use for", "compare models for", "what's state of the art for", or any question about
-  choosing an AI model for a specific use case. Always use this skill when the user wants
-  model recommendations or comparisons, even if they don't explicitly mention HuggingFace
-  or benchmarks.
+name: executing-plans
+description: Use quando você tem um plano de implementação escrito para executar em uma sessão separada com pontos de verificação de revisão
 ---
 
-# HuggingFace Best Model Finder
+# Executing Plans
 
-Finds the best models for a task by querying official HF benchmark leaderboards, enriching
-results with model size data, filtering for what fits on the user's device, and returning a
-comparison table with benchmark scores.
+## Overview
 
----
+Carregue o plano, revise criticamente, execute todas as tarefas e informe quando concluído.
 
-## Step 1: Parse the request
+**Anuncie no início:** "Estou usando a habilidade de execução de planos para implementar este plano."
 
-Extract from the user's message:
-- **Task**: what they want the model to do (coding, math/reasoning, chat, OCR, RAG/retrieval, speech recognition, image classification, multimodal, agents, etc.)
-- **Device**: hardware constraints (MacBook M-series 8/16/32/64GB unified memory, RTX GPU with VRAM amount, CPU-only, cloud/no constraint, etc.)
+**Nota:** Informe seu parceiro humano de que o Superpowers funciona muito melhor com acesso a subagentes. A qualidade do seu trabalho será significativamente maior se executado em uma plataforma com suporte a subagentes (como Claude Code ou Codex). Se os subagentes estiverem disponíveis, use superpowers:subagent-driven-development em vez desta habilidade.
 
-If device is not mentioned, skip filtering entirely and return the highest-performing models regardless of size. If the task is genuinely ambiguous, ask one clarifying question.
+## O Processo
 
-### Device → max parameter budget
+### Step 1: Carregar e Revisar Plano
+1. Leia o arquivo do plano
+2. Revise criticamente - identifique quaisquer dúvidas ou preocupações sobre o plano
+3. Se houver preocupações: Levante-as com seu parceiro humano antes de começar
+4. Se não houver preocupações: Crie TodoWrite e prossiga
 
-When a device is specified, extract its available memory (unified RAM for Apple Silicon, VRAM for discrete GPUs) and apply:
+### Step 2: Executar Tarefas
 
-- **fp16 max params (B)** ≈ memory (GB) ÷ 2
-- **Q4 max params (B)** ≈ memory (GB) × 2
+Para cada tarefa:
+1. Marque como em_progress
+2. Siga cada etapa exatamente (plano tem etapas pequenas)
+3. Execute verificações como especificado
+4. Marque como concluída
 
-Examples: 16GB → 8B fp16 / 32B Q4 — 24GB VRAM → 12B fp16 / 48B Q4 — 8GB → 4B fp16 / 16B Q4
+### Step 3: Concluir Desenvolvimento
 
----
+Depois que todas as tarefas forem concluídas e verificadas:
+- Anuncie: "Estou usando a habilidade de finalizar um ramo de desenvolvimento para concluir este trabalho."
+- **HABILIDADE SUB-REQUERIDA:** Use superpowers:finishing-a-development-branch
+- Siga essa habilidade para verificar testes, apresentar opções, executar escolha
 
-## Step 2: Find relevant benchmark datasets
+## Quando Parar e Pedir Ajuda
 
-Fetch the full list of official HF benchmarks:
+**PARE de executar imediatamente quando:**
+- Encontrar um bloqueador (dependência ausente, teste falha, instrução não clara)
+- Plano tem lacunas críticas que impedem o início
+- Você não entender uma instrução
+- Verificação falha repetidamente
 
-```bash
-curl -s -H "Authorization: Bearer $(cat ~/.cache/huggingface/token)" 
-  "https://huggingface.co/api/datasets?filter=benchmark:official&limit=500" | jq '[.[] | {id, tags, description}]'
-```
+**Peça esclarecimento em vez de adivinhar.**
 
-Read the returned list and select the datasets most relevant to the user's task — match on dataset id, tags, and description. Use your judgment; don't limit yourself to 2-3. Aim for comprehensive coverage: if 5 benchmarks clearly cover the task, use all 5.
+## Quando Revisitar Etapas Anteriores
 
----
+**Retorne à Revisão (Etapa 1) quando:**
+- Parceiro atualiza o plano com base em seu feedback
+- Abordagem fundamental precisa ser re pensada
 
-## Step 3: Fetch top models from leaderboards
+**Não force através de bloqueadores** - pare e peça.
 
-For each selected benchmark dataset:
+## Lembre-se
+- Revise o plano criticamente primeiro
+- Siga as etapas do plano exatamente
+- Não pule verificações
+- Faça referência a habilidades quando o plano disser para
+- Pare quando bloqueado, não adivinhe
+- Nunca inicie a implementação no ramo principal sem consentimento explícito do usuário
 
-```bash
-curl -s -H "Authorization: Bearer $(cat ~/.cache/huggingface/token)" 
-  "https://huggingface.co/api/datasets/<namespace>/<repo>/leaderboard" | jq '[.[:15] | .[] | {rank, modelId, value, verified}]'
-```
+## Integração
 
-Collect model IDs and scores across all benchmarks. If a leaderboard returns an error (404, 401, etc.), skip it and note it in the output.
+**Habilidades de fluxo de trabalho necessárias:**
+- **superpowers:using-git-worktrees** - Garante um espaço de trabalho isolado (cria um ou verifica se existe)
+- **superpowers:writing-plans** - Cria o plano que esta habilidade executa
+- **superpowers:finishing-a-development-branch** - Conclui o desenvolvimento após todas as tarefas
 
----
-
-## Step 4: Enrich with model metadata
-
-For the top 10-15 candidate model IDs, get model infos.
-
-```bash
-# REST API
-curl -s -H "Authorization: Bearer $(cat ~/.cache/huggingface/token)" 
-  "https://huggingface.co/api/models/org/model1" | jq '{safetensors, tags, cardData}'
-
-# CLI (hf-cli)
-hf models info org/model1 --json | jq '{safetensors, tags, cardData}'
-```
-
-Extract from each response:
-- **Parameters**: `safetensors.total` → convert to B (e.g., 7_241_748_480 → "7.2B")
-- **License**: from model card tags (look for `license:apache-2.0`, `license:mit`, etc.)
-- If `safetensors` is absent, parse size from the model name (look for "7b", "8b", "13b", "70b", "72b", etc.)
-
----
-
-## Step 5: Filter and rank
-
-**If a device was specified:**
-1. Remove models exceeding the fp16 parameter budget for the device
-2. Flag models that fit only with Q4 quantization (multiply budget by ~4 for Q4 capacity)
-3. If a highly-ranked model is slightly over budget, keep it with a "needs Q4" note — don't silently drop it
-
-**If no device was mentioned:** skip all size filtering — just rank by benchmark score.
-
-Then: rank by benchmark score (descending), keep top 5-8 models.
-
-Include proprietary models (GPT-4, Claude, Gemini) if they appear on leaderboards, but flag them as "API only / not self-hostable". If the user explicitly asked for local/open models only, exclude them.
-
----
-
-## Step 6: Output
-
-### Comparison table
-
-```markdown
-| # | Model | Params | [Benchmark 1] | [Benchmark 2] | License | On device |
-|---|-------|--------|--------------|--------------|---------|-----------|
-| ⭐1 | [org/name](https://huggingface.co/org/name) | 7B | 85.2% | — | Apache 2.0 | Yes (fp16) |
-| 2 | [org/name](https://huggingface.co/org/name) | 13B | 83.1% | 71.5% | MIT | Q4 only |
-| 3 | [org/name](https://huggingface.co/org/name) | 70B | 90.0% | 81.0% | Llama | Too large |
-```
-
-- Link model names to `https://huggingface.co/<model_id>`
-- Use `—` for benchmarks where the model wasn't evaluated
-- Star the top recommended pick with ⭐
-- "On device" values: `Yes (fp16)`, `Q4 only`, `Too large`, `API only`
-
-### Follow-up
-
-After presenting the table, ask the user: "Would you like to run **[top recommended model]**?"
-
-If they say yes, ask whether they'd prefer to:
-- **Run locally** — ask about their device if not already known, then give appropriate setup instructions
-- **Run on HF Jobs** — point them to the HF Jobs guide: https://huggingface.co/docs/huggingface_hub/en/guides/jobs
-
----
-
-## ⚠️ Tratamento de Exceções e Edge Cases
-
-### Erros de Rede
-
-- **Conexão de rede instável**: tente novamente após um curto período de tempo
-- **Servidor não encontrado**: verifique se o servidor está online e se o endereço está correto
-
-### Erros de Autenticação
-
-- **Token de autenticação inválido**: solicite ao usuário que verifique seu token e tente novamente
-- **Credenciais de autenticação inválidas**: solicite ao usuário que verifique suas credenciais e tente novamente
-
-### Erros de Processamento
-
-- **Modelo não encontrado**: verifique se o modelo está disponível e se o nome está correto
-- **Erro ao processar o modelo**: verifique se o modelo está correto e se os parâmetros estão configurados corretamente
+⚠️ Tratamento de Exceções e Edge Cases
+### Tratamento de Erros
+- **Erros de sintaxe no plano:** Se o plano contiver erros de sintaxe, a execução deve ser interrompida e um erro deve ser relatado ao usuário.
+- **Falhas de verificação:** Se uma verificação falhar, a tarefa deve ser marcada como não concluída e um erro deve ser relatado ao usuário.
+- **Dependências ausentes:** Se uma dependência necessária estiver ausente, a execução deve ser interrompida e um erro deve ser relatado ao usuário.
 
 ### Edge Cases
-
-- **Tarefa ambígua**: solicite ao usuário que forneça mais informações sobre a tarefa
-- **Dispositivo não especificado**: solicite ao usuário que forneça informações sobre o dispositivo
-- **Modelo não compatível**: avise o usuário que o modelo não é compatível com o dispositivo ou a tarefa
-
----
-
-## Error handling
-
-- **Leaderboard not found**: skip, note "leaderboard unavailable" in output
-- **Model missing from hub_repo_details**: fall back to parsing size from model name
-- **No benchmarks found for task**: use the curated fallback table above, or try `hub_repo_search` with `filters=["<task>"]` sorted by `trendingScore`
-- **All leaderboards fail**: fall back to `hub_repo_search` for popular models tagged with the task, note that results are by popularity rather than benchmark score
+- **Planos vazios:** Se o plano estiver vazio, a execução deve ser interrompida e um erro deve ser relatado ao usuário.
+- **Tarefas duplicadas:** Se houver tarefas duplicadas no plano, a execução deve ignorar as tarefas duplicadas e continuar com as tarefas únicas.
+- **Instruções não claras:** Se uma instrução no plano não for clara, a execução deve ser interrompida e um erro deve ser relatado ao usuário.
