@@ -59,21 +59,34 @@ internal/
 7. All tests pass
 ## ⚠️ Tratamento de Exceções e Edge Cases
 ### Exceções
-- **Entrada inválida**: O programa deve lidar com entradas inválidas, como valores negativos para `--size`, `--width`, `--height`, `--depth` e `--iterations`. Deve ser exibida uma mensagem de erro clara e concisa.
-- **Caractere inválido**: O programa deve lidar com caracteres inválidos para `--char`. Deve ser exibida uma mensagem de erro clara e concisa.
-- **Erro de saída**: O programa deve lidar com erros de saída, como falta de permissão para escrever na saída padrão.
+- **Entradas inválidas**: O programa deve lidar com entradas inválidas, como valores negativos para `--size`, `--width`, `--height`, `--depth` e `--iterations`. Nesses casos, o programa deve exibir uma mensagem de erro clara e sair com um código de status não zero.
+- **Caracteres inválidos**: O programa deve lidar com caracteres inválidos para o flag `--char`. Se o caractere for inválido, o programa deve exibir uma mensagem de erro clara e sair com um código de status não zero.
+- **Erros de sistema**: O programa deve lidar com erros de sistema, como falta de memória ou erro de escrita em stdout. Nesses casos, o programa deve exibir uma mensagem de erro clara e sair com um código de status não zero.
 ### Edge Cases
-- **Tamanho mínimo**: O programa deve lidar com tamanhos mínimos para `--size`, `--width` e `--height`. Deve ser exibida uma mensagem de erro clara e concisa se o tamanho for menor que o mínimo permitido.
-- **Tamanho máximo**: O programa deve lidar com tamanhos máximos para `--size`, `--width` e `--height`. Deve ser exibida uma mensagem de erro clara e concisa se o tamanho for maior que o máximo permitido.
-- **Profundidade mínima**: O programa deve lidar com profundidades mínimas para `--depth`. Deve ser exibida uma mensagem de erro clara e concisa se a profundidade for menor que a mínima permitida.
-- **Profundidade máxima**: O programa deve lidar com profundidades máximas para `--depth`. Deve ser exibida uma mensagem de erro clara e concisa se a profundidade for maior que a máxima permitida.
-- **Iterações mínimas**: O programa deve lidar com iterações mínimas para `--iterations`. Deve ser exibida uma mensagem de erro clara e concisa se o número de iterações for menor que o mínimo permitido.
-- **Iterações máximas**: O programa deve lidar com iterações máximas para `--iterations`. Deve ser exibida uma mensagem de erro clara e concisa se o número de iterações for maior que o máximo permitido.
-### Exemplos de Entradas Inválidas
-- `fractals sierpinski --size -1 --depth 5`
-- `fractals mandelbrot --width 80 --height 24 --iterations -1`
-- `fractals sierpinski --char abc`
-### Exemplos de Saídas de Erro
-- `Erro: tamanho inválido para --size. Valor deve ser maior que 0.`
-- `Erro: caractere inválido para --char. Valor deve ser um caractere único.`
-- `Erro: falta de permissão para escrever na saída padrão.`
+- **Tamanho mínimo**: O programa deve lidar com tamanhos mínimos para `--size`, `--width` e `--height`. Se o tamanho for menor que 1, o programa deve exibir uma mensagem de erro clara e sair com um código de status não zero.
+- **Profundidade mínima**: O programa deve lidar com profundidades mínimas para `--depth`. Se a profundidade for menor que 1, o programa deve exibir uma mensagem de erro clara e sair com um código de status não zero.
+- **Iterações mínimas**: O programa deve lidar com iterações mínimas para `--iterations`. Se o número de iterações for menor que 1, o programa deve exibir uma mensagem de erro clara e sair com um código de status não zero.
+### Exemplos de Tratamento de Exceções
+```go
+func main() {
+    // ...
+    if size < 1 {
+        log.Fatal("Tamanho inválido. O tamanho deve ser maior que 0.")
+    }
+    if depth < 1 {
+        log.Fatal("Profundidade inválida. A profundidade deve ser maior que 0.")
+    }
+    if iterations < 1 {
+        log.Fatal("Número de iterações inválido. O número de iterações deve ser maior que 0.")
+    }
+    // ...
+}
+```
+```go
+func sierpinski(size int, depth int, char string) {
+    // ...
+    if char == "" {
+        log.Fatal("Caractere inválido. O caractere não pode ser vazio.")
+    }
+    // ...
+}
