@@ -4,9 +4,9 @@ Skills use Claude Code tool names. When you encounter these in a skill, use your
 
 | Skill references | Codex equivalent |
 |-----------------|------------------|
-| `Task` tool (dispatch subagent) | `spawn_agent` (see [Named agent dispatch](#named-agent-dispatch)) |
+| `Task` tool (dispatch subagent) | `spawn_agent` (see [Subagent dispatch requires multi-agent support](#subagent-dispatch-requires-multi-agent-support)) |
 | Multiple `Task` calls (parallel) | Multiple `spawn_agent` calls |
-| Task returns result | `wait` |
+| Task returns result | `wait_agent` |
 | Task completes automatically | `close_agent` to free slot |
 | `TodoWrite` (task tracking) | `update_plan` |
 | `Skill` tool (invoke a skill) | Skills load natively — just follow the instructions |
@@ -22,53 +22,12 @@ Add to your Codex config (`~/.codex/config.toml`):
 multi_agent = true
 ```
 
-This enables `spawn_agent`, `wait`, and `close_agent` for skills like `dispatching-parallel-agents` and `subagent-driven-development`.
+This enables `spawn_agent`, `wait_agent`, and `close_agent` for skills like `dispatching-parallel-agents` and `subagent-driven-development`.
 
-## Named agent dispatch
-
-Claude Code skills reference named agent types like `superpowers:code-reviewer`.
-Codex does not have a named agent registry — `spawn_agent` creates generic agents
-from built-in roles (`default`, `explorer`, `worker`).
-
-When a skill says to dispatch a named agent type:
-
-1. Find the agent's prompt file (e.g., `agents/code-reviewer.md` or the skill's
-   local prompt template like `code-quality-reviewer-prompt.md`)
-2. Read the prompt content
-3. Fill any template placeholders (`{BASE_SHA}`, `{WHAT_WAS_IMPLEMENTED}`, etc.)
-4. Spawn a `worker` agent with the filled content as the `message`
-
-| Skill instruction | Codex equivalent |
-|-------------------|------------------|
-| `Task tool (superpowers:code-reviewer)` | `spawn_agent(agent_type="worker", message=...)` with `code-reviewer.md` content |
-| `Task tool (general-purpose)` with inline prompt | `spawn_agent(message=...)` with the same prompt |
-
-### Message framing
-
-The `message` parameter is user-level input, not a system prompt. Structure it
-for maximum instruction adherence:
-
-```
-Your task is to perform the following. Follow the instructions below exactly.
-
-<agent-instructions>
-[filled prompt content from the agent's .md file]
-</agent-instructions>
-
-Execute this now. Output ONLY the structured response following the format
-specified in the instructions above.
-```
-
-- Use task-delegation framing ("Your task is...") rather than persona framing ("You are...")
-- Wrap instructions in XML tags — the model treats tagged blocks as authoritative
-- End with an explicit execution directive to prevent summarization of the instructions
-
-### When this workaround can be removed
-
-This approach compensates for Codex's plugin system not yet supporting an `agents`
-field in `plugin.json`. When `RawPluginManifest` gains an `agents` field, the
-plugin can symlink to `agents/` (mirroring the existing `skills/` symlink) and
-skills can dispatch named agent types directly.
+Legacy note: Codex builds before `rust-v0.115.0` exposed spawned-agent
+waiting as `wait`. Current Codex uses `wait_agent` for spawned agents. The
+`wait` name now belongs to code-mode `exec/wait`, which resumes a yielded exec
+cell by `cell_id`; it is not the spawned-agent result tool.
 
 ## Environment Detection
 
@@ -103,23 +62,32 @@ names, commit messages, and PR descriptions for the user to copy.
 
 ### Erros de Configuração
 
-* Verifique se a configuração do Codex está correta e se o arquivo `config.toml` existe no diretório correto.
-* Certifique-se de que a feature `multi_agent` esteja habilitada.
+*   Verifique se o arquivo `~/.codex/config.toml` existe e se a chave `multi_agent` está definida como `true`.
+*   Se o arquivo não existir, crie-o e adicione a chave `multi_agent` com valor `true`.
 
-### Erros de Dispatch de Agentes
+### Erros de Execução
 
-* Verifique se o arquivo de prompt do agente existe e se o conteúdo está correto.
-* Certifique-se de que o agente esteja sendo dispatchado com o tipo correto (e.g., `worker`).
-* Verifique se o parâmetro `message` está sendo passado corretamente.
+*   Se ocorrer um erro durante a execução de um skill, verifique os logs para identificar a causa do erro.
+*   Se o erro for relacionado à falta de permissões, verifique se o usuário tem as permissões necessárias para executar o skill.
 
-### Erros de Detecção de Ambiente
+### Edge Cases
 
-* Verifique se os comandos Git estão sendo executados corretamente e se as variáveis `GIT_DIR`, `GIT_COMMON` e `BRANCH` estão sendo definidas corretamente.
-* Certifique-se de que o agente esteja lidando corretamente com os casos de erro, como um diretório de trabalho não encontrado ou um HEAD desanexado.
+*   **Detached HEAD**: se o sandbox estiver em um estado de detached HEAD, o agente não poderá criar branches ou fazer push. Nesse caso, o agente deve informar o usuário para usar os controles nativos do App.
+*   **Worktree vinculado**: se o sandbox estiver em um worktree vinculado, o agente não deve criar um novo worktree. Em vez disso, o agente deve usar o worktree existente.
+*   **Falta de recursos**: se o sandbox não tiver recursos suficientes (por exemplo, memória ou CPU) para executar um skill, o agente deve informar o usuário e solicitar que ele aloque mais recursos.
 
-### Erros de Finalização do App
+### Tratamento de Exceções
 
-* Verifique se o agente está commitando todas as alterações e informando o usuário sobre as ações necessárias.
-* Certifique-se de que o agente esteja lidando corretamente com os casos de erro, como um erro de commit ou push.
+*   **Try-except**: use blocos try-except para capturar e tratar exceções que ocorram durante a execução de um skill.
+*   **Logging**: use logs para registrar erros e exceções, para que possam ser analisados e resolvidos posteriormente.
 
-Ao lidar com esses erros e edge cases, é importante garantir que o agente esteja sempre informando o usuário sobre as ações necessárias e que esteja lidando corretamente com os casos de erro. Isso ajudará a garantir que o fluxo de trabalho seja executado corretamente e que o usuário tenha uma experiência suave e eficiente.
+Exemplo de tratamento de exceções:
+```python
+try:
+    # Executar o skill
+    spawn_agent()
+except Exception as e:
+    # Registrar o erro no log
+    logging.error(f"Erro ao executar o skill: {e}")
+    # Informar o usuário sobre o erro
+    print(f"Erro ao executar o skill: {e}")
