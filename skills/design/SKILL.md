@@ -58,35 +58,17 @@ internal/
 6. Invalid inputs produce clear error messages
 7. All tests pass
 ## ⚠️ Tratamento de Exceções e Edge Cases
-### Exceções
-- **Entradas inválidas**: O programa deve lidar com entradas inválidas, como valores negativos para `--size`, `--width`, `--height`, `--depth` e `--iterations`. Nesses casos, o programa deve exibir uma mensagem de erro clara e sair com um código de status não zero.
-- **Caracteres inválidos**: O programa deve lidar com caracteres inválidos para o flag `--char`. Se o caractere for inválido, o programa deve exibir uma mensagem de erro clara e sair com um código de status não zero.
-- **Erros de sistema**: O programa deve lidar com erros de sistema, como falta de memória ou erro de escrita em stdout. Nesses casos, o programa deve exibir uma mensagem de erro clara e sair com um código de status não zero.
+### Tratamento de Erros
+*   Verificar se os valores de `--size`, `--width`, `--height`, `--depth` e `--iterations` são números inteiros positivos.
+*   Verificar se o caractere fornecido para `--char` é um caractere único.
+*   Tratar erros de inicialização da CLI, como falhas na leitura de flags ou na inicialização do comando.
 ### Edge Cases
-- **Tamanho mínimo**: O programa deve lidar com tamanhos mínimos para `--size`, `--width` e `--height`. Se o tamanho for menor que 1, o programa deve exibir uma mensagem de erro clara e sair com um código de status não zero.
-- **Profundidade mínima**: O programa deve lidar com profundidades mínimas para `--depth`. Se a profundidade for menor que 1, o programa deve exibir uma mensagem de erro clara e sair com um código de status não zero.
-- **Iterações mínimas**: O programa deve lidar com iterações mínimas para `--iterations`. Se o número de iterações for menor que 1, o programa deve exibir uma mensagem de erro clara e sair com um código de status não zero.
-### Exemplos de Tratamento de Exceções
-```go
-func main() {
-    // ...
-    if size < 1 {
-        log.Fatal("Tamanho inválido. O tamanho deve ser maior que 0.")
-    }
-    if depth < 1 {
-        log.Fatal("Profundidade inválida. A profundidade deve ser maior que 0.")
-    }
-    if iterations < 1 {
-        log.Fatal("Número de iterações inválido. O número de iterações deve ser maior que 0.")
-    }
-    // ...
-}
-```
-```go
-func sierpinski(size int, depth int, char string) {
-    // ...
-    if char == "" {
-        log.Fatal("Caractere inválido. O caractere não pode ser vazio.")
-    }
-    // ...
-}
+*   **Tamanho mínimo**: Verificar como o programa se comporta com tamanhos mínimos para `--size`, `--width` e `--height` (por exemplo, 1).
+*   **Tamanho máximo**: Verificar como o programa se comporta com tamanhos máximos para `--size`, `--width` e `--height` (por exemplo, valores próximos ao limite do tipo `int`).
+*   **Profundidade mínima e máxima**: Verificar como o programa se comporta com profundidades mínimas e máximas para `--depth`.
+*   **Iterações mínimas e máximas**: Verificar como o programa se comporta com iterações mínimas e máximas para `--iterations`.
+*   **Caractere inválido**: Verificar como o programa se comporta quando um caractere inválido é fornecido para `--char`.
+### Segurança
+*   **Injeção de Comandos**: Verificar se o programa está vulnerável a injeção de comandos, especialmente quando lidando com inputs de usuário.
+*   **Validação de Inputs**: Garantir que todos os inputs sejam validados e sanitizados para prevenir ataques de injeção de comandos ou outros tipos de ataques.
+*   **Uso de Bibliotecas Seguras**: Verificar se as bibliotecas utilizadas (como `github.com/spf13/cobra`) estão atualizadas e não apresentam vulnerabilidades conhecidas.
