@@ -1,152 +1,135 @@
 ---
 name: Desenvolvimento de Aplicativos Móvel com React Native
-description: Esta skill ensina a desenvolver aplicativos móveis para Android e iOS utilizando React Native, abordando conceitos como componentes, navegação e integração com APIs, além de tratamento de exceções e edge cases.
+description: Ensina técnicas avançadas para desenvolver aplicativos móveis cross-plataforma utilizando React Native
+---
 
-## Objetivo
-O objetivo desta skill é capacitar os desenvolvedores a criar aplicativos móveis para Android e iOS utilizando a tecnologia React Native, abordando conceitos fundamentais como componentes, navegação e integração com APIs, garantindo a robustez e a segurança dos aplicativos.
+## 1. Objetivo
+O objetivo deste guia é fornecer uma visão geral das técnicas avançadas para desenvolver aplicativos móveis cross-plataforma utilizando React Native. Ao final deste guia, você será capaz de criar aplicativos móveis robustos e escaláveis utilizando a plataforma React Native.
 
-## Pré-requisitos
-Para iniciar esta skill, é necessário ter conhecimento prévio em:
-* Desenvolvimento de aplicações web com JavaScript e React
-* Conceitos básicos de programação orientada a objetos
-* Familiaridade com o ecossistema de desenvolvimento de aplicativos móveis
+## 2. Pré-requisitos
+Para seguir este guia, você deve ter conhecimento básico em:
+* JavaScript
+* React
+* Desenvolvimento de aplicativos móveis
+* Ferramentas de linha de comando (CLI)
 
-## Passo a Passo Técnico / Exemplos de Código
-### Instalação do React Native
-Para começar a desenvolver aplicativos móveis com React Native, é necessário instalar o framework e configurar o ambiente de desenvolvimento. Isso pode ser feito executando o seguinte comando no terminal:
+Além disso, é recomendado ter experiência em desenvolvimento de aplicativos móveis com React Native.
+
+## 3. Passo a Passo Técnico / Exemplos de Código
+### 3.1 Configurando o Ambiente de Desenvolvimento
+Para começar a desenvolver aplicativos móveis com React Native, você precisa configurar o ambiente de desenvolvimento. Isso inclui:
+* Instalar o Node.js e o npm (Node Package Manager)
+* Instalar o React Native CLI
+* Configurar o emulador ou dispositivo físico para testar o aplicativo
+
 ```bash
 npm install -g react-native-cli
 ```
-### Criação de um Novo Projeto
-Após a instalação, crie um novo projeto React Native executando:
+
+### 3.2 Criando um Novo Projeto
+Para criar um novo projeto React Native, execute o seguinte comando:
 ```bash
 npx react-native init NomeDoProjeto
 ```
-### Desenvolvimento de Componentes
-Os componentes são a base para a construção de interfaces de usuário em React Native. Um exemplo de componente simples é:
+
+### 3.3 Estruturando o Código
+A estrutura de código de um aplicativo React Native é semelhante à de um aplicativo web. Você precisa criar componentes, lidar com estado e props, e utilizar a API do React Native para interagir com o dispositivo móvel.
+
 ```jsx
-import React from 'react';
-import { View, Text } from 'react-native';
-
-const MeuComponente = () => {
-  return (
-    <View>
-      <Text>Olá, Mundo!</Text>
-    </View>
-  );
-};
-
-export default MeuComponente;
-```
-### Navegação entre Telas
-A navegação entre telas é fundamental em aplicativos móveis. O React Navigation é uma biblioteca popular para gerenciar a navegação:
-```jsx
-import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import TelaPrincipal from './TelaPrincipal';
-import TelaSecundaria from './TelaSecundaria';
-
-const Stack = createStackNavigator();
+import React, { useState } from 'react';
+import { View, Text, Button } from 'react-native';
 
 const App = () => {
+  const [contador, setContador] = useState(0);
+
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="TelaPrincipal" component={TelaPrincipal} />
-        <Stack.Screen name="TelaSecundaria" component={TelaSecundaria} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <View>
+      <Text>Contador: {contador}</Text>
+      <Button title="Incrementar" onPress={() => setContador(contador + 1)} />
+    </View>
   );
 };
 
 export default App;
 ```
-### Integração com APIs
-A integração com APIs é crucial para obter dados dinâmicos. O Axios é uma biblioteca popular para fazer requisições HTTP:
-```jsx
-import axios from 'axios';
 
-const obterDados = async () => {
-  try {
-    const resposta = await axios.get('https://api.exemplo.com/dados');
-    console.log(resposta.data);
-  } catch (erro) {
-    console.error(erro);
-  }
-};
+## 4. Validação
+Para validar o aplicativo, você pode utilizar ferramentas como o Jest e o Enzyme para testar os componentes e a lógica de negócios. Além disso, é importante testar o aplicativo em diferentes dispositivos e plataformas para garantir a compatibilidade e a estabilidade.
+
+```bash
+npm test
 ```
-## Validação
-Para validar o conhecimento adquirido, é recomendado desenvolver um aplicativo móvel completo que aborde os conceitos aprendidos, como componentes, navegação e integração com APIs. Além disso, é importante testar o aplicativo em diferentes dispositivos e plataformas para garantir a compatibilidade e a usabilidade.
 
-## ⚠️ Tratamento de Exceções e Edge Cases
-Para garantir a robustez e a segurança dos aplicativos, é fundamental tratar exceções e edge cases. Aqui estão alguns exemplos:
-* **Tratamento de erros de rede**: ao fazer requisições HTTP, é importante tratar erros de rede, como perda de conexão ou timeouts.
+## 5. ⚠️ Tratamento de Exceções e Edge Cases
+É fundamental tratar exceções e edge cases para garantir a robustez e a estabilidade do aplicativo. Aqui estão alguns exemplos de como lidar com esses casos:
+
+* **Tratamento de erros de rede**: utilize try-catch para capturar erros de rede e exibir uma mensagem de erro ao usuário.
+* **Validação de entrada de usuário**: valide a entrada de usuário para evitar erros de sintaxe e garantir que os dados sejam consistentes.
+* **Lidar com dispositivos com recursos limitados**: otimize o aplicativo para funcionar em dispositivos com recursos limitados, como memória e processamento.
+* **Testar em diferentes plataformas e dispositivos**: teste o aplicativo em diferentes plataformas e dispositivos para garantir a compatibilidade e a estabilidade.
+
+Exemplo de tratamento de erros de rede:
 ```jsx
-import axios from 'axios';
+import React, { useState, useEffect } from 'react';
+import { View, Text, Button } from 'react-native';
 
-const obterDados = async () => {
-  try {
-    const resposta = await axios.get('https://api.exemplo.com/dados');
-    console.log(resposta.data);
-  } catch (erro) {
-    if (erro.response) {
-      // Tratar erros de resposta
-      console.error(erro.response.data);
-    } else if (erro.request) {
-      // Tratar erros de requisição
-      console.error(erro.request);
-    } else {
-      // Tratar erros desconhecidos
-      console.error(erro);
-    }
+const App = () => {
+  const [dados, setDados] = useState(null);
+  const [erro, setErro] = useState(null);
+
+  useEffect(() => {
+    fetch('https://api.example.com/dados')
+      .then(response => response.json())
+      .then(data => setDados(data))
+      .catch(error => setErro(error.message));
+  }, []);
+
+  if (erro) {
+    return (
+      <View>
+        <Text>Erro: {erro}</Text>
+      </View>
+    );
   }
+
+  return (
+    <View>
+      <Text>Dados: {dados}</Text>
+    </View>
+  );
 };
+
+export default App;
 ```
-* **Tratamento de erros de parsing**: ao receber dados em formato JSON, é importante tratar erros de parsing.
+
+Exemplo de validação de entrada de usuário:
 ```jsx
-import axios from 'axios';
+import React, { useState } from 'react';
+import { View, Text, Button, TextInput } from 'react-native';
 
-const obterDados = async () => {
-  try {
-    const resposta = await axios.get('https://api.exemplo.com/dados');
-    const dados = JSON.parse(resposta.data);
-    console.log(dados);
-  } catch (erro) {
-    if (erro instanceof SyntaxError) {
-      // Tratar erros de parsing
-      console.error('Erro de parsing:', erro);
+const App = () => {
+  const [nome, setNome] = useState('');
+  const [erro, setErro] = useState(null);
+
+  const validarNome = () => {
+    if (nome.length < 3) {
+      setErro('Nome deve ter pelo menos 3 caracteres');
     } else {
-      // Tratar erros desconhecidos
-      console.error(erro);
-    }
-  }
-};
-```
-* **Tratamento de edge cases**: é importante tratar edge cases, como entrada de usuário inválida ou falta de permissões.
-```jsx
-import React from 'react';
-import { View, Text } from 'react-native';
-
-const MeuComponente = () => {
-  const [entrada, setEntrada] = React.useState('');
-
-  const handleEntrada = (texto) => {
-    if (texto.length > 10) {
-      // Tratar entrada inválida
-      console.error('Entrada inválida');
-    } else {
-      setEntrada(texto);
+      setErro(null);
     }
   };
 
   return (
     <View>
-      <Text>Olá, Mundo!</Text>
-      <TextInput value={entrada} onChangeText={handleEntrada} />
+      <TextInput
+        placeholder="Nome"
+        value={nome}
+        onChangeText={setNome}
+        onBlur={validarNome}
+      />
+      {erro && <Text>Erro: {erro}</Text>}
     </View>
   );
 };
 
-export default MeuComponente;
-```
+export default App;
