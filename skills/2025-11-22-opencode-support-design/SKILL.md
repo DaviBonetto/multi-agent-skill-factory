@@ -1,2 +1,5 @@
 # OpenCode Support Design
-... (conteúdo do arquivo SKILL.md)
+**Date:** 2025-11-22
+**Author:** Bot & Jesse
+**Status:** Design Complete, Awaiting Implementation
+...
