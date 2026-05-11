@@ -47,14 +47,10 @@ Task tool (general-purpose):
 
     ⚠️ Tratamento de Exceções e Edge Cases
 
-    *   **Planos vazios ou inexistentes:** Se o plano estiver vazio ou não for encontrado, o revisor deve retornar um status de "Issues Found" com uma descrição do problema.
-    *   **Especificações inconsistentes:** Se a especificação for inconsistente ou contiver erros, o revisor deve retornar um status de "Issues Found" com uma descrição do problema.
-    *   **Tarefas mal definidas:** Se as tarefas estiverem mal definidas ou forem ambíguas, o revisor deve retornar um status de "Issues Found" com uma descrição do problema.
-    *   **Problemas de segurança:** Se o plano contiver problemas de segurança, como a falta de autenticação ou autorização, o revisor deve retornar um status de "Issues Found" com uma descrição do problema.
-    *   **Erros de formatação:** Se o plano contiver erros de formatação, como caracteres especiais não escapados, o revisor deve retornar um status de "Issues Found" com uma descrição do problema.
-    *   **Limitações de recursos:** Se o plano exigir recursos que não estão disponíveis, como hardware ou software específico, o revisor deve retornar um status de "Issues Found" com uma descrição do problema.
-    *   **Dependências não resolvidas:** Se o plano contiver dependências não resolvidas, como bibliotecas ou frameworks não instalados, o revisor deve retornar um status de "Issues Found" com uma descrição do problema.
-    *   **Problemas de escalabilidade:** Se o plano não for escalável, o revisor deve retornar um status de "Issues Found" com uma descrição do problema.
-    *   **Falta de documentação:** Se o plano não contiver documentação suficiente, o revisor deve retornar um status de "Issues Found" com uma descrição do problema.
+    * **Planos vazios ou inexistentes:** Se o plano estiver vazio ou não existir, retorne um erro com a mensagem "Plano não encontrado ou vazio".
+    * **Especificações inconsistentes:** Se as especificações forem inconsistentes ou contenham erros, retorne um erro com a mensagem "Especificações inconsistentes".
+    * **Tarefas mal definidas:** Se as tarefas estiverem mal definidas ou forem ambíguas, retorne um erro com a mensagem "Tarefas mal definidas".
+    * **Problemas de segurança:** Se o plano contiver problemas de segurança, como a falta de autenticação ou autorização, retorne um erro com a mensagem "Problemas de segurança detectados".
+    * **Limites de recursos:** Se o plano exigir recursos excessivos, como memória ou processamento, retorne um erro com a mensagem "Limites de recursos excedidos".
 
 **Reviewer returns:** Status, Issues (if any), Recommendations
