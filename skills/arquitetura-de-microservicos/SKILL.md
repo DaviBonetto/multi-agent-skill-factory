@@ -1,150 +1,128 @@
 ---
 name: Arquitetura de Microsserviços
-description: Ensina como projetar e implementar arquiteturas de microsserviços escaláveis e seguras, utilizando tecnologias como Docker e Kubernetes.
+description: Esta habilidade aborda a concepção e implementação de arquiteturas de microsserviços, incluindo design de serviços, comunicação entre serviços e gerenciamento de escalabilidade.
 ---
 
 ## Objetivo
-O objetivo deste guia é fornecer uma visão geral de como projetar e implementar arquiteturas de microsserviços escaláveis e seguras, utilizando tecnologias como Docker e Kubernetes. Isso inclui entender os conceitos básicos de microsserviços, como eles se diferenciam da arquitetura monolítica, e como utilizar ferramentas de orquestração de contêineres para gerenciar esses serviços.
+O objetivo desta habilidade é fornecer conhecimentos e técnicas para conceber e implementar arquiteturas de microsserviços eficazes, escaláveis e fáceis de manter. Isso inclui entender como projetar serviços independentes, comunicá-los de forma eficiente e gerenciar a escalabilidade da arquitetura como um todo.
 
 ## Pré-requisitos
-Para seguir este guia, é necessário ter conhecimento básico em:
+Para aproveitar ao máximo esta habilidade, é recomendado ter conhecimentos básicos em:
 - Desenvolvimento de software
-- Conceitos de rede e sistemas operacionais
-- Familiaridade com linha de comando e terminais
-- Conhecimento básico de Docker e Kubernetes é recomendado, mas não necessário
+- Arquitetura de software
+- Protocolos de comunicação (como HTTP, gRPC, etc.)
+- Ferramentas de gerenciamento de contêineres (como Docker)
+- Orquestradores de contêineres (como Kubernetes)
 
 ## Passo a Passo Técnico / Exemplos de Código
-### 1. Introdução a Microsserviços
-Microsserviços são uma abordagem de arquitetura de software que envolve dividir uma aplicação em serviços menores, independentes e escaláveis. Cada serviço é responsável por uma funcionalidade específica da aplicação.
-
-### 2. Preparação do Ambiente
-Para começar a trabalhar com microsserviços, é necessário ter o Docker e o Kubernetes instalados no seu sistema. Você pode instalar o Docker seguindo as instruções no site oficial do Docker, e o Kubernetes pode ser instalado utilizando ferramentas como o Minikube.
-
-```bash
-# Instalar o Docker no Ubuntu
-sudo apt update
-sudo apt install docker.io -y
-
-# Iniciar o Docker
-sudo systemctl start docker
-
-# Instalar o Minikube
-curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.23.0/minikube-linux-amd64
-sudo install minikube-linux-amd64 /usr/local/bin/minikube
-
-# Iniciar o Minikube
-minikube start
-```
-
-### 3. Criando um Microsserviço
-Um microsserviço pode ser criado utilizando qualquer linguagem de programação. Aqui, vamos usar Python como exemplo.
+### 1. Projetando Serviços
+Ao projetar serviços em uma arquitetura de microsserviços, é importante considerar a responsabilidade única de cada serviço e como eles se comunicarão. Por exemplo, em um sistema de e-commerce, você pode ter serviços separados para gerenciar produtos, pedidos e pagamentos.
 
 ```python
-# exemplo.py
-from flask import Flask
-app = Flask(__name__)
+# Exemplo de serviço de produtos em Python
+from fastapi import FastAPI
 
-@app.route("/")
-def hello():
+app = FastAPI()
+
+@app.get("/produtos/")
+def ler_produtos():
     try:
-        # Lógica do microsserviço
-        return "Olá, Microsserviço!"
+        # Lógica para ler produtos
+        return [{"id": 1, "nome": "Produto 1"}, {"id": 2, "nome": "Produto 2"}]
     except Exception as e:
-        # Tratamento de exceção
-        return f"Erro: {str(e)}", 500
-
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+        return {"erro": str(e)}
 ```
 
-### 4. Containerizando o Microsserviço
-Para containerizar o microsserviço, é necessário criar um arquivo Dockerfile.
+### 2. Comunicação entre Serviços
+A comunicação entre serviços pode ser feita através de APIs RESTful, gRPC, ou outras tecnologias de comunicação. É importante escolher a tecnologia certa com base nas necessidades do sistema.
 
-```dockerfile
-# Dockerfile
-FROM python:3.9-slim
+```python
+# Exemplo de comunicação entre serviços usando REST
+import requests
 
-WORKDIR /app
-
-COPY . .
-
-RUN pip install flask
-
-CMD ["python", "exemplo.py"]
+def obter_pedido(id_pedido):
+    try:
+        resposta = requests.get(f"http://servico-pedidos:8000/pedidos/{id_pedido}", timeout=5)
+        resposta.raise_for_status()
+        return resposta.json()
+    except requests.exceptions.RequestException as e:
+        return {"erro": str(e)}
 ```
 
-### 5. Orquestrando com Kubernetes
-Para orquestrar o microsserviço com Kubernetes, é necessário criar um arquivo de definição de deployment.
+### 3. Gerenciamento de Escalabilidade
+O gerenciamento de escalabilidade é crucial em arquiteturas de microsserviços. Isso pode ser alcançado usando contêineres e orquestradores de contêineres.
 
 ```yml
-# deployment.yaml
+# Exemplo de arquivo de configuração para Kubernetes
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: microsservico
+  name: deployment-produtos
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: microsservico
+      app: produtos
   template:
     metadata:
       labels:
-        app: microsservico
+        app: produtos
     spec:
       containers:
-      - name: microsservico
-        image: microsservico:latest
+      - name: produtos
+        image: imagem-produtos:latest
         ports:
-        - containerPort: 5000
-      restartPolicy: Always
+        - containerPort: 8000
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 200m
+            memory: 256Mi
 ```
 
 ## Validação
-Para validar a implementação, você pode utilizar ferramentas de monitoramento e logging para garantir que os serviços estão funcionando corretamente e escalando conforme necessário. Além disso, é importante realizar testes de desempenho e segurança para garantir a estabilidade e a segurança da arquitetura de microsserviços.
+Para validar a implementação de uma arquitetura de microsserviços, é importante realizar testes de unidade, integração e de carga. Além disso, monitorar o desempenho do sistema e realizar ajustes conforme necessário é fundamental para garantir a escalabilidade e a confiabilidade do sistema.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-É fundamental considerar os seguintes casos de borda e exceções:
-- **Falha de rede**: Implementar mecanismos de retry e timeout para lidar com falhas de rede.
-- **Falha de serviço**: Implementar mecanismos de circuit breaker para lidar com falhas de serviço.
-- **Sobrecarga de tráfego**: Implementar mecanismos de escalonamento automático para lidar com sobrecarga de tráfego.
-- **Erros de segurança**: Implementar mecanismos de autenticação e autorização para lidar com erros de segurança.
-- **Erros de desempenho**: Implementar mecanismos de monitoramento e otimização para lidar com erros de desempenho.
+Ao implementar uma arquitetura de microsserviços, é importante considerar os seguintes edge cases e exceções:
+- **Timeouts**: Definir timeouts para as comunicações entre serviços para evitar que o sistema fique travado.
+- **Erros de comunicação**: Tratar erros de comunicação entre serviços, como erros de rede ou timeouts.
+- **Erros de negócio**: Tratar erros de negócio, como erros de validação de dados ou erros de lógica de negócio.
+- **Segurança**: Implementar medidas de segurança, como autenticação e autorização, para proteger os serviços e os dados.
+- **Escalabilidade**: Implementar mecanismos de escalabilidade para garantir que o sistema possa lidar com aumentos de carga.
+- **Monitoramento**: Implementar monitoramento para detectar problemas e realizar ajustes conforme necessário.
 
-Exemplo de tratamento de exceção em Python:
+Exemplos de código para tratamento de exceções e edge cases:
 ```python
-try:
-    # Lógica do microsserviço
-    return "Olá, Microsserviço!"
-except Exception as e:
-    # Tratamento de exceção
-    return f"Erro: {str(e)}", 500
+# Exemplo de tratamento de exceção de timeout
+import requests
+
+def obter_pedido(id_pedido):
+    try:
+        resposta = requests.get(f"http://servico-pedidos:8000/pedidos/{id_pedido}", timeout=5)
+        resposta.raise_for_status()
+        return resposta.json()
+    except requests.exceptions.Timeout:
+        return {"erro": "Timeout"}
+    except requests.exceptions.RequestException as e:
+        return {"erro": str(e)}
 ```
-Exemplo de tratamento de edge case em Kubernetes:
-```yml
-# deployment.yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: microsservico
-spec:
-  replicas: 3
-  selector:
-    matchLabels:
-      app: microsservico
-  template:
-    metadata:
-      labels:
-        app: microsservico
-    spec:
-      containers:
-      - name: microsservico
-        image: microsservico:latest
-        ports:
-        - containerPort: 5000
-      restartPolicy: Always
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 0
+
+```python
+# Exemplo de tratamento de exceção de erro de negócio
+from fastapi import FastAPI
+
+app = FastAPI()
+
+@app.get("/produtos/")
+def ler_produtos():
+    try:
+        # Lógica para ler produtos
+        return [{"id": 1, "nome": "Produto 1"}, {"id": 2, "nome": "Produto 2"}]
+    except ValueError as e:
+        return {"erro": "Erro de validação de dados"}
+    except Exception as e:
+        return {"erro": str(e)}
+```
