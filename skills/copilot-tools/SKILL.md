@@ -46,15 +46,18 @@ Copilot CLI supports persistent async shell sessions, which have no direct Claud
 Ao utilizar as ferramentas do Copilot CLI, é importante considerar os seguintes casos de exceção e edge cases:
 
 * **Erros de sintaxe**: Verifique se os comandos estão corretamente formatados e se os parâmetros estão sendo passados corretamente.
-* **Comandos não suportados**: Certifique-se de que os comandos utilizados são suportados pela plataforma e pela versão do Copilot CLI.
-* **Limites de recursos**: Tenha em mente os limites de recursos (como memória, CPU, etc.) ao executar comandos que possam consumir muitos recursos.
-* **Conflitos de nome**: Evite conflitos de nome entre variáveis, funções e comandos.
-* **Segurança**: Sempre verifique se os comandos estão sendo executados de forma segura, especialmente quando se trata de operações que envolvem dados sensíveis.
-* **Timeouts**: Defina timeouts adequados para comandos que possam demorar muito tempo para serem executados.
-* **Tratamento de erros**: Implemente um tratamento de erros adequado para lidar com erros inesperados que possam ocorrer durante a execução dos comandos.
+* **Comandos não encontrados**: Se um comando não for encontrado, verifique se o nome do comando está correto e se o comando está instalado e configurado corretamente.
+* **Erros de permissão**: Verifique se o usuário tem as permissões necessárias para executar os comandos.
+* **Limites de recursos**: Verifique se os recursos (como memória e CPU) estão disponíveis para executar os comandos.
+* **Conexões de rede**: Verifique se as conexões de rede estão estáveis e se os servidores estão respondendo corretamente.
+* **Dados inválidos**: Verifique se os dados sendo passados para os comandos estão válidos e consistentes.
+* **Timeouts**: Verifique se os timeouts estão configurados corretamente para evitar que os comandos fiquem pendentes por muito tempo.
+* **Dependências**: Verifique se as dependências necessárias estão instaladas e configuradas corretamente.
 
 Além disso, é importante considerar os seguintes edge cases:
 
-* **Execução de comandos em paralelo**: Certifique-se de que os comandos sejam executados de forma thread-safe e que não haja conflitos entre eles.
-* **Uso de variáveis globais**: Evite o uso de variáveis globais sempre que possível, pois elas podem causar problemas de escopo e conflitos entre comandos.
-* **Manipulação de arquivos**: Tenha cuidado ao manipular arquivos, especialmente quando se trata de operações de leitura e escrita, para evitar perda de dados ou corrupção de arquivos.
+* **Comandos com muitos parâmetros**: Verifique se os comandos com muitos parâmetros estão sendo executados corretamente e se os parâmetros estão sendo passados corretamente.
+* **Comandos com saídas grandes**: Verifique se os comandos com saídas grandes estão sendo executados corretamente e se as saídas estão sendo processadas corretamente.
+* **Comandos que exigem interação**: Verifique se os comandos que exigem interação estão sendo executados corretamente e se a interação está sendo processada corretamente.
+
+Ao considerar esses casos de exceção e edge cases, é possível garantir que as ferramentas do Copilot CLI sejam utilizadas de forma segura e eficaz.
