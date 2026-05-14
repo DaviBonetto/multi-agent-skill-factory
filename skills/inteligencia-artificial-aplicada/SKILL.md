@@ -1,87 +1,93 @@
 ---
-name: Desenvolvimento de Sistemas Inteligentes
-description: Esta habilidade ensina a aplicar conceitos de inteligência artificial em sistemas de software
+name: Inteligência Artificial Aplicada
+description: Ensina conceitos avançados de inteligência artificial, incluindo aprendizado de máquina, processamento de linguagem natural e visão computacional.
 ---
 
 ## Objetivo
-O objetivo desta habilidade é capacitar os desenvolvedores a criar sistemas inteligentes utilizando conceitos de inteligência artificial, permitindo que eles criem soluções inovadoras e eficazes para problemas complexos.
+O objetivo deste guia é fornecer uma visão geral dos conceitos avançados de inteligência artificial, incluindo aprendizado de máquina, processamento de linguagem natural e visão computacional, e como aplicá-los em projetos práticos.
 
 ## Pré-requisitos
-Para aproveitar ao máximo esta habilidade, é recomendado que os desenvolvedores tenham conhecimento prévio em:
-* Programação em linguagens como Python, Java ou C++
-* Conceitos básicos de inteligência artificial, como aprendizado de máquina e processamento de linguagem natural
-* Experiência em desenvolvimento de software e resolução de problemas
+Para seguir este guia, é necessário ter conhecimento básico em:
+* Programação em Python
+* Conceitos básicos de inteligência artificial e aprendizado de máquina
+* Familiaridade com bibliotecas como scikit-learn, TensorFlow e Keras
 
 ## Passo a Passo Técnico / Exemplos de Código
-### Etapa 1: Definição do Problema
-Defina o problema que você deseja resolver utilizando inteligência artificial. Isso pode incluir tarefas como classificação de imagens, previsão de séries temporais ou análise de texto.
-
-### Etapa 2: Escolha da Tecnologia
-Escolha a tecnologia e as bibliotecas mais adequadas para o problema. Por exemplo, você pode utilizar:
+### Aprendizado de Máquina
+O aprendizado de máquina é um subconjunto da inteligência artificial que se concentra em desenvolver algoritmos que possam aprender e melhorar com a experiência. Aqui está um exemplo simples de como treinar um modelo de aprendizado de máquina usando scikit-learn:
 ```python
-import tensorflow as tf
+from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split
-```
-para criar um modelo de aprendizado de máquina.
+from sklearn.linear_model import LogisticRegression
 
-### Etapa 3: Coleta e Preparação dos Dados
-Coletar e preparar os dados necessários para treinar o modelo. Isso pode incluir:
-```python
-# Carregar os dados
-try:
-    df = pd.read_csv('dados.csv')
-except FileNotFoundError:
-    print("Arquivo de dados não encontrado.")
-    exit(1)
+# Carregar o conjunto de dados
+iris = load_iris()
+X = iris.data
+y = iris.target
 
-# Preparar os dados
-try:
-    X = df.drop('target', axis=1)
-    y = df['target']
-except KeyError:
-    print("Coluna 'target' não encontrada no arquivo de dados.")
-    exit(1)
-```
-### Etapa 4: Treinamento do Modelo
-Treinar o modelo utilizando os dados preparados. Por exemplo:
-```python
-# Criar o modelo
-modelo = tf.keras.models.Sequential([
-    tf.keras.layers.Dense(64, activation='relu', input_shape=(X.shape[1],)),
-    tf.keras.layers.Dense(32, activation='relu'),
-    tf.keras.layers.Dense(1)
-])
-
-# Compilar o modelo
-modelo.compile(optimizer='adam', loss='mean_squared_error')
+# Dividir o conjunto de dados em treino e teste
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
 # Treinar o modelo
-try:
-    modelo.fit(X, y, epochs=10)
-except Exception as e:
-    print(f"Erro ao treinar o modelo: {e}")
-    exit(1)
-```
-## Validação
-Para validar o modelo, é importante avaliar seu desempenho utilizando métricas como precisão, recall e F1-score. Isso pode ser feito utilizando:
-```python
-# Avaliar o modelo
-try:
-    y_pred = modelo.predict(X_test)
-    print('Precisão:', metrics.accuracy_score(y_test, y_pred))
-    print('Recall:', metrics.recall_score(y_test, y_pred))
-    print('F1-score:', metrics.f1_score(y_test, y_pred))
-except Exception as e:
-    print(f"Erro ao avaliar o modelo: {e}")
-    exit(1)
-```
-## ⚠️ Tratamento de Exceções e Edge Cases
-Além das etapas anteriores, é fundamental considerar os seguintes casos de bordo e exceções:
-* **Dados faltantes**: Verifique se os dados estão completos e não contêm valores nulos ou faltantes.
-* **Dados inconsistentes**: Verifique se os dados estão consistentes e não contêm erros de digitação ou formatação.
-* **Modelo não converge**: Verifique se o modelo está convergindo durante o treinamento e ajuste os hiperparâmetros se necessário.
-* **Overfitting ou underfitting**: Verifique se o modelo está sofrendo de overfitting ou underfitting e ajuste os hiperparâmetros ou a arquitetura do modelo se necessário.
-* **Erros de inicialização**: Verifique se os pesos e vieses do modelo estão sendo inicializados corretamente.
-* **Erros de compilação**: Verifique se o modelo está sendo compilado corretamente e se as funções de perda e otimização estão sendo definidas corretamente.
+modelo = LogisticRegression()
+modelo.fit(X_train, y_train)
 
-Essas etapas devem ser seguidas para criar um sistema inteligente utilizando conceitos de inteligência artificial. Lembre-se de que a prática e a experimentação são fundamentais para dominar essa habilidade.
+# Avaliar o modelo
+print("Acurácia:", modelo.score(X_test, y_test))
+```
+### Processamento de Linguagem Natural
+O processamento de linguagem natural é um subconjunto da inteligência artificial que se concentra em desenvolver algoritmos que possam entender e gerar linguagem natural. Aqui está um exemplo simples de como usar a biblioteca NLTK para realizar o processamento de linguagem natural:
+```python
+import nltk
+from nltk.tokenize import word_tokenize
+
+# Tokenizar o texto
+texto = "Este é um exemplo de texto."
+tokens = word_tokenize(texto)
+
+# Imprimir os tokens
+print(tokens)
+```
+### Visão Computacional
+A visão computacional é um subconjunto da inteligência artificial que se concentra em desenvolver algoritmos que possam entender e interpretar imagens e vídeos. Aqui está um exemplo simples de como usar a biblioteca OpenCV para realizar a visão computacional:
+```python
+import cv2
+
+# Carregar a imagem
+imagem = cv2.imread("imagem.jpg")
+
+# Imprimir a imagem
+cv2.imshow("Imagem", imagem)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+```
+
+## Validação
+Para validar os conceitos aprendidos, é importante aplicá-los em projetos práticos e realizar testes e avaliações para garantir que os algoritmos estejam funcionando corretamente. Além disso, é importante manter-se atualizado com as últimas tendências e avanços na área de inteligência artificial e aprendizado de máquina.
+
+## ⚠️ Tratamento de Exceções e Edge Cases
+É fundamental considerar os casos de exceção e edge cases ao desenvolver algoritmos de inteligência artificial. Aqui estão alguns exemplos de como lidar com esses casos:
+* **Erro de carregamento de dados**: Verificar se os dados estão sendo carregados corretamente e lidar com erros de carregamento, como arquivos corrompidos ou não encontrados.
+* **Dados faltantes ou inconsistentes**: Lidar com dados faltantes ou inconsistentes, como valores nulos ou inconsistentes, e decidir como preencher ou ignorar esses dados.
+* **Overfitting ou underfitting**: Monitorar o desempenho do modelo e ajustar os hiperparâmetros para evitar overfitting ou underfitting.
+* **Erros de processamento de linguagem natural**: Lidar com erros de tokenização, como palavras desconhecidas ou pontuação incorreta.
+* **Erros de visão computacional**: Lidar com erros de carregamento de imagens, como imagens corrompidas ou não encontradas.
+
+Exemplos de código para lidar com esses casos:
+```python
+try:
+    # Carregar o conjunto de dados
+    iris = load_iris()
+except Exception as e:
+    print("Erro ao carregar o conjunto de dados:", e)
+
+# Lidar com dados faltantes ou inconsistentes
+if pd.isnull(X).any().any():
+    print("Dados faltantes ou inconsistentes detectados.")
+    # Decidir como preencher ou ignorar esses dados
+
+# Monitorar o desempenho do modelo
+if modelo.score(X_test, y_test) < 0.8:
+    print("Overfitting ou underfitting detectado.")
+    # Ajustar os hiperparâmetros do modelo
+```
