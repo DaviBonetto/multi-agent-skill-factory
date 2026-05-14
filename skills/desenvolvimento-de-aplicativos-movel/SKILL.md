@@ -1,26 +1,24 @@
 ---
-name: Desenvolvimento de Aplicativos Móveis Avançados
-description: Esta habilidade ensina a desenvolver aplicativos móveis com tecnologias modernas
+name: Desenvolvimento de Aplicativos Móvel
+description: Ensina técnicas avançadas de desenvolvimento de aplicativos móveis
 ---
 
 ## Objetivo
-O objetivo desta habilidade é capacitar os desenvolvedores a criar aplicativos móveis avançados utilizando tecnologias modernas, garantindo uma experiência de usuário aprimorada e eficiência no desenvolvimento.
+O objetivo deste guia é fornecer uma visão geral completa e técnica do desenvolvimento de aplicativos móveis, abordando desde o design de interface de usuário até a otimização de desempenho, com foco em linguagens como Java e Swift.
 
 ## Pré-requisitos
-Para iniciar o desenvolvimento de aplicativos móveis avançados, é necessário ter conhecimento básico em:
-* Programação em linguagens como Java, Swift ou Kotlin
-* Desenvolvimento de aplicativos móveis com frameworks como React Native ou Flutter
-* Conhecimento de bancos de dados e APIs
+Para seguir este guia, é recomendado que os desenvolvedores tenham conhecimento básico em:
+- Programação orientada a objetos
+- Conhecimento em pelo menos uma linguagem de programação (preferencialmente Java ou Swift)
+- Familiaridade com ambientes de desenvolvimento integrado (IDEs) como Android Studio ou Xcode
 
 ## Passo a Passo Técnico / Exemplos de Código
-### Configuração do Ambiente
-1. Instalar o SDK do Android ou iOS
-2. Configurar o ambiente de desenvolvimento com o uso de IDEs como Android Studio ou Xcode
-3. Instalar dependências e bibliotecas necessárias
+### Design de Interface de Usuário
+O design de interface de usuário é crucial para a experiência do usuário. Utilize ferramentas como Figma ou Sketch para criar protótipos visuais antes de iniciar a codificação.
 
-### Desenvolvimento do Aplicativo
+### Programação em Java para Android
 ```java
-// Exemplo de código em Java para criar um aplicativo móvel
+// Exemplo de uma Activity simples em Android
 public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,37 +28,42 @@ public class MainActivity extends AppCompatActivity {
 }
 ```
 
+### Programação em Swift para iOS
 ```swift
-// Exemplo de código em Swift para criar um aplicativo móvel
+// Exemplo de uma ViewController simples em iOS
 import UIKit
 
 class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
+        // Configuração inicial
     }
 }
 ```
 
-### Integração com APIs e Bancos de Dados
-1. Utilizar bibliotecas como Retrofit ou OkHttp para realizar requisições HTTP
-2. Integrar com bancos de dados como Firebase ou MongoDB
+### Otimização de Desempenho
+- Minifique e ofusque o código para reduzir o tamanho do aplicativo.
+- Use técnicas de caching para melhorar a performance de dados.
+- Otimize as consultas de banco de dados para evitar gargalos.
 
 ## Validação
-Para validar o aplicativo, é necessário realizar testes unitários e de integração, garantindo que o aplicativo atenda aos requisitos funcionais e não funcionais. Além disso, é importante realizar testes de usabilidade e experiência do usuário para garantir que o aplicativo seja intuitivo e agradável de usar.
+Para validar o desenvolvimento do aplicativo móvel, é importante realizar testes unitários, de integração e de UI. Utilize frameworks de teste como JUnit para Android e XCTest para iOS. Além disso, realize testes de desempenho e benchmarking para garantir que o aplicativo atenda aos requisitos de performance.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-Para garantir a robustez e segurança do aplicativo, é fundamental tratar exceções e edge cases. Aqui estão algumas considerações importantes:
-* **Tratamento de erros de rede**: Implementar mecanismos para lidar com erros de rede, como perda de conexão ou timeouts.
-* **Validação de dados**: Validar todos os dados de entrada para evitar ataques de injeção de código ou cross-site scripting (XSS).
-* **Tratamento de exceções**: Implementar blocos try-catch para lidar com exceções inesperadas e evitar que o aplicativo crash.
-* **Edge cases**: Considerar cenários de edge cases, como:
- + Usuários com permissões limitadas
- + Dispositivos com recursos limitados (memória, processamento, etc.)
- + Conexões de rede instáveis ou lentas
- + Dados de entrada inválidos ou inconsistentes
+### Tratamento de Exceções
+- Utilize blocos try-catch para capturar e tratar exceções em tempo de execução.
+- Implemente mecanismos de logging para registrar erros e exceções.
+- Forneça feedback ao usuário em caso de erros ou exceções.
 
-Exemplos de código para tratamento de exceções e edge cases:
+### Edge Cases
+- **Conexão de rede instável**: Implemente mecanismos de retry e timeout para lidar com conexões de rede instáveis.
+- **Dados inválidos**: Valide os dados de entrada e saída para evitar erros de processamento.
+- **Dispositivos com recursos limitados**: Otimize o aplicativo para funcionar em dispositivos com recursos limitados, como memória e processamento.
+- **Compatibilidade com diferentes versões do sistema operacional**: Teste o aplicativo em diferentes versões do sistema operacional para garantir a compatibilidade.
+
+Exemplos de código para tratamento de exceções:
 ```java
+// Exemplo de tratamento de exceção em Java
 try {
     // Código que pode lançar uma exceção
 } catch (Exception e) {
@@ -70,6 +73,7 @@ try {
 ```
 
 ```swift
+// Exemplo de tratamento de exceção em Swift
 do {
     // Código que pode lançar uma exceção
 } catch {
