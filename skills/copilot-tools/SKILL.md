@@ -41,23 +41,22 @@ Copilot CLI supports persistent async shell sessions, which have no direct Claud
 | `fetch_copilot_cli_documentation` | Look up Copilot CLI documentation |
 | GitHub MCP tools (`github-mcp-server-*`) | Native GitHub API access (issues, PRs, code search) |
 
-## ⚠️ Tratamento de Exceções e Edge Cases
+## Tratamento de Exceções e Edge Cases
 
 Ao utilizar as ferramentas do Copilot CLI, é importante considerar os seguintes casos de exceção e edge cases:
 
 * **Erros de sintaxe**: Verifique se os comandos estão corretamente formatados e se os parâmetros estão sendo passados corretamente.
-* **Comandos não encontrados**: Se um comando não for encontrado, verifique se o nome do comando está correto e se o comando está instalado e configurado corretamente.
-* **Erros de permissão**: Verifique se o usuário tem as permissões necessárias para executar os comandos.
-* **Limites de recursos**: Verifique se os recursos (como memória e CPU) estão disponíveis para executar os comandos.
-* **Conexões de rede**: Verifique se as conexões de rede estão estáveis e se os servidores estão respondendo corretamente.
-* **Dados inválidos**: Verifique se os dados sendo passados para os comandos estão válidos e consistentes.
-* **Timeouts**: Verifique se os timeouts estão configurados corretamente para evitar que os comandos fiquem pendentes por muito tempo.
-* **Dependências**: Verifique se as dependências necessárias estão instaladas e configuradas corretamente.
+* **Comandos não suportados**: Verifique se o comando utilizado é suportado pela plataforma e se está sendo utilizado corretamente.
+* **Erros de permissão**: Verifique se o usuário tem as permissões necessárias para executar o comando.
+* **Limites de recursos**: Verifique se os recursos necessários (como memória ou CPU) estão disponíveis para executar o comando.
+* **Conflitos de nomes**: Verifique se os nomes de arquivos ou variáveis não estão conflitando com outros nomes utilizados na sessão.
+* **Erros de conexão**: Verifique se a conexão com o servidor ou banco de dados está estabelecida corretamente.
+* **Timeouts**: Verifique se os comandos estão sendo executados dentro do tempo limite estabelecido.
+* **Erros de parsing**: Verifique se os dados estão sendo parseados corretamente e se os formatos estão sendo respeitados.
 
-Além disso, é importante considerar os seguintes edge cases:
+Além disso, é importante implementar mecanismos de tratamento de erros e exceções para lidar com situações inesperadas, como:
 
-* **Comandos com muitos parâmetros**: Verifique se os comandos com muitos parâmetros estão sendo executados corretamente e se os parâmetros estão sendo passados corretamente.
-* **Comandos com saídas grandes**: Verifique se os comandos com saídas grandes estão sendo executados corretamente e se as saídas estão sendo processadas corretamente.
-* **Comandos que exigem interação**: Verifique se os comandos que exigem interação estão sendo executados corretamente e se a interação está sendo processada corretamente.
-
-Ao considerar esses casos de exceção e edge cases, é possível garantir que as ferramentas do Copilot CLI sejam utilizadas de forma segura e eficaz.
+* **Try-catch**: Utilize blocos try-catch para capturar e tratar erros e exceções.
+* **Logging**: Registre os erros e exceções para facilitar a depuração e o diagnóstico.
+* **Retornos de erro**: Retorne códigos de erro ou mensagens de erro para indicar que um erro ocorreu.
+* **Recuperação**: Implemente mecanismos de recuperação para tentar executar o comando novamente ou para executar uma ação alternativa.
