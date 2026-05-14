@@ -1,145 +1,109 @@
 # Arquitetura de Microsserviços
-## Descrição
-Esta habilidade ensina a projetar sistemas de microsserviços escaláveis, permitindo que as aplicações sejam mais flexíveis, manuteníveis e resilientes.
-
 ## Objetivo
-O objetivo desta habilidade é capacitar os desenvolvedores a projetar e implementar sistemas de microsserviços escaláveis, permitindo que as aplicações sejam mais flexíveis, manuteníveis e resilientes.
-
+O objetivo deste guia é fornecer uma visão geral das técnicas de design e implementação de arquiteturas de microsserviços, incluindo comunicação entre serviços e gerenciamento de escalabilidade. Ao final deste guia, você estará capacitado a projetar e implementar uma arquitetura de microsserviços eficaz.
 ## Pré-requisitos
-Para aproveitar ao máximo esta habilidade, é recomendado que os desenvolvedores tenham conhecimento em:
-* Desenvolvimento de software orientado a serviços
-* Padrões de arquitetura de software
-* Linguagens de programação como Java, Python ou C#
-* Ferramentas de gerenciamento de containers como Docker
-* Orquestradores de containers como Kubernetes
-
+Para seguir este guia, é necessário ter conhecimento em:
+* Desenvolvimento de software
+* Arquitetura de software
+* Conceitos de microsserviços
+* Linguagens de programação (como Java, Python, etc.)
+* Ferramentas de gerenciamento de contêineres (como Docker)
 ## Passo a Passo Técnico / Exemplos de Código
-Aqui está um exemplo de como criar um microsserviço simples em Python usando Flask:
+### 1. Definição da Arquitetura
+A arquitetura de microsserviços é composta por vários serviços independentes que se comunicam entre si. Cada serviço é responsável por uma funcionalidade específica e pode ser desenvolvido, testado e implantado de forma independente.
+### 2. Comunicação entre Serviços
+A comunicação entre serviços pode ser feita utilizando protocolos de rede, como HTTP ou gRPC. Por exemplo, em um sistema de e-commerce, o serviço de pedidos pode se comunicar com o serviço de estoque para verificar a disponibilidade de produtos.
 ```python
-from flask import Flask, jsonify
-
-app = Flask(__name__)
-
-@app.route('/api/usuarios', methods=['GET'])
-def get_usuarios():
-    try:
-        usuarios = [
-            {'id': 1, 'nome': 'João'},
-            {'id': 2, 'nome': 'Maria'}
-        ]
-        return jsonify(usuarios)
-    except Exception as e:
-        return jsonify({'erro': str(e)}), 500
-
-if __name__ == '__main__':
-    app.run(debug=True)
+import requests
+# Solicitação para verificar a disponibilidade de produtos
+try:
+    response = requests.get('http://estoque:8080/produtos/disponiveis', timeout=5)
+    response.raise_for_status()
+    print('Produtos disponíveis')
+except requests.exceptions.HTTPError as errh:
+    print(f'Erro HTTP: {errh}')
+except requests.exceptions.ConnectionError as errc:
+    print(f'Erro de conexão: {errc}')
+except requests.exceptions.Timeout as errt:
+    print(f'Tempo limite excedido: {errt}')
+except requests.exceptions.RequestException as err:
+    print(f'Erro de requisição: {err}')
 ```
-Para criar um microsserviço em Java usando Spring Boot, você pode usar o seguinte exemplo:
-```java
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-@SpringBootApplication
-@RestController
-public class UsuarioService {
-    @GetMapping("/api/usuarios")
-    public String getUsuarios() {
-        try {
-            return "[{\"id\": 1, \"nome\": \"João\"}, {\"id\": 2, \"nome\": \"Maria\"}]";
-        } catch (Exception e) {
-            return "{\"erro\": \"" + e.getMessage() + "\"}";
-        }
-    }
-
-    public static void main(String[] args) {
-        SpringApplication.run(UsuarioService.class, args);
-    }
-}
-```
-Para orquestrar os microsserviços, você pode usar um arquivo de configuração YAML como o seguinte:
+### 3. Gerenciamento de Escalabilidade
+O gerenciamento de escalabilidade é crucial em uma arquitetura de microsserviços. Isso pode ser feito utilizando ferramentas de gerenciamento de contêineres, como Docker, e orquestradores de contêineres, como Kubernetes.
 ```yml
+# Exemplo de arquivo de configuração do Kubernetes
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: usuario-service
+  name: meu-servico
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: usuario-service
+      app: meu-servico
   template:
     metadata:
       labels:
-        app: usuario-service
+        app: meu-servico
     spec:
       containers:
-      - name: usuario-service
-        image: usuario-service:latest
+      - name: meu-servico
+        image: meu-servico:latest
         ports:
         - containerPort: 8080
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 200m
+            memory: 256Mi
 ```
 ## Validação
-Para validar a implementação dos microsserviços, você pode usar ferramentas de teste como Postman ou cURL para testar as APIs. Além disso, você pode usar ferramentas de monitoramento como Prometheus e Grafana para monitorar o desempenho dos microsserviços.
-
-## ⚠️ Tratamento de Exceções e Edge Cases
-Ao projetar e implementar microsserviços, é importante considerar os seguintes casos de bordo e exceções:
-* **Erros de rede**: como lidar com erros de conexão, timeouts e outros problemas de rede.
-* **Erros de banco de dados**: como lidar com erros de conexão, consultas inválidas e outros problemas de banco de dados.
-* **Erros de segurança**: como lidar com ataques de força bruta, injeção de SQL e outros problemas de segurança.
-* **Casos de bordo de negócios**: como lidar com casos de bordo de negócios, como clientes com saldo insuficiente ou pedidos com produtos indisponíveis.
-* **Monitoramento e logging**: como monitorar e registrar os erros e exceções para facilitar a depuração e a resolução de problemas.
-
-Exemplos de código para lidar com esses casos de bordo e exceções:
-```python
-from flask import Flask, jsonify
-import logging
-
-app = Flask(__name__)
-
-# Configurar logging
-logging.basicConfig(level=logging.INFO)
-
-@app.route('/api/usuarios', methods=['GET'])
-def get_usuarios():
-    try:
-        # Lógica de negócios
-        usuarios = [
-            {'id': 1, 'nome': 'João'},
-            {'id': 2, 'nome': 'Maria'}
-        ]
-        return jsonify(usuarios)
-    except Exception as e:
-        # Lidar com erros
-        logging.error(str(e))
-        return jsonify({'erro': str(e)}), 500
-
-if __name__ == '__main__':
-    app.run(debug=True)
-```
+Para validar a arquitetura de microsserviços, é necessário realizar testes de integração e testes de desempenho. Isso pode ser feito utilizando ferramentas de teste, como JUnit e Gatling.
 ```java
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-@SpringBootApplication
-@RestController
-public class UsuarioService {
-    @GetMapping("/api/usuarios")
-    public String getUsuarios() {
-        try {
-            // Lógica de negócios
-            return "[{\"id\": 1, \"nome\": \"João\"}, {\"id\": 2, \"nome\": \"Maria\"}]";
-        } catch (Exception e) {
-            // Lidar com erros
-            System.err.println(e.getMessage());
-            return "{\"erro\": \"" + e.getMessage() + "\"}";
-        }
-    }
-
-    public static void main(String[] args) {
-        SpringApplication.run(UsuarioService.class, args);
+// Exemplo de teste de integração
+@Test
+public void testarComunicacaoEntreServicos() {
+    // Configuração do teste
+    String url = "http://meu-servico:8080";
+    String metodo = "GET";
+    
+    // Execução do teste
+    try {
+        Response response = RestAssured.given()
+                .when()
+                .get(url);
+        
+        // Verificação do resultado
+        assertEquals(200, response.getStatusCode());
+    } catch (Exception e) {
+        fail("Erro ao executar o teste: " + e.getMessage());
     }
 }
+```
+## ⚠️ Tratamento de Exceções e Edge Cases
+É fundamental considerar os casos de exceção e edge cases ao projetar e implementar uma arquitetura de microsserviços. Alguns exemplos incluem:
+* **Tratamento de erros de rede**: Implementar mecanismos de retry e timeout para lidar com erros de rede.
+* **Tratamento de erros de serviço**: Implementar mecanismos de tratamento de erros para lidar com erros de serviço, como erros de banco de dados ou erros de processamento.
+* **Tratamento de casos de borda**: Considerar casos de borda, como lidar com grandes volumes de tráfego ou lidar com serviços que estão offline.
+* **Segurança**: Implementar mecanismos de segurança, como autenticação e autorização, para proteger os serviços e os dados.
+* **Monitoramento e logging**: Implementar mecanismos de monitoramento e logging para detectar e diagnosticar problemas.
+```python
+# Exemplo de tratamento de exceções
+try:
+    # Código que pode gerar uma exceção
+    response = requests.get('http://estoque:8080/produtos/disponiveis')
+    response.raise_for_status()
+except requests.exceptions.HTTPError as errh:
+    # Tratamento de erro HTTP
+    print(f'Erro HTTP: {errh}')
+    # Ação de recuperação, como enviar um alerta ou registrar o erro
+    enviar_alerta(f'Erro HTTP: {errh}')
+except requests.exceptions.ConnectionError as errc:
+    # Tratamento de erro de conexão
+    print(f'Erro de conexão: {errc}')
+    # Ação de recuperação, como tentar novamente ou registrar o erro
+    registrar_erro(f'Erro de conexão: {errc}')
+```
