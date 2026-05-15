@@ -8,4 +8,4 @@
 - Summary: The Reliability Checklist (pre-flight, script quality, job config)
 - When Principles Conflict
 - ⚠️ Tratamento de Exceções e Edge Cases
-... (restante do conteúdo)
+...
