@@ -47,10 +47,11 @@ Task tool (general-purpose):
 
     ⚠️ Tratamento de Exceções e Edge Cases
 
-    * **Planos vazios ou inexistentes:** Se o plano estiver vazio ou não existir, retorne um erro com a mensagem "Plano não encontrado ou vazio".
-    * **Especificações inconsistentes:** Se as especificações forem inconsistentes ou contenham erros, retorne um erro com a mensagem "Especificações inconsistentes".
-    * **Tarefas mal definidas:** Se as tarefas estiverem mal definidas ou forem ambíguas, retorne um erro com a mensagem "Tarefas mal definidas".
-    * **Problemas de segurança:** Se o plano contiver problemas de segurança, como a falta de autenticação ou autorização, retorne um erro com a mensagem "Problemas de segurança detectados".
-    * **Limites de recursos:** Se o plano exigir recursos excessivos, como memória ou processamento, retorne um erro com a mensagem "Limites de recursos excedidos".
+    *   **Planos incompletos:** Se o plano estiver incompleto ou faltar informações essenciais, o revisor deve solicitar mais detalhes antes de aprovar.
+    *   **Conflitos de especificação:** Se houver conflitos entre a especificação e o plano, o revisor deve identificar e documentar esses conflitos para resolução.
+    *   **Tarefas ambíguas:** Se as tarefas forem ambíguas ou não estiverem claramente definidas, o revisor deve solicitar esclarecimentos antes de aprovar.
+    *   **Dependências não declaradas:** Se houver dependências não declaradas entre tarefas ou componentes, o revisor deve identificar e documentar essas dependências para garantir a integridade do plano.
+    *   **Riscos de segurança:** Se o plano apresentar riscos de segurança, como a falta de autenticação ou autorização adequadas, o revisor deve destacar esses riscos e recomendar mitigações.
+    *   **Compliance regulatória:** Se o plano não atender aos requisitos regulatórios aplicáveis, o revisor deve identificar as lacunas e recomendar ações corretivas.
 
 **Reviewer returns:** Status, Issues (if any), Recommendations
