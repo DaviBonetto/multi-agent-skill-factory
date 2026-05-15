@@ -26,19 +26,15 @@ llama-cli -m model.gguf -t 8 -p "Hello"
 make LLAMA_OPENBLAS=1
 ```
 ### ⚠️ Tratamento de Exceções e Edge Cases
-Antes de executar os comandos, certifique-se de que:
-- O ambiente de desenvolvimento esteja configurado corretamente.
-- As dependências necessárias estejam instaladas.
-- Os modelos de linguagem estejam baixados e configurados corretamente.
-**Tratamento de Erros Comuns:**
-*   **Erro de Compilação:** Verifique se o código fonte está atualizado e se as dependências estão corretas.
-*   **Erro de Execução:** Verifique se o modelo de linguagem está carregado corretamente e se os parâmetros de entrada estão válidos.
-*   **Erro de Memória Insuficiente:** Aumente a quantidade de memória disponível ou otimize o uso de memória do modelo.
-**Edge Cases:**
-*   **Modelos de Linguagem Grandes:** Para modelos de linguagem muito grandes, considere usar a opção de split de tensor para distribuir o processamento entre múltiplas GPUs.
-*   **Entradas de Tamanho Variável:** Ajuste o parâmetro `-ngl` de acordo com o tamanho da entrada para garantir o processamento eficiente.
-*   **Ambientes de Desenvolvimento Diferentes:** Ajuste as configurações de compilação e execução de acordo com as especificações do ambiente de desenvolvimento.
-**Segurança:**
-*   **Atualize Regularmente:** Mantenha o código fonte e as dependências atualizados para garantir a segurança e evitar vulnerabilidades conhecidas.
-*   **Use Autenticação:** Quando necessário, use autenticação para proteger o acesso aos modelos de linguagem e aos dados de treinamento.
-*   **Monitore o Uso de Recursos:** Monitore o uso de recursos do sistema para detectar possíveis abusos ou ataques de força bruta.
+#### Erros Comuns
+*   **Erro de Compilação**: Certifique-se de que as dependências necessárias estejam instaladas e configuradas corretamente. Verifique se o comando `make` está sendo executado com as opções corretas.
+*   **Erro de Execução**: Verifique se o modelo está sendo carregado corretamente e se os parâmetros de entrada estão válidos. Use a opção `-p` para especificar a entrada correta.
+*   **Erro de Memória**: Ajuste o parâmetro `-ngl` para evitar problemas de memória insuficiente. Verifique se o modelo está sendo executado em um dispositivo com recursos suficientes.
+#### Edge Cases
+*   **Modelos Grandes**: Para modelos muito grandes, considere usar a opção `--tensor-split` para dividir o modelo em partes menores e processá-las em paralelo.
+*   **Multi-GPU**: Ao usar múltiplas GPUs, certifique-se de que as GPUs estejam configuradas corretamente e que o modelo esteja sendo executado com a opção `--tensor-split` para aproveitar ao máximo os recursos disponíveis.
+*   **CPU**: Ao executar em CPU, ajuste o parâmetro `-t` para corresponder ao número de núcleos físicos disponíveis. Isso ajudará a otimizar o desempenho.
+#### Segurança
+*   **Validação de Entrada**: Sempre valide a entrada do usuário para evitar ataques de injeção de comandos ou outros tipos de ataques mal-intencionados.
+*   **Atualização de Dependências**: Mantenha as dependências atualizadas para garantir que você tenha as últimas correções de segurança e melhorias de desempenho.
+*   **Uso de Senhas Fortes**: Use senhas fortes e únicas para proteger o acesso ao sistema e aos modelos de machine learning.
