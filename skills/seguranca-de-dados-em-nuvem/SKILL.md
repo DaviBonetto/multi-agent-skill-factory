@@ -1,98 +1,89 @@
 ---
 name: Segurança de Dados em Nuvem
-description: Aborda técnicas de segurança de dados em ambientes de nuvem, incluindo criptografia, autenticação de dois fatores e conformidade com regulamentações de segurança.
+description: Aborda técnicas de segurança de dados em ambientes de nuvem, incluindo criptografia e autenticação
 ---
 
 ## Objetivo
-O objetivo deste guia é fornecer uma visão geral das técnicas de segurança de dados em ambientes de nuvem, incluindo criptografia, autenticação de dois fatores e conformidade com regulamentações de segurança. Com isso, os profissionais de TI poderão implementar medidas de segurança eficazes para proteger os dados em nuvem.
+O objetivo deste guia é fornecer uma visão geral das técnicas de segurança de dados em ambientes de nuvem, abordando conceitos fundamentais de criptografia e autenticação. Com isso, os leitores junior poderão entender como proteger dados em nuvem de forma eficaz.
 
 ## Pré-requisitos
-Para seguir este guia, é necessário ter conhecimento básico em:
-* Conceitos de segurança de dados
-* Ambientes de nuvem (IaaS, PaaS, SaaS)
-* Ferramentas de criptografia e autenticação
+Para seguir este guia, é necessário ter conhecimentos básicos em:
+- Computação em nuvem
+- Conceitos de segurança de dados
+- Familiaridade com tecnologias de criptografia e autenticação
 
 ## Passo a Passo Técnico / Exemplos de Código
 ### Criptografia de Dados
-A criptografia é um método eficaz para proteger os dados em nuvem. Existem dois tipos principais de criptografia:
-* Criptografia simétrica: utiliza a mesma chave para criptografar e descriptografar os dados.
-* Criptografia assimétrica: utiliza uma chave pública para criptografar os dados e uma chave privada para descriptografar.
+A criptografia é um método para proteger dados convertendo-os em um código que apenas pode ser decifrado com a chave correta. Existem dois tipos principais de criptografia: simétrica e assimétrica.
 
-Exemplo de criptografia simétrica em Python:
+#### Exemplo de Criptografia Simétrica
 ```python
 from cryptography.fernet import Fernet
+import logging
 
-# Gera uma chave simétrica
-chave = Fernet.generate_key()
+# Configura o logging
+logging.basicConfig(level=logging.INFO)
 
-# Cria um objeto Fernet com a chave
-cipher_suite = Fernet(chave)
+try:
+    # Gera uma chave
+    chave = Fernet.generate_key()
 
-# Criptografa os dados
-dados = b"Olá, Mundo!"
-dados_criptografados = cipher_suite.encrypt(dados)
+    # Cria um objeto Fernet
+    cipher_suite = Fernet(chave)
 
-# Descriptografa os dados
-dados_descriptografados = cipher_suite.decrypt(dados_criptografados)
+    # Dados a serem criptografados
+    dados = b"Segredo"
 
-print(dados_descriptografados.decode())
+    # Criptografa os dados
+    dados_criptografados = cipher_suite.encrypt(dados)
+
+    logging.info(f"Dados Criptografados: {dados_criptografados}")
+except Exception as e:
+    logging.error(f"Erro ao criptografar dados: {e}")
 ```
 
-### Autenticação de Dois Fatores
-A autenticação de dois fatores é um método de segurança que exige dois fatores para acessar um sistema ou aplicativo. Os fatores podem ser:
-* Senha
-* Token de autenticação
-* Biometria (impressão digital, reconhecimento facial, etc.)
+### Autenticação de Usuários
+A autenticação é o processo de verificar a identidade de um usuário. Em ambientes de nuvem, a autenticação pode ser realizada através de senhas, tokens, ou métodos de autenticação de dois fatores.
 
-Exemplo de autenticação de dois fatores em Python:
+#### Exemplo de Autenticação com Token
 ```python
-import hmac
-import hashlib
+import jwt
+import logging
 
-# Gera um token de autenticação
-token = hmac.new(b"chave_secreta", b"mensagem", hashlib.sha256).hexdigest()
+# Configura o logging
+logging.basicConfig(level=logging.INFO)
 
-# Verifica o token de autenticação
-def verifica_token(token):
-    # Gera um novo token com a mesma chave e mensagem
-    novo_token = hmac.new(b"chave_secreta", b"mensagem", hashlib.sha256).hexdigest()
-    
-    # Verifica se os tokens são iguais
-    return token == novo_token
+try:
+    # Dados do usuário
+    usuario = {"id": 1, "nome": "João"}
 
-# Testa a verificação do token
-print(verifica_token(token))  # Deve imprimir: True
+    # Chave secreta para assinatura do token
+    chave_secreta = "minha_chave_secreta"
+
+    # Gera um token
+    token = jwt.encode(usuario, chave_secreta, algorithm="HS256")
+
+    logging.info(f"Token de Autenticação: {token}")
+except jwt.ExpiredSignatureError:
+    logging.error("Token expirado")
+except jwt.InvalidTokenError:
+    logging.error("Token inválido")
+except Exception as e:
+    logging.error(f"Erro ao gerar token: {e}")
 ```
 
 ## Validação
-Para validar a implementação das técnicas de segurança de dados em nuvem, é necessário realizar testes e auditorias regulares. Alguns passos para validar a implementação incluem:
-* Testar a criptografia e autenticação de dois fatores
-* Verificar a conformidade com regulamentações de segurança
-* Realizar auditorias de segurança regulares
-* Monitorar os logs de segurança e incidentes de segurança
+Para validar a segurança dos dados em nuvem, é importante realizar testes regulares, incluindo:
+- Testes de penetração
+- Análise de vulnerabilidades
+- Monitoramento de logs de segurança
+
+Além disso, é crucial manter os sistemas e aplicativos atualizados com os últimos patches de segurança e seguir as melhores práticas de segurança de dados em nuvem.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-Além das técnicas de segurança de dados em nuvem, é importante considerar os seguintes casos de exceção e edge cases:
-* **Chave de criptografia perdida ou comprometida**: em caso de perda ou comprometimento da chave de criptografia, é necessário gerar uma nova chave e recriptografar os dados.
-* **Token de autenticação expirado**: em caso de expiração do token de autenticação, é necessário gerar um novo token e atualizar o sistema de autenticação.
-* **Ataques de força bruta**: em caso de ataques de força bruta, é necessário implementar medidas de segurança adicionais, como limitação de tentativas de login e bloqueio de IPs suspeitos.
-* **Vulnerabilidades de segurança**: em caso de vulnerabilidades de segurança, é necessário atualizar o sistema e aplicar patches de segurança o mais rápido possível.
-* **Desastres**: em caso de desastres, como incêndios ou inundações, é necessário ter um plano de recuperação de desastres para garantir a disponibilidade dos dados.
-
-Exemplo de tratamento de exceção em Python:
-```python
-try:
-    # Tenta criptografar os dados
-    dados_criptografados = cipher_suite.encrypt(dados)
-except Exception as e:
-    # Trata a exceção
-    print(f"Erro ao criptografar os dados: {e}")
-```
-
-Exemplo de tratamento de edge case em Python:
-```python
-if chave == None:
-    # Gera uma nova chave em caso de perda ou comprometimento
-    chave = Fernet.generate_key()
-    cipher_suite = Fernet(chave)
-```
+É fundamental tratar exceções e edge cases para garantir a segurança e a confiabilidade do sistema. Alguns exemplos incluem:
+- **Chave de criptografia inválida**: Verificar se a chave de criptografia é válida antes de tentar criptografar ou descriptografar dados.
+- **Token de autenticação expirado**: Verificar se o token de autenticação está expirado antes de permitir o acesso ao sistema.
+- **Dados inválidos**: Verificar se os dados são válidos antes de processá-los para evitar erros ou ataques de injeção de dados.
+- **Conexões não seguras**: Verificar se as conexões com o sistema são seguras (HTTPS) para evitar interceptação de dados.
+- **Atualizações de segurança**: Manter o sistema e os aplicativos atualizados com os últimos patches de segurança para evitar vulnerabilidades conhecidas.
