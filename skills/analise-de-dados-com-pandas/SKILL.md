@@ -1,84 +1,83 @@
 ---
 name: Análise de Dados com Pandas
-description: Ensina a manipular e analisar dados utilizando a biblioteca Pandas
+description: Ensina como realizar análises de dados com a biblioteca Pandas em Python
 ---
 
 ## Objetivo
-O objetivo deste guia é fornecer uma introdução prática à análise de dados utilizando a biblioteca Pandas em Python. Ao final deste guia, você será capaz de manipular e analisar dados de forma eficiente.
+O objetivo deste guia é fornecer uma introdução prática à análise de dados utilizando a biblioteca Pandas em Python. Ao final, você será capaz de realizar análises básicas de dados, incluindo manipulação, filtragem e visualização de dados.
 
 ## Pré-requisitos
 Para seguir este guia, você deve ter:
 - Conhecimento básico de Python
-- Instalação do Python e da biblioteca Pandas em seu ambiente de desenvolvimento
-- Um editor de texto ou IDE (Integrated Development Environment) para escrever e executar código Python
+- Python instalado em seu computador (recomendado Python 3.x)
+- Biblioteca Pandas instalada (`pip install pandas`)
+- Um editor de texto ou IDE (como PyCharm, VSCode, etc.)
 
 ## Passo a Passo Técnico / Exemplos de Código
-### Instalando a Biblioteca Pandas
-Antes de começar, certifique-se de que a biblioteca Pandas está instalada em seu ambiente. Você pode instalar usando pip:
+### Instalação da Biblioteca Pandas
+Se você ainda não instalou a biblioteca Pandas, pode fazê-lo executando o seguinte comando no terminal:
 ```bash
 pip install pandas
 ```
+Caso você encontre algum problema durante a instalação, verifique se o Python está corretamente instalado e se o `pip` está atualizado.
+
 ### Importando a Biblioteca Pandas
-Para usar a biblioteca Pandas, você precisa importá-la no início do seu script Python:
+Para começar a usar a biblioteca Pandas, você precisa importá-la em seu script Python:
 ```python
 import pandas as pd
 ```
-### Carregando Dados
-A biblioteca Pandas permite carregar dados de várias fontes, como arquivos CSV, Excel, etc. Aqui está um exemplo de como carregar um arquivo CSV:
+Certifique-se de que a biblioteca foi importada corretamente, pois erros de importação podem afetar o restante do código.
+
+### Criando um DataFrame
+Um DataFrame é uma estrutura de dados bidimensional com colunas de tipos potencialmente diferentes. Você pode criar um DataFrame a partir de um dicionário:
 ```python
-# Carregando dados de um arquivo CSV
-try:
-    dados = pd.read_csv('nome_do_arquivo.csv')
-except FileNotFoundError:
-    print("Arquivo não encontrado. Verifique o caminho e o nome do arquivo.")
-except pd.errors.EmptyDataError:
-    print("Arquivo CSV está vazio.")
-except pd.errors.ParserError:
-    print("Erro ao parsear o arquivo CSV. Verifique a formatação do arquivo.")
+dados = {'Nome': ['João', 'Maria', 'Pedro'],
+         'Idade': [25, 31, 42]}
+df = pd.DataFrame(dados)
+print(df)
 ```
+Se o dicionário estiver vazio ou não for um dicionário, o Pandas lançará um erro. Certifique-se de que os dados estão no formato correto antes de criar o DataFrame.
+
 ### Manipulando Dados
-Com os dados carregados, você pode começar a manipulá-los. Por exemplo, para visualizar as primeiras linhas do dataset:
+Você pode manipular os dados do DataFrame de várias maneiras, como filtrar linhas ou selecionar colunas específicas:
 ```python
-# Visualizando as primeiras linhas do dataset
-if not dados.empty:
-    print(dados.head())
-else:
-    print("Dataset vazio.")
+# Filtrar linhas onde a idade é maior que 30
+df_filtrado = df[df['Idade'] > 30]
+print(df_filtrado)
+
+# Selecionar apenas a coluna 'Nome'
+nomes = df['Nome']
+print(nomes)
 ```
-### Analisando Dados
-A análise de dados envolve várias etapas, como calcular estatísticas descritivas, criar gráficos, etc. Aqui está um exemplo de como calcular estatísticas descritivas:
-```python
-# Calculando estatísticas descritivas
-if not dados.empty:
-    estatisticas = dados.describe()
-    print(estatisticas)
-else:
-    print("Dataset vazio.")
-```
+Se a coluna especificada não existir no DataFrame, o Pandas lançará um erro. Sempre verifique a existência da coluna antes de tentar acessá-la.
 
 ## Validação
-Para validar o conhecimento adquirido, tente os seguintes exercícios:
-- Carregue um arquivo CSV com dados de sua escolha.
-- Calcule e imprima as estatísticas descritivas dos dados.
-- Crie um gráfico de barras para visualizar a distribuição de uma variável específica.
-Ao completar esses exercícios, você terá uma compreensão prática de como manipular e analisar dados com a biblioteca Pandas.
+Para validar o conhecimento adquirido, tente realizar as seguintes tarefas:
+- Criar um DataFrame com informações sobre filmes (título, gênero, ano de lançamento)
+- Filtrar os filmes lançados após 2010
+- Calcular a média de idade dos atores em um conjunto de dados que inclui o nome do ator e sua idade
+
+Ao completar essas tarefas, você terá demonstrado uma compreensão básica da análise de dados com Pandas e estará pronto para avançar para conceitos mais complexos.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-Além dos exemplos acima, é importante considerar os seguintes casos:
-- **Arquivos com formato inválido**: Se o arquivo CSV tiver um formato inválido, a biblioteca Pandas pode lançar uma exceção. Você pode tratar isso usando um bloco try-except.
-- **Dados faltantes**: Se os dados contiverem valores faltantes, você pode usar o método `dropna()` para remover as linhas com valores faltantes ou o método `fillna()` para preencher os valores faltantes com um valor padrão.
-- **Dados duplicados**: Se os dados contiverem linhas duplicadas, você pode usar o método `drop_duplicates()` para remover as linhas duplicadas.
-- **Tipos de dados inconsistentes**: Se os dados contiverem tipos de dados inconsistentes, você pode usar o método `astype()` para converter os dados para um tipo de dados consistente.
-Exemplos de código para esses casos:
+Ao trabalhar com o Pandas, é importante considerar os casos de bordo e exceções que podem ocorrer. Aqui estão algumas dicas para lidar com esses casos:
+- **Dados faltantes**: O Pandas pode lidar com dados faltantes, mas é importante identificar e tratar esses dados corretamente. Use o método `isnull()` para detectar dados faltantes e o método `dropna()` para remover linhas com dados faltantes.
+- **Tipos de dados inconsistentes**: Certifique-se de que os dados estejam no tipo correto antes de realizar operações. Use o método `dtypes` para verificar os tipos de dados das colunas.
+- **Erros de importação**: Se ocorrer um erro durante a importação da biblioteca Pandas, verifique se o Python está corretamente instalado e se o `pip` está atualizado.
+- **Erros de criação de DataFrame**: Se ocorrer um erro durante a criação de um DataFrame, verifique se os dados estão no formato correto e se o dicionário não está vazio.
+
+Exemplo de como tratar dados faltantes:
 ```python
-# Removendo linhas com valores faltantes
-dados_limpos = dados.dropna()
+# Criar um DataFrame com dados faltantes
+dados = {'Nome': ['João', 'Maria', None],
+         'Idade': [25, 31, 42]}
+df = pd.DataFrame(dados)
 
-# Preenchendo valores faltantes com um valor padrão
-dados_preenchidos = dados.fillna(0)
+# Detectar dados faltantes
+print(df.isnull())
 
-# Removendo linhas duplicadas
-dados_unicos = dados.drop_duplicates()
-
-# Convertendo dados para um tipo de dados consistente
-dados_consistentes = dados.astype(int)
+# Remover linhas com dados faltantes
+df_limpo = df.dropna()
+print(df_limpo)
+```
+Lembre-se de que o tratamento de exceções e casos de bordo é fundamental para garantir a robustez e a confiabilidade do seu código. Sempre considere os possíveis erros e exceções que podem ocorrer e trate-os corretamente.
