@@ -1,6 +1,4 @@
 # UV Rules
-=====================================
-
 Use estas regras para scripts Python neste repositório:
 
 1. **Use PEP 723 inline dependencies** em cada script executável:
@@ -10,31 +8,22 @@ Use estas regras para scripts Python neste repositório:
    # dependencies = ["requests"]
    # ///
    ```
-   Certifique-se de que as dependências sejam especificadas corretamente e que o Python tenha a versão mínima necessária.
-
 2. **Execute scripts com `uv run`**, não `python ...`:
    ```bash
    uv run scripts/my_script.py --help
    ```
-   Isso garante que as dependências sejam resolvidas corretamente e que o script seja executado no ambiente correto.
-
-3. **Não documente `pip install -r requirements.txt` para scripts do repositório** a menos que haja um motivo específico para isso. O uso normal não deve exigir instalação manual.
-   Se houver uma dependência que não possa ser resolvida automaticamente, considere adicionar uma explicação sobre como instalá-la manualmente.
-
+3. **Não documente `pip install -r requirements.txt` para scripts do repositório** a menos que haja um motivo de fallback específico. O uso normal não deve exigir instalação manual.
 4. **Não instrua os usuários a `source .venv/bin/activate` para scripts de habilidade.** `uv run` deve ser suficiente.
-   Se o ambiente virtual for necessário, certifique-se de que ele seja ativado automaticamente pelo `uv run`.
+5. **Se um exemplo de instalação manual for realmente necessário, use `uv pip install ...`**, não `uv add`, a menos que você esteja editando intencionalmente um ambiente gerenciado pelo projeto.
+6. **Para Hugging Face Jobs UV workloads, use `hf jobs uv run ...`**.
 
-5. **Se um exemplo de instalação manual for necessário, use `uv pip install ...`**, não `uv add`, a menos que você esteja editando intencionalmente um ambiente gerenciado pelo projeto.
-   Isso garante que as dependências sejam instaladas no ambiente correto.
+## ⚠️ Tratamento de Exceções e Edge Cases
+### Tratamento de Erros
+- **Verifique a versão do Python**: Antes de executar scripts, certifique-se de que a versão do Python instalada atende aos requisitos especificados em `requires-python`.
+- **Trate exceções de dependência**: Se uma dependência especificada em `dependencies` não for encontrada, o script deve lançar uma exceção clara e útil para o usuário.
+- **Manipule erros de execução**: Se um script falhar durante a execução, certifique-se de que o erro seja tratado e uma mensagem de erro útil seja exibida para o usuário.
 
-6. **Para cargas de trabalho UV do Hugging Face Jobs, use `hf jobs uv run ...`**.
-   Certifique-se de que as dependências sejam resolvidas corretamente e que o script seja executado no ambiente correto.
-
-⚠️ Tratamento de Exceções e Edge Cases
-----------------------------------------
-
-* **Tratamento de erros**: certifique-se de que os scripts tratam erros e exceções adequadamente. Use `try`-`except` para capturar erros e forneça mensagens de erro claras e úteis.
-* **Dependências não resolvidas**: se uma dependência não puder ser resolvida, forneça uma mensagem de erro clara e instruções sobre como instalá-la manualmente.
-* **Versões incompatíveis do Python**: se o script exigir uma versão específica do Python, certifique-se de que o `requires-python` seja definido corretamente e que o script seja executado na versão correta do Python.
-* **Ambientes virtuais**: se o script exigir um ambiente virtual, certifique-se de que ele seja ativado automaticamente pelo `uv run`.
-* **Cargas de trabalho UV do Hugging Face Jobs**: se o script for executado em um ambiente de carga de trabalho UV do Hugging Face Jobs, certifique-se de que as dependências sejam resolvidas corretamente e que o script seja executado no ambiente correto.
+### Edge Cases
+- **Scripts com múltiplas dependências**: Se um script tiver múltiplas dependências, certifique-se de que todas sejam especificadas corretamente em `dependencies` e que o script possa lidar com diferentes versões dessas dependências.
+- **Uso de ambientes virtuais**: Embora `uv run` deva ser suficiente, considere como o script se comportará se um usuário estiver usando um ambiente virtual e como isso afetará as dependências e a execução do script.
+- **Compatibilidade com diferentes sistemas operacionais**: Se o script for projetado para ser executado em diferentes sistemas operacionais, certifique-se de que as dependências e a lógica do script sejam compatíveis com esses sistemas.
