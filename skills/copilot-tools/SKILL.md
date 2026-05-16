@@ -41,22 +41,23 @@ Copilot CLI supports persistent async shell sessions, which have no direct Claud
 | `fetch_copilot_cli_documentation` | Look up Copilot CLI documentation |
 | GitHub MCP tools (`github-mcp-server-*`) | Native GitHub API access (issues, PRs, code search) |
 
-## Tratamento de Exceções e Edge Cases
+## ⚠️ Tratamento de Exceções e Edge Cases
 
-Ao utilizar as ferramentas do Copilot CLI, é importante considerar os seguintes casos de exceção e edge cases:
+Ao utilizar os recursos do Copilot CLI, é importante considerar os seguintes casos de exceção e edge cases:
 
 * **Erros de sintaxe**: Verifique se os comandos estão corretamente formatados e se os parâmetros estão sendo passados corretamente.
-* **Comandos não suportados**: Verifique se o comando utilizado é suportado pela plataforma e se está sendo utilizado corretamente.
-* **Erros de permissão**: Verifique se o usuário tem as permissões necessárias para executar o comando.
-* **Limites de recursos**: Verifique se os recursos necessários (como memória ou CPU) estão disponíveis para executar o comando.
-* **Conflitos de nomes**: Verifique se os nomes de arquivos ou variáveis não estão conflitando com outros nomes utilizados na sessão.
-* **Erros de conexão**: Verifique se a conexão com o servidor ou banco de dados está estabelecida corretamente.
-* **Timeouts**: Verifique se os comandos estão sendo executados dentro do tempo limite estabelecido.
-* **Erros de parsing**: Verifique se os dados estão sendo parseados corretamente e se os formatos estão sendo respeitados.
+* **Comandos não suportados**: Certifique-se de que os comandos utilizados são suportados pela plataforma e pela versão do Copilot CLI.
+* **Erros de permissão**: Verifique se as permissões necessárias estão configuradas corretamente para executar os comandos.
+* **Timeouts**: Defina timeouts adequados para os comandos que podem demorar mais tempo para executar.
+* **Respostas vazias**: Verifique se as respostas dos comandos estão vazias ou nulas antes de processá-las.
+* **Erros de rede**: Verifique se a conexão de rede está estável e se os comandos estão sendo executados corretamente.
+* **Limites de recursos**: Verifique se os recursos necessários (como memória, CPU, etc.) estão disponíveis para executar os comandos.
+* **Compatibilidade com diferentes sistemas operacionais**: Verifique se os comandos são compatíveis com diferentes sistemas operacionais e versões.
 
-Além disso, é importante implementar mecanismos de tratamento de erros e exceções para lidar com situações inesperadas, como:
+Além disso, é importante implementar tratamento de erros e exceções adequados para lidar com situações inesperadas, como:
 
 * **Try-catch**: Utilize blocos try-catch para capturar e tratar erros e exceções.
 * **Logging**: Registre os erros e exceções para facilitar a depuração e o diagnóstico.
-* **Retornos de erro**: Retorne códigos de erro ou mensagens de erro para indicar que um erro ocorreu.
-* **Recuperação**: Implemente mecanismos de recuperação para tentar executar o comando novamente ou para executar uma ação alternativa.
+* **Recuperação**: Implemente mecanismos de recuperação para lidar com erros e exceções, como retry ou fallback.
+
+Ao considerar esses casos de exceção e edge cases, é possível desenvolver skills mais robustas e confiáveis que possam lidar com situações inesperadas e fornecer uma melhor experiência para os usuários.
