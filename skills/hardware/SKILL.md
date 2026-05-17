@@ -26,15 +26,17 @@ llama-cli -m model.gguf -t 8 -p "Hello"
 make LLAMA_OPENBLAS=1
 ```
 ### ⚠️ Tratamento de Exceções e Edge Cases
-#### Erros Comuns
-*   **Erro de Compilação**: Certifique-se de que as dependências necessárias estejam instaladas e configuradas corretamente. Verifique se o comando `make` está sendo executado com as opções corretas.
-*   **Erro de Execução**: Verifique se o modelo está sendo carregado corretamente e se os parâmetros de entrada estão válidos. Use a opção `-p` para especificar a entrada correta.
-*   **Erro de Memória**: Ajuste o parâmetro `-ngl` para evitar problemas de memória insuficiente. Verifique se o modelo está sendo executado em um dispositivo com recursos suficientes.
+#### Erros de Compilação
+* Certifique-se de que o ambiente de compilação esteja configurado corretamente antes de executar os comandos `make`.
+* Verifique se as dependências necessárias estão instaladas e atualizadas.
+#### Erros de Execução
+* Verifique se o modelo está carregado corretamente antes de executar o comando `llama-cli`.
+* Certifique-se de que os parâmetros de entrada estejam corretos e dentro dos limites aceitáveis.
 #### Edge Cases
-*   **Modelos Grandes**: Para modelos muito grandes, considere usar a opção `--tensor-split` para dividir o modelo em partes menores e processá-las em paralelo.
-*   **Multi-GPU**: Ao usar múltiplas GPUs, certifique-se de que as GPUs estejam configuradas corretamente e que o modelo esteja sendo executado com a opção `--tensor-split` para aproveitar ao máximo os recursos disponíveis.
-*   **CPU**: Ao executar em CPU, ajuste o parâmetro `-t` para corresponder ao número de núcleos físicos disponíveis. Isso ajudará a otimizar o desempenho.
+* **Modelos muito grandes**: Em casos onde os modelos são muito grandes, é recomendável utilizar a opção `--tensor-split` para dividir o modelo em partes menores e processá-las em paralelo.
+* **Recursos de hardware insuficientes**: Se os recursos de hardware (memória RAM, capacidade de processamento, etc.) forem insuficientes, o desempenho do modelo pode ser afetado. Nesse caso, é recomendável utilizar um hardware mais potente ou otimizar o modelo para reduzir a carga de processamento.
+* **Problemas de compatibilidade**: Em casos onde há problemas de compatibilidade entre o hardware e o software, é recomendável verificar as especificações do hardware e do software para garantir que sejam compatíveis.
 #### Segurança
-*   **Validação de Entrada**: Sempre valide a entrada do usuário para evitar ataques de injeção de comandos ou outros tipos de ataques mal-intencionados.
-*   **Atualização de Dependências**: Mantenha as dependências atualizadas para garantir que você tenha as últimas correções de segurança e melhorias de desempenho.
-*   **Uso de Senhas Fortes**: Use senhas fortes e únicas para proteger o acesso ao sistema e aos modelos de machine learning.
+* **Validação de entrada**: Certifique-se de que as entradas sejam validadas corretamente antes de serem processadas pelo modelo.
+* **Proteção contra ataques**: Implemente medidas de segurança para proteger o modelo contra ataques, como ataques de força bruta ou ataques de injeção de código malicioso.
+* **Atualizações de segurança**: Mantenha o modelo e as dependências atualizadas com as últimas atualizações de segurança para evitar vulnerabilidades conhecidas.
