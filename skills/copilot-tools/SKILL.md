@@ -41,23 +41,20 @@ Copilot CLI supports persistent async shell sessions, which have no direct Claud
 | `fetch_copilot_cli_documentation` | Look up Copilot CLI documentation |
 | GitHub MCP tools (`github-mcp-server-*`) | Native GitHub API access (issues, PRs, code search) |
 
-## ⚠️ Tratamento de Exceções e Edge Cases
+## Tratamento de Exceções e Edge Cases
 
-Ao utilizar os recursos do Copilot CLI, é importante considerar os seguintes casos de exceção e edge cases:
+Ao utilizar as ferramentas do Copilot CLI, é importante considerar os seguintes casos de exceção e edge cases:
 
 * **Erros de sintaxe**: Verifique se os comandos estão corretamente formatados e se os parâmetros estão sendo passados corretamente.
-* **Comandos não suportados**: Certifique-se de que os comandos utilizados são suportados pela plataforma e pela versão do Copilot CLI.
-* **Erros de permissão**: Verifique se as permissões necessárias estão configuradas corretamente para executar os comandos.
-* **Timeouts**: Defina timeouts adequados para os comandos que podem demorar mais tempo para executar.
-* **Respostas vazias**: Verifique se as respostas dos comandos estão vazias ou nulas antes de processá-las.
-* **Erros de rede**: Verifique se a conexão de rede está estável e se os comandos estão sendo executados corretamente.
-* **Limites de recursos**: Verifique se os recursos necessários (como memória, CPU, etc.) estão disponíveis para executar os comandos.
-* **Compatibilidade com diferentes sistemas operacionais**: Verifique se os comandos são compatíveis com diferentes sistemas operacionais e versões.
+* **Comandos não encontrados**: Se um comando não for encontrado, verifique se o nome do comando está correto e se o comando está disponível na versão atual do Copilot CLI.
+* **Parâmetros inválidos**: Verifique se os parâmetros passados para os comandos são válidos e se atendem aos requisitos do comando.
+* **Sessões async**: Ao utilizar sessões async, certifique-se de que as sessões sejam corretamente iniciadas e terminadas para evitar problemas de concorrência.
+* **Acesso a recursos**: Certifique-se de que os recursos necessários (como arquivos, diretórios, etc.) estejam disponíveis e acessíveis antes de tentar utilizá-los.
+* **Limites de recursos**: Esteja ciente dos limites de recursos (como memória, CPU, etc.) e planeje as tarefas de acordo para evitar problemas de desempenho.
+* **Segurança**: Sempre utilize práticas de segurança adequadas ao trabalhar com comandos e recursos do Copilot CLI, especialmente ao lidar com informações sensíveis ou ao executar comandos que possam ter implicações de segurança.
 
-Além disso, é importante implementar tratamento de erros e exceções adequados para lidar com situações inesperadas, como:
+Além disso, é importante:
 
-* **Try-catch**: Utilize blocos try-catch para capturar e tratar erros e exceções.
-* **Logging**: Registre os erros e exceções para facilitar a depuração e o diagnóstico.
-* **Recuperação**: Implemente mecanismos de recuperação para lidar com erros e exceções, como retry ou fallback.
-
-Ao considerar esses casos de exceção e edge cases, é possível desenvolver skills mais robustas e confiáveis que possam lidar com situações inesperadas e fornecer uma melhor experiência para os usuários.
+* **Testar os comandos**: Antes de executar comandos em produção, teste-os em um ambiente de desenvolvimento ou teste para garantir que funcionem corretamente.
+* **Verificar a documentação**: Verifique a documentação do Copilot CLI regularmente para estar ciente de novas funcionalidades, mudanças e melhorias.
+* **Reportar erros**: Se encontrar erros ou problemas, reporte-os à equipe de suporte do Copilot CLI para que possam ser corrigidos e melhorados.
