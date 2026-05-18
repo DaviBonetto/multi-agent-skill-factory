@@ -1,120 +1,69 @@
 ---
 name: DevOps Avançado
-description: Implementação de práticas de DevOps em ambientes complexos
+description: Aborda técnicas avançadas de DevOps, incluindo Continuous Integration e Continuous Deployment
 ---
 
 ## Objetivo
-O objetivo desta habilidade é capacitar os participantes a implementar práticas de DevOps em ambientes complexos, garantindo a entrega contínua e confiável de software de alta qualidade.
+O objetivo deste guia é fornecer uma visão geral das técnicas avançadas de DevOps, incluindo Continuous Integration (CI) e Continuous Deployment (CD), e como elas podem ser implementadas em um ambiente de desenvolvimento de software.
 
 ## Pré-requisitos
-Para participar desta habilidade, é necessário ter conhecimento prévio em:
+Para seguir este guia, é necessário ter conhecimento básico em:
 * Desenvolvimento de software
-* Infraestrutura como código (IaC)
-* Ferramentas de automação de deploy (como Jenkins, GitLab CI/CD, etc.)
-* Conhecimento básico de scripting (Bash, Python, etc.)
+* Ferramentas de versionamento (Git)
+* Linguagens de programação (Python, Java, etc.)
+* Conhecimento básico em DevOps e suas práticas
 
 ## Passo a Passo Técnico / Exemplos de Código
-### 1. Configuração do Ambiente
-Para começar, é necessário configurar o ambiente de desenvolvimento com as ferramentas necessárias. Isso inclui:
-* Instalação do Git
-* Configuração do ambiente de desenvolvimento (IDE, editor de texto, etc.)
-* Instalação das ferramentas de automação de deploy
+### Configurando o Ambiente
+Para começar a implementar as técnicas de DevOps avançadas, é necessário configurar o ambiente de desenvolvimento. Isso inclui:
+* Instalar o Git e configurar o repositório
+* Instalar as ferramentas de CI/CD (Jenkins, Travis CI, etc.)
+* Configurar o ambiente de desenvolvimento (IDE, editor de texto, etc.)
 
-Exemplo de instalação do Git no Ubuntu:
-```bash
-sudo apt-get update
-sudo apt-get install git
+### Implementando Continuous Integration
+A Continuous Integration é a prática de integrar o código fonte regularmente em um repositório centralizado. Para implementar a CI, é necessário:
+* Criar um arquivo de configuração para a ferramenta de CI (por exemplo, `jenkinsfile` para o Jenkins)
+* Configurar a ferramenta de CI para executar os testes automatizados e buildar o código
+* Implementar a integração contínua usando um exemplo de código em Python:
+```python
+import os
+import unittest
+
+class TestExample(unittest.TestCase):
+    def test_example(self):
+        try:
+            self.assertEqual(1 + 1, 2)
+        except AssertionError as e:
+            print(f"Erro: {e}")
+
+if __name__ == '__main__':
+    unittest.main()
 ```
-
-### 2. Implementação de Infraestrutura como Código (IaC)
-A implementação de IaC é fundamental para garantir a consistência e a reprodutibilidade do ambiente. Isso pode ser feito utilizando ferramentas como Terraform ou AWS CloudFormation.
-
-Exemplo de código Terraform para criar uma instância EC2:
-```terraform
-provider "aws" {
-  region = "us-west-2"
-}
-
-resource "aws_instance" "example" {
-  ami           = "ami-abc123"
-  instance_type = "t2.micro"
-}
+### Implementando Continuous Deployment
+A Continuous Deployment é a prática de deployar automaticamente o código fonte em produção após a aprovação. Para implementar a CD, é necessário:
+* Criar um arquivo de configuração para a ferramenta de CD (por exemplo, `docker-compose.yml` para o Docker)
+* Configurar a ferramenta de CD para deployar o código em produção
+* Implementar a deploy contínua usando um exemplo de código em YAML:
+```yml
+version: '3'
+services:
+  web:
+    build: .
+    ports:
+      - "80:80"
+    restart: always
 ```
-
-### 3. Configuração de Ferramentas de Automação de Deploy
-A configuração de ferramentas de automação de deploy é crucial para garantir a entrega contínua e confiável de software. Isso pode ser feito utilizando ferramentas como Jenkins ou GitLab CI/CD.
-
-Exemplo de código Jenkinsfile para criar um pipeline de deploy:
-```groovy
-pipeline {
-    agent any
-    stages {
-        stage('Build') {
-            steps {
-                sh 'make build'
-            }
-        }
-        stage('Deploy') {
-            steps {
-                sh 'make deploy'
-            }
-        }
-    }
-}
-```
-
 ## Validação
-Para validar a implementação das práticas de DevOps, é necessário realizar testes e verificações regulares. Isso inclui:
-* Testes unitários e de integração
-* Testes de desempenho e escalabilidade
-* Verificações de segurança e conformidade
-
-Exemplo de comando para executar testes unitários utilizando o framework JUnit:
-```bash
-mvn test
-```
+Para validar a implementação das técnicas de DevOps avançadas, é necessário:
+* Verificar se a Continuous Integration está funcionando corretamente
+* Verificar se a Continuous Deployment está funcionando corretamente
+* Verificar se o código fonte está sendo deployado em produção automaticamente após a aprovação
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-Além da implementação das práticas de DevOps, é fundamental considerar os casos de exceção e edge cases que podem ocorrer durante o processo de desenvolvimento e deploy. Isso inclui:
-* Tratamento de erros e exceções em código
-* Implementação de retries e timeouts para lidar com falhas temporárias
-* Consideração de casos de bordo, como limite de recursos ou conectividade
-* Implementação de monitoramento e logging para detectar e resolver problemas
+Além disso, é importante considerar os seguintes casos de exceção e edge cases:
+* **Erros de compilação**: caso ocorra um erro de compilação durante a execução da CI, é necessário configurar a ferramenta de CI para notificar os desenvolvedores e evitar que o código seja deployado em produção.
+* **Erros de deploy**: caso ocorra um erro de deploy durante a execução da CD, é necessário configurar a ferramenta de CD para notificar os desenvolvedores e evitar que o código seja deployado em produção.
+* **Problemas de segurança**: é importante garantir que o código fonte seja seguro e não contenha vulnerabilidades de segurança. Isso pode ser feito utilizando ferramentas de análise de segurança, como o OWASP ZAP.
+* **Problemas de desempenho**: é importante garantir que o código fonte seja otimizado para desempenho e não cause problemas de desempenho em produção. Isso pode ser feito utilizando ferramentas de monitoramento de desempenho, como o New Relic.
 
-Exemplo de código para tratamento de erros em Python:
-```python
-try:
-    # Código que pode gerar um erro
-    x = 1 / 0
-except ZeroDivisionError:
-    # Tratamento do erro
-    print("Erro: divisão por zero")
-```
-
-Exemplo de implementação de retries em Jenkinsfile:
-```groovy
-pipeline {
-    agent any
-    stages {
-        stage('Build') {
-            steps {
-                retry(3) {
-                    sh 'make build'
-                }
-            }
-        }
-    }
-}
-```
-
-Exemplo de implementação de monitoramento e logging em Terraform:
-```terraform
-resource "aws_cloudwatch_log_group" "example" {
-  name = "example-log-group"
-}
-
-resource "aws_cloudwatch_log_stream" "example" {
-  name           = "example-log-stream"
-  log_group_name = aws_cloudwatch_log_group.example.name
-}
-```
+Ao seguir este guia, é possível implementar as técnicas avançadas de DevOps em um ambiente de desenvolvimento de software, melhorando a eficiência e a qualidade do processo de desenvolvimento. Além disso, é importante lembrar que a segurança e o desempenho são fundamentais para um sistema de desenvolvimento de software de alta qualidade.
