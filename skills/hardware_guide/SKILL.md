@@ -1,40 +1,124 @@
-# Hardware Selection Guide
-...
-## Quick Reference
-```python
-# Model size → Hardware selection
-HARDWARE_MAP = {
-    "<1B":     "t4-small",
-    "1-3B":    "a10g-small",
-    "3-7B":    "a10g-large",
-    "7-13B":   "a10g-large (LoRA) or a100-large",
-    ">13B":    "a100-large (LoRA required)"
-}
+# Hardware Guide
+
+Training embedding models is memory-bound more often than compute-bound.
+
+## If you hit OOM
+
+Try in this order:
+
+1. **Reduce `per_device_train_batch_size`**. Raise `gradient_accumulation_steps` to keep the effective batch size for regression losses. (For MNRL, effective batch via grad-accum is **not** equivalent — see point 3.)
+2. **Enable `gradient_checkpointing=True`**. ~30% slower, ~40% less activation memory. Incompatible with `Cached*` losses.
+3. **Switch to a `Cached*` loss**:
+   - `CachedMultipleNegativesRankingLoss(model, mini_batch_size=32)` — forwards in mini-batches, accumulates the contrastive loss over the full batch. Can simulate batch sizes of 1024+ on a 24GB GPU.
+   - `CachedSpladeLoss(model, loss=..., mini_batch_size=16)` — same trick for sparse.
+   - `CachedGISTEmbedLoss(model, guide_model, mini_batch_size=32)` — GIST variant.
+4. **Enable PEFT / LoRA** for decoder models >1B. `LoraConfig(r=64, lora_alpha=128, task_type="FEATURE_EXTRACTION")`. See `../scripts/train_sentence_transformer_with_lora_example.py` (docstring covers when to use, hyperparams, QLoRA, sharing).
+5. **Move to multi-GPU**. See below.
+6. **Shorten sequences**. If truncating to 128 is already sufficient for your task, set `max_seq_length` on the transformer module.
+
+## Multi-GPU
+
+`sentence-transformers` uses `accelerate` under the hood. Distributed training works without code changes.
+
+### Data parallel (DDP)
+
+Launch:
+
+```bash
+accelerate launch train.py
+
+# or explicitly:
+accelerate launch --multi_gpu --num_processes=4 train.py
 ```
+
+`per_device_train_batch_size` stays per-GPU. Effective batch size scales linearly. MNRL's in-batch negatives remain **per-device**, not global, unless you pass `gather_across_devices=True` to losses that support it (`MultipleNegativesRankingLoss`, `CachedMultipleNegativesRankingLoss`, the symmetric variants, `GISTEmbedLoss`, `CachedGISTEmbedLoss`, `SparseMultipleNegativesRankingLoss`).
+
+### FSDP / DeepSpeed
+
+For models >3B, use `accelerate config` to enable FSDP or DeepSpeed ZeRO. Both are supported — `sentence-transformers` doesn't require any code changes, only the launch config.
+
+```bash
+accelerate config                   # interactive; choose FSDP or DeepSpeed
+accelerate launch train.py
+```
+
+With FSDP full-shard: a 7B model trains on 4×24GB GPUs that would OOM on any single one of them.
+
+**FSDP caveats** (from the [distributed training docs](https://sbert.net/docs/sentence_transformer/training/distributed.html)):
+- **Evaluators don't run under FSDP** as of writing — the eval hooks call `model.encode()` which FSDP-wrapped modules can't service mid-training. Plan to evaluate post-training on a single-GPU load of the final checkpoint instead, or train with DDP if you need mid-training evaluation.
+- **Layer wrapping must be specified**, e.g. `fsdp_config={"transformer_layer_cls_to_wrap": "BertLayer"}` (substitute the right layer class for your model: `BertLayer`, `LlamaDecoderLayer`, `Qwen2DecoderLayer`, etc.). Without this FSDP sharding can silently misbehave.
+- **Slower than DDP** for models that fit on a single GPU — only reach for FSDP when you actually need the memory savings.
+
+DeepSpeed ZeRO-2/3 is an alternative with its own config; works identically at the `accelerate config` level.
+
+## Effective batch size for contrastive losses
+
+For `MultipleNegativesRankingLoss` and its variants, **batch size is a quality knob**, not just a speed knob. Bigger batches = more in-batch negatives = richer gradients.
+
+The effective pool of in-batch negatives per anchor:
+
+| Setup | In-batch negatives per anchor |
+|---|---|
+| Single GPU, batch 64 | 63 |
+| 4× DDP, per-device batch 64 | 63 local only by default; 255 with `MultipleNegativesRankingLoss(model, gather_across_devices=True)` |
+| Single GPU, CachedMNRL, mini_batch 32, batch 256 | 255 |
+| 4× DDP, CachedMNRL, per-device 256 | 255 local; 1023 with `gather_across_devices=True` |
+
+For large corpora (retrieval), push toward 512+ effective negatives. For small, clean datasets (STS), 64 is plenty.
+
+## Precision choice by GPU
+
+| GPU generation | Recommended |
+|---|---|
+| T4, V100, GTX 1xxx, RTX 2xxx | `fp16=True` |
+| RTX 3xxx, A10G, A100, L4 | `bf16=True` |
+| RTX 4xxx, H100, B200 | `bf16=True` (or fp8 on H100 via specific kernels — not default) |
+| Apple M-series / ROCm | MPS/ROCm support is variable; `fp16` or `fp32` most reliable |
+
+bf16 is more numerically stable and almost always preferred when available.
+
+## Hugging Face Jobs flavor guide
+
+Hugging Face Jobs requires a Pro/Team/Enterprise plan. Pricing is approximate and subject to change — see the [Jobs pricing page](https://huggingface.co/docs/huggingface_hub/guides/jobs).
+
+| Flavor | Memory | Typical use | Est. $/hr |
+|---|---|---|---|
+| `cpu-basic` | ~2 GB | Dataset prep, validation, hard-neg mining (small) | <$0.10 |
+| `cpu-upgrade` | ~4 GB | Same, slightly bigger | $0.10 |
+| `t4-small` | 16 GB | Demos, MiniLM/DistilBERT with small batches | ~$0.75 |
+| `t4-medium` | 16 GB | MiniLM / DistilBERT with larger batch | ~$1.50 |
+| `l4x1` | 24 GB | BERT-base, MPNet, ModernBERT-base | ~$2.50 |
+| `a10g-small` | 24 GB | BERT-base to BERT-large | ~$3.50 |
+| `a10g-large` | 48 GB | ModernBERT-large, Qwen3-0.6B | ~$5.00 |
+| `a10g-largex2` | 96 GB (2× 48GB) | Mid-size multi-GPU | ~$10 |
+| `a100-large` | 80 GB | Large models or big contrastive batches | ~$10–12 |
+| `h100` | 80 GB | Biggest single-GPU | ~$12 |
+| `h100x8` | 640 GB | LLM-scale distributed | ~$96 |
+
+Defaults by base model:
+- MiniLM / DistilBERT -> `t4-small`
+- BERT-base / MPNet / ModernBERT-base -> `a10g-small` or `l4x1`
+- BERT-large / ModernBERT-large -> `a10g-large`
+- Qwen3-0.6B decoder base -> `a10g-large`
+- 1B+ decoder bases with LoRA -> `a10g-large` or `a100-large`
+
+Always start one flavor **smaller** than you think you need: OOM on Jobs is cheap ($0.50–$5 for a failed run). Underprovisioned is better than overprovisioned for the first attempt. When budgeting `timeout`, add **20–30% buffer** for model loading, checkpoint saving, and Hub push.
+
 ## ⚠️ Tratamento de Exceções e Edge Cases
-### Erros de Memória
-*   **Solução:** Reduzir o tamanho do lote (`batch_size`) ou aumentar a capacidade de memória do hardware.
-*   **Exemplo:** Se estiver usando `t4-small` e estourar a memória, considere mudar para `a10g-small` ou reduzir o `batch_size`.
-### Erros de Conexão
-*   **Solução:** Verificar a estabilidade da conexão de rede e garantir que os serviços necessários estejam disponíveis.
-*   **Exemplo:** Se ocorrer um erro de conexão durante o treinamento, verifique a conexão de rede e tente novamente.
-### Erros de Dados
-*   **Solução:** Verificar a integridade dos dados e garantir que estejam no formato correto.
-*   **Exemplo:** Se ocorrer um erro de dados durante o treinamento, verifique a fonte dos dados e corrija qualquer problema de formatação ou consistência.
-### Outros Erros
-*   **Solução:** Verificar os logs de erro e documentação para identificar a causa raiz do problema e aplicar a solução apropriada.
-*   **Exemplo:** Se ocorrer um erro desconhecido, verifique os logs de erro e a documentação do framework ou biblioteca utilizada para encontrar a solução.
-Ao tratar exceções e edge cases, é crucial manter um registro detalhado dos erros e soluções aplicadas para facilitar a depuração e melhoria contínua do processo de treinamento.
-[WARNINGS]
-- Seja rigoroso. A skill deve estar pronta para um ambiente de produção (Senior level).
-- Status deve ser "PASS" se for adequado, ou "FAIL" caso o markdown falhe em ser direto, coeso ou exiba código com falhas notórias.
-- Se for FAIL, a propriedade 'fixed_markdown' deve conter a versão corrigida (se for possível corrigir facilmente). Caso não consiga, devolva a string vazia ou o markdown da forma que conseguiu salvar.
-- Se for PASS, repita o markdown original em 'fixed_markdown'.
-- RETORNE APENAS JSON. Nenhuma palavra a mais.
-[RETURN]
-Retorne API JSON com o schema exato:
-{
-   "status": "PASS" ou "FAIL",
-   "reasoning": "Breve justificativa",
-   "fixed_markdown": "... conteudo final stringified ..."
-}
+
+Ao trabalhar com modelos de aprendizado de máquina, é importante considerar os casos de bordo e exceções que podem ocorrer durante o treinamento e inferência. Aqui estão algumas dicas para lidar com esses casos:
+
+* **Verifique a entrada**: Antes de alimentar os dados no modelo, verifique se eles estão no formato correto e se não há valores ausentes ou inválidos.
+* **Trate as exceções**: Use try-except para capturar e tratar as exceções que podem ocorrer durante o treinamento ou inferência, como erros de memória ou problemas de conectividade.
+* **Monitore o desempenho**: Monitore o desempenho do modelo durante o treinamento e ajuste os hiperparâmetros conforme necessário para evitar problemas de overfitting ou underfitting.
+* **Teste com dados de teste**: Teste o modelo com dados de teste para garantir que ele esteja funcionando corretamente e não esteja sobreajustado aos dados de treinamento.
+* **Considere a robustez**: Considere a robustez do modelo em relação a variações nos dados de entrada e ajuste os hiperparâmetros para garantir que o modelo seja robusto o suficiente.
+
+Além disso, é importante considerar os seguintes casos de bordo:
+
+* **Dados de entrada vazios**: O que acontece se os dados de entrada estiverem vazios ou forem nulos?
+* **Dados de entrada inválidos**: O que acontece se os dados de entrada forem inválidos ou inconsistentes?
+* **Modelo não converge**: O que acontece se o modelo não convergir durante o treinamento?
+* **Modelo sobreajustado**: O que acontece se o modelo estiver sobreajustado aos dados de treinamento?
+
+Ao considerar esses casos de bordo e exceções, é possível desenvolver modelos mais robustos e confiáveis que possam lidar com uma variedade de situações e dados.
