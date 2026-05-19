@@ -1,79 +1,161 @@
 ---
-name: Desenvolvimento de Aplicativos Móvel
-description: Ensina técnicas avançadas de desenvolvimento de aplicativos móveis utilizando frameworks como React Native e Flutter
+name: Desenvolvimento de Aplicativos Móveis
+description: Ensina técnicas e ferramentas para criar aplicativos móveis robustos e escaláveis
 ---
 
 ## Objetivo
-O objetivo deste guia é fornecer uma visão geral do desenvolvimento de aplicativos móveis utilizando frameworks como React Native e Flutter, abordando técnicas avançadas e práticas para o desenvolvimento de aplicativos móveis de alta qualidade.
+O objetivo deste guia é fornecer uma visão geral do desenvolvimento de aplicativos móveis, abordando as técnicas e ferramentas necessárias para criar aplicativos robustos e escaláveis. Este guia é direcionado a desenvolvedores experientes que buscam aprimorar suas habilidades em desenvolvimento de aplicativos móveis.
 
 ## Pré-requisitos
-Para seguir este guia, é necessário ter conhecimento prévio em:
-* Desenvolvimento de aplicativos móveis
-* Linguagens de programação como JavaScript (para React Native) ou Dart (para Flutter)
-* Conhecimento básico de frameworks de desenvolvimento de aplicativos móveis
+Antes de começar, é recomendado que os desenvolvedores tenham conhecimento em:
+* Programação em linguagens como Java, Swift ou Kotlin
+* Desenvolvimento de aplicativos móveis com frameworks como React Native ou Flutter
+* Conhecimento básico de banco de dados e APIs
 
 ## Passo a Passo Técnico / Exemplos de Código
-### Configurando o Ambiente de Desenvolvimento
-Para começar a desenvolver aplicativos móveis com React Native ou Flutter, é necessário configurar o ambiente de desenvolvimento. Isso inclui:
-* Instalar o Node.js e o npm (para React Native)
-* Instalar o Dart e o Flutter
-* Configurar o editor de código ou IDE
+### Configuração do Ambiente
+Para começar, é necessário configurar o ambiente de desenvolvimento. Isso inclui:
+* Instalar o Android Studio ou Xcode
+* Configurar o SDK do Android ou iOS
+* Instalar o Node.js e o npm (se estiver usando React Native)
 
-### Criando um Novo Projeto
-Para criar um novo projeto com React Native, execute o seguinte comando:
 ```bash
-npx react-native init NomeDoProjeto
-```
-Para criar um novo projeto com Flutter, execute o seguinte comando:
-```bash
-flutter create nome_do_projeto
+# Instalar o Node.js e o npm
+brew install node
 ```
 
-### Desenvolvendo a Interface do Usuário
-A interface do usuário é uma parte crucial do aplicativo móvel. Com React Native, você pode usar componentes como `View`, `Text` e `Image` para criar a interface do usuário. Com Flutter, você pode usar widgets como `Container`, `Text` e `Image` para criar a interface do usuário.
+### Criando o Aplicativo
+A seguir, criaremos um aplicativo móvel simples usando React Native. Primeiro, precisamos criar um novo projeto:
+```bash
+# Criar um novo projeto React Native
+npx react-native init MeuAplicativo
+```
+
+Em seguida, podemos começar a criar a interface do usuário:
+```jsx
+// MeuAplicativo/App.js
+import React, { useState } from 'react';
+import { View, Text, Button } from 'react-native';
+
+const App = () => {
+  const [contador, setContador] = useState(0);
+
+  return (
+    <View>
+      <Text>Contador: {contador}</Text>
+      <Button title="Incrementar" onPress={() => setContador(contador + 1)} />
+    </View>
+  );
+};
+
+export default App;
+```
 
 ### Implementando Funcionalidades
-Para implementar funcionalidades no aplicativo, você pode usar APIs, banco de dados e outras tecnologias. Com React Native, você pode usar a biblioteca `axios` para fazer requisições HTTP. Com Flutter, você pode usar a biblioteca `http` para fazer requisições HTTP.
+Agora, podemos implementar funcionalidades adicionais, como armazenamento de dados e integração com APIs. Por exemplo, podemos usar o AsyncStorage para armazenar dados locais:
+```jsx
+// MeuAplicativo/App.js
+import React, { useState, useEffect } from 'react';
+import { View, Text, Button } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-## Validação
-Para validar o aplicativo, é necessário testá-lo em diferentes dispositivos e plataformas. Isso inclui:
-* Testar o aplicativo em dispositivos físicos e emuladores
-* Testar o aplicativo em diferentes versões do sistema operacional
-* Testar o aplicativo com diferentes configurações de rede e hardware
+const App = () => {
+  const [contador, setContador] = useState(0);
 
-Além disso, é importante realizar testes unitários e de integração para garantir que o aplicativo esteja funcionando corretamente. Com React Native, você pode usar a biblioteca `Jest` para realizar testes unitários. Com Flutter, você pode usar a biblioteca `flutter_test` para realizar testes unitários.
+  useEffect(() => {
+    carregarContador();
+  }, []);
 
-## ⚠️ Tratamento de Exceções e Edge Cases
-É fundamental tratar exceções e edge cases para garantir a estabilidade e a segurança do aplicativo. Aqui estão alguns exemplos:
-* **Tratamento de erros de rede**: Use try-catch para capturar erros de rede e exibir uma mensagem de erro ao usuário.
-* **Tratamento de erros de banco de dados**: Use try-catch para capturar erros de banco de dados e exibir uma mensagem de erro ao usuário.
-* **Tratamento de erros de permissão**: Use try-catch para capturar erros de permissão e exibir uma mensagem de erro ao usuário.
-* **Edge case: dispositivo com recursos limitados**: Otimize o aplicativo para funcionar em dispositivos com recursos limitados, como dispositivos com memória RAM baixa.
-* **Edge case: conexão de rede lenta**: Otimize o aplicativo para funcionar em conexões de rede lentas, como 2G ou 3G.
+  const carregarContador = async () => {
+    try {
+      const valor = await AsyncStorage.getItem('contador');
+      if (valor) {
+        setContador(parseInt(valor));
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-Exemplo de código para tratamento de erros de rede com React Native:
-```javascript
-import axios from 'axios';
+  const salvarContador = async () => {
+    try {
+      await AsyncStorage.setItem('contador', contador.toString());
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-axios.get('https://api.example.com/data')
-  .then(response => {
-    // Tratar resposta
-  })
-  .catch(error => {
-    // Tratar erro
-    console.error(error);
-  });
+  return (
+    <View>
+      <Text>Contador: {contador}</Text>
+      <Button title="Incrementar" onPress={() => {
+        setContador(contador + 1);
+        salvarContador();
+      }} />
+    </View>
+  );
+};
+
+export default App;
 ```
 
-Exemplo de código para tratamento de erros de rede com Flutter:
-```dart
-import 'package:http/http.dart' as http;
+## Validação
+Para validar o aplicativo, podemos realizar testes unitários e de integração. Por exemplo, podemos usar o Jest para testar a funcionalidade do contador:
+```jsx
+// MeuAplicativo/App.test.js
+import React from 'react';
+import { render, fireEvent } from '@testing-library/react-native';
+import App from './App';
 
-http.get(Uri.parse('https://api.example.com/data'))
-  .then((response) {
-    // Tratar resposta
-  })
-  .catchError((error) {
-    // Tratar erro
-    print(error);
+describe('App', () => {
+  it('deve incrementar o contador quando o botão é pressionado', () => {
+    const { getByText } = render(<App />);
+    const botao = getByText('Incrementar');
+    const texto = getByText('Contador: 0');
+
+    fireEvent.press(botao);
+
+    expect(getByText('Contador: 1')).toBeTruthy();
   });
+});
+
+## ⚠️ Tratamento de Exceções e Edge Cases
+É importante tratar exceções e edge cases para garantir a robustez e escalabilidade do aplicativo. Aqui estão alguns exemplos:
+
+* **Tratamento de erros de rede**: ao realizar requisições de rede, é importante tratar erros de conexão, timeout, etc.
+```jsx
+const fazerRequisicao = async () => {
+  try {
+    const resposta = await fetch('https://api.exemplo.com/dados');
+    const dados = await resposta.json();
+    // Processar dados
+  } catch (error) {
+    console.error(error);
+    // Tratar erro
+  }
+};
+```
+
+* **Tratamento de erros de armazenamento**: ao armazenar dados locais, é importante tratar erros de armazenamento, como falta de espaço, etc.
+```jsx
+const salvarDados = async () => {
+  try {
+    await AsyncStorage.setItem('dados', JSON.stringify(dados));
+  } catch (error) {
+    console.error(error);
+    // Tratar erro
+  }
+};
+```
+
+* **Tratamento de edge cases**: é importante tratar edge cases, como entrada de usuário inválida, etc.
+```jsx
+const validarEntrada = (entrada) => {
+  if (entrada === null || entrada === undefined) {
+    throw new Error('Entrada inválida');
+  }
+  // Validar entrada
+};
+```
+
+Ao tratar exceções e edge cases, podemos garantir que o aplicativo seja robusto e escalável, e forneça uma experiência de usuário satisfatória.
