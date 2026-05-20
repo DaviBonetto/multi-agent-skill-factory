@@ -1,49 +1,33 @@
 ---
-name: Desenvolvimento de Aplicativos Móveis
-description: Ensina técnicas e ferramentas para criar aplicativos móveis robustos e escaláveis
+name: Desenvolvimento de Aplicativos Móvel
+description: Esta skill ensina a criar aplicativos móveis utilizando tecnologias como React Native e Flutter
 ---
 
 ## Objetivo
-O objetivo deste guia é fornecer uma visão geral do desenvolvimento de aplicativos móveis, abordando as técnicas e ferramentas necessárias para criar aplicativos robustos e escaláveis. Este guia é direcionado a desenvolvedores experientes que buscam aprimorar suas habilidades em desenvolvimento de aplicativos móveis.
+O objetivo desta skill é capacitar os desenvolvedores a criar aplicativos móveis utilizando tecnologias como React Native e Flutter, permitindo que eles criem soluções móveis eficazes e escaláveis.
 
 ## Pré-requisitos
-Antes de começar, é recomendado que os desenvolvedores tenham conhecimento em:
-* Programação em linguagens como Java, Swift ou Kotlin
-* Desenvolvimento de aplicativos móveis com frameworks como React Native ou Flutter
-* Conhecimento básico de banco de dados e APIs
+Para iniciar esta skill, é necessário ter conhecimento básico em:
+* Programação em JavaScript (para React Native)
+* Programação em Dart (para Flutter)
+* Conceitos de desenvolvimento de aplicativos móveis
+* Ferramentas de desenvolvimento como Node.js, npm e Git
 
 ## Passo a Passo Técnico / Exemplos de Código
-### Configuração do Ambiente
-Para começar, é necessário configurar o ambiente de desenvolvimento. Isso inclui:
-* Instalar o Android Studio ou Xcode
-* Configurar o SDK do Android ou iOS
-* Instalar o Node.js e o npm (se estiver usando React Native)
+### Configurando o Ambiente de Desenvolvimento
+1. Instalar o Node.js e o npm
+2. Instalar o React Native CLI ou o Flutter SDK
+3. Configurar o editor de código ou IDE
 
-```bash
-# Instalar o Node.js e o npm
-brew install node
-```
-
-### Criando o Aplicativo
-A seguir, criaremos um aplicativo móvel simples usando React Native. Primeiro, precisamos criar um novo projeto:
-```bash
-# Criar um novo projeto React Native
-npx react-native init MeuAplicativo
-```
-
-Em seguida, podemos começar a criar a interface do usuário:
-```jsx
-// MeuAplicativo/App.js
-import React, { useState } from 'react';
-import { View, Text, Button } from 'react-native';
+### Criando um Aplicativo Móvel com React Native
+```javascript
+import React from 'react';
+import { View, Text } from 'react-native';
 
 const App = () => {
-  const [contador, setContador] = useState(0);
-
   return (
     <View>
-      <Text>Contador: {contador}</Text>
-      <Button title="Incrementar" onPress={() => setContador(contador + 1)} />
+      <Text>Olá, mundo!</Text>
     </View>
   );
 };
@@ -51,111 +35,119 @@ const App = () => {
 export default App;
 ```
 
-### Implementando Funcionalidades
-Agora, podemos implementar funcionalidades adicionais, como armazenamento de dados e integração com APIs. Por exemplo, podemos usar o AsyncStorage para armazenar dados locais:
-```jsx
-// MeuAplicativo/App.js
-import React, { useState, useEffect } from 'react';
-import { View, Text, Button } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+### Criando um Aplicativo Móvel com Flutter
+```dart
+import 'package:flutter/material.dart';
 
-const App = () => {
-  const [contador, setContador] = useState(0);
+void main() {
+  runApp(const MyApp());
+}
 
-  useEffect(() => {
-    carregarContador();
-  }, []);
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
 
-  const carregarContador = async () => {
-    try {
-      const valor = await AsyncStorage.getItem('contador');
-      if (valor) {
-        setContador(parseInt(valor));
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const salvarContador = async () => {
-    try {
-      await AsyncStorage.setItem('contador', contador.toString());
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  return (
-    <View>
-      <Text>Contador: {contador}</Text>
-      <Button title="Incrementar" onPress={() => {
-        setContador(contador + 1);
-        salvarContador();
-      }} />
-    </View>
-  );
-};
-
-export default App;
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      title: 'Olá, mundo!',
+      home: Scaffold(
+        body: Center(
+          child: Text('Olá, mundo!'),
+        ),
+      ),
+    );
+  }
+}
 ```
 
 ## Validação
-Para validar o aplicativo, podemos realizar testes unitários e de integração. Por exemplo, podemos usar o Jest para testar a funcionalidade do contador:
-```jsx
-// MeuAplicativo/App.test.js
-import React from 'react';
-import { render, fireEvent } from '@testing-library/react-native';
-import App from './App';
+Para validar o conhecimento adquirido, é necessário:
+* Criar um aplicativo móvel utilizando React Native ou Flutter
+* Implementar funcionalidades básicas como navegação e armazenamento de dados
+* Testar o aplicativo em dispositivos móveis reais ou emuladores
+* Realizar ajustes e otimizações para melhorar o desempenho e a usabilidade do aplicativo
 
-describe('App', () => {
-  it('deve incrementar o contador quando o botão é pressionado', () => {
-    const { getByText } = render(<App />);
-    const botao = getByText('Incrementar');
-    const texto = getByText('Contador: 0');
+## Tratamento de Exceções e Edge Cases
+### Tratamento de Erros em React Native
+* Utilizar o `try-catch` para capturar erros em código JavaScript
+* Utilizar o `ErrorBoundary` para capturar erros em componentes React
+* Implementar um mecanismo de relatórios de erros para monitorar e solucionar problemas
 
-    fireEvent.press(botao);
+### Tratamento de Erros em Flutter
+* Utilizar o `try-catch` para capturar erros em código Dart
+* Utilizar o `ErrorWidget` para exibir erros em widgets
+* Implementar um mecanismo de relatórios de erros para monitorar e solucionar problemas
 
-    expect(getByText('Contador: 1')).toBeTruthy();
-  });
-});
+### Edge Cases
+* Lidar com diferentes tamanhos e resoluções de tela
+* Lidar com diferentes versões de sistema operacional e dispositivos
+* Lidar com problemas de conectividade e rede
+* Lidar com problemas de segurança e autenticação
 
-## ⚠️ Tratamento de Exceções e Edge Cases
-É importante tratar exceções e edge cases para garantir a robustez e escalabilidade do aplicativo. Aqui estão alguns exemplos:
+Exemplos de código para tratamento de exceções e edge cases:
+```javascript
+// React Native
+import React, { Component } from 'react';
+import { View, Text } from 'react-native';
 
-* **Tratamento de erros de rede**: ao realizar requisições de rede, é importante tratar erros de conexão, timeout, etc.
-```jsx
-const fazerRequisicao = async () => {
-  try {
-    const resposta = await fetch('https://api.exemplo.com/dados');
-    const dados = await resposta.json();
-    // Processar dados
-  } catch (error) {
-    console.error(error);
-    // Tratar erro
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      erro: null
+    };
   }
-};
+
+  componentDidMount() {
+    try {
+      // Código que pode gerar um erro
+    } catch (error) {
+      this.setState({ erro: error.message });
+    }
+  }
+
+  render() {
+    if (this.state.erro) {
+      return (
+        <View>
+          <Text>Erro: {this.state.erro}</Text>
+        </View>
+      );
+    } else {
+      return (
+        <View>
+          <Text>Olá, mundo!</Text>
+        </View>
+      );
+    }
+  }
+}
 ```
 
-* **Tratamento de erros de armazenamento**: ao armazenar dados locais, é importante tratar erros de armazenamento, como falta de espaço, etc.
-```jsx
-const salvarDados = async () => {
-  try {
-    await AsyncStorage.setItem('dados', JSON.stringify(dados));
-  } catch (error) {
-    console.error(error);
-    // Tratar erro
-  }
-};
-```
+```dart
+// Flutter
+import 'package:flutter/material.dart';
 
-* **Tratamento de edge cases**: é importante tratar edge cases, como entrada de usuário inválida, etc.
-```jsx
-const validarEntrada = (entrada) => {
-  if (entrada === null || entrada === undefined) {
-    throw new Error('Entrada inválida');
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Olá, mundo!',
+      home: Scaffold(
+        body: Center(
+          child: Text('Olá, mundo!'),
+        ),
+      ),
+      errorWidget: (context, error) {
+        return MaterialApp(
+          title: 'Erro',
+          home: Scaffold(
+            body: Center(
+              child: Text('Erro: $error'),
+            ),
+          ),
+        );
+      },
+    );
   }
-  // Validar entrada
-};
-```
-
-Ao tratar exceções e edge cases, podemos garantir que o aplicativo seja robusto e escalável, e forneça uma experiência de usuário satisfatória.
+}
