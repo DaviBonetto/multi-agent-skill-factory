@@ -1,88 +1,63 @@
 ---
 name: Segurança da Informação em Sistemas de Informação
-description: Aborda técnicas e estratégias para garantir a segurança da informação em sistemas de informação
+description: Esta skill ensina a proteger sistemas de informação contra ameaças e vulnerabilidades de segurança
 ---
 
 ## Objetivo
-O objetivo deste guia é fornecer uma visão geral das técnicas e estratégias para garantir a segurança da informação em sistemas de informação, abordando os principais conceitos e práticas para proteger a confidencialidade, integridade e disponibilidade dos dados.
+O objetivo desta skill é fornecer conhecimentos e habilidades para proteger sistemas de informação contra ameaças e vulnerabilidades de segurança, garantindo a confidencialidade, integridade e disponibilidade dos dados.
 
 ## Pré-requisitos
-- Conhecimento básico em segurança da informação
-- Experiência em sistemas de informação
-- Familiaridade com conceitos de criptografia e autenticação
+Para seguir esta skill, é recomendado que o aluno tenha conhecimentos básicos em:
+* Segurança da informação
+* Sistemas de informação
+* Redes de computadores
+* Protocolos de segurança
 
 ## Passo a Passo Técnico / Exemplos de Código
-### 1. Autenticação e Autorização
-A autenticação e autorização são fundamentais para garantir a segurança da informação. Isso pode ser implementado usando protocolos como OAuth ou OpenID Connect.
+Aqui estão os passos para implementar a segurança da informação em sistemas de informação:
+1. **Análise de Riscos**: Identificar os riscos e ameaças potenciais ao sistema de informação.
+2. **Implementação de Controles de Segurança**: Implementar controles de segurança para mitigar os riscos identificados, como:
+ * Autenticação e autorização de usuários
+ * Criptografia de dados
+ * Firewalls e sistemas de detecção de intrusos
+3. **Monitoramento e Análise de Logs**: Monitorar e analisar os logs do sistema para detectar atividades suspeitas.
+4. **Atualização e Manutenção**: Manter o sistema e os softwares atualizados para garantir a segurança.
+
+Exemplo de código em Python para criptografia de dados:
 ```python
-import requests
+import hashlib
 
-# Exemplo de autenticação usando OAuth
-url = "https://example.com/oauth/token"
-headers = {"Content-Type": "application/x-www-form-urlencoded"}
-data = {"grant_type": "password", "username": "usuario", "password": "senha"}
-response = requests.post(url, headers=headers, data=data)
+def criptografar_dados(dados):
+    try:
+        # Criar um objeto de criptografia
+        criptografia = hashlib.sha256()
+        
+        # Adicionar os dados ao objeto de criptografia
+        criptografia.update(dados.encode('utf-8'))
+        
+        # Retornar o hash criptografado
+        return criptografia.hexdigest()
+    except TypeError:
+        print("Erro: Os dados devem ser uma string.")
+        return None
+    except Exception as e:
+        print(f"Erro inesperado: {e}")
+        return None
 
-if response.status_code == 200:
-    token = response.json()["access_token"]
-    print("Autenticação bem-sucedida")
-else:
-    print("Falha na autenticação")
-```
-
-### 2. Criptografia
-A criptografia é essencial para proteger a confidencialidade dos dados. Isso pode ser feito usando algoritmos como AES ou RSA.
-```python
-from cryptography.fernet import Fernet
-
-# Exemplo de criptografia usando Fernet
-key = Fernet.generate_key()
-cipher_suite = Fernet(key)
-
-mensagem = "Esta é uma mensagem secreta"
-mensagem_criptografada = cipher_suite.encrypt(mensagem.encode())
-print("Mensagem criptografada:", mensagem_criptografada)
-
-mensagem_descriptografada = cipher_suite.decrypt(mensagem_criptografada)
-print("Mensagem descriptografada:", mensagem_descriptografada.decode())
-```
-
-### 3. Firewalls e Sistemas de Detecção de Intrusos
-Firewalls e sistemas de detecção de intrusos (IDS) são importantes para proteger contra ataques mal-intencionados.
-```bash
-# Exemplo de configuração de firewall usando iptables
-iptables -A INPUT -p tcp --dport 22 -j ACCEPT
-iptables -A INPUT -p tcp --dport 80 -j ACCEPT
-iptables -A INPUT -j DROP
+# Testar a função
+dados = "Meus dados secretos"
+hash_criptografado = criptografar_dados(dados)
+print(hash_criptografado)
 ```
 
 ## Validação
-A validação é crucial para garantir que as medidas de segurança implementadas estejam funcionando corretamente. Isso pode ser feito usando ferramentas de teste de penetração ou auditorias de segurança.
-- Verifique se as autenticações e autorizações estão funcionando corretamente.
-- Teste a criptografia para garantir que os dados estejam sendo protegidos.
-- Verifique se os firewalls e sistemas de detecção de intrusos estão configurados corretamente e funcionando como esperado.
+Para validar a implementação da segurança da informação em sistemas de informação, é importante realizar testes e auditorias regulares para garantir que os controles de segurança estejam funcionando corretamente e que os riscos sejam minimizados. Além disso, é fundamental manter os conhecimentos e habilidades atualizados para lidar com as ameaças e vulnerabilidades de segurança em constante evolução.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-É fundamental considerar os seguintes casos de exceção e edge cases:
-- **Autenticação**: Lidar com tentativas de autenticação inválidas, como senhas incorretas ou tokens expirados.
-- **Criptografia**: Gerenciar chaves de criptografia perdidas ou comprometidas, e lidar com ataques de força bruta.
-- **Firewalls e IDS**: Configurar regras de firewall para permitir tráfego legítimo e bloquear tráfego mal-intencionado, e monitorar alertas de IDS para detectar possíveis ameaças.
-- **Erros de rede**: Lidar com erros de conexão, como timeouts ou perda de pacotes, para garantir a confiabilidade da comunicação.
-- **Atualizações de segurança**: Manter o sistema atualizado com as últimas patches de segurança e atualizações de software para evitar vulnerabilidades conhecidas.
-
-Exemplos de código para tratamento de exceções:
-```python
-try:
-    # Tente autenticar o usuário
-    response = requests.post(url, headers=headers, data=data)
-    response.raise_for_status()
-except requests.exceptions.HTTPError as errh:
-    print("HTTP Error:", errh)
-except requests.exceptions.ConnectionError as errc:
-    print("Error de Conexão:", errc)
-except requests.exceptions.Timeout as errt:
-    print("Timeout Error:", errt)
-except requests.exceptions.RequestException as err:
-    print("Erro de Requisição:", err)
-```
-Esses exemplos ilustram como lidar com exceções e edge cases para garantir a segurança e confiabilidade do sistema.
+Além dos passos técnicos, é importante considerar os seguintes casos de bordo e exceções:
+* **Dados inválidos**: Verificar se os dados de entrada são válidos e consistentes antes de processá-los.
+* **Erros de criptografia**: Lidar com erros de criptografia, como chaves inválidas ou algoritmos não suportados.
+* **Acessos não autorizados**: Implementar controles de acesso para evitar acessos não autorizados ao sistema e aos dados.
+* **Ataques de força bruta**: Implementar medidas para prevenir ataques de força bruta, como limitar o número de tentativas de login.
+* **Vulnerabilidades de segurança**: Manter o sistema e os softwares atualizados para garantir que as vulnerabilidades de segurança sejam corrigidas.
+* **Desastres**: Ter um plano de recuperação de desastres para garantir a disponibilidade dos dados em caso de desastres.
