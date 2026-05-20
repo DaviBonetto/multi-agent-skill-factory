@@ -1,66 +1,73 @@
-# Svelte Todo List - Design
+# Go Fractals CLI - Design
 ## Overview
-A simple todo list application built with Svelte. Supports creating, completing, and deleting todos with localStorage persistence.
-## Features
-- Add new todos
-- Mark todos as complete/incomplete
-- Delete todos
-- Filter by: All / Active / Completed
-- Clear all completed todos
-- Persist to localStorage
-- Show count of remaining items
-## User Interface
+A command-line tool that generates ASCII art fractals. Supports two fractal types with configurable output.
+## Usage
+```bash
+# Sierpinski triangle
+fractals sierpinski --size 32 --depth 5
+# Mandelbrot set
+fractals mandelbrot --width 80 --height 24 --iterations 100
+# Custom character
+fractals sierpinski --size 16 --char '#'
+# Help
+fractals --help
+fractals sierpinski --help
 ```
-┌─────────────────────────────────────────┐
-│  Svelte Todos                           │
-├─────────────────────────────────────────┤
-│  [________________________] [Add]       │
-├─────────────────────────────────────────┤
-│  [ ] Buy groceries                  [x] │
-│  [✓] Walk the dog                   [x] │
-│  [ ] Write code                     [x] │
-├─────────────────────────────────────────┤
-│  2 items left                           │
-│  [All] [Active] [Completed]  [Clear ✓]  │
-└─────────────────────────────────────────┘
+## Commands
+### `sierpinski`
+Generates a Sierpinski triangle using recursive subdivision.
+Flags:
+- `--size` (default: 32) - Width of the triangle base in characters
+- `--depth` (default: 5) - Recursion depth
+- `--char` (default: '*') - Character to use for filled points
+Output: Triangle printed to stdout, one line per row.
+### `mandelbrot`
+Renders the Mandelbrot set as ASCII art. Maps iteration count to characters.
+Flags:
+- `--width` (default: 80) - Output width in characters
+- `--height` (default: 24) - Output height in characters
+- `--iterations` (default: 100) - Maximum iterations for escape calculation
+- `--char` (default: gradient) - Single character, or omit for gradient " .:-=+*#%@"
+Output: Rectangle printed to stdout.
+## Architecture
 ```
-## Components
+cmd/
+  fractals/
+    main.go           # Entry point, CLI setup
+internal/
+  sierpinski/
+    sierpinski.go     # Algorithm
+    sierpinski_test.go
+  mandelbrot/
+    mandelbrot.go     # Algorithm
+    mandelbrot_test.go
+  cli/
+    root.go           # Root command, help
+    sierpinski.go     # Sierpinski subcommand
+    mandelbrot.go     # Mandelbrot subcommand
 ```
-src/
-  App.svelte           # Main app, state management
-  lib/
-    TodoInput.svelte   # Text input + Add button
-    TodoList.svelte    # List container
-    TodoItem.svelte    # Single todo with checkbox, text, delete
-    FilterBar.svelte   # Filter buttons + clear completed
-    store.ts           # Svelte store for todos
-    storage.ts         # localStorage persistence
-```
-## Data Model
-```typescript
-interface Todo {
-  id: string;        // UUID
-  text: string;      // Todo text
-  completed: boolean;
-}
-type Filter = 'all' | 'active' | 'completed';
-```
+## Dependencies
+- Go 1.21+
+- `github.com/spf13/cobra` for CLI
 ## Acceptance Criteria
-1. Can add a todo by typing and pressing Enter or clicking Add
-2. Can toggle todo completion by clicking checkbox
-3. Can delete a todo by clicking X button
-4. Filter buttons show correct subset of todos
-5. "X items left" shows count of incomplete todos
-6. "Clear completed" removes all completed todos
-7. Todos persist across page refresh (localStorage)
-8. Empty state shows helpful message
-9. All tests pass
+1. `fractals --help` shows usage
+2. `fractals sierpinski` outputs a recognizable triangle
+3. `fractals mandelbrot` outputs a recognizable Mandelbrot set
+4. `--size`, `--width`, `--height`, `--depth`, `--iterations` flags work
+5. `--char` customizes output character
+6. Invalid inputs produce clear error messages
+7. All tests pass
 ## ⚠️ Tratamento de Exceções e Edge Cases
-- **Validação de entrada**: Verificar se o texto do todo é vazio antes de adicioná-lo à lista.
-- **Tratamento de erros de armazenamento**: Lidar com erros de armazenamento local, como falta de suporte ou espaço insuficiente.
-- **Edge case: lista vazia**: Exibir uma mensagem útil quando a lista de todos estiver vazia.
-- **Edge case: filtro inválido**: Lidar com filtros inválidos, como um filtro que não está definido no tipo `Filter`.
-- **Segurança**: Proteger contra ataques de injeção de scripts, garantindo que todos os dados sejam sanitizados antes de serem exibidos.
-- **Acessibilidade**: Garantir que a aplicação seja acessível para usuários com deficiência, seguindo as diretrizes de acessibilidade web.
-- **Desempenho**: Otimizar a aplicação para garantir que ela seja responsiva e eficiente, mesmo com grandes quantidades de dados.
-- **Testes**: Implementar testes unitários e de integração para garantir que a aplicação funcione corretamente em diferentes cenários.
+### Exceções
+- **Erro de inicialização**: Caso ocorra um erro durante a inicialização do programa, uma mensagem de erro clara será exibida para o usuário.
+- **Erro de parsing de flags**: Se os flags forem passados de forma inválida, o programa exibirá uma mensagem de erro indicando o problema.
+- **Erro de geração de fractal**: Em caso de erro durante a geração do fractal, o programa exibirá uma mensagem de erro com informações sobre o problema.
+### Edge Cases
+- **Tamanho de saída muito grande**: Se o tamanho de saída for muito grande, o programa pode demorar muito para gerar o fractal ou até mesmo causar um erro de falta de memória.
+- **Profundidade de recursão muito grande**: Se a profundidade de recursão for muito grande, o programa pode causar um erro de estouro de pilha.
+- **Caractere inválido**: Se o caractere passado for inválido, o programa exibirá uma mensagem de erro indicando o problema.
+- **Flags inválidos**: Se os flags forem passados de forma inválida, o programa exibirá uma mensagem de erro indicando o problema.
+### Tratamento de Exceções
+- **Try-catch**: O programa utilizará blocos try-catch para capturar e tratar exceções de forma apropriada.
+- **Mensagens de erro**: O programa exibirá mensagens de erro claras e concisas para o usuário em caso de exceção.
+- **Logs**: O programa manterá logs de erros para facilitar a depuração e resolução de problemas.
