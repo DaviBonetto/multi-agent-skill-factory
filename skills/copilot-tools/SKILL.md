@@ -46,19 +46,16 @@ Copilot CLI supports persistent async shell sessions, which have no direct Claud
 Ao utilizar as ferramentas do Copilot CLI, é importante considerar os seguintes casos de exceção e edge cases:
 
 * **Erros de sintaxe**: Verifique se os comandos estão corretamente formatados e se os parâmetros estão sendo passados corretamente.
-* **Comandos não suportados**: Verifique se o comando utilizado é suportado pelo Copilot CLI e se está sendo utilizado corretamente.
-* **Erros de permissão**: Verifique se o usuário tem as permissões necessárias para executar o comando.
-* **Limites de recursos**: Verifique se os recursos necessários (como memória ou CPU) estão disponíveis para executar o comando.
-* **Conexão de rede**: Verifique se a conexão de rede está estável e se o servidor está respondendo corretamente.
-* **Timeouts**: Verifique se os timeouts estão configurados corretamente para evitar que os comandos fiquem pendentes por muito tempo.
-* **Tratamento de erros**: Verifique se os erros estão sendo tratados corretamente e se as mensagens de erro estão sendo exibidas de forma clara e útil.
-* **Validação de entrada**: Verifique se as entradas estão sendo validadas corretamente para evitar erros ou comportamentos inesperados.
-* **Segurança**: Verifique se as ferramentas do Copilot CLI estão sendo utilizadas de forma segura e se os dados estão sendo protegidos corretamente.
+* **Comandos não suportados**: Certifique-se de que os comandos utilizados são suportados pela plataforma e pela versão do Copilot CLI.
+* **Limites de recursos**: Tenha em mente os limites de recursos (como memória e processamento) ao executar comandos que consomem muitos recursos.
+* **Sessões async**: Ao utilizar sessões async, certifique-se de que os comandos sejam executados corretamente e que os resultados sejam processados adequadamente.
+* **Erros de rede**: Verifique se os erros de rede estão sendo tratados corretamente, especialmente ao utilizar comandos que dependem de conexões de rede.
+* **Segurança**: Certifique-se de que as credenciais e os dados sensíveis sejam tratados corretamente e de forma segura.
+* **Casos de bordo**: Considere os casos de bordo, como quando um comando não retorna um resultado ou quando um erro ocorre durante a execução de um comando.
 
-Além disso, é importante considerar os seguintes edge cases:
+Além disso, é importante implementar mecanismos de tratamento de erros e exceções para garantir que as skills sejam robustas e confiáveis. Isso pode incluir:
 
-* **Comandos com muitos parâmetros**: Verifique se os comandos com muitos parâmetros estão sendo tratados corretamente e se os parâmetros estão sendo passados corretamente.
-* **Comandos com saída grande**: Verifique se os comandos com saída grande estão sendo tratados corretamente e se a saída está sendo exibida de forma clara e útil.
-* **Comandos que demoram muito tempo**: Verifique se os comandos que demoram muito tempo estão sendo tratados corretamente e se os timeouts estão configurados corretamente.
-
-Ao considerar esses casos de exceção e edge cases, é possível garantir que as ferramentas do Copilot CLI sejam utilizadas de forma segura e eficaz.
+* **Try-catch**: Utilize blocos try-catch para capturar e tratar erros e exceções.
+* **Verificação de erros**: Verifique se os comandos retornam erros ou exceções e trate-os adequadamente.
+* **Log de erros**: Registre os erros e exceções para que possam ser analisados e resolvidos posteriormente.
+* **Recuperação de erros**: Implemente mecanismos de recuperação de erros para garantir que as skills possam se recuperar de erros e exceções.
