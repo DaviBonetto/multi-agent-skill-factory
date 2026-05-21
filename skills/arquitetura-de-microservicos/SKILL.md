@@ -1,106 +1,119 @@
----
-name: Arquitetura de Microsserviços
-description: Projetar e implementar sistemas de microsserviços utilizando tecnologias como Docker e Kubernetes
----
-
+# Arquitetura de Microsserviços
+## Descrição
+Ensina como projetar e implementar arquiteturas de microsserviços utilizando tecnologias como Docker e Kubernetes.
 ## Objetivo
-O objetivo desta skill é ensinar como projetar e implementar sistemas de microsserviços utilizando tecnologias como Docker e Kubernetes. Com isso, os participantes serão capazes de criar sistemas escaláveis, flexíveis e fáceis de manter.
-
+O objetivo deste guia é fornecer uma visão geral de como projetar e implementar arquiteturas de microsserviços utilizando tecnologias como Docker e Kubernetes. Ao final deste guia, você estará apto a criar e gerenciar microsserviços escaláveis e eficientes.
 ## Pré-requisitos
-Para participar desta skill, é necessário ter conhecimento em:
+Para seguir este guia, é necessário ter conhecimento em:
 * Desenvolvimento de software
-* Conceitos de rede e sistemas operacionais
-* Experiência com linguagens de programação (como Java, Python, etc.)
-* Conhecimento básico de Docker e Kubernetes
-
+* Conceitos básicos de rede e sistemas operacionais
+* Experiência com Docker e Kubernetes (ou disposição para aprender)
 ## Passo a Passo Técnico / Exemplos de Código
-### 1. Introdução ao Docker
-O Docker é uma plataforma de contêinerização que permite criar, testar e implantar aplicações de forma rápida e segura. Para começar a usar o Docker, é necessário instalar o Docker Desktop ou o Docker Engine no seu sistema operacional.
-
+### 1. Configuração do Ambiente
+Primeiramente, é necessário configurar o ambiente de desenvolvimento. Isso inclui a instalação do Docker e do Kubernetes.
 ```bash
-# Instalar o Docker no Ubuntu
+# Instalar o Docker
 sudo apt-get update
 sudo apt-get install docker.io
+# Instalar o Kubernetes
+sudo snap install microk8s --classic
 ```
-
-### 2. Criação de Imagens Docker
-As imagens Docker são templates que contêm todo o necessário para executar uma aplicação. Para criar uma imagem Docker, é necessário criar um arquivo `Dockerfile` que contenha as instruções para criar a imagem.
-
-```dockerfile
-# Dockerfile exemplo
-FROM python:3.9-slim
-WORKDIR /app
-COPY requirements.txt .
-RUN pip install -r requirements.txt
-COPY . .
-CMD ["python", "app.py"]
+### 2. Criação de Microsserviços
+Em seguida, é necessário criar os microsserviços. Isso pode ser feito utilizando linguagens de programação como Python ou Java.
+```python
+# Exemplo de microsserviço em Python
+from flask import Flask
+app = Flask(__name__)
+@app.route("/")
+def hello():
+    return "Hello, World!"
+if __name__ == "__main__":
+    app.run()
 ```
-
-### 3. Introdução ao Kubernetes
-O Kubernetes é um sistema de orquestração de contêineres que permite gerenciar e escalonar aplicações em contêineres. Para começar a usar o Kubernetes, é necessário instalar o Minikube ou o Kind no seu sistema operacional.
-
-```bash
-# Instalar o Minikube no Ubuntu
-curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
-sudo install minikube-linux-amd64 /usr/local/bin/minikube
-```
-
-### 4. Criação de Pods e Serviços no Kubernetes
-Os pods são os componentes básicos do Kubernetes e contêm um ou mais contêineres. Os serviços são usados para expor os pods para o exterior da rede.
-
+### 3. Implementação da Arquitetura de Microsserviços
+Com os microsserviços criados, é necessário implementar a arquitetura de microsserviços. Isso inclui a configuração do Docker e do Kubernetes.
 ```yml
 # Exemplo de arquivo de configuração do Kubernetes
-apiVersion: v1
-kind: Pod
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: meu-pod
+  name: meu-microsservico
 spec:
-  containers:
-  - name: meu-contêiner
-    image: meu-imagem
-    ports:
-    - containerPort: 80
+  replicas: 3
+  selector:
+    matchLabels:
+      app: meu-microsservico
+  template:
+    metadata:
+      labels:
+        app: meu-microsservico
+    spec:
+      containers:
+      - name: meu-microsservico
+        image: meu-microsservico:latest
+        ports:
+        - containerPort: 80
 ```
-
 ## Validação
-Para validar a implementação da arquitetura de microsserviços, é necessário testar a aplicação em diferentes cenários, como:
-* Testar a escalabilidade da aplicação
-* Testar a flexibilidade da aplicação
-* Testar a segurança da aplicação
-
-Com isso, é possível garantir que a aplicação esteja funcionando corretamente e atendendo às necessidades dos usuários.
-
+Para validar a implementação da arquitetura de microsserviços, é necessário testar os microsserviços e verificar se eles estão funcionando corretamente. Isso pode ser feito utilizando ferramentas de teste como o Postman ou o cURL.
+```bash
+# Exemplo de teste utilizando o cURL
+curl http://localhost:80
+```
 ## ⚠️ Tratamento de Exceções e Edge Cases
-Além dos passos técnicos, é importante considerar os seguintes casos de exceção e edge cases:
-* **Falha na criação de imagens Docker**: Verificar se o arquivo `Dockerfile` está correto e se o processo de criação da imagem está funcionando corretamente.
-* **Problemas de rede**: Verificar se a rede está configurada corretamente e se os pods e serviços estão se comunicando corretamente.
-* **Erros de segurança**: Verificar se as políticas de segurança estão configuradas corretamente e se os pods e serviços estão sendo executados com as permissões corretas.
-* **Escalabilidade**: Verificar se a aplicação está escalando corretamente e se os recursos estão sendo alocados de forma eficiente.
-* **Flexibilidade**: Verificar se a aplicação está flexível o suficiente para lidar com mudanças nos requisitos dos usuários.
-
-Exemplos de código para tratamento de exceções:
+### Erros de Instalação
+* Certifique-se de que o Docker e o Kubernetes estejam instalados corretamente.
+* Verifique se as dependências necessárias estão instaladas.
+### Erros de Configuração
+* Verifique se o arquivo de configuração do Kubernetes está correto.
+* Certifique-se de que as variáveis de ambiente estão configuradas corretamente.
+### Erros de Execução
+* Verifique se os microsserviços estão executando corretamente.
+* Certifique-se de que as portas necessárias estão abertas.
+### Edge Cases
+* Lidar com falhas de rede: implemente mecanismos de retry e timeout para lidar com falhas de rede.
+* Lidar com sobrecarga: implemente mecanismos de escalabilidade para lidar com sobrecarga.
+* Lidar com segurança: implemente mecanismos de autenticação e autorização para garantir a segurança dos microsserviços.
 ```python
+# Exemplo de tratamento de exceções em Python
 try:
-    # Código que pode gerar exceção
-    docker_client.containers.run("meu-contêiner")
-except docker.errors.APIError as e:
-    # Tratar a exceção
-    print(f"Erro ao executar o contêiner: {e}")
+    # Código que pode gerar exceções
+    app.run()
+except Exception as e:
+    # Tratamento da exceção
+    print(f"Erro: {e}")
 ```
-
 ```yml
-# Exemplo de arquivo de configuração do Kubernetes com tratamento de exceções
-apiVersion: v1
-kind: Pod
+# Exemplo de configuração de retry e timeout no Kubernetes
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: meu-pod
+  name: meu-microsservico
 spec:
-  containers:
-  - name: meu-contêiner
-    image: meu-imagem
-    ports:
-    - containerPort: 80
-  restartPolicy: Always
-```
-
-Com essas considerações, é possível garantir que a aplicação esteja funcionando corretamente e atendendo às necessidades dos usuários, mesmo em casos de exceção e edge cases.
+  replicas: 3
+  selector:
+    matchLabels:
+      app: meu-microsservico
+  template:
+    metadata:
+      labels:
+        app: meu-microsservico
+    spec:
+      containers:
+      - name: meu-microsservico
+        image: meu-microsservico:latest
+        ports:
+        - containerPort: 80
+      restartPolicy: Always
+      livenessProbe:
+        httpGet:
+          path: /
+          port: 80
+        initialDelaySeconds: 10
+        periodSeconds: 10
+      readinessProbe:
+        httpGet:
+          path: /
+          port: 80
+        initialDelaySeconds: 10
+        periodSeconds: 10
