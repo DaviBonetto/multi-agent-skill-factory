@@ -1,153 +1,61 @@
 ---
 name: Desenvolvimento de Aplicativos Móvel
-description: Esta skill ensina a criar aplicativos móveis utilizando tecnologias como React Native e Flutter
+description: Ensina como desenvolver aplicativos móveis para Android e iOS utilizando tecnologias como React Native e Flutter
 ---
 
 ## Objetivo
-O objetivo desta skill é capacitar os desenvolvedores a criar aplicativos móveis utilizando tecnologias como React Native e Flutter, permitindo que eles criem soluções móveis eficazes e escaláveis.
+O objetivo deste guia é fornecer uma visão geral completa sobre como desenvolver aplicativos móveis para Android e iOS utilizando tecnologias como React Native e Flutter. Ao final deste guia, você estará capacitado a criar aplicativos móveis cross-plataforma utilizando as melhores práticas e tecnologias atuais.
 
 ## Pré-requisitos
-Para iniciar esta skill, é necessário ter conhecimento básico em:
-* Programação em JavaScript (para React Native)
-* Programação em Dart (para Flutter)
-* Conceitos de desenvolvimento de aplicativos móveis
-* Ferramentas de desenvolvimento como Node.js, npm e Git
+Para seguir este guia, é necessário ter conhecimentos básicos em:
+- Programação em JavaScript (para React Native)
+- Programação em Dart (para Flutter)
+- Conhecimento básico de HTML e CSS
+- Ambiente de desenvolvimento configurado (Node.js, Android Studio, Xcode, etc.)
 
 ## Passo a Passo Técnico / Exemplos de Código
 ### Configurando o Ambiente de Desenvolvimento
-1. Instalar o Node.js e o npm
-2. Instalar o React Native CLI ou o Flutter SDK
-3. Configurar o editor de código ou IDE
+1. **Instalar Node.js**: Para desenvolver com React Native, é necessário ter o Node.js instalado. Você pode baixá-lo em [https://nodejs.org/](https://nodejs.org/).
+2. **Instalar o React Native CLI**: Execute o comando `npm install -g react-native-cli` no terminal.
+3. **Instalar o Flutter**: Para desenvolver com Flutter, siga as instruções em [https://docs.flutter.dev/get-started/install](https://docs.flutter.dev/get-started/install).
 
-### Criando um Aplicativo Móvel com React Native
-```javascript
-import React from 'react';
-import { View, Text } from 'react-native';
-
-const App = () => {
-  return (
-    <View>
-      <Text>Olá, mundo!</Text>
-    </View>
-  );
-};
-
-export default App;
+### Criando um Novo Projeto com React Native
+```bash
+npx react-native init MeuApp
+```
+Navegue até a pasta do projeto e execute:
+```bash
+npx react-native run-android
+```
+ou
+```bash
+npx react-native run-ios
 ```
 
-### Criando um Aplicativo Móvel com Flutter
-```dart
-import 'package:flutter/material.dart';
-
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'Olá, mundo!',
-      home: Scaffold(
-        body: Center(
-          child: Text('Olá, mundo!'),
-        ),
-      ),
-    );
-  }
-}
+### Criando um Novo Projeto com Flutter
+```bash
+flutter create meu_app
+```
+Navegue até a pasta do projeto e execute:
+```bash
+flutter run
 ```
 
 ## Validação
-Para validar o conhecimento adquirido, é necessário:
-* Criar um aplicativo móvel utilizando React Native ou Flutter
-* Implementar funcionalidades básicas como navegação e armazenamento de dados
-* Testar o aplicativo em dispositivos móveis reais ou emuladores
-* Realizar ajustes e otimizações para melhorar o desempenho e a usabilidade do aplicativo
+Para validar o funcionamento do aplicativo, é importante testá-lo em diferentes dispositivos e plataformas. Além disso, é recomendável realizar testes unitários e de integração para garantir a qualidade e estabilidade do aplicativo. Utilize ferramentas como Jest para React Native e o próprio framework de testes do Flutter para realizar esses testes.
 
-## Tratamento de Exceções e Edge Cases
-### Tratamento de Erros em React Native
-* Utilizar o `try-catch` para capturar erros em código JavaScript
-* Utilizar o `ErrorBoundary` para capturar erros em componentes React
-* Implementar um mecanismo de relatórios de erros para monitorar e solucionar problemas
+## ⚠️ Tratamento de Exceções e Edge Cases
+### Erros Comuns no React Native
+- **Erro de instalação do Node.js**: Verifique se o Node.js está instalado corretamente e se a variável de ambiente `PATH` está configurada corretamente.
+- **Erro de instalação do React Native CLI**: Verifique se o comando `npm install -g react-native-cli` foi executado com sucesso e se o React Native CLI está instalado corretamente.
+- **Erro de compilação do aplicativo**: Verifique se o código do aplicativo está correto e se não há erros de sintaxe.
 
-### Tratamento de Erros em Flutter
-* Utilizar o `try-catch` para capturar erros em código Dart
-* Utilizar o `ErrorWidget` para exibir erros em widgets
-* Implementar um mecanismo de relatórios de erros para monitorar e solucionar problemas
+### Erros Comuns no Flutter
+- **Erro de instalação do Flutter**: Verifique se o Flutter está instalado corretamente e se a variável de ambiente `PATH` está configurada corretamente.
+- **Erro de criação do projeto**: Verifique se o comando `flutter create meu_app` foi executado com sucesso e se o projeto foi criado corretamente.
+- **Erro de execução do aplicativo**: Verifique se o código do aplicativo está correto e se não há erros de sintaxe.
 
 ### Edge Cases
-* Lidar com diferentes tamanhos e resoluções de tela
-* Lidar com diferentes versões de sistema operacional e dispositivos
-* Lidar com problemas de conectividade e rede
-* Lidar com problemas de segurança e autenticação
-
-Exemplos de código para tratamento de exceções e edge cases:
-```javascript
-// React Native
-import React, { Component } from 'react';
-import { View, Text } from 'react-native';
-
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      erro: null
-    };
-  }
-
-  componentDidMount() {
-    try {
-      // Código que pode gerar um erro
-    } catch (error) {
-      this.setState({ erro: error.message });
-    }
-  }
-
-  render() {
-    if (this.state.erro) {
-      return (
-        <View>
-          <Text>Erro: {this.state.erro}</Text>
-        </View>
-      );
-    } else {
-      return (
-        <View>
-          <Text>Olá, mundo!</Text>
-        </View>
-      );
-    }
-  }
-}
-```
-
-```dart
-// Flutter
-import 'package:flutter/material.dart';
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Olá, mundo!',
-      home: Scaffold(
-        body: Center(
-          child: Text('Olá, mundo!'),
-        ),
-      ),
-      errorWidget: (context, error) {
-        return MaterialApp(
-          title: 'Erro',
-          home: Scaffold(
-            body: Center(
-              child: Text('Erro: $error'),
-            ),
-          ),
-        );
-      },
-    );
-  }
-}
+- **Dispositivos com recursos limitados**: Verifique se o aplicativo funciona corretamente em dispositivos com recursos limitados, como memória RAM e processador.
+- **Conexão de rede instável**: Verifique se o aplicativo funciona corretamente em condições de conexão de rede instável.
+- **Entrada de dados inválida**: Verifique se o aplicativo lida corretamente com entrada de dados inválida, como texto vazio ou números inválidos.
