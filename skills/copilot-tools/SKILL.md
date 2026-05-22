@@ -47,15 +47,16 @@ Ao utilizar as ferramentas do Copilot CLI, é importante considerar os seguintes
 
 * **Erros de sintaxe**: Verifique se os comandos estão corretamente formatados e se os parâmetros estão sendo passados corretamente.
 * **Comandos não suportados**: Certifique-se de que os comandos utilizados são suportados pela plataforma e pela versão do Copilot CLI.
-* **Limites de recursos**: Tenha em mente os limites de recursos (como memória e processamento) ao executar comandos que consomem muitos recursos.
-* **Sessões async**: Ao utilizar sessões async, certifique-se de que os comandos sejam executados corretamente e que os resultados sejam processados adequadamente.
-* **Erros de rede**: Verifique se os erros de rede estão sendo tratados corretamente, especialmente ao utilizar comandos que dependem de conexões de rede.
-* **Segurança**: Certifique-se de que as credenciais e os dados sensíveis sejam tratados corretamente e de forma segura.
-* **Casos de bordo**: Considere os casos de bordo, como quando um comando não retorna um resultado ou quando um erro ocorre durante a execução de um comando.
+* **Erros de permissão**: Verifique se o usuário tem as permissões necessárias para executar os comandos.
+* **Limites de recursos**: Tenha em mente os limites de recursos (como memória e CPU) ao executar comandos que consomem muitos recursos.
+* **Conexões de rede**: Verifique se as conexões de rede estão estáveis e funcionando corretamente ao utilizar ferramentas que dependem da rede.
+* **Dados inválidos**: Verifique se os dados passados para as ferramentas são válidos e consistentes.
+* **Timeouts**: Defina timeouts adequados para comandos que podem demorar muito tempo para serem executados.
+* **Tratamento de erros**: Implemente um tratamento de erros adequado para lidar com erros inesperados e fornecer feedback ao usuário.
 
-Além disso, é importante implementar mecanismos de tratamento de erros e exceções para garantir que as skills sejam robustas e confiáveis. Isso pode incluir:
+Além disso, é importante considerar os seguintes edge cases:
 
-* **Try-catch**: Utilize blocos try-catch para capturar e tratar erros e exceções.
-* **Verificação de erros**: Verifique se os comandos retornam erros ou exceções e trate-os adequadamente.
-* **Log de erros**: Registre os erros e exceções para que possam ser analisados e resolvidos posteriormente.
-* **Recuperação de erros**: Implemente mecanismos de recuperação de erros para garantir que as skills possam se recuperar de erros e exceções.
+* **Comandos vazios**: Verifique como as ferramentas lidam com comandos vazios ou sem parâmetros.
+* **Parâmetros duplicados**: Verifique como as ferramentas lidam com parâmetros duplicados ou conflitantes.
+* **Comandos aninhados**: Verifique como as ferramentas lidam com comandos aninhados ou recursivos.
+* **Limites de tamanho**: Verifique como as ferramentas lidam com dados ou comandos que excedem os limites de tamanho.
