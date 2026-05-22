@@ -1,86 +1,83 @@
 ---
 name: Análise de Dados com Python
-description: Ensina técnicas de análise de dados utilizando bibliotecas Python como Pandas e NumPy
+description: Ensina técnicas de análise de dados utilizando Python e bibliotecas como Pandas e NumPy
 ---
 
 ## Objetivo
-O objetivo deste guia é fornecer uma introdução prática à análise de dados utilizando Python, com foco nas bibliotecas Pandas e NumPy. Ao final, você estará capacitado a realizar análises de dados básicas e entender como aplicar essas habilidades em projetos reais.
+O objetivo deste guia é fornecer uma visão geral das técnicas de análise de dados utilizando Python e bibliotecas como Pandas e NumPy. Ao final deste guia, você estará capacitado a realizar análises de dados básicas e avançadas utilizando essas ferramentas.
 
 ## Pré-requisitos
-Para seguir este guia, é necessário ter:
-- Conhecimento básico de programação em Python
-- Python instalado em seu computador (versão 3.x recomendada)
-- Bibliotecas Pandas e NumPy instaladas (`pip install pandas numpy`)
+Para seguir este guia, é necessário ter conhecimento básico em:
+* Programação em Python
+* Conceitos básicos de análise de dados
+* Instalação das bibliotecas Pandas e NumPy
 
 ## Passo a Passo Técnico / Exemplos de Código
 ### Instalação das Bibliotecas
-Primeiro, certifique-se de que as bibliotecas necessárias estão instaladas. Você pode instalar o Pandas e o NumPy usando pip:
+Para instalar as bibliotecas Pandas e NumPy, execute o seguinte comando no terminal:
 ```bash
 pip install pandas numpy
 ```
-
 ### Importação das Bibliotecas
-Para começar a usar as bibliotecas, você precisa importá-las no seu script Python:
+Para importar as bibliotecas, utilize o seguinte código:
 ```python
 import pandas as pd
 import numpy as np
 ```
-
 ### Carregamento de Dados
-Vamos carregar um conjunto de dados exemplo usando Pandas:
-```python
-# Criando um dataframe exemplo
-data = {'Nome': ['João', 'Maria', 'Pedro'],
-        'Idade': [25, 31, 42]}
-df = pd.DataFrame(data)
-
-# Exibindo o dataframe
-print(df)
-```
-
-### Análise de Dados
-Agora, vamos realizar algumas análises básicas:
-```python
-# Calculando a média da idade
-media_idade = df['Idade'].mean()
-print(f"Média da idade: {media_idade}")
-
-# Contando o número de pessoas
-num_pessoas = len(df)
-print(f"Número de pessoas: {num_pessoas}")
-```
-
-## Validação
-Para validar o conhecimento adquirido, tente realizar as seguintes tarefas:
-- Carregue um conjunto de dados real (por exemplo, um arquivo CSV) e realize análises básicas (média, soma, contagem) em diferentes colunas.
-- Crie um gráfico simples usando a biblioteca Matplotlib para visualizar os dados.
-- Experimente diferentes funções do Pandas e NumPy para entender melhor suas capacidades.
-
-## ⚠️ Tratamento de Exceções e Edge Cases
-Ao trabalhar com dados, é importante considerar os casos de exceção e edge cases que podem ocorrer. Aqui estão algumas dicas para lidar com esses casos:
-- **Erros de instalação**: Se ocorrer um erro durante a instalação das bibliotecas, verifique se o pip está atualizado e se o comando de instalação está correto.
-- **Erros de importação**: Se ocorrer um erro durante a importação das bibliotecas, verifique se as bibliotecas estão instaladas corretamente e se o nome da biblioteca está correto.
-- **Erros de carregamento de dados**: Se ocorrer um erro durante o carregamento de dados, verifique se o arquivo de dados está no formato correto e se o caminho do arquivo está correto.
-- **Erros de análise de dados**: Se ocorrer um erro durante a análise de dados, verifique se os dados estão no formato correto e se as operações de análise estão sendo realizadas corretamente.
-- **Tratamento de dados faltantes**: Se os dados contiverem valores faltantes, é importante decidir como lidar com esses valores. Você pode escolher remover as linhas com valores faltantes, substituir os valores faltantes por uma média ou mediana, ou usar uma técnica de imputação de dados.
-- **Tratamento de dados inconsistentes**: Se os dados contiverem valores inconsistentes, é importante decidir como lidar com esses valores. Você pode escolher remover as linhas com valores inconsistentes, substituir os valores inconsistentes por uma média ou mediana, ou usar uma técnica de limpeza de dados.
-
-Exemplo de código para lidar com erros de carregamento de dados:
+Para carregar dados de um arquivo CSV, utilize o seguinte código:
 ```python
 try:
     df = pd.read_csv('dados.csv')
 except FileNotFoundError:
-    print("Arquivo de dados não encontrado")
+    print("Arquivo não encontrado. Verifique o caminho do arquivo.")
 except pd.errors.EmptyDataError:
-    print("Arquivo de dados vazio")
+    print("Arquivo vazio. Verifique se o arquivo contém dados.")
 except pd.errors.ParserError:
-    print("Erro ao parsear o arquivo de dados")
+    print("Erro ao parser o arquivo. Verifique se o arquivo está no formato correto.")
 ```
-Exemplo de código para lidar com erros de análise de dados:
+### Análise de Dados
+Para realizar análises de dados, você pode utilizar as seguintes funções:
+* `df.head()`: exibe as primeiras linhas do dataframe
+* `df.info()`: exibe informações sobre o dataframe
+* `df.describe()`: exibe estatísticas descritivas do dataframe
+
+### Exemplo de Código
 ```python
+import pandas as pd
+import numpy as np
+
+# Carregamento de dados
 try:
-    media_idade = df['Idade'].mean()
-except KeyError:
-    print("Coluna 'Idade' não encontrada")
-except TypeError:
-    print("Valor não numérico encontrado na coluna 'Idade'")
+    df = pd.read_csv('dados.csv')
+except FileNotFoundError:
+    print("Arquivo não encontrado. Verifique o caminho do arquivo.")
+    df = None
+
+if df is not None:
+    # Análise de dados
+    print(df.head())
+    print(df.info())
+    print(df.describe())
+```
+## Validação
+Para validar os resultados da análise de dados, é importante verificar se os dados estão corretos e se as análises estão sendo realizadas de forma apropriada. Além disso, é importante documentar os resultados e as conclusões da análise para que possam ser compartilhados com outros.
+
+## ⚠️ Tratamento de Exceções e Edge Cases
+Além dos exemplos acima, é importante considerar os seguintes casos:
+* **Dados faltantes**: utilize `df.isnull().sum()` para verificar a quantidade de dados faltantes em cada coluna.
+* **Dados duplicados**: utilize `df.duplicated().sum()` para verificar a quantidade de dados duplicados.
+* **Tipos de dados inconsistentes**: utilize `df.dtypes` para verificar os tipos de dados em cada coluna.
+* **Erros de parser**: utilize `try-except` para capturar erros de parser ao carregar os dados.
+* **Arquivos muito grandes**: utilize `pd.read_csv` com o parâmetro `chunksize` para carregar arquivos muito grandes em partes.
+* **Segurança**: utilize `pd.read_csv` com o parâmetro `encoding` para especificar a codificação dos dados e evitar erros de decodificação.
+```python
+# Exemplo de tratamento de dados faltantes
+df.fillna(df.mean(), inplace=True)
+
+# Exemplo de tratamento de dados duplicados
+df.drop_duplicates(inplace=True)
+
+# Exemplo de tratamento de tipos de dados inconsistentes
+df['coluna'] = pd.to_numeric(df['coluna'], errors='coerce')
+```
