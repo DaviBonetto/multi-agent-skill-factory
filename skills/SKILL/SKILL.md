@@ -1,88 +1,141 @@
 ---
-name: executing-plans
-description: Use when you have a written implementation plan to execute in a separate session with review checkpoints
+name: huggingface-tool-builder
+description: Use this skill when the user wants to build tool/scripts or achieve a task where using data from the Hugging Face API would help. This is especially useful when chaining or combining API calls or the task will be repeated/automated. This Skill creates a reusable script to fetch, enrich or process data.
 ---
 
-# Executing Plans
+# Hugging Face API Tool Builder
 
-## Overview
+Your purpose is now is to create reusable command line scripts and utilities for using the Hugging Face API, allowing chaining, piping and intermediate processing where helpful. You can access the API directly, as well as use the `hf` command line tool. Model and Dataset cards can be accessed from repositories directly.
 
-Load plan, review critically, execute all tasks, report when complete.
+## Script Rules
 
-**Announce at start:** "I'm using the executing-plans skill to implement this plan."
+Make sure to follow these rules:
+ - Scripts must take a `--help` command line argument to describe their inputs and outputs
+ - Non-destructive scripts should be tested before handing over to the User
+ - Shell scripts are preferred, but use Python or TSX if complexity or user need requires it.
+ - IMPORTANT: Use the `HF_TOKEN` environment variable as an Authorization header. For example: `curl -H "Authorization: Bearer ${HF_TOKEN}" https://huggingface.co/api/`. This provides higher rate limits and appropriate authorization for data access.
+ - Investigate the shape of the API results before commiting to a final design; make use of piping and chaining where composability would be an advantage - prefer simple solutions where possible.
+ - Share usage examples once complete.
+ - Handle errors and exceptions properly, including API rate limits, network errors, and invalid input.
+ - Implement logging to track script execution and errors.
 
-**Note:** Tell your human partner that Superpowers works much better with access to subagents. The quality of its work will be significantly higher if run on a platform with subagent support (such as Claude Code or Codex). If subagents are available, use superpowers:subagent-driven-development instead of this skill.
+Be sure to confirm User preferences where there are questions or clarifications needed.
 
-## The Process
+## Sample Scripts
 
-### Step 1: Load and Review Plan
-1. Read plan file
-2. Review critically - identify any questions or concerns about the plan
-3. If concerns: Raise them with your human partner before starting
-4. If no concerns: Create TodoWrite and proceed
+Paths below are relative to this skill directory.
 
-### Step 2: Execute Tasks
+Reference examples:
+- `references/hf_model_papers_auth.sh` — uses `HF_TOKEN` automatically and chains trending → model metadata → model card parsing with fallbacks; it demonstrates multi-step API usage plus auth hygiene for gated/private content.
+- `references/find_models_by_paper.sh` — optional `HF_TOKEN` usage via `--token`, consistent authenticated search, and a retry path when arXiv-prefixed searches are too narrow; it shows resilient query strategy and clear user-facing help.
+- `references/hf_model_card_frontmatter.sh` — uses the `hf` CLI to download model cards, extracts YAML frontmatter, and emits NDJSON summaries (license, pipeline tag, tags, gated prompt flag) for easy filtering.
 
-For each task:
-1. Mark as in_progress
-2. Follow each step exactly (plan has bite-sized steps)
-3. Run verifications as specified
-4. Mark as completed
+Baseline examples (ultra-simple, minimal logic, raw JSON output with `HF_TOKEN` header):
+- `references/baseline_hf_api.sh` — bash
+- `references/baseline_hf_api.py` — python
+- `references/baseline_hf_api.tsx` — typescript executable
 
-### Step 3: Complete Development
+Composable utility (stdin → NDJSON):
+- `references/hf_enrich_models.sh` — reads model IDs from stdin, fetches metadata per ID, emits one JSON object per line for streaming pipelines.
 
-After all tasks complete and verified:
-- Announce: "I'm using the finishing-a-development-branch skill to complete this work."
-- **REQUIRED SUB-SKILL:** Use superpowers:finishing-a-development-branch
-- Follow that skill to verify tests, present options, execute choice
+Composability through piping (shell-friendly JSON output):
+- `references/baseline_hf_api.sh 25 | jq -r '.[].id' | references/hf_enrich_models.sh | jq -s 'sort_by(.downloads) | reverse | .[:10]'`
+- `references/baseline_hf_api.sh 50 | jq '[.[] | {id, downloads}] | sort_by(.downloads) | reverse | .[:10]'`
+- `printf '%s
+' openai/gpt-oss-120b meta-llama/Meta-Llama-3.1-8B | references/hf_model_card_frontmatter.sh | jq -s 'map({id, license, has_extra_gated_prompt})'`
 
-## When to Stop and Ask for Help
+## High Level Endpoints
 
-**STOP executing immediately when:**
-- Hit a blocker (missing dependency, test fails, instruction unclear)
-- Plan has critical gaps preventing starting
-- You don't understand an instruction
-- Verification fails repeatedly
+The following are the main API endpoints available at `https://huggingface.co`
 
-**Ask for clarification rather than guessing.**
+```
+/api/datasets
+/api/models
+/api/spaces
+/api/collections
+/api/daily_papers
+/api/notifications
+/api/settings
+/api/whoami-v2
+/api/trending
+/oauth/userinfo
+```
 
-## When to Revisit Earlier Steps
+## Accessing the API
 
-**Return to Review (Step 1) when:**
-- Partner updates the plan based on your feedback
-- Fundamental approach needs rethinking
+The API is documented with the OpenAPI standard at `https://huggingface.co/.well-known/openapi.json`.
 
-**Don't force through blockers** - stop and ask.
+**IMPORTANT:** DO NOT ATTEMPT to read `https://huggingface.co/.well-known/openapi.json` directly as it is too large to process. 
 
-## Remember
-- Review plan critically first
-- Follow plan steps exactly
-- Don't skip verifications
-- Reference skills when plan says to
-- Stop when blocked, don't guess
-- Never start implementation on main/master branch without explicit user consent
+**IMPORTANT** Use `jq` to query and extract relevant parts. For example, 
 
-## Integration
+ Command to Get All 160 Endpoints
 
-**Required workflow skills:**
-- **superpowers:using-git-worktrees** - Ensures isolated workspace (creates one or verifies existing)
-- **superpowers:writing-plans** - Creates the plan this skill executes
-- **superpowers:finishing-a-development-branch** - Complete development after all tasks
+```bash
+curl -s "https://huggingface.co/.well-known/openapi.json" | jq '.paths | keys | sort'
+```
+
+Model Search Endpoint Details
+
+```bash
+curl -s "https://huggingface.co/.well-known/openapi.json" | jq '.paths["/api/models"]'
+```
+
+You can also query endpoints to see the shape of the data. When doing so constrain results to low numbers to make them easy to process, yet representative.
+
+## Using the HF command line tool
+
+The `hf` command line tool gives you further access to Hugging Face repository content and infrastructure. 
+
+```bash
+❯ hf --help
+Usage: hf [OPTIONS] COMMAND [ARGS]...
+
+  Hugging Face Hub CLI
+
+Options:
+  --help                Show this message and exit.
+
+Commands:
+  auth                 Manage authentication (login, logout, etc.).
+  buckets              Commands to interact with buckets.
+  cache                Manage local cache directory.
+  collections          Interact with collections on the Hub.
+  datasets             Interact with datasets on the Hub.
+  discussions          Manage discussions and pull requests on the Hub.
+  download             Download files from the Hub.
+  endpoints            Manage Hugging Face Inference Endpoints.
+  env                  Print information about the environment.
+  extensions           Manage hf CLI extensions.
+  jobs                 Run and manage Jobs on the Hub.
+  models               Interact with models on the Hub.
+  papers               Interact with papers on the Hub.
+  repos                Manage repos on the Hub.
+  skills               Manage skills for AI assistants.
+  spaces               Interact with spaces on the Hub.
+  sync                 Sync files between local directory and a bucket.
+  upload               Upload a file or a folder to the Hub.
+  upload-large-folder  Upload a large folder to the Hub.
+  version              Print information about the hf version.
+  webhooks             Manage webhooks on the Hub.
+```
+
+The `hf` CLI command has replaced the now deprecated `huggingface-cli` command.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
 
-### Casos de Erro Comuns
-- **Planos mal formatados:** Se o plano não estiver no formato esperado, pare a execução e solicite ajuda.
-- **Dependências faltantes:** Se uma dependência necessária para a execução do plano estiver faltando, pare a execução e informe o parceiro humano.
-- **Erros de sintaxe:** Se ocorrerem erros de sintaxe durante a execução do plano, pare a execução e solicite ajuda.
-- **Verificações falhas:** Se as verificações especificadas no plano falharem repetidamente, pare a execução e solicite ajuda.
+- **Tratamento de Erros de API**: Implemente tratamento de erros para lidar com respostas de erro da API, como 404, 500, etc.
+- **Tratamento de Erros de Rede**: Implemente tratamento de erros para lidar com erros de rede, como conexão perdida, tempo limite, etc.
+- **Tratamento de Erros de Input**: Implemente tratamento de erros para lidar com input inválido, como parâmetros ausentes ou malformados.
+- **Tratamento de Limites de Taxa**: Implemente tratamento de erros para lidar com limites de taxa da API, como 429, etc.
+- **Tratamento de Exceções**: Implemente tratamento de exceções para lidar com erros inesperados, como erros de sintaxe, etc.
+- **Logging**: Implemente logging para registrar erros e exceções, para facilitar a depuração e o diagnóstico de problemas.
 
-### Edge Cases
-- **Planos muito grandes:** Se o plano for muito grande, considere dividi-lo em partes menores e mais gerenciáveis.
-- **Planos com muitas dependências:** Se o plano tiver muitas dependências, certifique-se de que todas elas estejam disponíveis antes de iniciar a execução.
-- **Planos com instruções ambíguas:** Se o plano contiver instruções ambíguas, solicite esclarecimentos antes de prosseguir.
-
-### Tratamento de Exceções
-- **Log de erros:** Mantenha um log de erros para registrar qualquer problema que ocorra durante a execução do plano.
-- **Notificação de erros:** Notifique o parceiro humano sobre qualquer erro que ocorra durante a execução do plano.
-- **Recuperação de erros:** Se possível, tente recuperar de erros e continuar a execução do plano. Se não for possível, pare a execução e solicite ajuda.
+Exemplo de tratamento de erros:
+```bash
+curl -s "https://huggingface.co/.well-known/openapi.json" | jq '.paths["/api/models"]' || {
+  echo "Erro ao obter endpoint de modelos"
+  exit 1
+}
+```
+Neste exemplo, se o comando `curl` falhar, o script imprime uma mensagem de erro e sai com código de erro 1.
