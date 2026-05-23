@@ -26,17 +26,15 @@ llama-cli -m model.gguf -t 8 -p "Hello"
 make LLAMA_OPENBLAS=1
 ```
 ### ⚠️ Tratamento de Exceções e Edge Cases
-#### Erros de Compilação
-* Certifique-se de que o ambiente de compilação esteja configurado corretamente antes de executar os comandos `make`.
-* Verifique se as dependências necessárias estão instaladas e atualizadas.
-#### Erros de Execução
-* Verifique se o modelo está carregado corretamente antes de executar o comando `llama-cli`.
-* Certifique-se de que os parâmetros de entrada estejam corretos e dentro dos limites aceitáveis.
+#### Erros Comuns
+*   Certifique-se de que o modelo esteja corretamente compilado e que as dependências estejam instaladas.
+*   Verifique se o modelo está compatível com o hardware utilizado.
+*   Em caso de erros de inicialização, verifique se as variáveis de ambiente estão corretamente configuradas.
 #### Edge Cases
-* **Modelos muito grandes**: Em casos onde os modelos são muito grandes, é recomendável utilizar a opção `--tensor-split` para dividir o modelo em partes menores e processá-las em paralelo.
-* **Recursos de hardware insuficientes**: Se os recursos de hardware (memória RAM, capacidade de processamento, etc.) forem insuficientes, o desempenho do modelo pode ser afetado. Nesse caso, é recomendável utilizar um hardware mais potente ou otimizar o modelo para reduzir a carga de processamento.
-* **Problemas de compatibilidade**: Em casos onde há problemas de compatibilidade entre o hardware e o software, é recomendável verificar as especificações do hardware e do software para garantir que sejam compatíveis.
+*   **Modelos muito grandes**: Em casos onde o modelo é muito grande para caber na memória da GPU, considere utilizar o modo híbrido ou a divisão de tensor.
+*   **Múltiplas GPUs**: Ao utilizar múltiplas GPUs, certifique-se de que as GPUs estejam corretamente configuradas e que o modelo esteja otimizado para utilização de múltiplas GPUs.
+*   **Problemas de desempenho**: Em caso de problemas de desempenho, verifique se o modelo está otimizado para o hardware utilizado e se as configurações de inicialização estão corretas.
 #### Segurança
-* **Validação de entrada**: Certifique-se de que as entradas sejam validadas corretamente antes de serem processadas pelo modelo.
-* **Proteção contra ataques**: Implemente medidas de segurança para proteger o modelo contra ataques, como ataques de força bruta ou ataques de injeção de código malicioso.
-* **Atualizações de segurança**: Mantenha o modelo e as dependências atualizadas com as últimas atualizações de segurança para evitar vulnerabilidades conhecidas.
+*   **Validação de entrada**: Certifique-se de que as entradas sejam validadas corretamente para evitar ataques de injeção de código.
+*   **Atualizações de segurança**: Mantenha o modelo e as dependências atualizados com as últimas atualizações de segurança.
+*   **Uso de criptografia**: Considere utilizar criptografia para proteger os dados de treinamento e os modelos treinados.
