@@ -46,17 +46,19 @@ Copilot CLI supports persistent async shell sessions, which have no direct Claud
 Ao utilizar as ferramentas do Copilot CLI, é importante considerar os seguintes casos de exceção e edge cases:
 
 * **Erros de sintaxe**: Verifique se os comandos estão corretamente formatados e se os parâmetros estão sendo passados corretamente.
-* **Comandos não suportados**: Certifique-se de que os comandos utilizados são suportados pela plataforma e pela versão do Copilot CLI.
-* **Erros de permissão**: Verifique se o usuário tem as permissões necessárias para executar os comandos.
-* **Limites de recursos**: Tenha em mente os limites de recursos (como memória e CPU) ao executar comandos que consomem muitos recursos.
-* **Conexões de rede**: Verifique se as conexões de rede estão estáveis e funcionando corretamente ao utilizar ferramentas que dependem da rede.
-* **Dados inválidos**: Verifique se os dados passados para as ferramentas são válidos e consistentes.
-* **Timeouts**: Defina timeouts adequados para comandos que podem demorar muito tempo para serem executados.
-* **Tratamento de erros**: Implemente um tratamento de erros adequado para lidar com erros inesperados e fornecer feedback ao usuário.
+* **Comandos não suportados**: Verifique se o comando utilizado é suportado pela plataforma e se está sendo utilizado corretamente.
+* **Erros de permissão**: Verifique se o usuário tem as permissões necessárias para executar o comando.
+* **Erros de rede**: Verifique se a conexão de rede está estável e se o servidor está respondendo corretamente.
+* **Timeouts**: Verifique se os timeouts estão configurados corretamente e se os comandos estão sendo executados dentro do tempo limite.
+* **Tratamento de erros**: Verifique se os erros estão sendo tratados corretamente e se as mensagens de erro estão sendo exibidas de forma clara e útil.
+* **Validação de entrada**: Verifique se as entradas estão sendo validadas corretamente e se os dados estão sendo tratados de forma segura.
+* **Segurança**: Verifique se as ferramentas estão sendo utilizadas de forma segura e se os dados estão sendo protegidos contra acessos não autorizados.
 
 Além disso, é importante considerar os seguintes edge cases:
 
-* **Comandos vazios**: Verifique como as ferramentas lidam com comandos vazios ou sem parâmetros.
-* **Parâmetros duplicados**: Verifique como as ferramentas lidam com parâmetros duplicados ou conflitantes.
-* **Comandos aninhados**: Verifique como as ferramentas lidam com comandos aninhados ou recursivos.
-* **Limites de tamanho**: Verifique como as ferramentas lidam com dados ou comandos que excedem os limites de tamanho.
+* **Comandos vazios**: Verifique como os comandos vazios são tratados e se eles causam erros ou comportamentos inesperados.
+* **Comandos muito longos**: Verifique como os comandos muito longos são tratados e se eles causam erros ou comportamentos inesperados.
+* **Caracteres especiais**: Verifique como os caracteres especiais são tratados e se eles causam erros ou comportamentos inesperados.
+* **Entradas inválidas**: Verifique como as entradas inválidas são tratadas e se elas causam erros ou comportamentos inesperados.
+
+Ao considerar esses casos de exceção e edge cases, é possível criar skills mais robustas e seguras que possam lidar com uma variedade de situações e cenários.
