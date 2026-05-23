@@ -1,81 +1,87 @@
 ---
 name: Análise de Dados Avançada com Python
-description: Ensina como realizar análises de dados avançadas utilizando a linguagem Python e bibliotecas como Pandas e NumPy
+description: Esta habilidade ensina como realizar análise de dados avançada utilizando a linguagem Python e bibliotecas como Pandas e NumPy
 ---
 
 ## Objetivo
-O objetivo desta análise é fornecer uma abordagem prática e avançada para a análise de dados utilizando a linguagem Python. Com foco em bibliotecas como Pandas e NumPy, o objetivo é capacitar os usuários a realizar análises complexas de forma eficiente.
+O objetivo desta habilidade é capacitar os desenvolvedores a realizar análise de dados avançada utilizando a linguagem Python e bibliotecas como Pandas e NumPy. Com isso, os desenvolvedores poderão extrair insights valiosos de conjuntos de dados complexos e tomar decisões informadas.
 
 ## Pré-requisitos
-- Conhecimento básico em Python
-- Familiaridade com bibliotecas como Pandas e NumPy
-- Ambiente de desenvolvimento Python configurado (recomenda-se o uso de Anaconda ou similar)
+Para aproveitar ao máximo esta habilidade, é necessário ter conhecimento básico em:
+* Linguagem Python
+* Estruturas de dados (listas, dicionários, etc.)
+* Bibliotecas Pandas e NumPy
+* Análise de dados básica
 
 ## Passo a Passo Técnico / Exemplos de Código
-### Importação de Bibliotecas
-Para iniciar, é necessário importar as bibliotecas essenciais. Isso inclui Pandas para manipulação de dados e NumPy para operações numéricas avançadas.
+### Instalação das Bibliotecas Necessárias
+Para começar, é necessário instalar as bibliotecas Pandas e NumPy. Isso pode ser feito utilizando o pip:
+```bash
+pip install pandas numpy
+```
+### Carregamento de Dados
+Em seguida, carregue o conjunto de dados utilizando a biblioteca Pandas:
 ```python
 import pandas as pd
-import numpy as np
-```
 
-### Carregamento de Dados
-Carregue um conjunto de dados exemplo para análise. Neste caso, usaremos um dataframe simples.
-```python
-# Exemplo de criação de um dataframe
-dados = {'Nome': ['João', 'Maria', 'Pedro'],
-         'Idade': [25, 31, 42],
-         'Cidade': ['São Paulo', 'Rio de Janeiro', 'Belo Horizonte']}
-df = pd.DataFrame(dados)
-print(df)
+# Carregue o conjunto de dados
+df = pd.read_csv('dados.csv')
 ```
-
 ### Análise de Dados
-Agora, vamos realizar algumas análises básicas nos dados. Isso inclui calcular a média da idade e contar quantas pessoas moram em cada cidade.
+Agora, é possível realizar análise de dados avançada utilizando as bibliotecas Pandas e NumPy. Por exemplo, para calcular a média e o desvio padrão de uma coluna:
 ```python
-# Calcula a média da idade
-media_idade = df['Idade'].mean()
-print(f"Média da idade: {media_idade}")
+# Calcule a média e o desvio padrão da coluna 'valor'
+media = df['valor'].mean()
+desvio_padrao = df['valor'].std()
 
-# Conta quantas pessoas moram em cada cidade
-contagem_cidades = df['Cidade'].value_counts()
-print(contagem_cidades)
+print(f'Média: {media}')
+print(f'Desvio Padrão: {desvio_padrao}')
 ```
+### Visualização de Dados
+Para visualizar os dados, é possível utilizar a biblioteca Matplotlib:
+```python
+import matplotlib.pyplot as plt
 
+# Crie um gráfico de barras para a coluna 'categoria'
+df['categoria'].value_counts().plot(kind='bar')
+plt.show()
+```
 ## Validação
-Para validar a análise, é importante verificar se os resultados obtidos são coerentes com os dados originais. Isso pode ser feito comparando as estatísticas calculadas com o conjunto de dados original. Além disso, é crucial testar o código em diferentes conjuntos de dados para garantir sua robustez e generalização.
+Para validar os resultados, é possível utilizar técnicas de validação de dados, como:
+* Verificar a consistência dos dados
+* Verificar a ausência de valores nulos ou inconsistentes
+* Verificar a precisão dos cálculos
+
+Além disso, é importante documentar os resultados e os métodos utilizados para análise de dados, para que outros desenvolvedores possam entender e reproduzir os resultados.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-É fundamental considerar possíveis exceções e casos de bordo (edge cases) durante a análise de dados. Aqui estão algumas considerações importantes:
+É importante considerar os seguintes casos:
+* **Arquivo não encontrado**: Se o arquivo 'dados.csv' não for encontrado, o programa deve lançar uma exceção `FileNotFoundError`.
+* **Coluna não existente**: Se a coluna 'valor' ou 'categoria' não existir no conjunto de dados, o programa deve lançar uma exceção `KeyError`.
+* **Valores nulos ou inconsistentes**: Se os dados contiverem valores nulos ou inconsistentes, o programa deve tratar esses valores de forma apropriada, por exemplo, removendo-os ou substituindo-os por valores padrão.
+* **Erros de cálculo**: Se ocorrerem erros de cálculo, por exemplo, ao calcular a média ou o desvio padrão, o programa deve lançar uma exceção `ZeroDivisionError` ou `TypeError`.
 
-- **Dados Faltantes**: Antes de realizar qualquer análise, verifique se existem dados faltantes no conjunto de dados. Isso pode ser feito usando `df.isnull().sum()`. Dependendo do caso, você pode decidir remover essas linhas ou imputar valores.
-```python
-# Verifica dados faltantes
-dados_faltantes = df.isnull().sum()
-print(dados_faltantes)
-```
-
-- **Tipos de Dados**: Certifique-se de que os dados estejam no tipo correto. Por exemplo, a idade deve ser um número inteiro, e o nome deve ser uma string. Use `df.dtypes` para verificar os tipos de dados.
-```python
-# Verifica tipos de dados
-tipos_dados = df.dtypes
-print(tipos_dados)
-```
-
-- **Erros de Importação**: Ao importar bibliotecas, é possível que ocorram erros se elas não estiverem instaladas. Use `try-except` para tratar esses erros.
+Exemplos de como tratar esses casos:
 ```python
 try:
-    import pandas as pd
-    import numpy as np
-except ImportError as e:
-    print(f"Erro ao importar bibliotecas: {e}")
-```
+    df = pd.read_csv('dados.csv')
+except FileNotFoundError:
+    print("Arquivo não encontrado")
+    # Tratar o erro
 
-- **Exceções durante a Análise**: Durante a análise, podem ocorrer exceções, como divisão por zero. Use `try-except` para capturar e tratar essas exceções.
-```python
 try:
-    media_idade = df['Idade'].mean()
-    print(f"Média da idade: {media_idade}")
-except Exception as e:
-    print(f"Erro durante a análise: {e}")
+    media = df['valor'].mean()
+except KeyError:
+    print("Coluna 'valor' não existente")
+    # Tratar o erro
+
+try:
+    desvio_padrao = df['valor'].std()
+except ZeroDivisionError:
+    print("Erro de cálculo: desvio padrão não pode ser calculado")
+    # Tratar o erro
 ```
+Além disso, é importante utilizar técnicas de segurança, como:
+* **Validação de entrada**: Validar os dados de entrada para garantir que sejam válidos e consistentes.
+* **Uso de bibliotecas seguras**: Utilizar bibliotecas seguras e atualizadas para evitar vulnerabilidades de segurança.
+* **Documentação**: Documentar os resultados e os métodos utilizados para análise de dados, para que outros desenvolvedores possam entender e reproduzir os resultados.
