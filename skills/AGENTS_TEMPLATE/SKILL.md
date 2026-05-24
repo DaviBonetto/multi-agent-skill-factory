@@ -6,7 +6,7 @@ Essas habilidades são:
  - {{name}} -> "{{path}}/SKILL.md"
 {{/skills}}
 
-**Importante:** Você DEVE ler o arquivo SKILL.md sempre que a descrição da habilidade corresponder à intenção do usuário ou possa ajudar a realizar sua tarefa.
+**Importante:** É OBRIGATÓRIO ler o arquivo SKILL.md sempre que a descrição da habilidade corresponder à intenção do usuário ou possa ajudar a realizar sua tarefa.
 
 ## Habilidades Disponíveis
 {{#skills}}
@@ -14,21 +14,20 @@ Essas habilidades são:
 
 {{/skills}}
 
-Os caminhos referenciados dentro das pastas de habilidades são relativos àquela habilidade. Por exemplo, o script `scripts/example.py` do hf-datasets seria referenciado como `hf-datasets/scripts/example.py`.
+**Observação:** Os caminhos referenciados dentro das pastas de habilidades são relativos àquela habilidade. Por exemplo, o script `scripts/example.py` do hf-datasets seria referenciado como `hf-datasets/scripts/example.py`.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-### Erros de Arquivo
-- **Arquivo "SKILL.md" não encontrado:** Verifique se o arquivo "SKILL.md" existe no diretório especificado e se o caminho está correto.
-- **Conteúdo inválido no arquivo "SKILL.md":** Certifique-se de que o arquivo "SKILL.md" contenha informações válidas e bem formatadas.
+### Erros de Leitura do Arquivo SKILL.md
+- **Erro de Arquivo Não Encontrado:** Se o arquivo SKILL.md não for encontrado no diretório especificado, uma mensagem de erro será exibida informando o caminho incorreto.
+- **Erro de Permissão de Leitura:** Se houver uma falha de permissão para ler o arquivo SKILL.md, uma mensagem de erro será exibida solicitando permissão de leitura.
 
-### Erros de Caminho
-- **Caminho relativo incorreto:** Verifique se os caminhos relativos dentro das pastas de habilidades estão corretos e se correspondem aos arquivos ou diretórios existentes.
-- **Caminho absoluto incorreto:** Certifique-se de que os caminhos absolutos sejam válidos e correspondam aos arquivos ou diretórios existentes.
+### Tratamento de Habilidades Não Documentadas
+- **Habilidades Não Listadas:** Se uma habilidade não estiver listada na seção de habilidades disponíveis, mas tiver um arquivo SKILL.md correspondente, uma mensagem de aviso será exibida sugerindo a adição da habilidade à lista.
 
 ### Segurança
-- **Acesso não autorizado:** Certifique-se de que as permissões de acesso sejam adequadas e que apenas usuários autorizados possam acessar e modificar os arquivos e diretórios.
-- **Injeção de código malicioso:** Verifique se os arquivos e diretórios estão livres de código malicioso e se as entradas de usuário são validadas e sanitizadas.
+- **Validação de Entradas:** Todas as entradas de usuário devem ser validadas para evitar injeção de código malicioso ou outros ataques de segurança.
+- **Uso de Bibliotecas Seguras:** As bibliotecas utilizadas devem ser mantidas atualizadas e seguras para evitar vulnerabilidades conhecidas.
 
-### Outros Casos
-- **Conflito de nomes:** Verifique se não há conflitos de nomes entre habilidades ou arquivos.
-- **Dependências não atendidas:** Certifique-se de que todas as dependências necessárias estejam atendidas e configuradas corretamente.
+### Edge Cases
+- **Nomes de Habilidades Duplicados:** Se dois ou mais diretórios tiverem o mesmo nome de habilidade, uma mensagem de erro será exibida solicitando a renomeação de uma das habilidades para evitar conflitos.
+- **Caminhos Relativos Inválidos:** Se um caminho relativo dentro de uma pasta de habilidade for inválido, uma mensagem de erro será exibida indicando o caminho incorreto.
