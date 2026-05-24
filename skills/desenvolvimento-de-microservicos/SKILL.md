@@ -1,105 +1,102 @@
----
-name: Desenvolvimento de Microserviços com Kubernetes
-description: Ensina como projetar, desenvolver e implantar microserviços escaláveis utilizando Kubernetes
----
-
+# Desenvolvimento de Microsserviços
 ## Objetivo
-O objetivo deste guia é fornecer uma visão geral prática sobre como desenvolver, implantar e gerenciar microserviços utilizando Kubernetes, abordando desde a concepção até a implantação de soluções escaláveis e eficientes.
+O objetivo desta habilidade é capacitar os desenvolvedores a projetar e implementar microsserviços escaláveis e resilientes, utilizando tecnologias como Docker e Kubernetes. Com isso, os desenvolvedores poderão criar sistemas distribuídos robustos e flexíveis, capazes de atender às necessidades de negócios em constante evolução.
 
 ## Pré-requisitos
-Para seguir este guia, é recomendado que você tenha:
-- Conhecimento básico em programação (preferencialmente em linguagens como Java, Python ou Go)
-- Experiência com contêineres Docker
-- Noções básicas sobre redes e sistemas operacionais
-- Acesso a uma máquina com Docker e Kubernetes instalados (pode ser um cluster local como Minikube)
+Para aproveitar ao máximo esta habilidade, é recomendado que os desenvolvedores tenham conhecimento em:
+* Programação em linguagens como Java, Python ou C#
+* Conceitos básicos de arquitetura de software
+* Experiência com contêineres e orquestração de contêineres
 
 ## Passo a Passo Técnico / Exemplos de Código
-### 1. Configurando o Ambiente
-Primeiramente, certifique-se de que o Docker e o Kubernetes estejam instalados e funcionando corretamente em sua máquina. Para verificar, execute:
-```bash
-docker --version
-kubectl version --client
-```
-### 2. Criando um Microserviço
-Vamos criar um exemplo simples de microserviço em Python que expõe uma API REST. Crie um arquivo `app.py` com o seguinte conteúdo:
-```python
-from flask import Flask, jsonify
+### 1. Definição do Microsserviço
+Um microsserviço é um componente de software que fornece uma funcionalidade específica e pode ser desenvolvido, testado e implantado de forma independente. Para definir um microsserviço, é necessário:
+* Identificar a funcionalidade que o microsserviço irá fornecer
+* Definir as interfaces de comunicação com outros microsserviços
+* Especificar os requisitos de escalabilidade e resiliência
 
-app = Flask(__name__)
-
-@app.route('/healthcheck', methods=['GET'])
-def healthcheck():
-    try:
-        # Simula uma operação que pode falhar
-        # Aqui você pode adicionar lógica para lidar com exceções
-        return jsonify({'status': 'ok'})
-    except Exception as e:
-        return jsonify({'status': 'error', 'message': str(e)}), 500
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
-```
-### 3. Contêinerizando o Microserviço
-Crie um arquivo `Dockerfile` para contêinerizar o microserviço:
+### 2. Implementação com Docker
+Docker é uma tecnologia de contêinerização que permite empacotar o microsserviço e suas dependências em um contêiner. Para implementar um microsserviço com Docker:
 ```dockerfile
+# Dockerfile exemplo
 FROM python:3.9-slim
 
-WORKDIR /app
-
-COPY requirements.txt .
-
+# Instalar dependências
 RUN pip install -r requirements.txt
 
-COPY . .
+# Copiar código do microsserviço
+COPY . /app
 
+# Definir comando para executar o microsserviço
 CMD ["python", "app.py"]
 ```
-Construa a imagem Docker executando:
-```bash
-docker build -t meu-microservico .
-```
-### 4. Implantando no Kubernetes
-Crie um arquivo `deployment.yaml` para definir a implantação do microserviço no Kubernetes:
+
+### 3. Orquestração com Kubernetes
+Kubernetes é uma plataforma de orquestração de contêineres que permite gerenciar a implantação, escalabilidade e resiliência dos microsserviços. Para orquestrar um microsserviço com Kubernetes:
 ```yml
+# deployment.yaml exemplo
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: meu-microservico
+  name: meu-microsservico
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: meu-microservico
+      app: meu-microsservico
   template:
     metadata:
       labels:
-        app: meu-microservico
+        app: meu-microsservico
     spec:
       containers:
-      - name: meu-microservico
-        image: meu-microservico:latest
+      - name: meu-microsservico
+        image: meu-microsservico:latest
         ports:
-        - containerPort: 5000
-      restartPolicy: Always
-```
-Aplique a configuração executando:
-```bash
-kubectl apply -f deployment.yaml
+        - containerPort: 80
 ```
 
 ## Validação
-Para validar se o microserviço está funcionando corretamente, você pode executar:
-```bash
-kubectl get deployments
-kubectl get pods
-```
-E acessar o microserviço através do endpoint exposto. Certifique-se de que o serviço está respondendo corretamente às requisições.
+Para validar a implementação do microsserviço, é necessário:
+* Testar a funcionalidade do microsserviço
+* Verificar a escalabilidade e resiliência do microsserviço
+* Monitorar o desempenho do microsserviço em produção
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-- **Falha na inicialização do contêiner**: Certifique-se de que o Dockerfile está correto e que a imagem está sendo construída corretamente.
-- **Problemas de rede**: Verifique se as portas estão sendo mapeadas corretamente e se o tráfego de rede está sendo permitido.
-- **Exceções não capturadas**: Adicione tratamento de exceções em seu código para lidar com erros inesperados.
-- **Escalabilidade**: Ajuste o número de réplicas de acordo com a demanda do seu serviço.
-- **Segurança**: Implemente autenticação e autorização para proteger seu microserviço.
-- **Monitoramento**: Configure ferramentas de monitoramento para detectar problemas e exceções em tempo real.
-- **Rollback**: Tenha um plano de rollback para casos de falha durante a implantação de atualizações.
+Para garantir a robustez e confiabilidade do microsserviço, é fundamental considerar os seguintes casos de exceção e edge cases:
+* **Falha de comunicação entre microsserviços**: Implementar mecanismos de retry e timeout para lidar com falhas de comunicação entre microsserviços.
+* **Sobrecarga de tráfego**: Implementar mecanismos de escalabilidade automática para lidar com aumentos repentinos de tráfego.
+* **Erros de dependência**: Implementar mecanismos de fallback para lidar com erros de dependência, como falhas de banco de dados ou serviços externos.
+* **Segurança**: Implementar mecanismos de autenticação e autorização para garantir a segurança do microsserviço e dos dados que ele manipula.
+* **Monitoramento e logging**: Implementar mecanismos de monitoramento e logging para detectar e diagnosticar problemas no microsserviço.
+
+Exemplos de código para tratamento de exceções e edge cases:
+```python
+# Exemplo de tratamento de exceção de falha de comunicação
+try:
+    response = requests.get('https://outro-microsservico.com/api/dados')
+    response.raise_for_status()
+except requests.exceptions.RequestException as e:
+    # Implementar mecanismo de retry ou fallback
+    print(f'Falha de comunicação: {e}')
+```
+
+```yml
+# Exemplo de configuração de escalabilidade automática no Kubernetes
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: meu-microsservico
+spec:
+  selector:
+    matchLabels:
+      app: meu-microsservico
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 50
