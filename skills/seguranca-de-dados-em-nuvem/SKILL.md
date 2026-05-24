@@ -1,88 +1,69 @@
 ---
 name: Segurança de Dados em Nuvem
-description: Ensina técnicas de segurança de dados em nuvem utilizando AWS e Azure
+description: Esta habilidade ensina como proteger dados sensíveis em ambientes de nuvem, utilizando tecnologias como AWS e Azure.
 ---
 
 ## Objetivo
-O objetivo deste guia é fornecer uma visão geral das técnicas de segurança de dados em nuvem utilizando AWS e Azure, permitindo que os desenvolvedores e administradores de sistemas implementem medidas de segurança eficazes para proteger seus dados em nuvem.
+O objetivo desta habilidade é capacitar os profissionais a proteger dados sensíveis em ambientes de nuvem, utilizando tecnologias como AWS e Azure, garantindo a segurança e a conformidade com as regulamentações atuais.
 
 ## Pré-requisitos
-Antes de começar, é necessário ter conhecimento básico em:
-* Computação em nuvem (AWS e Azure)
-* Segurança de dados
-* Ferramentas de gerenciamento de segurança (IAM, etc.)
-
-Além disso, é recomendado ter experiência prática com:
-* Linguagens de programação (Python, Java, etc.)
-* Ferramentas de linha de comando (CLI)
+Para aproveitar ao máximo esta habilidade, é recomendado que os participantes tenham:
+* Conhecimento básico em segurança de dados
+* Experiência com ambientes de nuvem (AWS ou Azure)
+* Conhecimento em programação (opcional)
 
 ## Passo a Passo Técnico / Exemplos de Código
-### Configuração de Segurança em AWS
-1. Criar um usuário IAM com permissões de administrador
-2. Configurar o acesso à console de gerenciamento da AWS
-3. Habilitar o recurso de autenticação de dois fatores (2FA)
+### Configurando a Autenticação em AWS
+Para configurar a autenticação em AWS, siga os passos abaixo:
+1. Acesse o console da AWS e navegue até a seção de IAM.
+2. Crie um novo usuário e atribua as permissões necessárias.
+3. Configure a autenticação multifator (MFA) para o usuário.
 
-Exemplo de código em Python para criar um usuário IAM:
-```python
-import boto3
-
-iam = boto3.client('iam')
-
-try:
-    response = iam.create_user(
-        UserName='nome-do-usuario'
-    )
-    print(response)
-except iam.exceptions.EntityAlreadyExistsException:
-    print("O usuário já existe")
-except iam.exceptions.InvalidInputException:
-    print("Parâmetros de entrada inválidos")
-except Exception as e:
-    print(f"Ocorreu um erro: {e}")
+```bash
+# Exemplo de comando para criar um novo usuário em AWS
+aws iam create-user --user-name meu-usuario
 ```
 
-### Configuração de Segurança em Azure
-1. Criar um grupo de recursos
-2. Configurar o acesso à portal do Azure
-3. Habilitar o recurso de autenticação de dois fatores (2FA)
+### Configurando a Autenticação em Azure
+Para configurar a autenticação em Azure, siga os passos abaixo:
+1. Acesse o portal do Azure e navegue até a seção de Azure Active Directory.
+2. Crie um novo usuário e atribua as permissões necessárias.
+3. Configure a autenticação multifator (MFA) para o usuário.
 
-Exemplo de código em Python para criar um grupo de recursos:
-```python
-import os
-from azure.identity import DefaultAzureCredential
-from azure.mgmt.resource import ResourceManagementClient
-
-credential = DefaultAzureCredential()
-resource_client = ResourceManagementClient(credential, 'nome-da-subscrição')
-
-try:
-    resource_group = resource_client.resource_groups.create_or_update(
-        'nome-do-grupo-de-recursos',
-        {'location': 'localização'}
-    )
-    print(resource_group)
-except resource_client.exceptions.ResourceGroupAlreadyExists:
-    print("O grupo de recursos já existe")
-except resource_client.exceptions.InvalidRequestContent:
-    print("Conteúdo da solicitação inválido")
-except Exception as e:
-    print(f"Ocorreu um erro: {e}")
+```bash
+# Exemplo de comando para criar um novo usuário em Azure
+az ad user create --user-name meu-usuario
 ```
 
 ## Validação
-Para validar a configuração de segurança, é necessário:
-1. Verificar se o acesso à console de gerenciamento está funcionando corretamente
-2. Testar a autenticação de dois fatores (2FA)
-3. Verificar se os logs de segurança estão sendo coletados e armazenados corretamente
+Para validar a configuração da segurança de dados em nuvem, siga os passos abaixo:
+1. Verifique se a autenticação multifator (MFA) está configurada corretamente.
+2. Verifique se as permissões necessárias estão atribuídas aos usuários.
+3. Realize testes de segurança para garantir a integridade dos dados.
 
-Além disso, é recomendado realizar testes de segurança regulares para garantir que a configuração de segurança esteja funcionando corretamente e que não haja vulnerabilidades conhecidas.
+```bash
+# Exemplo de comando para verificar a configuração da MFA
+aws iam get-user --user-name meu-usuario
+```
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-Alguns casos especiais que devem ser considerados:
-* **Usuário não autorizado**: se o usuário não tiver permissões suficientes para criar um usuário IAM ou um grupo de recursos, o sistema deve retornar um erro de autorização.
-* **Parâmetros de entrada inválidos**: se os parâmetros de entrada forem inválidos, o sistema deve retornar um erro de validação.
-* **Recursos já existentes**: se o usuário IAM ou o grupo de recursos já existirem, o sistema deve retornar um erro de recurso já existente.
-* **Erros de rede**: se ocorrer um erro de rede durante a criação do usuário IAM ou do grupo de recursos, o sistema deve retornar um erro de conexão.
-* **Limites de recursos**: se o sistema atingir os limites de recursos, o sistema deve retornar um erro de limite de recursos.
+Além dos passos básicos de configuração, é importante considerar os seguintes casos de exceção e edge cases:
+* **Usuário não encontrado**: se o usuário não for encontrado durante a criação ou configuração, verifique se o nome de usuário está correto e se as permissões necessárias estão atribuídas.
+* **Erro de autenticação**: se ocorrer um erro de autenticação durante a configuração da MFA, verifique se as credenciais estão corretas e se a MFA está configurada corretamente.
+* **Permissões insuficientes**: se as permissões necessárias não estiverem atribuídas aos usuários, verifique se as permissões estão corretas e se os usuários têm acesso às recursos necessários.
+* **Problemas de conectividade**: se ocorrerem problemas de conectividade durante a configuração ou validação, verifique se a conexão com a nuvem está estável e se os firewalls ou proxies estão configurados corretamente.
 
-Para lidar com esses casos, é recomendado implementar um tratamento de exceções robusto e personalizado, que forneça mensagens de erro claras e úteis para o usuário. Além disso, é importante realizar testes de unidade e integração para garantir que o sistema esteja funcionando corretamente e que os erros sejam tratados de forma adequada.
+```bash
+# Exemplo de comando para tratar exceções
+try:
+    aws iam create-user --user-name meu-usuario
+except Exception as e:
+    print(f"Erro: {e}")
+```
+
+```bash
+# Exemplo de comando para tratar edge cases
+if [ -z "$usuario" ]; then
+    echo "Usuário não encontrado"
+    exit 1
+fi
