@@ -47,15 +47,16 @@ Task tool (general-purpose):
 
     ⚠️ Tratamento de Exceções e Edge Cases
 
-    *   **Planos vazios ou inexistentes:** Se o plano estiver vazio ou não for encontrado, o revisor deve retornar um status de "Issues Found" com uma descrição do problema.
-    *   **Especificações inconsistentes:** Se a especificação for inconsistente ou contiver erros, o revisor deve retornar um status de "Issues Found" com uma descrição do problema.
-    *   **Tarefas mal definidas:** Se as tarefas estiverem mal definidas ou forem ambíguas, o revisor deve retornar um status de "Issues Found" com uma descrição do problema.
-    *   **Problemas de segurança:** Se o plano contiver problemas de segurança, como a falta de autenticação ou autorização, o revisor deve retornar um status de "Issues Found" com uma descrição do problema.
-    *   **Erros de formatação:** Se o plano contiver erros de formatação, como links quebrados ou imagens faltantes, o revisor deve retornar um status de "Issues Found" com uma descrição do problema.
-    *   **Limitações de recursos:** Se o plano exigir recursos que não estão disponíveis, como hardware ou software específico, o revisor deve retornar um status de "Issues Found" com uma descrição do problema.
-    *   **Dependências não resolvidas:** Se o plano contiver dependências que não foram resolvidas, como bibliotecas ou frameworks que não estão instalados, o revisor deve retornar um status de "Issues Found" com uma descrição do problema.
-    *   **Problemas de escalabilidade:** Se o plano não for escalável ou não for capaz de lidar com um grande volume de dados, o revisor deve retornar um status de "Issues Found" com uma descrição do problema.
-    *   **Falta de documentação:** Se o plano não contiver documentação suficiente, como comentários ou explicações, o revisor deve retornar um status de "Issues Found" com uma descrição do problema.
-    *   **Problemas de compatibilidade:** Se o plano não for compatível com diferentes plataformas ou sistemas operacionais, o revisor deve retornar um status de "Issues Found" com uma descrição do problema.
+    *   **Planos incompletos:** Se o plano estiver incompleto, verifique se há uma explicação clara sobre o que está faltando e como será completado.
+    *   **Specs contraditórias:** Se houver specs contraditórias, verifique se há uma explicação clara sobre como elas serão resolvidas.
+    *   **Tarefas vagas:** Se houver tarefas vagas, verifique se há uma explicação clara sobre como elas serão executadas.
+    *   **Erros de formatação:** Se houver erros de formatação, verifique se eles afetam a compreensão do plano.
+    *   **Falta de recursos:** Se houver falta de recursos, verifique se há uma explicação clara sobre como eles serão obtidos.
+    *   **Prazos inexequíveis:** Se houver prazos inexequíveis, verifique se há uma explicação clara sobre como eles serão ajustados.
+    *   **Dependências não claras:** Se houver dependências não claras, verifique se há uma explicação clara sobre como elas serão resolvidas.
+    *   **Riscos não identificados:** Se houver riscos não identificados, verifique se há uma explicação clara sobre como eles serão mitigados.
+    *   **Cenários de erro não considerados:** Se houver cenários de erro não considerados, verifique se há uma explicação clara sobre como eles serão tratados.
+    *   **Segurança:** Verifique se o plano considera a segurança e a privacidade dos dados.
+    *   **Compliance:** Verifique se o plano está em conformidade com as leis e regulamentações aplicáveis.
 
 **Reviewer returns:** Status, Issues (if any), Recommendations
