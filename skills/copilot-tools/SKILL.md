@@ -46,19 +46,19 @@ Copilot CLI supports persistent async shell sessions, which have no direct Claud
 Ao utilizar as ferramentas do Copilot CLI, é importante considerar os seguintes casos de exceção e edge cases:
 
 * **Erros de sintaxe**: Verifique se os comandos estão corretamente formatados e se os parâmetros estão sendo passados corretamente.
-* **Comandos não suportados**: Verifique se o comando utilizado é suportado pela plataforma e se está sendo utilizado corretamente.
-* **Erros de permissão**: Verifique se o usuário tem as permissões necessárias para executar o comando.
-* **Erros de rede**: Verifique se a conexão de rede está estável e se o servidor está respondendo corretamente.
-* **Timeouts**: Verifique se os timeouts estão configurados corretamente e se os comandos estão sendo executados dentro do tempo limite.
-* **Tratamento de erros**: Verifique se os erros estão sendo tratados corretamente e se as mensagens de erro estão sendo exibidas de forma clara e útil.
-* **Validação de entrada**: Verifique se as entradas estão sendo validadas corretamente e se os dados estão sendo tratados de forma segura.
-* **Segurança**: Verifique se as ferramentas estão sendo utilizadas de forma segura e se os dados estão sendo protegidos contra acessos não autorizados.
+* **Comandos não suportados**: Certifique-se de que os comandos utilizados são suportados pela plataforma e pela versão do Copilot CLI.
+* **Erros de permissão**: Verifique se o usuário tem as permissões necessárias para executar os comandos.
+* **Limites de recursos**: Tenha em mente os limites de recursos (como memória e CPU) ao executar comandos que consomem muitos recursos.
+* **Conexões de rede**: Verifique se as conexões de rede estão estáveis e funcionando corretamente ao utilizar ferramentas que dependem da rede.
+* **Timeouts**: Defina timeouts adequados para comandos que podem demorar muito tempo para serem executados.
+* **Tratamento de erros**: Implemente mecanismos de tratamento de erros para lidar com erros inesperados e fornecer feedback ao usuário.
+* **Validação de entrada**: Valide as entradas de usuário para evitar erros e garantir que os comandos sejam executados corretamente.
+* **Edge cases de async shell sessions**: Tenha em mente os casos de edge cases específicos para as sessões de shell assíncronas, como lidar com comandos que demoram muito tempo para serem executados ou com sessões que são interrompidas inesperadamente. 
 
-Além disso, é importante considerar os seguintes edge cases:
+Exemplos de como lidar com esses casos de exceção e edge cases incluem:
 
-* **Comandos vazios**: Verifique como os comandos vazios são tratados e se eles causam erros ou comportamentos inesperados.
-* **Comandos muito longos**: Verifique como os comandos muito longos são tratados e se eles causam erros ou comportamentos inesperados.
-* **Caracteres especiais**: Verifique como os caracteres especiais são tratados e se eles causam erros ou comportamentos inesperados.
-* **Entradas inválidas**: Verifique como as entradas inválidas são tratadas e se elas causam erros ou comportamentos inesperados.
-
-Ao considerar esses casos de exceção e edge cases, é possível criar skills mais robustas e seguras que possam lidar com uma variedade de situações e cenários.
+* Utilizar try-catch para capturar erros e fornecer feedback ao usuário
+* Implementar timeouts e retries para comandos que podem demorar muito tempo para serem executados
+* Validar as entradas de usuário para evitar erros
+* Utilizar mecanismos de logging para registrar erros e problemas
+* Implementar mecanismos de rollback para lidar com erros e restaurar o estado anterior do sistema.
