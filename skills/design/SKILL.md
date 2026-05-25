@@ -1,73 +1,66 @@
-# Go Fractals CLI - Design
+# Svelte Todo List - Design
 ## Overview
-A command-line tool that generates ASCII art fractals. Supports two fractal types with configurable output.
-## Usage
-```bash
-# Sierpinski triangle
-fractals sierpinski --size 32 --depth 5
-# Mandelbrot set
-fractals mandelbrot --width 80 --height 24 --iterations 100
-# Custom character
-fractals sierpinski --size 16 --char '#'
-# Help
-fractals --help
-fractals sierpinski --help
+A simple todo list application built with Svelte. Supports creating, completing, and deleting todos with localStorage persistence.
+## Features
+- Add new todos
+- Mark todos as complete/incomplete
+- Delete todos
+- Filter by: All / Active / Completed
+- Clear all completed todos
+- Persist to localStorage
+- Show count of remaining items
+## User Interface
 ```
-## Commands
-### `sierpinski`
-Generates a Sierpinski triangle using recursive subdivision.
-Flags:
-- `--size` (default: 32) - Width of the triangle base in characters
-- `--depth` (default: 5) - Recursion depth
-- `--char` (default: '*') - Character to use for filled points
-Output: Triangle printed to stdout, one line per row.
-### `mandelbrot`
-Renders the Mandelbrot set as ASCII art. Maps iteration count to characters.
-Flags:
-- `--width` (default: 80) - Output width in characters
-- `--height` (default: 24) - Output height in characters
-- `--iterations` (default: 100) - Maximum iterations for escape calculation
-- `--char` (default: gradient) - Single character, or omit for gradient " .:-=+*#%@"
-Output: Rectangle printed to stdout.
-## Architecture
+┌─────────────────────────────────────────┐
+│  Svelte Todos                           │
+├─────────────────────────────────────────┤
+│  [________________________] [Add]       │
+├─────────────────────────────────────────┤
+│  [ ] Buy groceries                  [x] │
+│  [✓] Walk the dog                   [x] │
+│  [ ] Write code                     [x] │
+├─────────────────────────────────────────┤
+│  2 items left                           │
+│  [All] [Active] [Completed]  [Clear ✓]  │
+└─────────────────────────────────────────┘
 ```
-cmd/
-  fractals/
-    main.go           # Entry point, CLI setup
-internal/
-  sierpinski/
-    sierpinski.go     # Algorithm
-    sierpinski_test.go
-  mandelbrot/
-    mandelbrot.go     # Algorithm
-    mandelbrot_test.go
-  cli/
-    root.go           # Root command, help
-    sierpinski.go     # Sierpinski subcommand
-    mandelbrot.go     # Mandelbrot subcommand
+## Components
 ```
-## Dependencies
-- Go 1.21+
-- `github.com/spf13/cobra` for CLI
+src/
+  App.svelte           # Main app, state management
+  lib/
+    TodoInput.svelte   # Text input + Add button
+    TodoList.svelte    # List container
+    TodoItem.svelte    # Single todo with checkbox, text, delete
+    FilterBar.svelte   # Filter buttons + clear completed
+    store.ts           # Svelte store for todos
+    storage.ts         # localStorage persistence
+```
+## Data Model
+```typescript
+interface Todo {
+  id: string;        // UUID
+  text: string;      // Todo text
+  completed: boolean;
+}
+type Filter = 'all' | 'active' | 'completed';
+```
 ## Acceptance Criteria
-1. `fractals --help` shows usage
-2. `fractals sierpinski` outputs a recognizable triangle
-3. `fractals mandelbrot` outputs a recognizable Mandelbrot set
-4. `--size`, `--width`, `--height`, `--depth`, `--iterations` flags work
-5. `--char` customizes output character
-6. Invalid inputs produce clear error messages
-7. All tests pass
+1. Can add a todo by typing and pressing Enter or clicking Add
+2. Can toggle todo completion by clicking checkbox
+3. Can delete a todo by clicking X button
+4. Filter buttons show correct subset of todos
+5. "X items left" shows count of incomplete todos
+6. "Clear completed" removes all completed todos
+7. Todos persist across page refresh (localStorage)
+8. Empty state shows helpful message
+9. All tests pass
 ## ⚠️ Tratamento de Exceções e Edge Cases
-### Exceções
-- **Erro de inicialização**: Caso ocorra um erro durante a inicialização do CLI, uma mensagem de erro clara será exibida.
-- **Erro de parsing de flags**: Se os flags forem inválidos ou faltarem, uma mensagem de erro clara será exibida.
-- **Erro de geração de fractal**: Se ocorrer um erro durante a geração do fractal, uma mensagem de erro clara será exibida.
-### Edge Cases
-- **Tamanho de saída inválido**: Se o tamanho de saída for inválido (por exemplo, menor que 1), uma mensagem de erro clara será exibida.
-- **Profundidade de recursão inválida**: Se a profundidade de recursão for inválida (por exemplo, menor que 1), uma mensagem de erro clara será exibida.
-- **Caractere inválido**: Se o caractere for inválido (por exemplo, não for um caractere único), uma mensagem de erro clara será exibida.
-- **Iterações inválidas**: Se o número de iterações for inválido (por exemplo, menor que 1), uma mensagem de erro clara será exibida.
-### Segurança
-- **Validação de entrada**: Todas as entradas serão validadas para evitar ataques de injeção de código.
-- **Uso de bibliotecas seguras**: Somente bibliotecas seguras e atualizadas serão utilizadas.
-- **Proteção contra ataques de força bruta**: O CLI será projetado para evitar ataques de força bruta.
+- **Validação de entrada**: Verificar se o texto do todo é vazio antes de adicioná-lo à lista.
+- **Tratamento de erro de localStorage**: Lidar com erros que ocorrem ao tentar salvar ou carregar dados do localStorage.
+- **Prevenção de duplicatas**: Verificar se um todo com o mesmo texto já existe antes de adicioná-lo à lista.
+- **Limite de tamanho de texto**: Definir um limite de tamanho para o texto do todo e truncá-lo se necessário.
+- **Prevenção de ataques de injeção de código**: Sanitizar o texto do todo para prevenir ataques de injeção de código.
+- **Tratamento de erros de rede**: Lidar com erros que ocorrem ao tentar carregar ou salvar dados de uma API remota (se aplicável).
+- **Caso de uso de vários usuários**: Considerar como a aplicação lidará com vários usuários acessando a lista de todos simultaneamente.
+- **Caso de uso de dispositivos móveis**: Considerar como a aplicação se comportará em dispositivos móveis, incluindo a responsividade da interface do usuário e a acessibilidade.
