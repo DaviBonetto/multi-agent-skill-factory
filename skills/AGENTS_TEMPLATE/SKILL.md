@@ -6,7 +6,7 @@ Essas habilidades são:
  - {{name}} -> "{{path}}/SKILL.md"
 {{/skills}}
 
-**Importante:** É OBRIGATÓRIO ler o arquivo SKILL.md sempre que a descrição da habilidade corresponder à intenção do usuário ou possa ajudar a realizar sua tarefa.
+**Importante:** Você DEVE ler o arquivo SKILL.md sempre que a descrição das habilidades corresponder à intenção do usuário ou possa ajudar a realizar sua tarefa.
 
 ## Habilidades Disponíveis
 {{#skills}}
@@ -14,20 +14,20 @@ Essas habilidades são:
 
 {{/skills}}
 
-**Observação:** Os caminhos referenciados dentro das pastas de habilidades são relativos àquela habilidade. Por exemplo, o script `scripts/example.py` do hf-datasets seria referenciado como `hf-datasets/scripts/example.py`.
+Os caminhos referenciados dentro das pastas de habilidades são relativos àquela habilidade. Por exemplo, o script `scripts/example.py` do hf-datasets seria referenciado como `hf-datasets/scripts/example.py`.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-### Erros de Leitura do Arquivo SKILL.md
-- **Erro de Arquivo Não Encontrado:** Se o arquivo SKILL.md não for encontrado no diretório especificado, uma mensagem de erro será exibida informando o caminho incorreto.
-- **Erro de Permissão de Leitura:** Se houver uma falha de permissão para ler o arquivo SKILL.md, uma mensagem de erro será exibida solicitando permissão de leitura.
+### Erros de Arquivo
+- **Arquivo não encontrado:** Se o arquivo "SKILL.md" não for encontrado no diretório especificado, uma mensagem de erro será exibida indicando que o arquivo não foi localizado.
+- **Permissão de leitura:** Se o arquivo "SKILL.md" não tiver permissão de leitura, uma mensagem de erro será exibida indicando que não é possível ler o arquivo.
 
-### Tratamento de Habilidades Não Documentadas
-- **Habilidades Não Listadas:** Se uma habilidade não estiver listada na seção de habilidades disponíveis, mas tiver um arquivo SKILL.md correspondente, uma mensagem de aviso será exibida sugerindo a adição da habilidade à lista.
-
-### Segurança
-- **Validação de Entradas:** Todas as entradas de usuário devem ser validadas para evitar injeção de código malicioso ou outros ataques de segurança.
-- **Uso de Bibliotecas Seguras:** As bibliotecas utilizadas devem ser mantidas atualizadas e seguras para evitar vulnerabilidades conhecidas.
+### Erros de Formatação
+- **Formatação inválida:** Se o arquivo "SKILL.md" tiver formatação inválida, uma mensagem de erro será exibida indicando que o arquivo não pode ser processado devido à formatação inválida.
 
 ### Edge Cases
-- **Nomes de Habilidades Duplicados:** Se dois ou mais diretórios tiverem o mesmo nome de habilidade, uma mensagem de erro será exibida solicitando a renomeação de uma das habilidades para evitar conflitos.
-- **Caminhos Relativos Inválidos:** Se um caminho relativo dentro de uma pasta de habilidade for inválido, uma mensagem de erro será exibida indicando o caminho incorreto.
+- **Nenhum arquivo "SKILL.md" encontrado:** Se nenhum arquivo "SKILL.md" for encontrado nos diretórios especificados, uma mensagem será exibida indicando que não há habilidades disponíveis.
+- **Descrição de habilidade vazia:** Se a descrição de uma habilidade estiver vazia, uma mensagem será exibida indicando que a descrição da habilidade não está disponível.
+
+### Segurança
+- **Validação de entrada:** Todas as entradas de usuário serão validadas para evitar ataques de injeção de código malicioso.
+- **Uso de bibliotecas seguras:** Somente bibliotecas seguras e atualizadas serão usadas para processar os arquivos "SKILL.md" e evitar vulnerabilidades de segurança.
