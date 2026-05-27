@@ -1,66 +1,74 @@
-# Svelte Todo List - Design
+# Go Fractals CLI - Design
 ## Overview
-A simple todo list application built with Svelte. Supports creating, completing, and deleting todos with localStorage persistence.
-## Features
-- Add new todos
-- Mark todos as complete/incomplete
-- Delete todos
-- Filter by: All / Active / Completed
-- Clear all completed todos
-- Persist to localStorage
-- Show count of remaining items
-## User Interface
+A command-line tool that generates ASCII art fractals. Supports two fractal types with configurable output.
+## Usage
+```bash
+# Sierpinski triangle
+fractals sierpinski --size 32 --depth 5
+# Mandelbrot set
+fractals mandelbrot --width 80 --height 24 --iterations 100
+# Custom character
+fractals sierpinski --size 16 --char '#'
+# Help
+fractals --help
+fractals sierpinski --help
 ```
-┌─────────────────────────────────────────┐
-│  Svelte Todos                           │
-├─────────────────────────────────────────┤
-│  [________________________] [Add]       │
-├─────────────────────────────────────────┤
-│  [ ] Buy groceries                  [x] │
-│  [✓] Walk the dog                   [x] │
-│  [ ] Write code                     [x] │
-├─────────────────────────────────────────┤
-│  2 items left                           │
-│  [All] [Active] [Completed]  [Clear ✓]  │
-└─────────────────────────────────────────┘
+## Commands
+### `sierpinski`
+Generates a Sierpinski triangle using recursive subdivision.
+Flags:
+- `--size` (default: 32) - Width of the triangle base in characters
+- `--depth` (default: 5) - Recursion depth
+- `--char` (default: '*') - Character to use for filled points
+Output: Triangle printed to stdout, one line per row.
+### `mandelbrot`
+Renders the Mandelbrot set as ASCII art. Maps iteration count to characters.
+Flags:
+- `--width` (default: 80) - Output width in characters
+- `--height` (default: 24) - Output height in characters
+- `--iterations` (default: 100) - Maximum iterations for escape calculation
+- `--char` (default: gradient) - Single character, or omit for gradient " .:-=+*#%@"
+Output: Rectangle printed to stdout.
+## Architecture
 ```
-## Components
+cmd/
+  fractals/
+    main.go           # Entry point, CLI setup
+internal/
+  sierpinski/
+    sierpinski.go     # Algorithm
+    sierpinski_test.go
+  mandelbrot/
+    mandelbrot.go     # Algorithm
+    mandelbrot_test.go
+  cli/
+    root.go           # Root command, help
+    sierpinski.go     # Sierpinski subcommand
+    mandelbrot.go     # Mandelbrot subcommand
 ```
-src/
-  App.svelte           # Main app, state management
-  lib/
-    TodoInput.svelte   # Text input + Add button
-    TodoList.svelte    # List container
-    TodoItem.svelte    # Single todo with checkbox, text, delete
-    FilterBar.svelte   # Filter buttons + clear completed
-    store.ts           # Svelte store for todos
-    storage.ts         # localStorage persistence
-```
-## Data Model
-```typescript
-interface Todo {
-  id: string;        // UUID
-  text: string;      // Todo text
-  completed: boolean;
-}
-type Filter = 'all' | 'active' | 'completed';
-```
+## Dependencies
+- Go 1.21+
+- `github.com/spf13/cobra` for CLI
 ## Acceptance Criteria
-1. Can add a todo by typing and pressing Enter or clicking Add
-2. Can toggle todo completion by clicking checkbox
-3. Can delete a todo by clicking X button
-4. Filter buttons show correct subset of todos
-5. "X items left" shows count of incomplete todos
-6. "Clear completed" removes all completed todos
-7. Todos persist across page refresh (localStorage)
-8. Empty state shows helpful message
-9. All tests pass
+1. `fractals --help` shows usage
+2. `fractals sierpinski` outputs a recognizable triangle
+3. `fractals mandelbrot` outputs a recognizable Mandelbrot set
+4. `--size`, `--width`, `--height`, `--depth`, `--iterations` flags work
+5. `--char` customizes output character
+6. Invalid inputs produce clear error messages
+7. All tests pass
 ## ⚠️ Tratamento de Exceções e Edge Cases
-- **Validação de entrada**: Verificar se o texto do todo é vazio antes de adicioná-lo à lista.
-- **Tratamento de erro de localStorage**: Lidar com erros que ocorrem ao tentar salvar ou carregar dados do localStorage.
-- **Prevenção de duplicatas**: Verificar se um todo com o mesmo texto já existe antes de adicioná-lo à lista.
-- **Limite de tamanho de texto**: Definir um limite de tamanho para o texto do todo e truncá-lo se necessário.
-- **Prevenção de ataques de injeção de código**: Sanitizar o texto do todo para prevenir ataques de injeção de código.
-- **Tratamento de erros de rede**: Lidar com erros que ocorrem ao tentar carregar ou salvar dados de uma API remota (se aplicável).
-- **Caso de uso de vários usuários**: Considerar como a aplicação lidará com vários usuários acessando a lista de todos simultaneamente.
-- **Caso de uso de dispositivos móveis**: Considerar como a aplicação se comportará em dispositivos móveis, incluindo a responsividade da interface do usuário e a acessibilidade.
+### Tratamento de Erros
+*   Verificar se os valores de `--size`, `--width`, `--height`, `--depth` e `--iterations` são números inteiros positivos.
+*   Verificar se o valor de `--char` é um caractere único.
+*   Tratar erros de divisão por zero e outros erros matemáticos que possam ocorrer durante a geração dos fractais.
+*   Implementar tratamento de erros para casos de entrada inválida, como valores de flags não numéricos ou caracteres inválidos.
+### Edge Cases
+*   Caso de `--size` ou `--width`/`--height` muito grande: limitar o tamanho máximo da saída para evitar problemas de desempenho.
+*   Caso de `--depth` ou `--iterations` muito grande: limitar o número máximo de iterações para evitar problemas de desempenho.
+*   Caso de `--char` vazio: usar um caractere padrão ou exibir uma mensagem de erro.
+*   Caso de entrada inválida: exibir uma mensagem de erro clara e concisa.
+### Segurança
+*   Validar todas as entradas de usuário para evitar ataques de injeção de comandos ou outros tipos de ataques.
+*   Utilizar bibliotecas e frameworks seguros e atualizados para evitar vulnerabilidades conhecidas.
+*   Implementar medidas de segurança para proteger contra acessos não autorizados e garantir a integridade dos dados.
