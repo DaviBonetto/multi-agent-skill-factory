@@ -26,15 +26,9 @@ llama-cli -m model.gguf -t 8 -p "Hello"
 make LLAMA_OPENBLAS=1
 ```
 ### ⚠️ Tratamento de Exceções e Edge Cases
-#### Erros Comuns
-*   Certifique-se de que o modelo esteja corretamente compilado e que as dependências estejam instaladas.
-*   Verifique se o modelo está compatível com o hardware utilizado.
-*   Em caso de erros de inicialização, verifique se as variáveis de ambiente estão corretamente configuradas.
-#### Edge Cases
-*   **Modelos muito grandes**: Em casos onde o modelo é muito grande para caber na memória da GPU, considere utilizar o modo híbrido ou a divisão de tensor.
-*   **Múltiplas GPUs**: Ao utilizar múltiplas GPUs, certifique-se de que as GPUs estejam corretamente configuradas e que o modelo esteja otimizado para utilização de múltiplas GPUs.
-*   **Problemas de desempenho**: Em caso de problemas de desempenho, verifique se o modelo está otimizado para o hardware utilizado e se as configurações de inicialização estão corretas.
-#### Segurança
-*   **Validação de entrada**: Certifique-se de que as entradas sejam validadas corretamente para evitar ataques de injeção de código.
-*   **Atualizações de segurança**: Mantenha o modelo e as dependências atualizados com as últimas atualizações de segurança.
-*   **Uso de criptografia**: Considere utilizar criptografia para proteger os dados de treinamento e os modelos treinados.
+* **Erro de Compilação**: Certifique-se de que o ambiente de compilação esteja configurado corretamente e que as dependências necessárias estejam instaladas. Em caso de erros de compilação, verifique os logs de compilação para identificar a causa raiz do problema.
+* **Incompatibilidade de Hardware**: Verifique se o hardware utilizado é compatível com a aceleração de hardware escolhida (Metal, CUDA, ROCm, etc.). Em caso de incompatibilidade, escolha uma opção de aceleração de hardware alternativa.
+* **Modelos Grandes**: Ao trabalhar com modelos grandes, é importante considerar a capacidade de memória disponível no hardware. Em caso de falta de memória, considere utilizar técnicas de otimização de memória, como a divisão de tensores.
+* **Erros de Execução**: Em caso de erros de execução, verifique os logs de execução para identificar a causa raiz do problema. Além disso, certifique-se de que as dependências necessárias estejam instaladas e configuradas corretamente.
+* **Segurança**: Ao trabalhar com aceleração de hardware, é importante considerar a segurança do sistema. Certifique-se de que as permissões de acesso sejam configuradas corretamente e que os dados sejam protegidos contra acessos não autorizados.
+* **Otimização de Desempenho**: Para otimizar o desempenho da aceleração de hardware, considere utilizar técnicas de otimização, como a utilização de threads paralelos, a otimização de memória e a utilização de algoritmos eficientes. Além disso, certifique-se de que o hardware esteja configurado corretamente e que as dependências necessárias estejam instaladas.
