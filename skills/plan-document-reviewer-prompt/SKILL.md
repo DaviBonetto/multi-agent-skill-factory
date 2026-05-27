@@ -47,15 +47,12 @@ Task tool (general-purpose):
 
     ⚠️ Tratamento de Exceções e Edge Cases
 
-    *   **Planos vazios ou inexistentes:** Se o plano estiver vazio ou não for encontrado, o revisor deve retornar um status de "Issues Found" com uma descrição do problema.
-    *   **Especificações inconsistentes:** Se a especificação for inconsistente ou contiver erros, o revisor deve retornar um status de "Issues Found" com uma descrição do problema.
-    *   **Tarefas mal definidas:** Se as tarefas estiverem mal definidas ou forem ambíguas, o revisor deve retornar um status de "Issues Found" com uma descrição do problema.
-    *   **Problemas de segurança:** Se o plano contiver problemas de segurança, como a falta de autenticação ou autorização, o revisor deve retornar um status de "Issues Found" com uma descrição do problema.
-    *   **Limitações de recursos:** Se o plano exigir recursos que não estão disponíveis, o revisor deve retornar um status de "Issues Found" com uma descrição do problema.
-    *   **Dependências não resolvidas:** Se o plano contiver dependências que não foram resolvidas, o revisor deve retornar um status de "Issues Found" com uma descrição do problema.
-    *   **Erros de sintaxe ou formatação:** Se o plano contiver erros de sintaxe ou formatação, o revisor deve retornar um status de "Issues Found" com uma descrição do problema.
-    *   **Falta de documentação:** Se o plano não contiver documentação suficiente, o revisor deve retornar um status de "Issues Found" com uma descrição do problema.
-    *   **Problemas de compatibilidade:** Se o plano contiver problemas de compatibilidade com diferentes plataformas ou sistemas, o revisor deve retornar um status de "Issues Found" com uma descrição do problema.
-    *   **Falta de testes:** Se o plano não contiver testes suficientes, o revisor deve retornar um status de "Issues Found" com uma descrição do problema.
+    - **Planos vazios ou inexistentes:** Verifique se o plano está vazio ou se o arquivo não existe. Se isso ocorrer, retorne um erro indicando que o plano não está disponível para revisão.
+    - **Especificações inconsistentes:** Se a especificação for inconsistente ou contenha informações contraditórias, registre um problema e forneça uma explicação clara sobre como isso afeta a implementação.
+    - **Tarefas mal definidas:** Se as tarefas não tiverem limites claros ou se as etapas não forem ações claras, registre um problema e sugira melhorias para tornar as tarefas mais claras e executáveis.
+    - **Problemas de segurança:** Se o plano contiver informações sensíveis ou possíveis vulnerabilidades de segurança, registre um problema e forneça recomendações para mitigar esses riscos.
+    - **Limitações de recursos:** Se o plano exigir recursos que não estão disponíveis ou que ultrapassam os limites de recursos, registre um problema e sugira alternativas viáveis.
+    - **Dependências não resolvidas:** Se o plano depender de outras tarefas ou recursos que não estão disponíveis, registre um problema e forneça uma explicação clara sobre como isso afeta a implementação.
+    - **Erros de formatação:** Se o plano contiver erros de formatação que possam afetar a legibilidade ou a compreensão do plano, registre um problema e sugira melhorias para corrigir esses erros.
 
 **Reviewer returns:** Status, Issues (if any), Recommendations
