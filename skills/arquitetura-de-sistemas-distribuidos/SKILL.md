@@ -1,68 +1,113 @@
 ---
-name: Arquitetura de Sistemas Distribuídos
-description: Ensina a projetar e implementar sistemas distribuídos escaláveis e confiáveis
+name: Arquitetura de Sistemas Distribuídos com Apache Kafka
+description: Esta skill ensina como projetar e implementar sistemas distribuídos escaláveis utilizando Apache Kafka e outras tecnologias de código aberto.
 ---
 
 ## Objetivo
-O objetivo deste guia é fornecer uma visão geral completa sobre como projetar e implementar sistemas distribuídos escaláveis e confiáveis. Isso inclui entender os princípios fundamentais da arquitetura de sistemas distribuídos, como comunicação entre processos, gerenciamento de estado e tolerância a falhas.
+O objetivo desta skill é capacitar os desenvolvedores a projetar e implementar sistemas distribuídos escaláveis utilizando Apache Kafka e outras tecnologias de código aberto, permitindo que eles criem soluções robustas e eficientes para lidar com grandes volumes de dados.
 
 ## Pré-requisitos
-Para aproveitar ao máximo este guia, é recomendado que os leitores tenham conhecimento prévio em:
-- Programação em linguagens como Java, Python ou C++
-- Conceitos básicos de redes de computadores e protocolos de comunicação
-- Experiência com desenvolvimento de software e sistemas operacionais
+Antes de iniciar esta skill, é recomendado que os desenvolvedores tenham conhecimento básico em:
+* Programação em linguagens como Java, Python ou Scala
+* Conceitos de sistemas distribuídos e arquitetura de software
+* Ferramentas de gerenciamento de dados como Apache Kafka, ZooKeeper e outros
 
 ## Passo a Passo Técnico / Exemplos de Código
-### 1. Introdução à Arquitetura de Sistemas Distribuídos
-A arquitetura de sistemas distribuídos envolve o design de sistemas que consistem em múltiplos componentes ou nodos que se comunicam entre si para alcançar um objetivo comum. Isso pode incluir sistemas de processamento de transações, sistemas de gerenciamento de dados e sistemas de comunicação em tempo real.
-
-### 2. Escolhendo um Modelo de Arquitetura
-Existem vários modelos de arquitetura para sistemas distribuídos, incluindo:
-- **Arquitetura Cliente-Servidor**: Neste modelo, os clientes fazem solicitações a um servidor centralizado que fornece serviços.
-- **Arquitetura Peer-to-Peer**: Neste modelo, todos os nodos são iguais e podem atuar como clientes e servidores.
-
-### 3. Implementação de um Sistema Distribuído
-Um exemplo simples de um sistema distribuído pode ser implementado usando Python e a biblioteca `socket` para comunicação entre processos:
-```python
-import socket
-
-# Criação de um socket
-sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-# Conexão ao servidor
-try:
-    sock.connect(("localhost", 12345))
-except ConnectionRefusedError:
-    print("Erro: Conexão recusada pelo servidor.")
-    exit(1)
-
-# Envio de uma mensagem
-try:
-    sock.sendall(b"Olá, servidor!")
-except BrokenPipeError:
-    print("Erro: Conexão fechada inesperadamente.")
-    exit(1)
-
-# Recebimento da resposta
-try:
-    resposta = sock.recv(1024)
-    print(resposta.decode())
-except ConnectionResetError:
-    print("Erro: Conexão resetada pelo servidor.")
-    exit(1)
-
-# Fechamento do socket
-finally:
-    sock.close()
+### Instalação do Apache Kafka
+Para começar, é necessário instalar o Apache Kafka em sua máquina. Isso pode ser feito utilizando o seguinte comando:
+```bash
+wget https://dl.bintray.com/apache/kafka/3.1.0/kafka_2.13-3.1.0.tgz
+tar -xzf kafka_2.13-3.1.0.tgz
+cd kafka_2.13-3.1.0
 ```
+### Configuração do Apache Kafka
+Em seguida, é necessário configurar o Apache Kafka para que ele possa ser utilizado em sua aplicação. Isso pode ser feito editando o arquivo `config/server.properties` e adicionando as seguintes linhas:
+```properties
+listeners=PLAINTEXT://localhost:9092
+advertised.listeners=PLAINTEXT://localhost:9092
+```
+### Criação de um Tópico
+Para criar um tópico no Apache Kafka, é necessário utilizar o comando `kafka-topics`:
+```bash
+bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 meu-topico
+```
+### Produção de Mensagens
+Para produzir mensagens no Apache Kafka, é necessário criar um produtor que envie mensagens para o tópico criado anteriormente. Isso pode ser feito utilizando a seguinte classe Java:
+```java
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.clients.producer.ProducerRecord;
 
+import java.util.Properties;
+
+public class Producer {
+    public static void main(String[] args) {
+        Properties props = new Properties();
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");
+        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");
+
+        KafkaProducer<String, String> producer = new KafkaProducer<>(props);
+        try {
+            producer.send(new ProducerRecord<>("meu-topico", "Olá, mundo!"));
+        } catch (Exception e) {
+            System.err.println("Erro ao produzir mensagem: " + e.getMessage());
+        } finally {
+            producer.close();
+        }
+    }
+}
+```
+### Consumo de Mensagens
+Para consumir mensagens no Apache Kafka, é necessário criar um consumidor que leia as mensagens do tópico criado anteriormente. Isso pode ser feito utilizando a seguinte classe Java:
+```java
+import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
+
+import java.util.Collections;
+import java.util.Properties;
+
+public class Consumer {
+    public static void main(String[] args) {
+        Properties props = new Properties();
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, "meu-grupo");
+        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
+        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
+
+        KafkaConsumer<String, String> consumer = new KafkaConsumer<>(props);
+        consumer.subscribe(Collections.singleton("meu-topico"));
+        try {
+            while (true) {
+                for (ConsumerRecord<String, String> record : consumer.poll(100)) {
+                    System.out.println(record.value());
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Erro ao consumir mensagem: " + e.getMessage());
+        } finally {
+            consumer.close();
+        }
+    }
+}
+```
 ## Validação
-Para validar a implementação de um sistema distribuído, é importante testar sua escalabilidade, confiabilidade e desempenho. Isso pode ser feito usando ferramentas de teste de carga e monitoramento de desempenho. Além disso, é crucial garantir que o sistema seja tolerante a falhas e possa se recuperar de erros de forma eficaz.
+Para validar a implementação do Apache Kafka, é necessário verificar se as mensagens estão sendo produzidas e consumidas corretamente. Isso pode ser feito utilizando ferramentas como o `kafka-console-consumer` ou o `kafka-console-producer`. Além disso, é importante monitorar o desempenho do sistema e ajustar a configuração do Apache Kafka conforme necessário.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-Além do tratamento de exceções apresentado no exemplo de código, é importante considerar os seguintes edge cases:
-- **Conexão perdida**: O sistema deve ser capaz de detectar e lidar com a perda de conexão com o servidor ou outros nodos.
-- **Mensagens corrompidas**: O sistema deve ser capaz de detectar e lidar com mensagens corrompidas ou inválidas.
-- **Sobrecarga do sistema**: O sistema deve ser capaz de lidar com uma grande quantidade de solicitações simultâneas sem comprometer a estabilidade.
-- **Falhas de hardware**: O sistema deve ser capaz de lidar com falhas de hardware, como falhas de disco ou perda de energia.
-- **Ataques de segurança**: O sistema deve ser capaz de lidar com ataques de segurança, como ataques de negação de serviço ou injeção de código malicioso.
+### Tratamento de Exceções
+É importante tratar as exceções que podem ocorrer durante a produção e consumo de mensagens. Isso pode ser feito utilizando blocos try-catch para capturar as exceções e lidar com elas de forma apropriada.
+
+### Edge Cases
+Alguns exemplos de edge cases que devem ser considerados incluem:
+* **Mensagens duplicadas**: O que acontece se uma mensagem for produzida mais de uma vez?
+* **Mensagens perdidas**: O que acontece se uma mensagem for perdida durante a transmissão?
+* **Falha do broker**: O que acontece se um dos brokers do Apache Kafka falhar?
+* **Sobrecarga do sistema**: O que acontece se o sistema estiver sobrecarregado e não puder lidar com o volume de mensagens?
+
+Para lidar com esses edge cases, é importante implementar mecanismos de detecção e tratamento de erros, como:
+* **Idempotência**: garantir que as mensagens sejam idempotentes, ou seja, que possam ser processadas mais de uma vez sem causar problemas.
+* **Repetição de mensagens**: implementar mecanismos de repetição de mensagens para garantir que as mensagens sejam entregues corretamente.
+* **Monitoramento do sistema**: monitorar o sistema para detectar falhas e sobrecargas, e tomar medidas para corrigi-las.
+* **Recuperação de falhas**: implementar mecanismos de recuperação de falhas para garantir que o sistema possa se recuperar de falhas e continuar funcionando corretamente.
