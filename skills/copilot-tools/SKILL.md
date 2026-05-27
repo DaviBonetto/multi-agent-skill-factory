@@ -1,5 +1,4 @@
 # Copilot CLI Tool Mapping
-
 Skills use Claude Code tool names. When you encounter these in a skill, use your platform equivalent:
 
 | Skill references | Copilot CLI equivalent |
@@ -20,7 +19,6 @@ Skills use Claude Code tool names. When you encounter these in a skill, use your
 | `EnterPlanMode` / `ExitPlanMode` | No equivalent — stay in the main session |
 
 ## Async shell sessions
-
 Copilot CLI supports persistent async shell sessions, which have no direct Claude Code equivalent:
 
 | Tool | Purpose |
@@ -32,7 +30,6 @@ Copilot CLI supports persistent async shell sessions, which have no direct Claud
 | `list_bash` | List all active shell sessions |
 
 ## Additional Copilot CLI tools
-
 | Tool | Purpose |
 |------|---------|
 | `store_memory` | Persist facts about the codebase for future sessions |
@@ -42,23 +39,14 @@ Copilot CLI supports persistent async shell sessions, which have no direct Claud
 | GitHub MCP tools (`github-mcp-server-*`) | Native GitHub API access (issues, PRs, code search) |
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-
 Ao utilizar as ferramentas do Copilot CLI, é importante considerar os seguintes casos de exceção e edge cases:
-
 * **Erros de sintaxe**: Verifique se os comandos estão corretamente formatados e se os parâmetros estão sendo passados corretamente.
 * **Comandos não suportados**: Certifique-se de que os comandos utilizados são suportados pela plataforma e pela versão do Copilot CLI.
-* **Erros de permissão**: Verifique se o usuário tem as permissões necessárias para executar os comandos.
-* **Limites de recursos**: Tenha em mente os limites de recursos (como memória e CPU) ao executar comandos que consomem muitos recursos.
-* **Conexões de rede**: Verifique se as conexões de rede estão estáveis e funcionando corretamente ao utilizar ferramentas que dependem da rede.
-* **Timeouts**: Defina timeouts adequados para comandos que podem demorar muito tempo para serem executados.
-* **Tratamento de erros**: Implemente mecanismos de tratamento de erros para lidar com erros inesperados e fornecer feedback ao usuário.
-* **Validação de entrada**: Valide as entradas de usuário para evitar erros e garantir que os comandos sejam executados corretamente.
-* **Edge cases de async shell sessions**: Tenha em mente os casos de edge cases específicos para as sessões de shell assíncronas, como lidar com comandos que demoram muito tempo para serem executados ou com sessões que são interrompidas inesperadamente. 
-
-Exemplos de como lidar com esses casos de exceção e edge cases incluem:
-
-* Utilizar try-catch para capturar erros e fornecer feedback ao usuário
-* Implementar timeouts e retries para comandos que podem demorar muito tempo para serem executados
-* Validar as entradas de usuário para evitar erros
-* Utilizar mecanismos de logging para registrar erros e problemas
-* Implementar mecanismos de rollback para lidar com erros e restaurar o estado anterior do sistema.
+* **Limites de recursos**: Tenha em mente os limites de recursos (como memória, CPU, etc.) ao executar comandos que possam consumir muitos recursos.
+* **Conflitos de nome**: Evite conflitos de nome entre variáveis, funções e comandos.
+* **Segurança**: Sempre verifique se os comandos estão sendo executados de forma segura, especialmente quando se trata de operações que envolvem acesso a dados sensíveis ou execução de comandos com privilégios elevados.
+* **Tratamento de erros**: Implemente mecanismos de tratamento de erros para lidar com erros inesperados ou exceções que possam ocorrer durante a execução dos comandos.
+* **Validação de entrada**: Valide as entradas dos comandos para garantir que elas sejam válidas e consistentes.
+* **Uso de async**: Tenha cuidado ao usar comandos assíncronos, pois eles podem afetar a ordem de execução dos comandos e causar problemas de sincronização.
+* **Uso de variáveis**: Evite o uso de variáveis globais e prefira variáveis locais para evitar conflitos e problemas de escopo.
+* **Documentação**: Mantenha a documentação atualizada e clara para evitar erros de interpretação e uso incorreto das ferramentas.
