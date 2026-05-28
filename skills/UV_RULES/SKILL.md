@@ -1,6 +1,5 @@
 # UV Rules
-=====================================
-
+## Introdução
 Use estas regras para scripts Python neste repositório:
 
 1. **Use PEP 723 inline dependencies** em cada script executável:
@@ -10,31 +9,25 @@ Use estas regras para scripts Python neste repositório:
    # dependencies = ["requests"]
    # ///
    ```
-   Lembre-se de que as dependências devem ser especificadas corretamente para evitar erros de compatibilidade.
-
 2. **Execute scripts com `uv run`**, não `python ...`:
    ```bash
    uv run scripts/my_script.py --help
    ```
-   Isso garante que as dependências sejam carregadas corretamente e que o script seja executado no ambiente adequado.
-
-3. **Não documente `pip install -r requirements.txt` para scripts do repositório** a menos que haja um motivo específico para isso. O uso normal não deve exigir instalação manual.
-   Certifique-se de que as dependências sejam gerenciadas corretamente pelo `uv run`.
-
+3. **Não documente `pip install -r requirements.txt` para scripts do repositório** a menos que haja um motivo de fallback específico. O uso normal não deve exigir instalação manual.
 4. **Não instrua os usuários a `source .venv/bin/activate` para scripts de habilidade.** `uv run` deve ser suficiente.
-   Isso ajuda a manter a consistência e evitar erros de ambiente.
+5. **Se um exemplo de instalação manual for realmente necessário, use `uv pip install ...`**, não `uv add`, a menos que você esteja editando intencionalmente um ambiente gerenciado pelo projeto.
+6. **Para cargas de trabalho UV do Hugging Face Jobs, use `hf jobs uv run ...`**.
 
-5. **Se um exemplo de instalação manual for necessário, use `uv pip install ...`**, não `uv add`, a menos que você esteja editando intencionalmente um ambiente gerenciado pelo projeto.
-   Isso garante que as dependências sejam instaladas corretamente e evita conflitos.
+## ⚠️ Tratamento de Exceções e Edge Cases
+### Tratamento de Erros
+- **Verifique as versões do Python**: Certifique-se de que a versão do Python especificada nas dependências inline seja compatível com a versão do Python instalada no ambiente de execução.
+- **Trate exceções de dependência**: Implemente tratamento de exceções para lidar com situações em que as dependências especificadas não podem ser resolvidas ou instaladas.
+- **Manipule erros de execução**: Implemente mecanismos para capturar e relatar erros que ocorrem durante a execução dos scripts, fornecendo informações úteis para depuração.
 
-6. **Para Hugging Face Jobs UV workloads, use `hf jobs uv run ...`**.
-   Isso é crucial para garantir a compatibilidade e o funcionamento correto dos trabalhos.
+### Edge Cases
+- **Ambientes de Desenvolvimento e Produção**: Considere as diferenças entre ambientes de desenvolvimento e produção, garantindo que as dependências e configurações sejam apropriadas para cada caso.
+- **Compatibilidade entre Versões**: Verifique a compatibilidade entre diferentes versões de dependências e bibliotecas, especialmente quando há atualizações ou mudanças significativas.
+- **Restrições de Segurança**: Implemente restrições de segurança adequadas, como validação de entrada e saída, para prevenir vulnerabilidades nos scripts.
 
-⚠️ Tratamento de Exceções e Edge Cases
-----------------------------------------
-
-* **Tratamento de erros de dependência**: Certifique-se de que as dependências sejam especificadas corretamente e que haja um plano para lidar com erros de dependência, como versões incompatíveis ou pacotes faltando.
-* **Erros de execução**: Implemente tratamento de erros para lidar com erros de execução, como exceções não capturadas ou saídas inesperadas.
-* **Edge cases de ambiente**: Considere edge cases de ambiente, como diferentes versões do Python ou ambientes de desenvolvimento versus produção, e certifique-se de que os scripts sejam robustos o suficiente para lidar com essas variações.
-* **Segurança**: Sempre considere a segurança ao executar scripts, especialmente quando lidando com dependências externas ou acesso a recursos sensíveis. Use práticas de segurança recomendadas, como validação de entrada e saída, e siga as diretrizes de segurança do projeto.
-* **Testes e validação**: Implemente testes e validação para garantir que os scripts sejam executados corretamente e produzam os resultados esperados, mesmo em edge cases ou condições de erro.
+## Conclusão
+Ao seguir estas regras e considerar os tratamentos de exceções e edge cases, você pode garantir que seus scripts Python sejam robustos, seguros e fáceis de manter. Lembre-se de sempre testar seus scripts em diferentes ambientes e cenários para garantir a compatibilidade e a confiabilidade.
