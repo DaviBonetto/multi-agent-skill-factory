@@ -1,4 +1,5 @@
 # Copilot CLI Tool Mapping
+
 Skills use Claude Code tool names. When you encounter these in a skill, use your platform equivalent:
 
 | Skill references | Copilot CLI equivalent |
@@ -19,6 +20,7 @@ Skills use Claude Code tool names. When you encounter these in a skill, use your
 | `EnterPlanMode` / `ExitPlanMode` | No equivalent — stay in the main session |
 
 ## Async shell sessions
+
 Copilot CLI supports persistent async shell sessions, which have no direct Claude Code equivalent:
 
 | Tool | Purpose |
@@ -30,6 +32,7 @@ Copilot CLI supports persistent async shell sessions, which have no direct Claud
 | `list_bash` | List all active shell sessions |
 
 ## Additional Copilot CLI tools
+
 | Tool | Purpose |
 |------|---------|
 | `store_memory` | Persist facts about the codebase for future sessions |
@@ -39,14 +42,17 @@ Copilot CLI supports persistent async shell sessions, which have no direct Claud
 | GitHub MCP tools (`github-mcp-server-*`) | Native GitHub API access (issues, PRs, code search) |
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
+
 Ao utilizar as ferramentas do Copilot CLI, é importante considerar os seguintes casos de exceção e edge cases:
+
 * **Erros de sintaxe**: Verifique se os comandos estão corretamente formatados e se os parâmetros estão sendo passados corretamente.
-* **Comandos não suportados**: Certifique-se de que os comandos utilizados são suportados pela plataforma e pela versão do Copilot CLI.
-* **Limites de recursos**: Tenha em mente os limites de recursos (como memória, CPU, etc.) ao executar comandos que possam consumir muitos recursos.
-* **Conflitos de nome**: Evite conflitos de nome entre variáveis, funções e comandos.
-* **Segurança**: Sempre verifique se os comandos estão sendo executados de forma segura, especialmente quando se trata de operações que envolvem acesso a dados sensíveis ou execução de comandos com privilégios elevados.
-* **Tratamento de erros**: Implemente mecanismos de tratamento de erros para lidar com erros inesperados ou exceções que possam ocorrer durante a execução dos comandos.
-* **Validação de entrada**: Valide as entradas dos comandos para garantir que elas sejam válidas e consistentes.
-* **Uso de async**: Tenha cuidado ao usar comandos assíncronos, pois eles podem afetar a ordem de execução dos comandos e causar problemas de sincronização.
-* **Uso de variáveis**: Evite o uso de variáveis globais e prefira variáveis locais para evitar conflitos e problemas de escopo.
-* **Documentação**: Mantenha a documentação atualizada e clara para evitar erros de interpretação e uso incorreto das ferramentas.
+* **Comandos não suportados**: Certifique-se de que os comandos utilizados são suportados pelo Copilot CLI e que as versões são compatíveis.
+* **Limites de recursos**: Tenha em mente os limites de recursos (como memória e processamento) ao executar comandos que consomem muitos recursos.
+* **Segurança**: Sempre verifique se os comandos estão sendo executados com as permissões corretas e se os dados sensíveis estão sendo tratados de forma segura.
+* **Conexões de rede**: Verifique se as conexões de rede estão estáveis e se os servidores estão respondendo corretamente.
+* **Timeouts**: Defina timeouts adequados para os comandos para evitar que eles fiquem pendentes indefinidamente.
+* **Tratamento de erros**: Implemente um tratamento de erros robusto para lidar com erros inesperados e fornecer feedback útil ao usuário.
+* **Validação de dados**: Valide os dados de entrada e saída para garantir que eles estejam corretos e consistentes.
+* **Compatibilidade**: Verifique a compatibilidade das ferramentas e comandos com diferentes plataformas e versões.
+
+Ao considerar esses casos de exceção e edge cases, você pode criar skills mais robustas e confiáveis que forneçam uma melhor experiência ao usuário.
