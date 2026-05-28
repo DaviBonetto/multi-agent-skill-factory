@@ -1,127 +1,51 @@
 ---
-name: Segurança Avançada em Sistemas de Informação
-description: Ensina técnicas avançadas de segurança cibernética, incluindo criptografia, autenticação e autorização
+name: Segurança em Sistemas de Informação
+description: Esta habilidade técnica avançada ensina como proteger sistemas de informação contra ameaças e vulnerabilidades
 ---
 
 ## Objetivo
-O objetivo deste guia é fornecer uma visão geral das técnicas avançadas de segurança cibernética, incluindo criptografia, autenticação e autorização, para proteger sistemas de informação contra ameaças cibernéticas.
+O objetivo desta habilidade técnica é capacitar profissionais a proteger sistemas de informação contra ameaças e vulnerabilidades, garantindo a segurança e integridade dos dados. Isso inclui entender as principais ameaças, vulnerabilidades e técnicas de ataque, bem como implementar medidas de segurança eficazes para prevenir e mitigar esses riscos.
 
 ## Pré-requisitos
-Para aproveitar ao máximo este guia, é recomendado que os leitores tenham conhecimento básico em:
-* Segurança cibernética
-* Sistemas de informação
-* Programação em linguagens como Python ou C++
-* Conhecimento de redes de computadores e protocolos de comunicação
+Para aproveitar ao máximo esta habilidade técnica, é recomendado que os participantes tenham:
+- Conhecimento básico em sistemas de informação e redes de computadores
+- Experiência em trabalhar com sistemas operacionais e aplicativos comuns
+- Familiaridade com conceitos de segurança cibernética, como autenticação, autorização e criptografia
 
 ## Passo a Passo Técnico / Exemplos de Código
-### Criptografia
-A criptografia é uma técnica de segurança que envolve a conversão de dados em um formato ilegível para protegê-los contra acessos não autorizados. Existem dois tipos principais de criptografia: simétrica e assimétrica.
-```python
-# Exemplo de criptografia simétrica em Python
-from cryptography.fernet import Fernet
+### Identificação de Ameaças e Vulnerabilidades
+1. **Análise de Risco**: Identifique os ativos de informação críticos e avalie os riscos potenciais.
+2. **Testes de Penetração**: Realize testes de penetração para identificar vulnerabilidades nos sistemas e aplicativos.
+3. **Monitoramento de Logs**: Monitore os logs do sistema para detectar atividades suspeitas.
 
-# Gera uma chave de criptografia
-chave = Fernet.generate_key()
-
-# Cria um objeto Fernet com a chave
-cipher_suite = Fernet(chave)
-
-# Dados a serem criptografados
-dados = b"Segredo"
-
-# Criptografa os dados
-dados_criptografados = cipher_suite.encrypt(dados)
-
-# Descriptografa os dados
-dados_descriptografados = cipher_suite.decrypt(dados_criptografados)
-
-print(dados_descriptografados)
+### Implementação de Medidas de Segurança
+```bash
+# Exemplo de configuração de firewall
+sudo ufw allow ssh
+sudo ufw enable
 ```
-
-### Autenticação
-A autenticação é o processo de verificar a identidade de um usuário ou sistema. Existem vários métodos de autenticação, incluindo senhas, biometria e tokens.
-```python
-# Exemplo de autenticação com senhas em Python
-import hashlib
-
-# Senha do usuário
-senha = "minhasenha"
-
-# Gera um hash da senha
-hash_senha = hashlib.sha256(senha.encode()).hexdigest()
-
-# Verifica se a senha é válida
-def verifica_senha(senha_digitada):
-    hash_senha_digitada = hashlib.sha256(senha_digitada.encode()).hexdigest()
-    return hash_senha_digitada == hash_senha
-
-print(verifica_senha("minhasenha"))  # True
-print(verifica_senha("outrasenha"))  # False
-```
-
-### Autorização
-A autorização é o processo de determinar se um usuário ou sistema tem permissão para realizar uma ação específica. Existem vários métodos de autorização, incluindo ACL (Access Control List) e RBAC (Role-Based Access Control).
-```python
-# Exemplo de autorização com ACL em Python
-class Usuario:
-    def __init__(self, nome, permissao):
-        self.nome = nome
-        self.permissao = permissao
-
-class ACL:
-    def __init__(self):
-        self.usuarios = {}
-
-    def adiciona_usuario(self, usuario):
-        self.usuarios[usuario.nome] = usuario.permissao
-
-    def verifica_permissao(self, nome_usuario, acao):
-        if nome_usuario in self.usuarios:
-            return self.usuarios[nome_usuario] == acao
-        return False
-
-acl = ACL()
-usuario = Usuario("joao", "leitura")
-acl.adiciona_usuario(usuario)
-
-print(acl.verifica_permissao("joao", "leitura"))  # True
-print(acl.verifica_permissao("joao", "escrita"))  # False
-```
+1. **Autenticação e Autorização**: Implemente autenticação de dois fatores e controle de acesso baseado em papéis.
+2. **Criptografia**: Use criptografia para proteger dados em repouso e em trânsito.
+3. **Atualizações e Patches**: Mantenha os sistemas e aplicativos atualizados com os últimos patches de segurança.
 
 ## Validação
-Para validar a segurança do sistema, é importante realizar testes regulares e auditorias de segurança. Além disso, é fundamental manter o sistema atualizado com as últimas patches de segurança e atualizações de software.
+Para validar a eficácia das medidas de segurança implementadas:
+1. **Testes de Segurança**: Realize testes de segurança regulares para identificar vulnerabilidades.
+2. **Análise de Incidentes**: Analise incidentes de segurança para identificar causas raiz e melhorar as medidas de segurança.
+3. **Treinamento e Conscientização**: Forneça treinamento e conscientização sobre segurança cibernética para todos os usuários do sistema.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-É fundamental tratar exceções e edge cases para garantir a segurança e a estabilidade do sistema. Aqui estão alguns exemplos:
-* **Tratamento de exceções**: é importante tratar exceções que possam ocorrer durante a execução do código, como erros de criptografia ou autenticação.
-```python
-try:
-    # Código que pode gerar exceção
-    dados_criptografados = cipher_suite.encrypt(dados)
-except Exception as e:
-    # Tratamento da exceção
-    print(f"Erro ao criptografar dados: {e}")
-```
-* **Edge cases**: é importante considerar edge cases, como entrada de dados inválidos ou situações de borda.
-```python
-# Verifica se a senha é válida
-def verifica_senha(senha_digitada):
-    if not senha_digitada:
-        return False
-    hash_senha_digitada = hashlib.sha256(senha_digitada.encode()).hexdigest()
-    return hash_senha_digitada == hash_senha
-```
-* **Injeção de dependências**: é importante evitar a injeção de dependências para garantir a segurança do sistema.
-```python
-# Evita a injeção de dependências
-def cria_usuario(nome, permissao):
-    return Usuario(nome, permissao)
-```
-* **Validação de dados**: é importante validar os dados de entrada para garantir a segurança do sistema.
-```python
-# Valida os dados de entrada
-def valida_dados(nome, permissao):
-    if not nome or not permissao:
-        return False
-    return True
-```
+### Erros de Configuração
+- **Firewall**: Verifique se o firewall está configurado corretamente para permitir tráfego de entrada e saída.
+- **Autenticação**: Certifique-se de que a autenticação de dois fatores esteja habilitada e configurada corretamente.
+- **Criptografia**: Verifique se a criptografia está sendo usada para proteger dados em repouso e em trânsito.
+
+### Casos de Uso Especiais
+- **Sistemas Legados**: Para sistemas legados, é importante avaliar a viabilidade de atualizar ou substituir o sistema para garantir a segurança.
+- **Dispositivos Móveis**: Para dispositivos móveis, é importante implementar medidas de segurança adicionais, como criptografia e autenticação de dois fatores.
+- **Nuvem**: Para sistemas em nuvem, é importante entender as responsabilidades compartilhadas de segurança entre o provedor de nuvem e o cliente.
+
+### Tratamento de Incidentes
+- **Resposta a Incidentes**: Desenvolva um plano de resposta a incidentes para lidar com violações de segurança.
+- **Comunicação**: Estabeleça canais de comunicação claros para notificar stakeholders em caso de incidentes de segurança.
+- **Aprendizado**: Realize análises pós-incidente para identificar causas raiz e melhorar as medidas de segurança.
