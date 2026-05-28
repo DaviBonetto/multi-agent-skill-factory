@@ -1,120 +1,131 @@
 ---
 name: Desenvolvimento de Aplicativos Web com React
-description: Ensina técnicas de desenvolvimento de aplicativos web com o framework React
+description: Esta habilidade técnica avançada ensina como criar aplicativos web dinâmicos e escaláveis utilizando a biblioteca React
 ---
 
 ## Objetivo
-O objetivo deste guia é fornecer uma visão geral detalhada sobre como desenvolver aplicativos web utilizando o framework React. Este guia é direcionado a desenvolvedores seniores que buscam aprimorar suas habilidades em desenvolvimento de aplicativos web com React.
+O objetivo desta habilidade técnica é capacitar os desenvolvedores a criar aplicativos web dinâmicos e escaláveis utilizando a biblioteca React. Com isso, os desenvolvedores poderão criar interfaces de usuário personalizadas e interativas, melhorando a experiência do usuário final.
 
 ## Pré-requisitos
-Antes de começar, é necessário ter conhecimento básico em:
-* JavaScript (ES6+)
-* HTML5
-* CSS3
-* Conceitos de desenvolvimento web
-* Familiaridade com o uso de bibliotecas e frameworks JavaScript
-
-Além disso, é recomendado ter experiência com ferramentas de desenvolvimento como Node.js, npm ou yarn, e um editor de código de sua preferência.
+Antes de iniciar esta habilidade técnica, é necessário ter conhecimento básico em:
+* JavaScript
+* HTML
+* CSS
+* Conceitos de programação orientada a objetos
+* Experiência com frameworks de front-end
 
 ## Passo a Passo Técnico / Exemplos de Código
 ### Instalação do React
-Para começar a desenvolver com React, você precisará instalar o Create React App, uma ferramenta oficial para criar novos projetos React. Execute o seguinte comando no seu terminal:
+Para começar a desenvolver com React, é necessário instalar o pacote `create-react-app` utilizando o npm ou yarn:
+```bash
+npm install create-react-app
+```
+ou
+```bash
+yarn add create-react-app
+```
+Em seguida, crie um novo projeto React executando o comando:
 ```bash
 npx create-react-app meu-projeto
 ```
-Isso criará um novo projeto React com todos os arquivos e dependências necessárias.
-
 ### Estrutura do Projeto
 A estrutura básica de um projeto React inclui:
-* `public/`: pasta para arquivos estáticos
-* `src/`: pasta para o código fonte do aplicativo
-* `src/App.js`: componente principal do aplicativo
-* `src/index.js`: ponto de entrada do aplicativo
+* `public`: pasta que contém os arquivos estáticos, como o ícone da aplicação e o arquivo `index.html`
+* `src`: pasta que contém o código fonte da aplicação
+* `src/components`: pasta que contém os componentes React
+* `src/App.js`: arquivo que contém o componente principal da aplicação
 
-### Desenvolvimento de Componentes
-Em React, os componentes são a unidade básica de construção de interfaces de usuário. Você pode criar componentes funcionais ou de classe. Aqui está um exemplo de um componente funcional simples:
+### Criando Componentes React
+Um componente React é uma função que retorna um elemento JSX. Por exemplo:
 ```jsx
 import React from 'react';
 
 function Saudacao() {
-  return <h1>Olá, Mundo!</h1>;
+  return <h1>Olá, mundo!</h1>;
 }
 
 export default Saudacao;
 ```
-### Estado e Props
-Para gerenciar o estado de um componente, você pode usar o hook `useState`. Para passar props para um componente, você pode usar a sintaxe de atributos JSX. Aqui está um exemplo:
+### Renderizando Componentes
+Para renderizar um componente, é necessário importá-lo e utilizá-lo em outro componente. Por exemplo:
 ```jsx
-import React, { useState } from 'react';
+import React from 'react';
+import Saudacao from './Saudacao';
 
-function Contador() {
-  const [contador, setContador] = useState(0);
-
+function App() {
   return (
     <div>
-      <p>Contador: {contador}</p>
-      <button onClick={() => setContador(contador + 1)}>Incrementar</button>
+      <Saudacao />
     </div>
   );
 }
 
-export default Contador;
-```
-### Ciclo de Vida
-Os componentes React têm um ciclo de vida que inclui métodos como `componentDidMount`, `componentDidUpdate` e `componentWillUnmount`. Aqui está um exemplo:
-```jsx
-import React, { useState, useEffect } from 'react';
-
-function Relogio() {
-  const [hora, setHora] = useState(new Date().toLocaleTimeString());
-
-  useEffect(() => {
-    const intervalo = setInterval(() => {
-      setHora(new Date().toLocaleTimeString());
-    }, 1000);
-
-    return () => {
-      clearInterval(intervalo);
-    };
-  }, []);
-
-  return <p>Hora: {hora}</p>;
-}
-
-export default Relogio;
+export default App;
 ```
 ## Validação
-Para validar o funcionamento do seu aplicativo, você pode usar ferramentas como o React DevTools, que fornece uma interface para inspecionar e depurar componentes React. Além disso, você pode escrever testes unitários e de integração para garantir que o seu aplicativo esteja funcionando corretamente.
+Para validar a aplicação, é necessário executar o comando:
+```bash
+npm start
+```
+ou
+```bash
+yarn start
+```
+Isso irá iniciar o servidor de desenvolvimento e abrir a aplicação no navegador. Verifique se a aplicação está funcionando corretamente e se os componentes estão sendo renderizados corretamente.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-É fundamental tratar exceções e edge cases para garantir a estabilidade e segurança do seu aplicativo. Aqui estão algumas dicas:
-* **Tratamento de erros**: Use try-catch para capturar erros e exibir mensagens de erro amigáveis para o usuário.
-* **Validação de dados**: Valide os dados de entrada para evitar erros e ataques de injeção de código.
-* **Edge cases**: Considere casos de bordo, como quando o usuário não fornece dados ou quando os dados são inválidos.
-* **Segurança**: Use práticas de segurança, como autenticação e autorização, para proteger o seu aplicativo contra ataques.
-
-Exemplo de tratamento de erros:
+### Tratamento de Erros
+É importante tratar os erros que podem ocorrer durante a execução da aplicação. Por exemplo, se um componente não for encontrado, é possível tratar o erro utilizando o método `componentDidCatch`:
 ```jsx
-import React, { useState } from 'react';
+import React, { Component } from 'react';
 
-function Contador() {
-  const [contador, setContador] = useState(0);
-
-  try {
-    // Código que pode gerar erros
-  } catch (erro) {
-    console.error(erro);
-    // Exibir mensagem de erro amigável para o usuário
+class App extends Component {
+  componentDidCatch(error, info) {
+    console.error('Erro:', error);
+    console.error('Info:', info);
   }
 
-  return (
-    <div>
-      <p>Contador: {contador}</p>
-      <button onClick={() => setContador(contador + 1)}>Incrementar</button>
-    </div>
-  );
+  render() {
+    return (
+      <div>
+        <Saudacao />
+      </div>
+    );
+  }
 }
 
-export default Contador;
+export default App;
 ```
-Lembre-se de que a prática e a experimentação são fundamentais para dominar o desenvolvimento de aplicativos web com React. Não hesite em explorar e aprender mais sobre as funcionalidades e recursos do framework.
+### Edge Cases
+Alguns exemplos de edge cases que devem ser considerados:
+* **Componentes não encontrados**: se um componente não for encontrado, a aplicação deve tratar o erro e exibir uma mensagem de erro ao usuário.
+* **Dados inválidos**: se os dados recebidos forem inválidos, a aplicação deve tratar o erro e exibir uma mensagem de erro ao usuário.
+* **Conexão de rede perdida**: se a conexão de rede for perdida, a aplicação deve tratar o erro e exibir uma mensagem de erro ao usuário.
+* **Tamanho de tela**: a aplicação deve ser responsiva e se adaptar a diferentes tamanhos de tela.
+* **Dispositivos móveis**: a aplicação deve ser compatível com dispositivos móveis e se adaptar a diferentes tipos de dispositivos.
+
+Exemplo de como tratar o edge case de componente não encontrado:
+```jsx
+import React from 'react';
+
+function Saudacao() {
+  if (!Saudacao) {
+    return <div>Componente não encontrado</div>;
+  }
+  return <h1>Olá, mundo!</h1>;
+}
+
+export default Saudacao;
+```
+Exemplo de como tratar o edge case de dados inválidos:
+```jsx
+import React from 'react';
+
+function Saudacao(props) {
+  if (!props.nome) {
+    return <div>Dados inválidos</div>;
+  }
+  return <h1>Olá, {props.nome}!</h1>;
+}
+
+export default Saudacao;
