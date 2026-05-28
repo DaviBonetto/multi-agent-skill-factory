@@ -26,9 +26,14 @@ llama-cli -m model.gguf -t 8 -p "Hello"
 make LLAMA_OPENBLAS=1
 ```
 ### ⚠️ Tratamento de Exceções e Edge Cases
-* **Erro de Compilação**: Certifique-se de que o ambiente de compilação esteja configurado corretamente e que as dependências necessárias estejam instaladas. Em caso de erros de compilação, verifique os logs de compilação para identificar a causa raiz do problema.
-* **Incompatibilidade de Hardware**: Verifique se o hardware utilizado é compatível com a aceleração de hardware escolhida (Metal, CUDA, ROCm, etc.). Em caso de incompatibilidade, escolha uma opção de aceleração de hardware alternativa.
-* **Modelos Grandes**: Ao trabalhar com modelos grandes, é importante considerar a capacidade de memória disponível no hardware. Em caso de falta de memória, considere utilizar técnicas de otimização de memória, como a divisão de tensores.
-* **Erros de Execução**: Em caso de erros de execução, verifique os logs de execução para identificar a causa raiz do problema. Além disso, certifique-se de que as dependências necessárias estejam instaladas e configuradas corretamente.
-* **Segurança**: Ao trabalhar com aceleração de hardware, é importante considerar a segurança do sistema. Certifique-se de que as permissões de acesso sejam configuradas corretamente e que os dados sejam protegidos contra acessos não autorizados.
-* **Otimização de Desempenho**: Para otimizar o desempenho da aceleração de hardware, considere utilizar técnicas de otimização, como a utilização de threads paralelos, a otimização de memória e a utilização de algoritmos eficientes. Além disso, certifique-se de que o hardware esteja configurado corretamente e que as dependências necessárias estejam instaladas.
+#### Erros Comuns
+*   **Erro de Compilação**: Verifique se as dependências necessárias estão instaladas e se o código-fonte está atualizado.
+*   **Erro de Execução**: Verifique se o modelo está carregado corretamente e se os parâmetros de entrada estão válidos.
+#### Edge Cases
+*   **Modelos Grandes**: Para modelos muito grandes, considere usar a opção `--tensor-split` para dividir o modelo em múltiplas GPUs.
+*   **Recursos Limitados**: Se os recursos de hardware forem limitados, considere reduzir o valor de `-ngl` ou `-t` para evitar erros de memória insuficiente.
+*   **Compatibilidade**: Verifique a compatibilidade do modelo com o hardware e o software utilizados.
+#### Segurança
+*   **Validação de Entrada**: Sempre valide as entradas para evitar ataques de injeção de código malicioso.
+*   **Atualização de Dependências**: Mantenha as dependências atualizadas para evitar vulnerabilidades de segurança conhecidas.
+*   **Uso de Senhas Fortes**: Use senhas fortes e únicas para proteger o acesso ao sistema e aos modelos.
