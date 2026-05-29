@@ -1,5 +1,4 @@
-# UV Rules
-## Introdução
+# UV rules
 Use estas regras para scripts Python neste repositório:
 
 1. **Use PEP 723 inline dependencies** em cada script executável:
@@ -9,25 +8,34 @@ Use estas regras para scripts Python neste repositório:
    # dependencies = ["requests"]
    # ///
    ```
+   Certifique-se de que as dependências sejam especificadas corretamente e que o Python tenha a versão mínima necessária.
+
 2. **Execute scripts com `uv run`**, não `python ...`:
    ```bash
    uv run scripts/my_script.py --help
    ```
-3. **Não documente `pip install -r requirements.txt` para scripts do repositório** a menos que haja um motivo de fallback específico. O uso normal não deve exigir instalação manual.
+   Isso garante que as dependências sejam carregadas corretamente e que o script seja executado no ambiente adequado.
+
+3. **Não documente `pip install -r requirements.txt` para scripts do repositório** a menos que haja um motivo específico para isso. O uso normal não deve exigir instalação manual.
+   Se houver uma dependência que não possa ser instalada via `uv run`, certifique-se de documentar o motivo e a solução alternativa.
+
 4. **Não instrua os usuários a `source .venv/bin/activate` para scripts de habilidade.** `uv run` deve ser suficiente.
+   Se o usuário precisar ativar um ambiente virtual, certifique-se de que isso seja feito automaticamente pelo `uv run`.
+
 5. **Se um exemplo de instalação manual for realmente necessário, use `uv pip install ...`**, não `uv add`, a menos que você esteja editando intencionalmente um ambiente gerenciado pelo projeto.
-6. **Para cargas de trabalho UV do Hugging Face Jobs, use `hf jobs uv run ...`**.
+   Isso garante que as dependências sejam instaladas corretamente e que o ambiente seja mantido consistente.
 
-## ⚠️ Tratamento de Exceções e Edge Cases
-### Tratamento de Erros
-- **Verifique as versões do Python**: Certifique-se de que a versão do Python especificada nas dependências inline seja compatível com a versão do Python instalada no ambiente de execução.
-- **Trate exceções de dependência**: Implemente tratamento de exceções para lidar com situações em que as dependências especificadas não podem ser resolvidas ou instaladas.
-- **Manipule erros de execução**: Implemente mecanismos para capturar e relatar erros que ocorrem durante a execução dos scripts, fornecendo informações úteis para depuração.
+6. **Para Hugging Face Jobs UV workloads, use `hf jobs uv run ...`**.
+   Certifique-se de que as dependências e o ambiente sejam configurados corretamente para o workload.
 
-### Edge Cases
-- **Ambientes de Desenvolvimento e Produção**: Considere as diferenças entre ambientes de desenvolvimento e produção, garantindo que as dependências e configurações sejam apropriadas para cada caso.
-- **Compatibilidade entre Versões**: Verifique a compatibilidade entre diferentes versões de dependências e bibliotecas, especialmente quando há atualizações ou mudanças significativas.
-- **Restrições de Segurança**: Implemente restrições de segurança adequadas, como validação de entrada e saída, para prevenir vulnerabilidades nos scripts.
+⚠️ Tratamento de Exceções e Edge Cases
+------------------------------------
 
-## Conclusão
-Ao seguir estas regras e considerar os tratamentos de exceções e edge cases, você pode garantir que seus scripts Python sejam robustos, seguros e fáceis de manter. Lembre-se de sempre testar seus scripts em diferentes ambientes e cenários para garantir a compatibilidade e a confiabilidade.
+* **Tratamento de erros**: Certifique-se de que os scripts lidem com erros de forma adequada, como exceções de dependências não instaladas ou erros de execução.
+* **Edge cases**: Considere casos de bordo, como:
+ + Dependências conflitantes: como lidar com dependências que têm versões incompatíveis.
+ + Ambientes virtuais: como lidar com ambientes virtuais que não estão ativados corretamente.
+ + Permissões de arquivo: como lidar com permissões de arquivo que impedem a execução do script.
+ + Limitações de recursos: como lidar com limitações de recursos, como memória ou CPU, que afetam a execução do script.
+* **Testes**: Certifique-se de que os scripts sejam testados adequadamente para garantir que funcionem corretamente em diferentes ambientes e cenários.
+* **Documentação**: Certifique-se de que a documentação seja clara e concisa, e forneça informações suficientes para que os usuários possam executar os scripts corretamente.
