@@ -10,5 +10,3 @@ HARDWARE_MAP = {
     "7-13B":   "a10g-large (LoRA) or a100-large",
     ">13B":    "a100-large (LoRA required)"
 }
-```
-...
