@@ -1,113 +1,102 @@
 ---
-name: Arquitetura de Sistemas Distribuídos com Apache Kafka
-description: Esta skill ensina como projetar e implementar sistemas distribuídos escaláveis utilizando Apache Kafka e outras tecnologias de código aberto.
+name: Arquitetura de Sistemas Distribuídos
+description: Ensina a projetar sistemas distribuídos escaláveis e confiáveis
 ---
 
 ## Objetivo
-O objetivo desta skill é capacitar os desenvolvedores a projetar e implementar sistemas distribuídos escaláveis utilizando Apache Kafka e outras tecnologias de código aberto, permitindo que eles criem soluções robustas e eficientes para lidar com grandes volumes de dados.
+O objetivo deste guia é fornecer uma abordagem prática e técnica para projetar sistemas distribuídos escaláveis e confiáveis. Serão abordados conceitos fundamentais, padrões de design e boas práticas para garantir que os sistemas distribuídos atendam às necessidades de desempenho, segurança e manutenção.
 
 ## Pré-requisitos
-Antes de iniciar esta skill, é recomendado que os desenvolvedores tenham conhecimento básico em:
-* Programação em linguagens como Java, Python ou Scala
-* Conceitos de sistemas distribuídos e arquitetura de software
-* Ferramentas de gerenciamento de dados como Apache Kafka, ZooKeeper e outros
+Antes de começar, é necessário ter conhecimento em:
+- Programação em linguagens como Java, Python ou C++
+- Conceitos básicos de redes de computadores e protocolos de comunicação
+- Experiência com sistemas operacionais e gerenciamento de processos
+- Noções de banco de dados e armazenamento de dados
 
 ## Passo a Passo Técnico / Exemplos de Código
-### Instalação do Apache Kafka
-Para começar, é necessário instalar o Apache Kafka em sua máquina. Isso pode ser feito utilizando o seguinte comando:
-```bash
-wget https://dl.bintray.com/apache/kafka/3.1.0/kafka_2.13-3.1.0.tgz
-tar -xzf kafka_2.13-3.1.0.tgz
-cd kafka_2.13-3.1.0
+### 1. Definição da Arquitetura
+A arquitetura de sistemas distribuídos pode ser categorizada em três principais tipos:
+- **Arquitetura Cliente-Servidor**: O cliente faz requisições ao servidor, que processa e retorna as respostas.
+- **Arquitetura Peer-to-Peer**: Todos os nós da rede atuam como clientes e servidores, compartilhando recursos e processando requisições.
+- **Arquitetura em Camadas**: A arquitetura é dividida em camadas, cada uma com uma função específica, como apresentação, aplicação, negócios e dados.
+
+### 2. Implementação de Comunicação
+A comunicação entre os componentes do sistema distribuído pode ser implementada usando protocolos como:
+- **HTTP/HTTPS**: Para comunicação web
+- **TCP/IP**: Para comunicação de rede
+- **MQTT**: Para comunicação de dispositivos IoT
+
+Exemplo de código em Python para comunicação usando HTTP:
+```python
+import requests
+
+# Enviar requisição GET
+response = requests.get('https://example.com/api/dados')
+print(response.json())
 ```
-### Configuração do Apache Kafka
-Em seguida, é necessário configurar o Apache Kafka para que ele possa ser utilizado em sua aplicação. Isso pode ser feito editando o arquivo `config/server.properties` e adicionando as seguintes linhas:
-```properties
-listeners=PLAINTEXT://localhost:9092
-advertised.listeners=PLAINTEXT://localhost:9092
+
+### 3. Gerenciamento de Dados
+O gerenciamento de dados em sistemas distribuídos é crucial para garantir a consistência e a integridade dos dados. Isso pode ser alcançado usando:
+- **Banco de Dados Relacional**: Como MySQL ou PostgreSQL
+- **Banco de Dados NoSQL**: Como MongoDB ou Cassandra
+
+Exemplo de código em Python para conexão com um banco de dados MySQL:
+```python
+import mysql.connector
+
+# Conectar ao banco de dados
+cnx = mysql.connector.connect(
+    user='username',
+    password='password',
+    host='127.0.0.1',
+    database='mydatabase'
+)
+
+# Executar query
+cursor = cnx.cursor()
+cursor.execute("SELECT * FROM tabela")
 ```
-### Criação de um Tópico
-Para criar um tópico no Apache Kafka, é necessário utilizar o comando `kafka-topics`:
-```bash
-bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 meu-topico
-```
-### Produção de Mensagens
-Para produzir mensagens no Apache Kafka, é necessário criar um produtor que envie mensagens para o tópico criado anteriormente. Isso pode ser feito utilizando a seguinte classe Java:
-```java
-import org.apache.kafka.clients.producer.KafkaProducer;
-import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.clients.producer.ProducerRecord;
 
-import java.util.Properties;
-
-public class Producer {
-    public static void main(String[] args) {
-        Properties props = new Properties();
-        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
-        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");
-        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");
-
-        KafkaProducer<String, String> producer = new KafkaProducer<>(props);
-        try {
-            producer.send(new ProducerRecord<>("meu-topico", "Olá, mundo!"));
-        } catch (Exception e) {
-            System.err.println("Erro ao produzir mensagem: " + e.getMessage());
-        } finally {
-            producer.close();
-        }
-    }
-}
-```
-### Consumo de Mensagens
-Para consumir mensagens no Apache Kafka, é necessário criar um consumidor que leia as mensagens do tópico criado anteriormente. Isso pode ser feito utilizando a seguinte classe Java:
-```java
-import org.apache.kafka.clients.consumer.KafkaConsumer;
-import org.apache.kafka.clients.consumer.ConsumerConfig;
-import org.apache.kafka.clients.consumer.ConsumerRecord;
-
-import java.util.Collections;
-import java.util.Properties;
-
-public class Consumer {
-    public static void main(String[] args) {
-        Properties props = new Properties();
-        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, "meu-grupo");
-        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
-        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
-
-        KafkaConsumer<String, String> consumer = new KafkaConsumer<>(props);
-        consumer.subscribe(Collections.singleton("meu-topico"));
-        try {
-            while (true) {
-                for (ConsumerRecord<String, String> record : consumer.poll(100)) {
-                    System.out.println(record.value());
-                }
-            }
-        } catch (Exception e) {
-            System.err.println("Erro ao consumir mensagem: " + e.getMessage());
-        } finally {
-            consumer.close();
-        }
-    }
-}
-```
 ## Validação
-Para validar a implementação do Apache Kafka, é necessário verificar se as mensagens estão sendo produzidas e consumidas corretamente. Isso pode ser feito utilizando ferramentas como o `kafka-console-consumer` ou o `kafka-console-producer`. Além disso, é importante monitorar o desempenho do sistema e ajustar a configuração do Apache Kafka conforme necessário.
+A validação do sistema distribuído é essencial para garantir que ele atenda aos requisitos de desempenho, segurança e manutenção. Isso pode ser feito através de:
+- **Testes de Unidade**: Para verificar a funcionalidade individual dos componentes
+- **Testes de Integração**: Para verificar a interação entre os componentes
+- **Testes de Desempenho**: Para verificar o desempenho do sistema sob carga
+
+Exemplo de código em Python para teste de unidade usando a biblioteca `unittest`:
+```python
+import unittest
+
+class TestComponente(unittest.TestCase):
+    def test_metodo(self):
+        # Verificar se o método retorna o resultado esperado
+        self.assertEqual(Componente.metodo(), 'resultado_esperado')
+
+if __name__ == '__main__':
+    unittest.main()
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-### Tratamento de Exceções
-É importante tratar as exceções que podem ocorrer durante a produção e consumo de mensagens. Isso pode ser feito utilizando blocos try-catch para capturar as exceções e lidar com elas de forma apropriada.
+O tratamento de exceções e edge cases é fundamental para garantir a robustez e a confiabilidade do sistema distribuído. Aqui estão alguns exemplos de como lidar com esses casos:
+- **Tratamento de Erros de Conexão**: Implementar retry mechanisms e timeouts para lidar com erros de conexão.
+- **Tratamento de Erros de Dados**: Implementar validação de dados e tratamento de erros para lidar com dados inválidos ou inconsistentes.
+- **Tratamento de Erros de Segurança**: Implementar autenticação e autorização para lidar com acessos não autorizados e ataques de segurança.
 
-### Edge Cases
-Alguns exemplos de edge cases que devem ser considerados incluem:
-* **Mensagens duplicadas**: O que acontece se uma mensagem for produzida mais de uma vez?
-* **Mensagens perdidas**: O que acontece se uma mensagem for perdida durante a transmissão?
-* **Falha do broker**: O que acontece se um dos brokers do Apache Kafka falhar?
-* **Sobrecarga do sistema**: O que acontece se o sistema estiver sobrecarregado e não puder lidar com o volume de mensagens?
+Exemplo de código em Python para tratamento de exceções:
+```python
+try:
+    # Código que pode lançar uma exceção
+    response = requests.get('https://example.com/api/dados')
+    print(response.json())
+except requests.exceptions.RequestException as e:
+    # Tratamento da exceção
+    print(f"Erro ao realizar requisição: {e}")
+```
 
-Para lidar com esses edge cases, é importante implementar mecanismos de detecção e tratamento de erros, como:
-* **Idempotência**: garantir que as mensagens sejam idempotentes, ou seja, que possam ser processadas mais de uma vez sem causar problemas.
-* **Repetição de mensagens**: implementar mecanismos de repetição de mensagens para garantir que as mensagens sejam entregues corretamente.
-* **Monitoramento do sistema**: monitorar o sistema para detectar falhas e sobrecargas, e tomar medidas para corrigi-las.
-* **Recuperação de falhas**: implementar mecanismos de recuperação de falhas para garantir que o sistema possa se recuperar de falhas e continuar funcionando corretamente.
+Exemplo de código em Python para tratamento de edge cases:
+```python
+def dividir(a, b):
+    if b == 0:
+        # Tratamento do edge case de divisão por zero
+        raise ValueError("Não é possível dividir por zero")
+    return a / b
+```
