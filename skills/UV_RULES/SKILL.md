@@ -1,4 +1,6 @@
-# UV rules
+# UV Rules
+=====================================
+
 Use estas regras para scripts Python neste repositório:
 
 1. **Use PEP 723 inline dependencies** em cada script executável:
@@ -8,34 +10,35 @@ Use estas regras para scripts Python neste repositório:
    # dependencies = ["requests"]
    # ///
    ```
-   Certifique-se de que as dependências sejam especificadas corretamente e que o Python tenha a versão mínima necessária.
-
 2. **Execute scripts com `uv run`**, não `python ...`:
    ```bash
    uv run scripts/my_script.py --help
    ```
-   Isso garante que as dependências sejam carregadas corretamente e que o script seja executado no ambiente adequado.
-
-3. **Não documente `pip install -r requirements.txt` para scripts do repositório** a menos que haja um motivo específico para isso. O uso normal não deve exigir instalação manual.
-   Se houver uma dependência que não possa ser instalada via `uv run`, certifique-se de documentar o motivo e a solução alternativa.
-
+3. **Não documente `pip install -r requirements.txt` para scripts do repositório** a menos que haja um motivo específico de fallback. O uso normal não deve exigir instalação manual.
 4. **Não instrua os usuários a `source .venv/bin/activate` para scripts de habilidade.** `uv run` deve ser suficiente.
-   Se o usuário precisar ativar um ambiente virtual, certifique-se de que isso seja feito automaticamente pelo `uv run`.
-
 5. **Se um exemplo de instalação manual for realmente necessário, use `uv pip install ...`**, não `uv add`, a menos que você esteja editando intencionalmente um ambiente gerenciado pelo projeto.
-   Isso garante que as dependências sejam instaladas corretamente e que o ambiente seja mantido consistente.
+6. **Para trabalhos UV do Hugging Face, use `hf jobs uv run ...`**.
 
-6. **Para Hugging Face Jobs UV workloads, use `hf jobs uv run ...`**.
-   Certifique-se de que as dependências e o ambiente sejam configurados corretamente para o workload.
+## ⚠️ Tratamento de Exceções e Edge Cases
+------------------------------------------
 
-⚠️ Tratamento de Exceções e Edge Cases
-------------------------------------
+### Tratamento de Erros
 
-* **Tratamento de erros**: Certifique-se de que os scripts lidem com erros de forma adequada, como exceções de dependências não instaladas ou erros de execução.
-* **Edge cases**: Considere casos de bordo, como:
- + Dependências conflitantes: como lidar com dependências que têm versões incompatíveis.
- + Ambientes virtuais: como lidar com ambientes virtuais que não estão ativados corretamente.
- + Permissões de arquivo: como lidar com permissões de arquivo que impedem a execução do script.
- + Limitações de recursos: como lidar com limitações de recursos, como memória ou CPU, que afetam a execução do script.
-* **Testes**: Certifique-se de que os scripts sejam testados adequadamente para garantir que funcionem corretamente em diferentes ambientes e cenários.
-* **Documentação**: Certifique-se de que a documentação seja clara e concisa, e forneça informações suficientes para que os usuários possam executar os scripts corretamente.
+* Certifique-se de que todos os scripts Python tenham um bloco `try-except` para capturar e lidar com exceções inesperadas.
+* Use `logging` para registrar erros e exceções, em vez de apenas imprimir mensagens de erro.
+* Considere usar uma biblioteca de tratamento de erros, como `errorhandler`, para ajudar a lidar com exceções.
+
+### Edge Cases
+
+* **Versões de Python**: Certifique-se de que os scripts sejam compatíveis com as versões de Python especificadas no arquivo `requires-python`.
+* **Dependências**: Verifique se as dependências especificadas no arquivo `dependencies` estão corretas e atualizadas.
+* **Ambientes**: Certifique-se de que os scripts sejam executados em ambientes compatíveis, como Linux, Windows ou macOS.
+* **Entrada de Usuário**: Verifique se os scripts lidam corretamente com entrada de usuário inválida ou malformada.
+* **Conexões de Rede**: Certifique-se de que os scripts lidem corretamente com falhas de conexão de rede ou timeouts.
+
+### Segurança
+
+* **Validação de Entrada**: Certifique-se de que os scripts validem a entrada de usuário para evitar ataques de injeção de código ou cross-site scripting (XSS).
+* **Autenticação**: Verifique se os scripts exigem autenticação adequada para acessar recursos sensíveis.
+* **Criptografia**: Certifique-se de que os scripts usem criptografia adequada para proteger dados sensíveis.
+* **Atualizações de Segurança**: Mantenha os scripts e dependências atualizados com as últimas atualizações de segurança.
