@@ -1,102 +1,89 @@
 ---
-name: Arquitetura de Sistemas Distribuídos
-description: Ensina a projetar sistemas distribuídos escaláveis e confiáveis
+name: Desenvolvimento de Sistemas Distribuídos
+description: Ensina técnicas de desenvolvimento de sistemas distribuídos, incluindo arquitetura de clusters e gestão de recursos
 ---
 
 ## Objetivo
-O objetivo deste guia é fornecer uma abordagem prática e técnica para projetar sistemas distribuídos escaláveis e confiáveis. Serão abordados conceitos fundamentais, padrões de design e boas práticas para garantir que os sistemas distribuídos atendam às necessidades de desempenho, segurança e manutenção.
+O objetivo deste guia é fornecer uma visão geral detalhada sobre como desenvolver sistemas distribuídos, abordando desde a arquitetura de clusters até a gestão de recursos. Este conhecimento é essencial para profissionais seniores que buscam aprimorar suas habilidades em desenvolvimento de sistemas distribuídos.
 
 ## Pré-requisitos
-Antes de começar, é necessário ter conhecimento em:
+Antes de iniciar, é importante ter conhecimento básico em:
 - Programação em linguagens como Java, Python ou C++
-- Conceitos básicos de redes de computadores e protocolos de comunicação
-- Experiência com sistemas operacionais e gerenciamento de processos
-- Noções de banco de dados e armazenamento de dados
+- Conceitos de redes de computadores
+- Fundamentos de sistemas operacionais
+- Experiência com ambiente de desenvolvimento integrado (IDE) e ferramentas de versionamento como Git
 
 ## Passo a Passo Técnico / Exemplos de Código
-### 1. Definição da Arquitetura
-A arquitetura de sistemas distribuídos pode ser categorizada em três principais tipos:
-- **Arquitetura Cliente-Servidor**: O cliente faz requisições ao servidor, que processa e retorna as respostas.
-- **Arquitetura Peer-to-Peer**: Todos os nós da rede atuam como clientes e servidores, compartilhando recursos e processando requisições.
-- **Arquitetura em Camadas**: A arquitetura é dividida em camadas, cada uma com uma função específica, como apresentação, aplicação, negócios e dados.
+### Arquitetura de Clusters
+A arquitetura de clusters é fundamental em sistemas distribuídos. Um cluster é um grupo de computadores que trabalham juntos para fornecer serviços de alta disponibilidade e escalabilidade. Para implementar um cluster, você precisará:
+1. **Definir o Modelo de Cluster**: Decida se o cluster será homogêneo (todos os nós têm a mesma configuração) ou heterogêneo (nós com configurações diferentes).
+2. **Escolher o Sistema de Gerenciamento de Cluster**: Existem várias opções, como Apache Mesos, Kubernetes, etc.
+3. **Configurar a Comunicação entre Nós**: Utilize protocolos de comunicação como TCP/IP, HTTP, etc.
 
-### 2. Implementação de Comunicação
-A comunicação entre os componentes do sistema distribuído pode ser implementada usando protocolos como:
-- **HTTP/HTTPS**: Para comunicação web
-- **TCP/IP**: Para comunicação de rede
-- **MQTT**: Para comunicação de dispositivos IoT
+### Gestão de Recursos
+A gestão de recursos é crucial para garantir que o sistema distribuído utilize os recursos de forma eficiente. Isso inclui:
+- **Gerenciamento de Memória**: Implemente algoritmos de gerenciamento de memória para evitar vazamentos de memória e garantir a utilização eficiente dos recursos.
+- **Gerenciamento de Processos**: Use técnicas de programação concorrente para gerenciar processos e threads de forma eficaz.
 
-Exemplo de código em Python para comunicação usando HTTP:
+Exemplo de código em Python para um sistema de gerenciamento de recursos básico:
 ```python
-import requests
+import threading
+import time
 
-# Enviar requisição GET
-response = requests.get('https://example.com/api/dados')
-print(response.json())
-```
+class ResourceManager:
+    def __init__(self):
+        self.lock = threading.Lock()
+        self.resources = {}
 
-### 3. Gerenciamento de Dados
-O gerenciamento de dados em sistemas distribuídos é crucial para garantir a consistência e a integridade dos dados. Isso pode ser alcançado usando:
-- **Banco de Dados Relacional**: Como MySQL ou PostgreSQL
-- **Banco de Dados NoSQL**: Como MongoDB ou Cassandra
+    def allocate_resource(self, resource_name):
+        with self.lock:
+            if resource_name in self.resources:
+                return False
+            self.resources[resource_name] = True
+            return True
 
-Exemplo de código em Python para conexão com um banco de dados MySQL:
-```python
-import mysql.connector
+    def deallocate_resource(self, resource_name):
+        with self.lock:
+            if resource_name not in self.resources:
+                return False
+            del self.resources[resource_name]
+            return True
 
-# Conectar ao banco de dados
-cnx = mysql.connector.connect(
-    user='username',
-    password='password',
-    host='127.0.0.1',
-    database='mydatabase'
-)
-
-# Executar query
-cursor = cnx.cursor()
-cursor.execute("SELECT * FROM tabela")
+# Exemplo de uso
+manager = ResourceManager()
+print(manager.allocate_resource("Resource1"))  # True
+print(manager.allocate_resource("Resource1"))  # False
+print(manager.deallocate_resource("Resource1"))  # True
 ```
 
 ## Validação
-A validação do sistema distribuído é essencial para garantir que ele atenda aos requisitos de desempenho, segurança e manutenção. Isso pode ser feito através de:
-- **Testes de Unidade**: Para verificar a funcionalidade individual dos componentes
-- **Testes de Integração**: Para verificar a interação entre os componentes
-- **Testes de Desempenho**: Para verificar o desempenho do sistema sob carga
+Para validar o sistema distribuído, é importante realizar testes abrangentes, incluindo:
+- **Testes de Unidade**: Verifique se cada componente funciona corretamente.
+- **Testes de Integração**: Verifique se os componentes se integram corretamente.
+- **Testes de Desempenho**: Avalie o desempenho do sistema sob diferentes cargas.
+- **Testes de Falha**: Simule falhas para garantir que o sistema se recupere corretamente.
 
-Exemplo de código em Python para teste de unidade usando a biblioteca `unittest`:
-```python
-import unittest
-
-class TestComponente(unittest.TestCase):
-    def test_metodo(self):
-        # Verificar se o método retorna o resultado esperado
-        self.assertEqual(Componente.metodo(), 'resultado_esperado')
-
-if __name__ == '__main__':
-    unittest.main()
+Realizar esses testes ajudará a garantir que o sistema distribuído atenda aos requisitos de desempenho, escalabilidade e confiabilidade.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-O tratamento de exceções e edge cases é fundamental para garantir a robustez e a confiabilidade do sistema distribuído. Aqui estão alguns exemplos de como lidar com esses casos:
-- **Tratamento de Erros de Conexão**: Implementar retry mechanisms e timeouts para lidar com erros de conexão.
-- **Tratamento de Erros de Dados**: Implementar validação de dados e tratamento de erros para lidar com dados inválidos ou inconsistentes.
-- **Tratamento de Erros de Segurança**: Implementar autenticação e autorização para lidar com acessos não autorizados e ataques de segurança.
+É fundamental considerar os seguintes casos de exceção e edge cases:
+- **Falha de Comunicação**: Implemente mecanismos de retry e timeout para lidar com falhas de comunicação entre os nós.
+- **Vazamento de Memória**: Use ferramentas de detecção de vazamento de memória para identificar e corrigir problemas de memória.
+- **Sobrecarga de Recursos**: Implemente mecanismos de escalabilidade para lidar com sobrecarga de recursos.
+- **Segurança**: Implemente mecanismos de autenticação e autorização para garantir a segurança do sistema.
+- **Recuperação de Falhas**: Implemente mecanismos de recuperação de falhas para garantir que o sistema se recupere corretamente em caso de falha.
 
 Exemplo de código em Python para tratamento de exceções:
 ```python
 try:
-    # Código que pode lançar uma exceção
-    response = requests.get('https://example.com/api/dados')
-    print(response.json())
-except requests.exceptions.RequestException as e:
-    # Tratamento da exceção
-    print(f"Erro ao realizar requisição: {e}")
+    # Código que pode gerar exceção
+    manager.allocate_resource("Resource1")
+except Exception as e:
+    # Tratamento de exceção
+    print(f"Erro: {e}")
 ```
 
-Exemplo de código em Python para tratamento de edge cases:
-```python
-def dividir(a, b):
-    if b == 0:
-        # Tratamento do edge case de divisão por zero
-        raise ValueError("Não é possível dividir por zero")
-    return a / b
-```
+Além disso, é importante considerar os seguintes edge cases:
+- **Nós com Configurações Diferentes**: Certifique-se de que o sistema possa lidar com nós com configurações diferentes.
+- **Recursos com Restrições**: Certifique-se de que o sistema possa lidar com recursos com restrições, como recursos com capacidade limitada.
+- **Sistemas com Alta Disponibilidade**: Certifique-se de que o sistema possa lidar com sistemas com alta disponibilidade, como sistemas que requerem redundância e failover.
