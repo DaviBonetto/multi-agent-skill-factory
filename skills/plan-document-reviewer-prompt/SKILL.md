@@ -47,12 +47,15 @@ Task tool (general-purpose):
 
     ⚠️ Tratamento de Exceções e Edge Cases
 
-    - **Planos vazios ou inexistentes:** Verifique se o plano está vazio ou se o arquivo não existe. Se isso ocorrer, retorne um erro indicando que o plano não está disponível para revisão.
-    - **Especificações inconsistentes:** Se a especificação for inconsistente ou contenha informações contraditórias, registre um problema e forneça uma explicação clara sobre como isso afeta a implementação.
-    - **Tarefas mal definidas:** Se as tarefas não tiverem limites claros ou se as etapas não forem ações claras, registre um problema e sugira melhorias para tornar as tarefas mais claras e executáveis.
-    - **Problemas de segurança:** Se o plano contiver informações sensíveis ou possíveis vulnerabilidades de segurança, registre um problema e forneça recomendações para mitigar esses riscos.
-    - **Limitações de recursos:** Se o plano exigir recursos que não estão disponíveis ou que ultrapassam os limites de recursos, registre um problema e sugira alternativas viáveis.
-    - **Dependências não resolvidas:** Se o plano depender de outras tarefas ou recursos que não estão disponíveis, registre um problema e forneça uma explicação clara sobre como isso afeta a implementação.
-    - **Erros de formatação:** Se o plano contiver erros de formatação que possam afetar a legibilidade ou a compreensão do plano, registre um problema e sugira melhorias para corrigir esses erros.
+    *   **Planos incompletos:** Se o plano estiver incompleto, verifique se há uma justificativa clara para a falta de informações. Se não houver, solicite mais detalhes antes de aprovar.
+    *   **Specs desatualizados:** Se a especificação estiver desatualizada, verifique se o plano está alinhado com a versão mais recente da especificação. Se não estiver, solicite atualizações antes de aprovar.
+    *   **Tarefas ambíguas:** Se as tarefas forem ambíguas ou não tiverem claro escopo, solicite esclarecimentos antes de aprovar.
+    *   **Dependências não declaradas:** Verifique se há dependências não declaradas entre tarefas ou componentes. Se houver, solicite que sejam documentadas antes de aprovar.
+    *   **Riscos não identificados:** Verifique se há riscos não identificados no plano. Se houver, solicite que sejam avaliados e mitigados antes de aprovar.
+    *   **Conflitos de interesses:** Verifique se há conflitos de interesses entre as partes envolvidas no plano. Se houver, solicite que sejam resolvidos antes de aprovar.
+    *   **Comunicação ineficaz:** Verifique se a comunicação entre as partes envolvidas no plano é clara e eficaz. Se não for, solicite melhorias antes de aprovar.
+    *   **Mudanças não documentadas:** Verifique se há mudanças no plano que não foram documentadas. Se houver, solicite que sejam documentadas antes de aprovar.
+    *   **Falta de recursos:** Verifique se há falta de recursos (humanos, materiais, financeiros) para executar o plano. Se houver, solicite que sejam alocados antes de aprovar.
+    *   **Prazos não realistas:** Verifique se os prazos estabelecidos no plano são realistas. Se não forem, solicite que sejam ajustados antes de aprovar.
 
 **Reviewer returns:** Status, Issues (if any), Recommendations
