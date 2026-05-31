@@ -1,110 +1,30 @@
 ---
 name: DevOps Avançado
-description: Ensina a implementar práticas de DevOps para melhorar a colaboração e entrega de software
+description: Aprofunda conhecimentos em DevOps, incluindo automação de deploy, monitoramento e escalabilidade
 ---
 
 ## Objetivo
-O objetivo deste guia é fornecer uma visão abrangente sobre como implementar práticas de DevOps avançadas para melhorar a colaboração e entrega de software. Isso inclui a automação de processos, monitoramento contínuo e integração de ferramentas para otimizar o ciclo de vida do desenvolvimento de software.
+O objetivo deste guia é fornecer uma visão aprofundada sobre DevOps Avançado, abordando tópicos como automação de deploy, monitoramento e escalabilidade. Com isso, os desenvolvedores e equipes de operações poderão melhorar a eficiência e a qualidade dos serviços de TI.
 
 ## Pré-requisitos
-Antes de começar, é necessário ter conhecimento básico em:
+Para seguir este guia, é necessário ter conhecimentos básicos em:
 - Desenvolvimento de software
-- Infraestrutura como código (IaC)
-- Ferramentas de automação como Jenkins, GitLab CI/CD, etc.
-- Conhecimento em linguagens de programação como Python, Java, etc.
+- Infraestrutura de TI
+- Ferramentas de automação de deploy (como Jenkins, GitLab CI/CD, etc.)
+- Ferramentas de monitoramento (como Prometheus, Grafana, etc.)
 
 ## Passo a Passo Técnico / Exemplos de Código
-### 1. Configuração do Ambiente
-Para começar, você precisará configurar seu ambiente de desenvolvimento com as ferramentas necessárias. Isso inclui:
-- Instalação do Git
-- Configuração do Jenkins ou outra ferramenta de automação
-- Instalação de um gerenciador de pacotes como o pip (para Python)
-
-```bash
-# Instalação do Git no Ubuntu
-sudo apt-get update
-sudo apt-get install git
-
-# Instalação do Jenkins no Ubuntu
-sudo apt-get update
-sudo apt-get install jenkins
-```
-
-### 2. Implementação de IaC
-A implementação de Infraestrutura como Código (IaC) é crucial para DevOps. Você pode usar ferramentas como o Terraform para criar e gerenciar sua infraestrutura.
-
-```terraform
-# Exemplo de configuração do Terraform para criar uma instância EC2 na AWS
-provider "aws" {
-  region = "us-west-2"
-}
-
-resource "aws_instance" "example" {
-  ami           = "ami-abc123"
-  instance_type = "t2.micro"
-}
-```
-
-### 3. Automatização de Processos
-A automação de processos é essencial para reduzir o tempo de entrega e melhorar a eficiência. Você pode usar ferramentas como o Jenkins para criar pipelines de automação.
-
+### Automatizando o Deploy com Jenkins
+1. Instalar o Jenkins e configurar o ambiente de desenvolvimento.
+2. Criar um novo job no Jenkins e selecionar a opção "Pipeline".
+3. Adicionar o código abaixo para automatizar o deploy:
 ```groovy
-// Exemplo de pipeline no Jenkins
 pipeline {
     agent any
-
     stages {
         stage('Build') {
             steps {
                 sh 'make build'
-            }
-        }
-        stage('Test') {
-            steps {
-                sh 'make test'
-            }
-        }
-        stage('Deploy') {
-            steps {
-                sh 'make deploy'
-            }
-        }
-    }
-}
-```
-
-## Validação
-Para validar a implementação das práticas de DevOps avançadas, você deve:
-- Monitorar os logs e métricas de desempenho
-- Realizar testes de integração e funcionalidade
-- Acompanhar o tempo de entrega e a frequência de releases
-
-Isso ajudará a identificar áreas de melhoria e a ajustar as práticas de DevOps para atender às necessidades específicas da sua equipe e organização.
-
-## ⚠️ Tratamento de Exceções e Edge Cases
-Além da implementação das práticas de DevOps, é fundamental considerar os casos de exceção e edge cases que podem ocorrer durante o processo. Aqui estão algumas considerações importantes:
-
-* **Tratamento de erros**: Implemente mecanismos de tratamento de erros para lidar com falhas inesperadas durante a automação de processos. Isso pode incluir a criação de logs de erros, notificações por e-mail ou mensagens de alerta.
-* **Edge cases**: Considere os casos de edge cases que podem ocorrer durante a implementação de IaC, como a criação de recursos duplicados ou a exclusão acidental de recursos importantes.
-* **Segurança**: Implemente práticas de segurança para proteger sua infraestrutura e dados. Isso pode incluir a criação de políticas de segurança, a implementação de autenticação e autorização, e a criptografia de dados sensíveis.
-* **Monitoramento**: Implemente mecanismos de monitoramento para detectar problemas e anomalias durante a execução dos processos. Isso pode incluir a criação de dashboards de monitoramento, a configuração de alertas e a implementação de logs de auditoria.
-
-Exemplos de código para tratamento de exceções e edge cases:
-
-```groovy
-// Exemplo de tratamento de erros no Jenkins
-pipeline {
-    agent any
-
-    stages {
-        stage('Build') {
-            steps {
-                sh 'make build'
-            }
-        }
-        stage('Test') {
-            steps {
-                sh 'make test'
             }
         }
         stage('Deploy') {
@@ -116,33 +36,48 @@ pipeline {
     post {
         failure {
             mail to: 'equipe@exemplo.com',
-                 subject: 'Falha no pipeline',
-                 body: 'O pipeline falhou. Verifique os logs para mais informações.'
+                 subject: 'Falha no deploy',
+                 body: 'O deploy falhou. Verifique os logs para mais informações.'
         }
     }
 }
 ```
+### Monitoramento com Prometheus e Grafana
+1. Instalar o Prometheus e o Grafana.
+2. Configurar o Prometheus para coletar métricas do sistema.
+3. Criar um dashboard no Grafana para visualizar as métricas:
+```bash
+# Exemplo de configuração do Prometheus
+scrape_configs:
+  - job_name: 'node'
+    scrape_interval: 10s
+    static_configs:
+      - targets: ['localhost:9090']
+```
 
-```terraform
-# Exemplo de implementação de segurança no Terraform
-provider "aws" {
-  region = "us-west-2"
-}
+## Validação
+Para validar a implementação do DevOps Avançado, é necessário:
+1. Verificar se o deploy está sendo automatizado corretamente.
+2. Monitorar as métricas do sistema e verificar se elas estão dentro dos limites esperados.
+3. Realizar testes de escalabilidade e verificar se o sistema está funcionando corretamente.
 
-resource "aws_instance" "example" {
-  ami           = "ami-abc123"
-  instance_type = "t2.micro"
-  vpc_security_group_ids = [aws_security_group.example.id]
-}
+## ⚠️ Tratamento de Exceções e Edge Cases
+### Tratamento de Erros no Deploy
+- Verificar se o código-fonte está atualizado e se as dependências estão corretas.
+- Verificar se o ambiente de desenvolvimento está configurado corretamente.
+- Implementar um mecanismo de retry para lidar com falhas temporárias.
 
-resource "aws_security_group" "example" {
-  name        = "example-sg"
-  description = "Segurança para a instância EC2"
+### Tratamento de Erros no Monitoramento
+- Verificar se o Prometheus está coletando métricas corretamente.
+- Verificar se o Grafana está configurado corretamente para visualizar as métricas.
+- Implementar alertas para notificar a equipe em caso de anomalias nos dados.
 
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-}
+### Segurança
+- Implementar autenticação e autorização para acessar o Jenkins e o Prometheus.
+- Utilizar criptografia para proteger os dados em trânsito e em repouso.
+- Realizar auditorias regulares para garantir a segurança do sistema.
+
+### Edge Cases
+- Lidar com situações de alta carga e escalabilidade.
+- Lidar com falhas de hardware ou software.
+- Lidar com mudanças nos requisitos do sistema ou nos ambientes de desenvolvimento.
