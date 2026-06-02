@@ -1,101 +1,61 @@
 ---
 name: Segurança de Dados em Nuvem
-description: Ensina como proteger dados sensíveis em ambientes de nuvem, utilizando ferramentas como AWS e Azure
+description: Esta skill ensina como proteger dados em ambientes de nuvem, incluindo criptografia, autenticação e autorização, utilizando ferramentas como AWS IAM e Azure Security Center.
 ---
 
 ## Objetivo
-O objetivo deste guia é fornecer uma abordagem prática e técnica para proteger dados sensíveis em ambientes de nuvem, utilizando ferramentas como AWS e Azure. Serão abordados conceitos de segurança de dados, configuração de controles de acesso e uso de ferramentas de segurança em nuvem.
+O objetivo desta skill é capacitar os profissionais a proteger dados em ambientes de nuvem, garantindo a segurança e a conformidade com as normas de segurança de dados. Isso inclui entender como implementar criptografia, autenticação e autorização, utilizando ferramentas como AWS IAM e Azure Security Center.
 
 ## Pré-requisitos
-Para seguir este guia, é necessário ter conhecimento básico em:
-- Computação em nuvem (AWS ou Azure)
-- Segurança de dados
-- Ferramentas de linha de comando (CLI)
-
-Além disso, é recomendado ter experiência em:
-- Desenvolvimento de soluções em nuvem
-- Implementação de controles de segurança
+Para aproveitar ao máximo esta skill, é recomendado que os participantes tenham conhecimento básico em:
+* Conceitos de segurança de dados
+* Nuvem computacional (AWS ou Azure)
+* Ferramentas de segurança de dados (IAM, Security Center)
 
 ## Passo a Passo Técnico / Exemplos de Código
-### Configurando o Ambiente
-1. **Criar uma conta na AWS ou Azure**: Acesse o site da AWS ou Azure e crie uma conta gratuita.
-2. **Instalar a CLI**: Instale a CLI da AWS ou Azure no seu computador.
-3. **Configurar a CLI**: Configure a CLI com as credenciais da sua conta.
+### Implementação de Criptografia
+A criptografia é um dos principais meios de proteger dados em nuvem. Aqui está um exemplo de como implementar criptografia utilizando AWS IAM:
+```bash
+# Instalar o AWS CLI
+pip install awscli
 
-### Configurando Controles de Acesso
-1. **Criar um grupo de segurança**: Crie um grupo de segurança com permissões específicas para acessar os recursos em nuvem.
-2. **Adicionar usuários ao grupo**: Adicione usuários ao grupo de segurança.
-3. **Configurar políticas de segurança**: Configure políticas de segurança para o grupo de segurança.
+# Configurar o AWS CLI
+aws configure
 
-Exemplo de código em Python para criar um grupo de segurança na AWS:
-```python
-import boto3
-
-iam = boto3.client('iam')
-
-try:
-    response = iam.create_group(
-        GroupName='meu_grupo_de_seguranca'
-    )
-    print(response)
-except iam.exceptions.EntityAlreadyExistsException:
-    print("O grupo de segurança já existe.")
-except Exception as e:
-    print(f"Ocorreu um erro: {e}")
+# Criar um bucket no S3 com criptografia
+aws s3 mb s3://meu-bucket --region sa-east-1
+aws s3api put-bucket-encryption --bucket meu-bucket --server-side-encryption-configuration '{"Rules": [{"ApplyServerSideEncryptionByDefault": {"SSEAlgorithm": "AES256"}}]}'
 ```
+### Configuração de Autenticação e Autorização
+A autenticação e autorização são fundamentais para controlar o acesso a dados em nuvem. Aqui está um exemplo de como configurar autenticação e autorização utilizando Azure Security Center:
+```bash
+# Instalar o Azure CLI
+pip install azure-cli
 
-### Utilizando Ferramentas de Segurança em Nuvem
-1. **Habilitar o monitoramento**: Habilite o monitoramento de segurança para detectar atividades suspeitas.
-2. **Configurar alertas**: Configure alertas para notificar quando ocorrerem atividades suspeitas.
-3. **Utilizar ferramentas de análise**: Utilize ferramentas de análise para identificar vulnerabilidades de segurança.
+# Configurar o Azure CLI
+az login
 
-Exemplo de código em Python para habilitar o monitoramento de segurança na AWS:
-```python
-import boto3
+# Criar um grupo de recursos no Azure
+az group create --name meu-grupo --location brazilsouth
 
-cloudwatch = boto3.client('cloudwatch')
+# Criar um usuário no Azure Active Directory
+az ad user create --display-name "Meu Usuário" --password "MinhaSenha" --user-principal-name "meu.usuario@meu-domínio.com"
 
-try:
-    response = cloudwatch.put_metric_alarm(
-        AlarmName='meu_alarme_de_seguranca',
-        ComparisonOperator='GreaterThanThreshold',
-        EvaluationPeriods=1,
-        MetricName='CPUUtilization',
-        Namespace='AWS/EC2',
-        Period=300,
-        Statistic='Average',
-        Threshold=70,
-        ActionsEnabled=True,
-        AlarmActions=['arn:aws:sns:REGION:ACCOUNT_ID:meu_topico_de_notificacao']
-    )
-    print(response)
-except cloudwatch.exceptions.ResourceNotFoundException:
-    print("O recurso não foi encontrado.")
-except Exception as e:
-    print(f"Ocorreu um erro: {e}")
+# Atribuir permissões ao usuário
+az role assignment create --assignee "meu.usuario@meu-domínio.com" --role "Leitor" --resource-group "meu-grupo"
 ```
-
 ## Validação
-Para validar a configuração de segurança, execute os seguintes passos:
-1. **Testar o acesso**: Teste o acesso aos recursos em nuvem com diferentes contas e grupos de segurança.
-2. **Verificar os logs**: Verifique os logs de segurança para detectar atividades suspeitas.
-3. **Executar testes de penetração**: Execute testes de penetração para identificar vulnerabilidades de segurança.
-
-Se todos os passos forem executados corretamente, a segurança dos dados em nuvem estará configurada e validada.
+Para validar a implementação da segurança de dados em nuvem, é importante realizar testes e auditorias regulares. Isso inclui:
+* Verificar a criptografia dos dados
+* Testar a autenticação e autorização
+* Realizar auditorias de segurança para identificar vulnerabilidades
+* Implementar controles de segurança adicionais, como firewalls e sistemas de detecção de intrusos.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-### Exceções
-- **EntityAlreadyExistsException**: Ocorre quando o grupo de segurança ou o alarme de segurança já existe.
-- **ResourceNotFoundException**: Ocorre quando o recurso não é encontrado.
-- **InvalidParameterException**: Ocorre quando um parâmetro é inválido.
-
-### Edge Cases
-- **Conta gratuita**: A conta gratuita da AWS ou Azure pode ter limitações de recursos e funcionalidades.
-- **Permissões insuficientes**: O usuário pode não ter permissões suficientes para criar grupos de segurança ou configurar políticas de segurança.
-- **Conflitos de configuração**: A configuração de segurança pode entrar em conflito com outras configurações de segurança existentes.
-
-Para lidar com esses casos, é importante:
-- Verificar a documentação da AWS ou Azure para entender as limitações e restrições da conta gratuita.
-- Verificar as permissões do usuário e garantir que ele tenha as permissões necessárias para criar grupos de segurança e configurar políticas de segurança.
-- Testar a configuração de segurança em um ambiente de teste antes de implantá-la em produção.
-- Monitorar os logs de segurança e ajustar a configuração de segurança conforme necessário.
+Além dos passos técnicos, é fundamental considerar os seguintes casos de bordo e exceções:
+* **Erro de autenticação**: Em caso de erro de autenticação, é importante verificar se as credenciais estão corretas e se o usuário tem permissão para acessar os recursos.
+* **Exceção de criptografia**: Se ocorrer uma exceção durante a criptografia, é importante verificar se a chave de criptografia está correta e se o algoritmo de criptografia está configurado corretamente.
+* **Limites de recursos**: É importante verificar se os recursos utilizados estão dentro dos limites permitidos, para evitar problemas de desempenho ou segurança.
+* **Compatibilidade de versões**: É fundamental verificar a compatibilidade de versões entre as ferramentas e os serviços utilizados, para evitar problemas de compatibilidade.
+* **Segurança de dados em trânsito**: É importante considerar a segurança de dados em trânsito, utilizando protocolos de segurança como HTTPS e TLS.
+* **Monitoramento e logging**: É fundamental implementar monitoramento e logging para detectar e responder a incidentes de segurança.
