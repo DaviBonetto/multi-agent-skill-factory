@@ -1,77 +1,91 @@
 ---
-name: Automação de Testes de Interface com Cypress
-description: Aborda a automação de testes de interface de usuário utilizando o framework Cypress
+name: Automação de Testes com Cypress
+description: Esta skill ensina como automatizar testes de aplicativos web utilizando Cypress, incluindo testes unitários, de integração e end-to-end.
 ---
 
 ## Objetivo
-O objetivo deste guia é apresentar uma abordagem prática para a automação de testes de interface de usuário utilizando o framework Cypress. Com isso, os desenvolvedores e testadores poderão aprender a criar testes automatizados eficazes para garantir a qualidade e a confiabilidade de suas aplicações web.
+O objetivo desta skill é capacitar os desenvolvedores a criar testes automatizados para aplicativos web utilizando o framework Cypress, abordando testes unitários, de integração e end-to-end. Com isso, os desenvolvedores poderão garantir a qualidade e a confiabilidade dos aplicativos web de forma eficiente.
 
 ## Pré-requisitos
-Antes de começar, é necessário ter:
-- Conhecimento básico em JavaScript e HTML/CSS
-- Node.js instalado no computador
-- Um projeto Cypress configurado (pode ser criado utilizando o comando `npx cypress open`)
+Para iniciar esta skill, é necessário ter conhecimento básico em:
+- Desenvolvimento web (HTML, CSS, JavaScript)
+- Frameworks de testes
+- Ambiente de desenvolvimento (Node.js, npm ou yarn)
 
 ## Passo a Passo Técnico / Exemplos de Código
 ### Instalação do Cypress
-Para instalar o Cypress, execute o seguinte comando no terminal:
+Para começar, é necessário instalar o Cypress no projeto. Isso pode ser feito via npm ou yarn:
 ```bash
 npm install cypress
 ```
-### Configuração do Projeto
-Após a instalação, é necessário configurar o projeto. Isso pode ser feito criando um arquivo `cypress/support/index.js` com o seguinte conteúdo:
-```javascript
-// cypress/support/index.js
-import './commands'
+ou
+```bash
+yarn add cypress
 ```
-E um arquivo `cypress/support/commands.js` com os comandos personalizados:
-```javascript
-// cypress/support/commands.js
-Cypress.Commands.add('login', (username, password) => {
-  cy.get('input[name="username"]').type(username)
-  cy.get('input[name="password"]').type(password)
-  cy.get('button[type="submit"]').click()
-})
+**Atenção:** Certifique-se de que o Node.js e o npm ou yarn estejam instalados e configurados corretamente no seu ambiente de desenvolvimento.
+
+### Configuração do Cypress
+Após a instalação, é necessário configurar o Cypress. Isso pode ser feito editando o arquivo `cypress.json`:
+```json
+{
+  "baseUrl": "https://example.com",
+  "viewportWidth": 1280,
+  "viewportHeight": 720
+}
 ```
+**Observação:** O arquivo `cypress.json` deve ser criado na raiz do projeto. Se o arquivo não existir, o Cypress não funcionará corretamente.
+
 ### Escrita de Testes
-Agora, é possível começar a escrever testes. Por exemplo, para testar o login de um usuário, crie um arquivo `cypress/integration/login.spec.js` com o seguinte conteúdo:
+Agora, é possível começar a escrever testes. Por exemplo, um teste simples para verificar se um elemento está visível:
 ```javascript
-// cypress/integration/login.spec.js
-describe('Login', () => {
-  it('deve realizar login com sucesso', () => {
-    cy.visit('https://example.com/login')
-    cy.login('username', 'password')
-    cy.url().should('eq', 'https://example.com/dashboard')
-  })
-})
+describe('Visibilidade do elemento', () => {
+  it('Deve estar visível', () => {
+    cy.visit('https://example.com');
+    cy.get('#meu-elemento').should('be.visible');
+  });
+});
 ```
+**Dica:** Utilize o comando `cy.get()` para selecionar elementos da página e o método `should()` para verificar as condições de teste.
+
 ## Validação
-Para executar os testes e validar a automação, basta executar o comando `npx cypress run` no terminal. Isso irá executar todos os testes configurados e exibir os resultados no console. Além disso, é possível visualizar os testes em execução utilizando o comando `npx cypress open`, que irá abrir a interface gráfica do Cypress.
+Para validar os testes, basta executar o comando:
+```bash
+npx cypress run
+```
+Isso irá executar todos os testes e exibir os resultados no terminal. Além disso, é possível visualizar os testes em modo interativo com:
+```bash
+npx cypress open
+```
+**Atenção:** Certifique-se de que o Cypress esteja configurado corretamente e que os testes estejam escritos de forma válida.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-É importante considerar os seguintes casos de exceção e edge cases ao criar testes automatizados com Cypress:
-- **Erro de rede**: O Cypress pode falhar ao tentar acessar uma URL se houver um problema de rede. Para lidar com isso, é possível adicionar um retry ao comando `cy.visit()`:
+### Tratamento de Erros
+Para tratar erros durante a execução dos testes, é possível utilizar o bloco `try-catch`:
 ```javascript
-cy.visit('https://example.com/login', { retry: 3 })
+try {
+  cy.get('#meu-elemento').should('be.visible');
+} catch (error) {
+  console.error('Erro ao executar o teste:', error);
+}
 ```
-- **Elementos não encontrados**: Se um elemento não for encontrado na página, o Cypress irá falhar. Para lidar com isso, é possível adicionar um timeout ao comando `cy.get()`:
+**Observação:** O bloco `try-catch` deve ser utilizado com cautela, pois pode mascarar erros importantes.
+
+### Edge Cases
+Alguns exemplos de edge cases que devem ser considerados:
+* **Elementos dinâmicos:** Elementos que são carregados dinamicamente após a página ser carregada.
+* **Elementos ocultos:** Elementos que estão ocultos ou não são visíveis na página.
+* **Elementos com atributos especiais:** Elementos com atributos especiais, como `disabled` ou `readonly`.
+* **Páginas com carregamento lento:** Páginas que demoram muito tempo para carregar.
+
+Para lidar com esses edge cases, é possível utilizar comandos como `cy.wait()` para aguardar a carga de elementos dinâmicos ou `cy.get()` com seletores mais específicos para selecionar elementos ocultos ou com atributos especiais.
+
 ```javascript
-cy.get('input[name="username"]', { timeout: 10000 })
+// Aguardar a carga de um elemento dinâmico
+cy.wait('@meu-requisicao').then(() => {
+  cy.get('#meu-elemento').should('be.visible');
+});
+
+// Selecionar um elemento oculto
+cy.get('#meu-elemento', { includeHidden: true }).should('be.visible');
 ```
-- **Autenticação**: Se a aplicação web exigir autenticação, é necessário lidar com isso nos testes. Uma forma de fazer isso é utilizar o comando `cy.login()` personalizado:
-```javascript
-Cypress.Commands.add('login', (username, password) => {
-  cy.get('input[name="username"]').type(username)
-  cy.get('input[name="password"]').type(password)
-  cy.get('button[type="submit"]').click()
-})
-```
-- **Diferenças de navegador**: Os testes podem se comportar de forma diferente em diferentes navegadores. Para lidar com isso, é possível utilizar o comando `cy.viewport()` para definir o tamanho da janela do navegador:
-```javascript
-cy.viewport(1280, 720)
-```
-- **Diferenças de plataforma**: Os testes podem se comportar de forma diferente em diferentes plataformas (por exemplo, Windows, macOS, Linux). Para lidar com isso, é possível utilizar o comando `cy.exec()` para executar comandos do sistema operacional:
-```javascript
-cy.exec('ls -l')
-```
-Ao considerar esses casos de exceção e edge cases, é possível criar testes automatizados mais robustos e confiáveis com Cypress.
+**Dica:** Utilize o comando `cy.log()` para registrar informações importantes durante a execução dos testes.
