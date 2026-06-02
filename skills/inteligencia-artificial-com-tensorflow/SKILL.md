@@ -1,86 +1,74 @@
 ---
-name: Desenvolvimento de Modelos de Inteligência Artificial com TensorFlow
-description: Ensina como criar e treinar modelos de IA utilizando o framework TensorFlow
+name: Inteligência Artificial com TensorFlow
+description: Desenvolvimento de modelos de machine learning e deep learning utilizando TensorFlow
 ---
-
 ## Objetivo
-O objetivo deste guia é fornecer uma visão geral detalhada sobre como desenvolver modelos de inteligência artificial utilizando o framework TensorFlow. Nele, você aprenderá a criar e treinar modelos de IA para resolver problemas complexos de aprendizado de máquina.
+O objetivo desta skill é ensinar como desenvolver modelos de machine learning e deep learning utilizando TensorFlow, incluindo redes neurais e processamento de linguagem natural. Ao final desta skill, os participantes serão capazes de criar e implementar modelos de inteligência artificial utilizando a biblioteca TensorFlow.
 
 ## Pré-requisitos
-Para seguir este guia, é necessário ter conhecimento prévio em:
-- Programação Python
-- Conceitos básicos de inteligência artificial e aprendizado de máquina
-- Instalação do TensorFlow e de um ambiente de desenvolvimento Python
+Para participar desta skill, é necessário ter conhecimento em:
+* Programação em Python
+* Conceitos básicos de machine learning e deep learning
+* Experiência com bibliotecas de científico de dados como NumPy e Pandas
 
 ## Passo a Passo Técnico / Exemplos de Código
 ### Instalação do TensorFlow
-Para começar, você precisa instalar o TensorFlow. Isso pode ser feito via pip:
-```bash
+Para começar a trabalhar com TensorFlow, é necessário instalar a biblioteca. Isso pode ser feito utilizando o pip:
+```python
 pip install tensorflow
 ```
-### Criando um Modelo Simples
-Aqui está um exemplo simples de como criar um modelo de rede neural com TensorFlow:
+### Criando um Modelo de Redes Neurais
+Aqui está um exemplo de como criar um modelo de redes neurais utilizando TensorFlow:
 ```python
 import tensorflow as tf
 from tensorflow import keras
-from sklearn.model_selection import train_test_split
-from sklearn.datasets import load_iris
-from sklearn.metrics import accuracy_score
 
-# Carregando o conjunto de dados Iris
-iris = load_iris()
-X = iris.data
-y = iris.target
-
-# Dividindo o conjunto de dados em treino e teste
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
-# Criando o modelo
+# Criar o modelo
 modelo = keras.Sequential([
-    keras.layers.Dense(10, activation='relu', input_shape=(4,)),
-    keras.layers.Dense(3, activation='softmax')
+    keras.layers.Dense(64, activation='relu', input_shape=(784,)),
+    keras.layers.Dense(32, activation='relu'),
+    keras.layers.Dense(10, activation='softmax')
 ])
 
-# Compilando o modelo
+# Compilar o modelo
 modelo.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
-
-# Treinando o modelo
-modelo.fit(X_train, y_train, epochs=50, batch_size=10)
-
-# Fazendo previsões
-previsoes = modelo.predict(X_test)
-
-# Convertendo previsões para classes
-previsoes_classes = tf.argmax(previsoes, axis=1)
-
-# Avaliando o modelo
-acuracia = accuracy_score(y_test, previsoes_classes)
-print(f'Acuracia: {acuracia:.2f}')
 ```
-Este exemplo ilustra a criação de um modelo de rede neural simples para classificar flores iris com base em suas características.
-
-## Validação
-Para validar o modelo, é importante avaliar sua performance em um conjunto de dados de teste. Isso pode ser feito calculando métricas como acurácia, precisão, recall e F1-score. Além disso, é crucial realizar técnicas de cross-validation para garantir que o modelo generalize bem para novos dados.
-
-## ⚠️ Tratamento de Exceções e Edge Cases
-Ao trabalhar com modelos de inteligência artificial, é fundamental considerar os seguintes casos de bordo e exceções:
-- **Dados ausentes ou nulos**: Verifique se os dados estão completos e não contêm valores nulos. Isso pode ser feito utilizando funções como `pd.isnull()` ou `np.isnan()`.
-- **Dados inconsistentes**: Verifique se os dados estão consistentes em termos de tipo e formato. Isso pode ser feito utilizando funções como `pd.dtypes` ou `np.dtype()`.
-- **Modelo não converge**: Verifique se o modelo está convergindo durante o treinamento. Isso pode ser feito monitorando a perda e a acurácia do modelo durante o treinamento.
-- **Overfitting ou underfitting**: Verifique se o modelo está sofrendo de overfitting ou underfitting. Isso pode ser feito utilizando técnicas de regularização, como dropout ou L1/L2, ou aumentando o tamanho do conjunto de treinamento.
-- **Erros de tipo**: Verifique se os tipos de dados estão corretos. Isso pode ser feito utilizando funções como `isinstance()` ou `type()`.
-- **Exceções de memória**: Verifique se o modelo está consumindo muita memória. Isso pode ser feito utilizando funções como `sys.getsizeof()` ou `psutil.virtual_memory()`.
-- **Erros de inicialização**: Verifique se o modelo está sendo inicializado corretamente. Isso pode ser feito utilizando funções como `keras.initializers` ou `tf.initializers`.
-
-Exemplo de como tratar exceções:
+### Treinamento do Modelo
+Para treinar o modelo, é necessário fornecer os dados de treinamento e teste:
 ```python
+# Carregar os dados
 try:
-    # Código que pode gerar exceção
-    modelo.fit(X_train, y_train, epochs=50, batch_size=10)
+    (x_treinamento, y_treinamento), (x_teste, y_teste) = keras.datasets.mnist.load_data()
 except Exception as e:
-    # Tratamento da exceção
-    print(f"Erro: {e}")
-    # Ação a ser tomada em caso de erro
-    # ...
+    print(f"Erro ao carregar os dados: {e}")
+    exit(1)
+
+# Normalizar os dados
+x_treinamento = x_treinamento.reshape(-1, 784) / 255.0
+x_teste = x_teste.reshape(-1, 784) / 255.0
+
+# Treinar o modelo
+try:
+    modelo.fit(x_treinamento, y_treinamento, epochs=10, batch_size=128)
+except Exception as e:
+    print(f"Erro ao treinar o modelo: {e}")
+    exit(1)
 ```
-Ao considerar esses casos de bordo e exceções, é possível desenvolver modelos de inteligência artificial mais robustos e confiáveis.
+## Validação
+Para validar o modelo, é necessário testá-lo com os dados de teste:
+```python
+# Testar o modelo
+try:
+    perda, acuracia = modelo.evaluate(x_teste, y_teste)
+    print(f'Acuracia: {acuracia:.2f}')
+except Exception as e:
+    print(f"Erro ao testar o modelo: {e}")
+    exit(1)
+```
+## ⚠️ Tratamento de Exceções e Edge Cases
+Além do tratamento de exceções nos exemplos de código acima, é importante considerar os seguintes edge cases:
+* **Dados de entrada inválidos**: Verificar se os dados de entrada estão no formato correto e dentro do intervalo de valores esperados.
+* **Modelo não converge**: Verificar se o modelo está convergindo durante o treinamento e ajustar os hiperparâmetros se necessário.
+* **Overfitting ou underfitting**: Verificar se o modelo está sofrrendo de overfitting ou underfitting e ajustar os hiperparâmetros ou a arquitetura do modelo se necessário.
+* **Erros de memória**: Verificar se o modelo está consumindo demasiada memória e ajustar os hiperparâmetros ou a arquitetura do modelo se necessário.
+* **Erros de compatibilidade**: Verificar se o modelo é compatível com as versões mais recentes do TensorFlow e ajustar o código se necessário.
