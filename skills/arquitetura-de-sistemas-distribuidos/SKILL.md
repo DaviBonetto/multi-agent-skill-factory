@@ -1,89 +1,107 @@
 ---
-name: Desenvolvimento de Sistemas Distribuídos
-description: Ensina técnicas de desenvolvimento de sistemas distribuídos, incluindo arquitetura de clusters e gestão de recursos
+name: Arquitetura de Sistemas Distribuídos
+description: Ensina como projetar e implementar sistemas distribuídos escaláveis e tolerantes a falhas
 ---
 
 ## Objetivo
-O objetivo deste guia é fornecer uma visão geral detalhada sobre como desenvolver sistemas distribuídos, abordando desde a arquitetura de clusters até a gestão de recursos. Este conhecimento é essencial para profissionais seniores que buscam aprimorar suas habilidades em desenvolvimento de sistemas distribuídos.
+O objetivo deste guia é fornecer uma visão geral de como projetar e implementar sistemas distribuídos escaláveis e tolerantes a falhas. Isso inclui entender os conceitos fundamentais de arquitetura de sistemas distribuídos, como comunicação entre processos, gerenciamento de recursos e tolerância a falhas.
 
 ## Pré-requisitos
-Antes de iniciar, é importante ter conhecimento básico em:
-- Programação em linguagens como Java, Python ou C++
-- Conceitos de redes de computadores
-- Fundamentos de sistemas operacionais
-- Experiência com ambiente de desenvolvimento integrado (IDE) e ferramentas de versionamento como Git
+Para seguir este guia, é necessário ter conhecimento em:
+* Programação em linguagens como Java, Python ou C++
+* Conceitos básicos de redes de computadores e protocolos de comunicação
+* Experiência com sistemas operacionais e gerenciamento de processos
 
 ## Passo a Passo Técnico / Exemplos de Código
-### Arquitetura de Clusters
-A arquitetura de clusters é fundamental em sistemas distribuídos. Um cluster é um grupo de computadores que trabalham juntos para fornecer serviços de alta disponibilidade e escalabilidade. Para implementar um cluster, você precisará:
-1. **Definir o Modelo de Cluster**: Decida se o cluster será homogêneo (todos os nós têm a mesma configuração) ou heterogêneo (nós com configurações diferentes).
-2. **Escolher o Sistema de Gerenciamento de Cluster**: Existem várias opções, como Apache Mesos, Kubernetes, etc.
-3. **Configurar a Comunicação entre Nós**: Utilize protocolos de comunicação como TCP/IP, HTTP, etc.
+### 1. Definição da Arquitetura
+A arquitetura de um sistema distribuído pode ser definida como uma coleção de processos que se comunicam entre si para alcançar um objetivo comum. Existem várias abordagens para projetar uma arquitetura de sistema distribuído, incluindo:
+* Arquitetura cliente-servidor
+* Arquitetura peer-to-peer
+* Arquitetura de microsserviços
 
-### Gestão de Recursos
-A gestão de recursos é crucial para garantir que o sistema distribuído utilize os recursos de forma eficiente. Isso inclui:
-- **Gerenciamento de Memória**: Implemente algoritmos de gerenciamento de memória para evitar vazamentos de memória e garantir a utilização eficiente dos recursos.
-- **Gerenciamento de Processos**: Use técnicas de programação concorrente para gerenciar processos e threads de forma eficaz.
-
-Exemplo de código em Python para um sistema de gerenciamento de recursos básico:
+### 2. Comunicação entre Processos
+A comunicação entre processos é fundamental em sistemas distribuídos. Existem várias formas de comunicação, incluindo:
+* Comunicação síncrona (RPC)
+* Comunicação assíncrona (mensagens)
 ```python
-import threading
-import time
+import socket
 
-class ResourceManager:
-    def __init__(self):
-        self.lock = threading.Lock()
-        self.resources = {}
+# Criação de um socket
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-    def allocate_resource(self, resource_name):
-        with self.lock:
-            if resource_name in self.resources:
-                return False
-            self.resources[resource_name] = True
-            return True
+# Conexão com o servidor
+try:
+    sock.connect(("localhost", 8080))
+except ConnectionRefusedError:
+    print("Erro: Servidor não disponível")
+    exit(1)
 
-    def deallocate_resource(self, resource_name):
-        with self.lock:
-            if resource_name not in self.resources:
-                return False
-            del self.resources[resource_name]
-            return True
+# Envio de uma mensagem
+try:
+    sock.sendall(b"Olá, servidor!")
+except BrokenPipeError:
+    print("Erro: Conexão fechada")
+    exit(1)
 
-# Exemplo de uso
-manager = ResourceManager()
-print(manager.allocate_resource("Resource1"))  # True
-print(manager.allocate_resource("Resource1"))  # False
-print(manager.deallocate_resource("Resource1"))  # True
+# Recebimento da resposta
+try:
+    resposta = sock.recv(1024)
+    print(resposta.decode())
+except TimeoutError:
+    print("Erro: Tempo de espera excedido")
+    exit(1)
+```
+
+### 3. Gerenciamento de Recursos
+O gerenciamento de recursos é crucial em sistemas distribuídos. Isso inclui gerenciamento de memória, processamento e armazenamento.
+```java
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+// Criação de um pool de threads
+ExecutorService executor = Executors.newFixedThreadPool(5);
+
+// Submissão de tarefas para o pool de threads
+for (int i = 0; i < 10; i++) {
+    executor.submit(() -> {
+        try {
+            // Tarefa a ser executada
+            System.out.println("Tarefa executada!");
+        } catch (Exception e) {
+            System.out.println("Erro: " + e.getMessage());
+        }
+    });
+}
 ```
 
 ## Validação
-Para validar o sistema distribuído, é importante realizar testes abrangentes, incluindo:
-- **Testes de Unidade**: Verifique se cada componente funciona corretamente.
-- **Testes de Integração**: Verifique se os componentes se integram corretamente.
-- **Testes de Desempenho**: Avalie o desempenho do sistema sob diferentes cargas.
-- **Testes de Falha**: Simule falhas para garantir que o sistema se recupere corretamente.
-
-Realizar esses testes ajudará a garantir que o sistema distribuído atenda aos requisitos de desempenho, escalabilidade e confiabilidade.
+A validação de um sistema distribuído é fundamental para garantir que ele esteja funcionando corretamente. Isso inclui testes de unidade, integração e sistema.
+* Testes de unidade: verificam se as unidades individuais do sistema estão funcionando corretamente.
+* Testes de integração: verificam se as unidades do sistema estão se comunicando corretamente.
+* Testes de sistema: verificam se o sistema como um todo está funcionando corretamente.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-É fundamental considerar os seguintes casos de exceção e edge cases:
-- **Falha de Comunicação**: Implemente mecanismos de retry e timeout para lidar com falhas de comunicação entre os nós.
-- **Vazamento de Memória**: Use ferramentas de detecção de vazamento de memória para identificar e corrigir problemas de memória.
-- **Sobrecarga de Recursos**: Implemente mecanismos de escalabilidade para lidar com sobrecarga de recursos.
-- **Segurança**: Implemente mecanismos de autenticação e autorização para garantir a segurança do sistema.
-- **Recuperação de Falhas**: Implemente mecanismos de recuperação de falhas para garantir que o sistema se recupere corretamente em caso de falha.
-
-Exemplo de código em Python para tratamento de exceções:
+O tratamento de exceções e edge cases é fundamental em sistemas distribuídos. Isso inclui:
+* Tratamento de erros de conexão
+* Tratamento de erros de timeout
+* Tratamento de erros de recursos insuficientes
+* Tratamento de erros de segurança
 ```python
-try:
-    # Código que pode gerar exceção
-    manager.allocate_resource("Resource1")
-except Exception as e:
-    # Tratamento de exceção
-    print(f"Erro: {e}")
-```
+import logging
 
+# Configuração do logging
+logging.basicConfig(level=logging.ERROR)
+
+try:
+    # Código que pode gerar exceções
+    sock.connect(("localhost", 8080))
+except Exception as e:
+    # Tratamento de exceções
+    logging.error("Erro: " + str(e))
+```
 Além disso, é importante considerar os seguintes edge cases:
-- **Nós com Configurações Diferentes**: Certifique-se de que o sistema possa lidar com nós com configurações diferentes.
-- **Recursos com Restrições**: Certifique-se de que o sistema possa lidar com recursos com restrições, como recursos com capacidade limitada.
-- **Sistemas com Alta Disponibilidade**: Certifique-se de que o sistema possa lidar com sistemas com alta disponibilidade, como sistemas que requerem redundância e failover.
+* Conexão com um servidor que não está disponível
+* Envio de uma mensagem para um servidor que não está disponível
+* Recebimento de uma resposta de um servidor que não está disponível
+* Tratamento de erros de recursos insuficientes, como memória ou processamento
+* Tratamento de erros de segurança, como ataques de força bruta ou injeção de código malicioso.
