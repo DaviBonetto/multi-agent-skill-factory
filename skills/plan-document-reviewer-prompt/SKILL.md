@@ -47,15 +47,11 @@ Task tool (general-purpose):
 
     ⚠️ Tratamento de Exceções e Edge Cases
 
-    *   **Planos incompletos:** Se o plano estiver incompleto, verifique se há uma justificativa clara para a falta de informações. Se não houver, solicite mais detalhes antes de aprovar.
-    *   **Specs desatualizados:** Se a especificação estiver desatualizada, verifique se o plano está alinhado com a versão mais recente da especificação. Se não estiver, solicite atualizações antes de aprovar.
-    *   **Tarefas ambíguas:** Se as tarefas forem ambíguas ou não tiverem claro escopo, solicite esclarecimentos antes de aprovar.
-    *   **Dependências não declaradas:** Verifique se há dependências não declaradas entre tarefas ou componentes. Se houver, solicite que sejam documentadas antes de aprovar.
-    *   **Riscos não identificados:** Verifique se há riscos não identificados no plano. Se houver, solicite que sejam avaliados e mitigados antes de aprovar.
-    *   **Conflitos de interesses:** Verifique se há conflitos de interesses entre as partes envolvidas no plano. Se houver, solicite que sejam resolvidos antes de aprovar.
-    *   **Comunicação ineficaz:** Verifique se a comunicação entre as partes envolvidas no plano é clara e eficaz. Se não for, solicite melhorias antes de aprovar.
-    *   **Mudanças não documentadas:** Verifique se há mudanças no plano que não foram documentadas. Se houver, solicite que sejam documentadas antes de aprovar.
-    *   **Falta de recursos:** Verifique se há falta de recursos (humanos, materiais, financeiros) para executar o plano. Se houver, solicite que sejam alocados antes de aprovar.
-    *   **Prazos não realistas:** Verifique se os prazos estabelecidos no plano são realistas. Se não forem, solicite que sejam ajustados antes de aprovar.
+    *   **Planos incompletos:** Se o plano estiver incompleto ou faltar informações cruciais, o revisor deve solicitar mais detalhes antes de aprovar.
+    *   **Conflitos de especificação:** Se houver conflitos entre a especificação e o plano, o revisor deve identificar e relatar esses conflitos para resolução.
+    *   **Tarefas ambíguas:** Se as tarefas forem ambíguas ou não tiverem limites claros, o revisor deve solicitar esclarecimentos para garantir que as tarefas sejam executáveis.
+    *   **Problemas de segurança:** Se o plano apresentar riscos de segurança, como a falta de autenticação ou autorização adequadas, o revisor deve destacar esses problemas e recomendar soluções.
+    *   **Dependências não declaradas:** Se o plano depende de recursos ou serviços externos não declarados, o revisor deve identificar essas dependências e garantir que sejam documentadas e gerenciadas adequadamente.
+    *   **Cenários de erro:** O revisor deve considerar cenários de erro e garantir que o plano inclua mecanismos para lidar com falhas e exceções de forma robusta.
 
 **Reviewer returns:** Status, Issues (if any), Recommendations
