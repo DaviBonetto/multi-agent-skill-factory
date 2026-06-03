@@ -1,140 +1,152 @@
 ---
-name: huggingface-datasets
-description: Use this skill for Hugging Face Dataset Viewer API workflows that fetch subset/split metadata, paginate rows, search text, apply filters, download parquet URLs, and read size or statistics.
+name: verification-before-completion
+description: Use when about to claim work is complete, fixed, or passing, before committing or creating PRs - requires running verification commands and confirming output before making any success claims; evidence before assertions always
 ---
 
-# Hugging Face Dataset Viewer
+# Verification Before Completion
 
-Use this skill to execute read-only Dataset Viewer API calls for dataset exploration and extraction.
+## Overview
 
-## Core workflow
+Claiming work is complete without verification is dishonesty, not efficiency.
 
-1. Optionally validate dataset availability with `/is-valid`.
-2. Resolve `config` + `split` with `/splits`.
-3. Preview with `/first-rows`.
-4. Paginate content with `/rows` using `offset` and `length` (max 100).
-5. Use `/search` for text matching and `/filter` for row predicates.
-6. Retrieve parquet links via `/parquet` and totals/metadata via `/size` and `/statistics`.
+**Core principle:** Evidence before claims, always.
 
-## Defaults
+**Violating the letter of this rule is violating the spirit of this rule.**
 
-- Base URL: `https://datasets-server.huggingface.co`
-- Default API method: `GET`
-- Query params should be URL-encoded.
-- `offset` is 0-based.
-- `length` max is usually `100` for row-like endpoints.
-- Gated/private datasets require `Authorization: Bearer <HF_TOKEN>`.
+## The Iron Law
 
-## Dataset Viewer
-
-- `Validate dataset`: `/is-valid?dataset=<namespace/repo>`
-- `List subsets and splits`: `/splits?dataset=<namespace/repo>`
-- `Preview first rows`: `/first-rows?dataset=<namespace/repo>&config=<config>&split=<split>`
-- `Paginate rows`: `/rows?dataset=<namespace/repo>&config=<config>&split=<split>&offset=<int>&length=<int>`
-- `Search text`: `/search?dataset=<namespace/repo>&config=<config>&split=<split>&query=<text>&offset=<int>&length=<int>`
-- `Filter with predicates`: `/filter?dataset=<namespace/repo>&config=<config>&split=<split>&where=<predicate>&orderby=<sort>&offset=<int>&length=<int>`
-- `List parquet shards`: `/parquet?dataset=<namespace/repo>`
-- `Get size totals`: `/size?dataset=<namespace/repo>`
-- `Get column statistics`: `/statistics?dataset=<namespace/repo>&config=<config>&split=<split>`
-- `Get Croissant metadata (if available)`: `/croissant?dataset=<namespace/repo>`
-
-Pagination pattern:
-
-```bash
-curl "https://datasets-server.huggingface.co/rows?dataset=stanfordnlp/imdb&config=plain_text&split=train&offset=0&length=100"
-curl "https://datasets-server.huggingface.co/rows?dataset=stanfordnlp/imdb&config=plain_text&split=train&offset=100&length=100"
+```
+NO COMPLETION CLAIMS WITHOUT FRESH VERIFICATION EVIDENCE
 ```
 
-When pagination is partial, use response fields such as `num_rows_total`, `num_rows_per_page`, and `partial` to drive continuation logic.
+If you haven't run the verification command in this message, you cannot claim it passes.
 
-Search/filter notes:
+## The Gate Function
 
-- `/search` matches string columns (full-text style behavior is internal to the API).
-- `/filter` requires predicate syntax in `where` and optional sort in `orderby`.
-- Keep filtering and searches read-only and side-effect free.
+```
+BEFORE claiming any status or expressing satisfaction:
 
-For CLI-based parquet URL discovery or SQL, use the `hf-cli` skill with `hf datasets parquet` and `hf datasets sql`.
+1. IDENTIFY: What command proves this claim?
+2. RUN: Execute the FULL command (fresh, complete)
+3. READ: Full output, check exit code, count failures
+4. VERIFY: Does output confirm the claim?
+   - If NO: State actual status with evidence
+   - If YES: State claim WITH evidence
+5. ONLY THEN: Make the claim
 
-## Creating and Uploading Datasets
-
-Use one of these flows depending on dependency constraints.
-
-Zero local dependencies (Hub UI):
-
-- Create dataset repo in browser: `https://huggingface.co/new-dataset`
-- Upload parquet files in the repo "Files and versions" page.
-- Verify shards appear in Dataset Viewer:
-
-```bash
-curl -s "https://datasets-server.huggingface.co/parquet?dataset=<namespace>/<repo>"
+Skip any step = lying, not verifying
 ```
 
-Low dependency CLI flow (`npx @huggingface/hub` / `hfjs`):
+## Common Failures
 
-- Set auth token:
+| Claim | Requires | Not Sufficient |
+|-------|----------|----------------|
+| Tests pass | Test command output: 0 failures | Previous run, "should pass" |
+| Linter clean | Linter output: 0 errors | Partial check, extrapolation |
+| Build succeeds | Build command: exit 0 | Linter passing, logs look good |
+| Bug fixed | Test original symptom: passes | Code changed, assumed fixed |
+| Regression test works | Red-green cycle verified | Test passes once |
+| Agent completed | VCS diff shows changes | Agent reports "success" |
+| Requirements met | Line-by-line checklist | Tests passing |
 
-```bash
-export HF_TOKEN=<your_hf_token>
+## Red Flags - STOP
+
+- Using "should", "probably", "seems to"
+- Expressing satisfaction before verification ("Great!", "Perfect!", "Done!", etc.)
+- About to commit/push/PR without verification
+- Trusting agent success reports
+- Relying on partial verification
+- Thinking "just this once"
+- Tired and wanting work over
+- **ANY wording implying success without having run verification**
+
+## Rationalization Prevention
+
+| Excuse | Reality |
+|--------|---------|
+| "Should work now" | RUN the verification |
+| "I'm confident" | Confidence ≠ evidence |
+| "Just this once" | No exceptions |
+| "Linter passed" | Linter ≠ compiler |
+| "Agent said success" | Verify independently |
+| "I'm tired" | Exhaustion ≠ excuse |
+| "Partial check is enough" | Partial proves nothing |
+| "Different words so rule doesn't apply" | Spirit over letter |
+
+## Key Patterns
+
+**Tests:**
+```
+ [Run test command] [See: 34/34 pass] "All tests pass"
+ "Should pass now" / "Looks correct"
 ```
 
-- Upload parquet folder to a dataset repo (auto-creates repo if missing):
-
-```bash
-npx -y @huggingface/hub upload datasets/<namespace>/<repo> ./local/parquet-folder data
+**Regression tests (TDD Red-Green):**
+```
+ Write → Run (pass) → Revert fix → Run (MUST FAIL) → Restore → Run (pass)
+ "I've written a regression test" (without red-green verification)
 ```
 
-- Upload as private repo on creation:
-
-```bash
-npx -y @huggingface/hub upload datasets/<namespace>/<repo> ./local/parquet-folder data --private
+**Build:**
+```
+ [Run build] [See: exit 0] "Build passes"
+ "Linter passed" (linter doesn't check compilation)
 ```
 
-After upload, call `/parquet` to discover `<config>/<split>/<shard>` values for querying with `@~parquet`.
-
-## Agent Traces
-
-The Hub supports raw agent session traces from Claude Code, Codex, and Pi Agent. Upload them to Hugging Face Datasets as original JSONL files and the Hub can auto-detect the trace format, tag the dataset as `Traces`, and enable the trace viewer for browsing sessions, turns, tool calls, and model responses. Common local session directories:
-
-- Claude Code: `~/.claude/projects`
-- Codex: `~/.codex/sessions`
-- Pi: `~/.pi/agent/sessions`
-
-Default to private dataset repos because traces can contain prompts, file paths, tool outputs, secrets, or PII. Preserve the raw `.jsonl` files and nest them by project/cwd instead of uploading every session at the dataset root.
-
-```bash
-hf repos create <namespace>/<repo> --type dataset --private --exist-ok
-hf upload <namespace>/<repo> ~/.codex/sessions codex/<project-or-cwd> --type dataset
+**Requirements:**
 ```
+ Re-read plan → Create checklist → Verify each → Report gaps or completion
+ "Tests pass, phase complete"
+```
+
+**Agent delegation:**
+```
+ Agent reports success → Check VCS diff → Verify changes → Report actual state
+ Trust agent report
+```
+
+## Why This Matters
+
+From 24 failure memories:
+- your human partner said "I don't believe you" - trust broken
+- Undefined functions shipped - would crash
+- Missing requirements shipped - incomplete features
+- Time wasted on false completion → redirect → rework
+- Violates: "Honesty is a core value. If you lie, you'll be replaced."
+
+## When To Apply
+
+**ALWAYS before:**
+- ANY variation of success/completion claims
+- ANY expression of satisfaction
+- ANY positive statement about work state
+- Committing, PR creation, task completion
+- Moving to next task
+- Delegating to agents
+
+**Rule applies to:**
+- Exact phrases
+- Paraphrases and synonyms
+- Implications of success
+- ANY communication suggesting completion/correctness
+
+## The Bottom Line
+
+**No shortcuts for verification.**
+
+Run the command. Read the output. THEN claim the result.
+
+This is non-negotiable.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
 
-### Erros de Autenticação
+### Exceções Técnicas
 
-*   Verifique se o token de autenticação está correto e não expirou.
-*   Certifique-se de que o token de autenticação está sendo passado corretamente na requisição.
-
-### Erros de Conexão
-
-*   Verifique se a conexão com a API está funcionando corretamente.
-*   Certifique-se de que o servidor da API está disponível e respondendo às requisições.
-
-### Erros de Paginação
-
-*   Verifique se os parâmetros de paginação (`offset` e `length`) estão sendo passados corretamente.
-*   Certifique-se de que o tamanho da página (`length`) não excede o limite máximo permitido (100).
-
-### Erros de Filtro e Busca
-
-*   Verifique se os parâmetros de filtro e busca estão sendo passados corretamente.
-*   Certifique-se de que a sintaxe de filtro e busca está correta.
-
-### Erros de Upload de Dados
-
-*   Verifique se os dados estão sendo enviados corretamente.
-*   Certifique-se de que o formato dos dados está correto e compatível com a API.
+- **Falha de execução do comando de verificação:** Se o comando de verificação falhar devido a problemas técnicos (como falta de recursos, timeout, etc.), é necessário identificar a causa raiz e solucioná-la antes de prosseguir.
+- **Saída de verificação ambígua:** Se a saída do comando de verificação for ambígua ou difícil de interpretar, é necessário rever a configuração do comando ou buscar ajuda de especialistas para garantir a precisão da interpretação.
 
 ### Edge Cases
 
-*   Verifique se o conjunto de dados está vazio ou não existe.
-*   Certifique-se de que o conjunto de dados está sendo processado corretamente em caso de grandes volumes de dados.
-*   Verifique se a API está lidando corretamente com caracteres especiais e acentos nos nomes dos conjuntos de dados e arquivos.
+- **Cenários de bordo:** Em casos onde o comando de verificação não é aplicável (por exemplo, em ambientes de desenvolvimento específicos ou em situações de emergência), é necessário estabelecer procedimentos alternativos de verificação que garantam a integridade do processo.
+- **Limitações de recursos:** Em situações onde os recursos (como tempo, memória, etc.) são limitados, é necessário priorizar a verificação e otimizar o processo para garantir que os principais aspectos sejam verificados dentro das limitações existentes.
+- **Comunicação Cruzada:** Em equipes distribuídas ou em projetos que envolvem múltiplos stakeholders, é crucial estabelecer canais de comunicação claros e procedimentos de verificação que sejam compreendidos e seguidos por todos, minimizando mal-entendidos e garantindo a consistência dos resultados.
