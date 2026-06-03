@@ -1,102 +1,105 @@
----
-name: Implementação de DevOps com Kubernetes
-description: Automatiza a implementação de pipelines de DevOps utilizando Kubernetes, Docker e ferramentas de orquestração de contêineres
----
-
+# Implantação de Aplicativos com Kubernetes
 ## Objetivo
-O objetivo deste guia é fornecer uma abordagem prática para a implementação de DevOps com Kubernetes, utilizando Docker e ferramentas de orquestração de contêineres. Isso permitirá que os desenvolvedores e equipes de operações automatizem a entrega de software de forma eficiente e escalável.
-
+O objetivo deste guia é fornecer uma visão geral prática de como implantar e gerenciar aplicativos em ambientes de produção utilizando Kubernetes e Docker. Ao final, você estará capacitado a implantar e gerenciar aplicativos de forma eficiente, escalável e segura.
 ## Pré-requisitos
-Antes de iniciar a implementação, é necessário ter conhecimento em:
-- Docker e contêineres
-- Kubernetes e orquestração de contêineres
-- Ferramentas de versionamento de código, como Git
-- Conhecimento básico em linha de comando e scripts
-
-Além disso, é necessário ter:
-- Um cluster Kubernetes configurado e funcionando
-- Docker instalado e configurado
-- Ferramentas de desenvolvimento, como Git e um editor de código
-
+Para seguir este guia, você deve ter:
+- Conhecimento básico em Docker e contêineres
+- Experiência em ambientes de desenvolvimento e produção
+- Familiaridade com comandos de terminal ou prompt de comando
+- Acesso a um cluster Kubernetes (pode ser local ou remoto)
 ## Passo a Passo Técnico / Exemplos de Código
-### 1. Configuração do Cluster Kubernetes
-Primeiramente, é necessário configurar o cluster Kubernetes. Isso pode ser feito utilizando a ferramenta `kubectl`.
+### 1. Preparação do Ambiente
+Primeiramente, certifique-se de que o Docker e o Kubernetes estejam instalados e configurados corretamente em seu ambiente. Você pode verificar a instalação do Docker executando:
 ```bash
-kubectl cluster-info
+docker --version
 ```
-### 2. Criação de um Deployment
-Em seguida, crie um arquivo `deployment.yaml` com o seguinte conteúdo:
+E para o Kubernetes, use:
+```bash
+kubectl version --client
+```
+### 2. Criando um Aplicativo Simples
+Vamos criar um aplicativo simples em Python que retornará uma mensagem de boas-vindas. Crie um arquivo chamado `app.py` com o seguinte conteúdo:
+```python
+from http.server import BaseHTTPRequestHandler, HTTPServer
+
+class RequestHandler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.send_header('Content-type', 'text/html')
+        self.end_headers()
+        self.wfile.write(b"Boas-vindas ao meu aplicativo!")
+
+def run(server_class=HTTPServer, handler_class=RequestHandler):
+    server_address = ('', 8000)
+    httpd = server_class(server_address, handler_class)
+    print("Iniciando servidor...")
+    httpd.serve_forever()
+
+if __name__ == "__main__":
+    run()
+```
+### 3. Containerizando o Aplicativo
+Agora, vamos criar um arquivo `Dockerfile` para containerizar nosso aplicativo:
+```dockerfile
+FROM python:3.9-slim
+
+WORKDIR /app
+
+COPY app.py .
+
+CMD ["python", "app.py"]
+```
+Build o container com:
+```bash
+docker build -t meu-aplicativo .
+```
+### 4. Implantando no Kubernetes
+Crie um arquivo `deployment.yaml` com a seguinte configuração:
 ```yml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: meu-deployment
+  name: meu-aplicativo
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: meu-app
+      app: meu-aplicativo
   template:
     metadata:
       labels:
-        app: meu-app
+        app: meu-aplicativo
     spec:
       containers:
-      - name: meu-container
-        image: meu-imagem
+      - name: meu-aplicativo
+        image: meu-aplicativo:latest
         ports:
-        - containerPort: 80
+        - containerPort: 8000
 ```
-### 3. Aplicação do Deployment
-Aplique o deployment utilizando o comando:
+Aplique a configuração com:
 ```bash
 kubectl apply -f deployment.yaml
 ```
-### 4. Criação de um Service
-Crie um arquivo `service.yaml` com o seguinte conteúdo:
-```yml
-apiVersion: v1
-kind: Service
-metadata:
-  name: meu-service
-spec:
-  selector:
-    app: meu-app
-  ports:
-  - name: http
-    port: 80
-    targetPort: 80
-  type: LoadBalancer
-```
-### 5. Aplicação do Service
-Aplique o service utilizando o comando:
-```bash
-kubectl apply -f service.yaml
-```
-
 ## Validação
-Para validar a implementação, é possível utilizar o comando `kubectl get` para verificar se os pods e services estão funcionando corretamente.
+Para validar a implantação, você pode verificar o status do deployment com:
 ```bash
-kubectl get pods
-kubectl get services
+kubectl get deployments
 ```
-Além disso, é possível acessar o aplicativo utilizando o endereço IP do service.
+E para acessar o aplicativo, use:
 ```bash
-kubectl get svc meu-service -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'
+kubectl port-forward deployment/meu-aplicativo 8000:8000 &
 ```
-
+Acesse `http://localhost:8000` em seu navegador para ver a mensagem de boas-vindas.
 ## ⚠️ Tratamento de Exceções e Edge Cases
 ### Erros Comuns
-- **Erro de conexão com o cluster Kubernetes**: Verifique se o cluster está configurado corretamente e se o `kubectl` está conectado ao cluster.
-- **Erro de criação de deployment**: Verifique se o arquivo `deployment.yaml` está correto e se o `kubectl` tem permissão para criar deployments.
-- **Erro de criação de service**: Verifique se o arquivo `service.yaml` está correto e se o `kubectl` tem permissão para criar services.
-
+- **Erro de conexão com o cluster Kubernetes**: Verifique se o seu arquivo de configuração do Kubernetes (`~/.kube/config`) está correto e se você tem permissão para acessar o cluster.
+- **Erro ao buildar a imagem Docker**: Verifique se o seu arquivo `Dockerfile` está correto e se você tem as dependências necessárias instaladas.
+- **Erro ao aplicar a configuração do deployment**: Verifique se o seu arquivo `deployment.yaml` está correto e se você tem permissão para aplicar configurações no cluster.
 ### Edge Cases
-- **Cluster Kubernetes com múltiplos namespaces**: Certifique-se de que o `kubectl` esteja configurado para usar o namespace correto.
-- **Imagens de contêineres com permissões restritas**: Certifique-se de que as permissões de execução sejam configuradas corretamente para as imagens de contêineres.
-- **Serviços com múltiplos ports**: Certifique-se de que os ports sejam configurados corretamente no arquivo `service.yaml`.
-
-### Tratamento de Erros
-- **Utilize o comando `kubectl describe` para obter mais informações sobre os erros**: `kubectl describe pod <nome-do-pod>` ou `kubectl describe svc <nome-do-servico>`.
-- **Utilize o comando `kubectl logs` para visualizar os logs dos contêineres**: `kubectl logs <nome-do-pod>`.
-- **Utilize o comando `kubectl exec` para executar comandos dentro dos contêineres**: `kubectl exec <nome-do-pod> -- <comando>`.
+- **Implantação em um cluster com recursos limitados**: Certifique-se de que o seu deployment esteja configurado para usar recursos adequados para o seu cluster.
+- **Implantação em um ambiente de produção**: Certifique-se de que o seu deployment esteja configurado para usar um registro de imagens seguro e que você tenha um plano de backup e recuperação em caso de falhas.
+- **Segurança**: Certifique-se de que o seu deployment esteja configurado para usar segurança adequada, como autenticação e autorização, e que você tenha um plano para lidar com vulnerabilidades de segurança.
+### Melhores Práticas
+- **Use um registro de imagens seguro**: Use um registro de imagens como o Docker Hub ou o Google Container Registry para armazenar suas imagens.
+- **Use um plano de backup e recuperação**: Use um plano de backup e recuperação para garantir que você possa recuperar seus dados em caso de falhas.
+- **Use segurança adequada**: Use segurança adequada, como autenticação e autorização, para proteger seu deployment.
