@@ -17,19 +17,17 @@ Essas habilidades são:
 Os caminhos referenciados dentro das pastas de habilidades são relativos àquela habilidade. Por exemplo, o script `scripts/example.py` do hf-datasets seria referenciado como `hf-datasets/scripts/example.py`.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-### Erros de Arquivo
-- **Arquivo "SKILL.md" não encontrado:** Verifique se o arquivo "SKILL.md" existe no diretório especificado e se o caminho está correto.
-- **Conteúdo inválido no arquivo "SKILL.md":** Certifique-se de que o arquivo "SKILL.md" contenha informações válidas e esteja formatado corretamente.
+### Tratamento de Erros
+- **Erro de Arquivo Não Encontrado:** Se o arquivo "SKILL.md" não for encontrado no diretório especificado, uma mensagem de erro será exibida informando que o arquivo não foi encontrado.
+- **Erro de Permissão:** Se o usuário não tiver permissão para acessar o diretório ou o arquivo "SKILL.md", uma mensagem de erro será exibida informando que o acesso foi negado.
+- **Erro de Formatação:** Se o arquivo "SKILL.md" estiver com formatação inválida, uma mensagem de erro será exibida informando que o arquivo está com formatação inválida.
 
-### Erros de Caminho
-- **Caminho relativo incorreto:** Verifique se os caminhos relativos dentro das pastas de habilidades estão corretos e se correspondem ao local dos arquivos ou recursos.
-- **Caminho absoluto incorreto:** Certifique-se de que os caminhos absolutos sejam válidos e correspondam ao sistema de arquivos.
-
-### Tratamento de Exceções
-- **Try-Except:** Utilize blocos try-except para capturar e tratar exceções que possam ocorrer durante a execução das habilidades, como erros de arquivo, erros de caminho, etc.
-- **Logging:** Implemente logging para registrar erros e exceções, facilitando a depuração e a resolução de problemas.
+### Edge Cases
+- **Habilidades Duplicadas:** Se houver habilidades duplicadas, apenas a primeira ocorrência será exibida.
+- **Caminhos Relativos:** Se os caminhos relativos forem utilizados, eles serão resolvidos com base no diretório atual.
+- **Descrições Vazias:** Se as descrições das habilidades estiverem vazias, elas serão exibidas como "Descrição não disponível".
 
 ### Segurança
-- **Validação de Entrada:** Valide todas as entradas de usuário para evitar ataques de injeção de código ou outros tipos de ataques maliciosos.
-- **Autenticação e Autorização:** Implemente mecanismos de autenticação e autorização para garantir que apenas usuários autorizados possam acessar e executar as habilidades.
-- **Atualizações e Patchs:** Mantenha as dependências e bibliotecas atualizadas com os últimos patchs de segurança para evitar vulnerabilidades conhecidas.
+- **Validação de Entradas:** Todas as entradas de usuário serão validadas para evitar ataques de injeção de código.
+- **Uso de Bibliotecas Seguras:** Somente bibliotecas seguras e atualizadas serão utilizadas para evitar vulnerabilidades de segurança.
+- **Proteção de Dados:** Todos os dados serão protegidos com criptografia e armazenados de forma segura para evitar acessos não autorizados.
