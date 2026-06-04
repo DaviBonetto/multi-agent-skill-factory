@@ -1,83 +1,49 @@
 ---
 name: DevOps Avançado
-description: Aprofunda conhecimentos em DevOps, incluindo automação de deploy, monitoramento e escalabilidade
+description: Aprofunda conhecimentos em DevOps, incluindo automação de deploy e monitoramento
 ---
 
 ## Objetivo
-O objetivo deste guia é fornecer uma visão aprofundada sobre DevOps Avançado, abordando tópicos como automação de deploy, monitoramento e escalabilidade. Com isso, os desenvolvedores e equipes de operações poderão melhorar a eficiência e a qualidade dos serviços de TI.
+O objetivo deste guia é fornecer uma visão aprofundada sobre DevOps Avançado, abordando tópicos como automação de deploy e monitoramento. Com isso, os participantes poderão entender e aplicar práticas avançadas de DevOps em seus projetos, melhorando a eficiência e a qualidade dos processos de desenvolvimento e entrega de software.
 
 ## Pré-requisitos
-Para seguir este guia, é necessário ter conhecimentos básicos em:
+Para aproveitar ao máximo este guia, é recomendado que os participantes tenham conhecimentos básicos em:
 - Desenvolvimento de software
-- Infraestrutura de TI
+- Infraestrutura como código (IaC)
 - Ferramentas de automação de deploy (como Jenkins, GitLab CI/CD, etc.)
-- Ferramentas de monitoramento (como Prometheus, Grafana, etc.)
+- Conceitos de monitoramento e logging
 
 ## Passo a Passo Técnico / Exemplos de Código
 ### Automatizando o Deploy com Jenkins
-1. Instalar o Jenkins e configurar o ambiente de desenvolvimento.
-2. Criar um novo job no Jenkins e selecionar a opção "Pipeline".
-3. Adicionar o código abaixo para automatizar o deploy:
-```groovy
-pipeline {
-    agent any
-    stages {
-        stage('Build') {
-            steps {
-                sh 'make build'
-            }
-        }
-        stage('Deploy') {
-            steps {
-                sh 'make deploy'
-            }
-        }
-    }
-    post {
-        failure {
-            mail to: 'equipe@exemplo.com',
-                 subject: 'Falha no deploy',
-                 body: 'O deploy falhou. Verifique os logs para mais informações.'
-        }
-    }
-}
-```
+1. **Instalação do Jenkins**: Primeiro, é necessário instalar o Jenkins em um servidor. Isso pode ser feito utilizando Docker:
+   ```bash
+   docker run -p 8080:8080 -v jenkins_home:/var/jenkins_home jenkins/jenkins:lts
+   ```
+2. **Configuração do Jenkins**: Após a instalação, configure o Jenkins para utilizar o seu repositório Git e defina as etapas de build e deploy.
+3. **Criação de um Job**: Crie um novo job no Jenkins que execute os scripts de build e deploy do seu projeto.
+
 ### Monitoramento com Prometheus e Grafana
-1. Instalar o Prometheus e o Grafana.
-2. Configurar o Prometheus para coletar métricas do sistema.
-3. Criar um dashboard no Grafana para visualizar as métricas:
-```bash
-# Exemplo de configuração do Prometheus
-scrape_configs:
-  - job_name: 'node'
-    scrape_interval: 10s
-    static_configs:
-      - targets: ['localhost:9090']
-```
+1. **Instalação do Prometheus**: Instale o Prometheus em um servidor para começar a coletar métricas.
+   ```bash
+   docker run -p 9090:9090 prom/prometheus
+   ```
+2. **Configuração do Prometheus**: Configure o Prometheus para coletar métricas do seu aplicativo.
+3. **Instalação e Configuração do Grafana**: Instale o Grafana e configure dashboards para visualizar as métricas coletadas pelo Prometheus.
 
 ## Validação
-Para validar a implementação do DevOps Avançado, é necessário:
-1. Verificar se o deploy está sendo automatizado corretamente.
-2. Monitorar as métricas do sistema e verificar se elas estão dentro dos limites esperados.
-3. Realizar testes de escalabilidade e verificar se o sistema está funcionando corretamente.
+Para validar o conhecimento adquirido, é recomendado:
+- Implementar um pipeline de deploy automatizado para um projeto simples.
+- Configurar o monitoramento de um aplicativo utilizando Prometheus e Grafana.
+- Realizar testes de desempenho e escalabilidade no aplicativo monitorado.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-### Tratamento de Erros no Deploy
-- Verificar se o código-fonte está atualizado e se as dependências estão corretas.
-- Verificar se o ambiente de desenvolvimento está configurado corretamente.
-- Implementar um mecanismo de retry para lidar com falhas temporárias.
+Ao trabalhar com automação de deploy e monitoramento, é importante considerar os seguintes casos de exceção e edge cases:
+- **Falha na instalação do Jenkins**: Verifique se o Docker está instalado e funcionando corretamente. Se o problema persistir, tente instalar o Jenkins utilizando um método diferente.
+- **Erros de configuração do Jenkins**: Verifique se as credenciais do repositório Git estão corretas e se as etapas de build e deploy estão configuradas corretamente.
+- **Problemas de conectividade com o Prometheus**: Verifique se o Prometheus está instalado e funcionando corretamente. Se o problema persistir, tente verificar as configurações de rede e firewall.
+- **Erros de configuração do Grafana**: Verifique se as credenciais do Prometheus estão corretas e se os dashboards estão configurados corretamente.
+- **Casos de exceção em pipelines de deploy**: Implemente tratamento de exceções para lidar com erros inesperados durante o processo de deploy, como falhas de conexão ou erros de compilação.
+- **Monitoramento de aplicativos com alta carga**: Ajuste as configurações de monitoramento para lidar com aplicativos que têm alta carga ou tráfego, evitando sobrecarga no sistema de monitoramento.
+- **Segurança**: Implemente medidas de segurança para proteger o acesso ao Jenkins, Prometheus e Grafana, como autenticação e autorização.
 
-### Tratamento de Erros no Monitoramento
-- Verificar se o Prometheus está coletando métricas corretamente.
-- Verificar se o Grafana está configurado corretamente para visualizar as métricas.
-- Implementar alertas para notificar a equipe em caso de anomalias nos dados.
-
-### Segurança
-- Implementar autenticação e autorização para acessar o Jenkins e o Prometheus.
-- Utilizar criptografia para proteger os dados em trânsito e em repouso.
-- Realizar auditorias regulares para garantir a segurança do sistema.
-
-### Edge Cases
-- Lidar com situações de alta carga e escalabilidade.
-- Lidar com falhas de hardware ou software.
-- Lidar com mudanças nos requisitos do sistema ou nos ambientes de desenvolvimento.
+Ao seguir estes passos e validar os conhecimentos adquiridos, você estará bem equipado para aplicar práticas avançadas de DevOps em seus projetos, melhorando a eficiência e a qualidade dos processos de desenvolvimento e entrega de software.
