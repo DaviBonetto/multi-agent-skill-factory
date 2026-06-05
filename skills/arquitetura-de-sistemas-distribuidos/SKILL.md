@@ -1,82 +1,92 @@
 ---
 name: Arquitetura de Sistemas Distribuídos
-description: Ensina como projetar sistemas distribuídos escaláveis e confiáveis
+description: Esta habilidade aborda as principais arquiteturas de sistemas distribuídos, incluindo modelo de cliente-servidor, peer-to-peer e microserviços.
 ---
 
 ## Objetivo
-O objetivo deste guia é fornecer uma visão geral de como projetar sistemas distribuídos escaláveis e confiáveis, abordando os principais conceitos e técnicas utilizadas na arquitetura de sistemas distribuídos.
+O objetivo desta habilidade é fornecer uma compreensão profunda das principais arquiteturas de sistemas distribuídos, permitindo que os desenvolvedores projetem e implementem soluções escaláveis e eficientes.
 
 ## Pré-requisitos
-Para seguir este guia, é recomendado ter conhecimento em:
+Para aproveitar ao máximo esta habilidade, é recomendado ter conhecimento em:
 * Programação em linguagens como Java, Python ou C++
 * Conceitos básicos de redes de computadores e protocolos de comunicação
-* Experiência com sistemas operacionais e gerenciamento de processos
+* Experiência com desenvolvimento de software em ambientes distribuídos
 
 ## Passo a Passo Técnico / Exemplos de Código
-### 1. Definição da Arquitetura
-A arquitetura de sistemas distribuídos pode ser definida como um conjunto de componentes que trabalham juntos para fornecer um serviço ou realizar uma tarefa. Existem várias abordagens para projetar sistemas distribuídos, incluindo:
-* Arquitetura cliente-servidor
-* Arquitetura peer-to-peer
-* Arquitetura de microserviços
-
-### 2. Escolha da Tecnologia
-A escolha da tecnologia depende do tipo de sistema que está sendo projetado e das necessidades específicas do projeto. Algumas tecnologias comuns utilizadas em sistemas distribuídos incluem:
-* Protocolos de comunicação como HTTP, TCP/IP e UDP
-* Linguagens de programação como Java, Python e C++
-* Frameworks e bibliotecas como Spring, Django e Apache Kafka
-
-### 3. Implementação do Sistema
-A implementação do sistema distribuído envolve a criação dos componentes e a configuração da comunicação entre eles. Por exemplo, em um sistema de arquitetura cliente-servidor, o cliente pode ser implementado em Python usando o framework Flask, enquanto o servidor pode ser implementado em Java usando o framework Spring.
+### Modelo de Cliente-Servidor
+O modelo de cliente-servidor é uma das arquiteturas mais comuns em sistemas distribuídos. Neste modelo, os clientes solicitam recursos ou serviços a um servidor centralizado.
 ```python
-from flask import Flask, request
-app = Flask(__name__)
+import socket
 
-@app.route('/hello', methods=['GET'])
-def hello():
-    try:
-        return 'Olá, mundo!'
-    except Exception as e:
-        return str(e), 500
+# Criação de um socket
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+# Conexão ao servidor
+try:
+    sock.connect(("localhost", 8080))
+except ConnectionRefusedError:
+    print("Erro: Servidor não disponível")
+    exit(1)
+
+# Envio de uma solicitação
+try:
+    sock.sendall(b"Olá, servidor!")
+except BrokenPipeError:
+    print("Erro: Conexão fechada inesperadamente")
+    exit(1)
+
+# Recebimento da resposta
+try:
+    resposta = sock.recv(1024)
+    print(resposta.decode())
+except ConnectionResetError:
+    print("Erro: Conexão resetada")
+    exit(1)
+
+# Fechamento da conexão
+finally:
+    sock.close()
 ```
-
+### Peer-to-Peer
+A arquitetura peer-to-peer permite que os nós da rede atuem como clientes e servidores simultaneamente.
 ```java
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import java.net.ServerSocket;
+import java.net.Socket;
 
-@SpringBootApplication
-public class Servidor {
-    public static void main(String[] args) {
-        SpringApplication.run(Servidor.class, args);
+public class Peer {
+    public static void main(String[] args) throws Exception {
+        // Criação de um servidor
+        try (ServerSocket serverSocket = new ServerSocket(8080)) {
+            // Aceitação de conexões
+            try (Socket socket = serverSocket.accept()) {
+                // Envio de uma mensagem
+                socket.getOutputStream().write("Olá, peer!".getBytes());
+            } catch (IOException e) {
+                System.err.println("Erro: " + e.getMessage());
+            }
+        } catch (IOException e) {
+            System.err.println("Erro: " + e.getMessage());
+        }
     }
 }
 ```
-
+### Microserviços
+A arquitetura de microserviços é uma abordagem que divide um sistema em serviços independentes e escaláveis.
+```bash
+# Criação de um serviço
+docker run -d -p 8080:8080 meu-servico
+```
 ## Validação
-A validação do sistema distribuído envolve testar a funcionalidade e a escalabilidade do sistema. Isso pode ser feito usando ferramentas de teste como JUnit e PyUnit, bem como ferramentas de monitoramento como Prometheus e Grafana. Além disso, é importante realizar testes de desempenho e escalabilidade para garantir que o sistema possa lidar com um grande volume de requisições e dados.
+Para validar a compreensão das arquiteturas de sistemas distribuídos, é recomendado:
+* Desenvolver projetos práticos que implementem as diferentes arquiteturas
+* Realizar testes de desempenho e escalabilidade
+* Analisar casos de uso reais e discutir as vantagens e desvantagens de cada abordagem
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-É fundamental considerar os seguintes casos de exceção e edge cases ao projetar um sistema distribuído:
-* **Falha de comunicação**: O que acontece se a comunicação entre os componentes falhar?
-* **Timeouts**: Como lidar com timeouts em requisições e respostas?
-* **Erros de sincronização**: Como garantir a consistência dos dados em um sistema distribuído?
-* **Ataques de segurança**: Como proteger o sistema contra ataques de segurança, como ataques de negação de serviço (DoS) e injeção de SQL?
-* **Escalabilidade**: Como garantir que o sistema possa lidar com um grande volume de requisições e dados?
-* **Recuperação de falhas**: Como garantir que o sistema possa se recuperar de falhas e erros?
-
-Exemplos de código para tratamento de exceções:
-```python
-try:
-    # Código que pode falhar
-except Exception as e:
-    # Tratamento da exceção
-    return str(e), 500
-```
-
-```java
-try {
-    // Código que pode falhar
-} catch (Exception e) {
-    // Tratamento da exceção
-    return ResponseEntity.status(500).body(e.getMessage());
-}
-```
+Ao trabalhar com sistemas distribuídos, é fundamental considerar os seguintes casos de borda e exceções:
+* **Conexão perdida**: O que acontece quando a conexão entre o cliente e o servidor é perdida?
+* **Servidor não disponível**: O que acontece quando o servidor não está disponível ou não responde?
+* **Dados corrompidos**: O que acontece quando os dados enviados ou recebidos estão corrompidos ou inválidos?
+* **Ataques de segurança**: O que acontece quando o sistema é alvo de ataques de segurança, como ataques de negação de serviço ou injeção de código malicioso?
+* **Escalabilidade**: O que acontece quando o sistema precisa ser escalado para atender a uma demanda crescente?
+* **Falhas de hardware**: O que acontece quando ocorre uma falha de hardware, como a perda de um nó da rede ou a falha de um disco rígido?
