@@ -1,87 +1,79 @@
-# Svelte Todo List - Design
+# Go Fractals CLI - Design
 ## Overview
-A simple todo list application built with Svelte. Supports creating, completing, and deleting todos with localStorage persistence.
-## Features
-- Add new todos
-- Mark todos as complete/incomplete
-- Delete todos
-- Filter by: All / Active / Completed
-- Clear all completed todos
-- Persist to localStorage
-- Show count of remaining items
-## User Interface
+A command-line tool that generates ASCII art fractals. Supports two fractal types with configurable output.
+## Usage
+```bash
+# Sierpinski triangle
+fractals sierpinski --size 32 --depth 5
+# Mandelbrot set
+fractals mandelbrot --width 80 --height 24 --iterations 100
+# Custom character
+fractals sierpinski --size 16 --char '#'
+# Help
+fractals --help
+fractals sierpinski --help
 ```
-┌─────────────────────────────────────────┐
-│  Svelte Todos                           │
-├─────────────────────────────────────────┤
-│  [________________________] [Add]       │
-├─────────────────────────────────────────┤
-│  [ ] Buy groceries                  [x] │
-│  [✓] Walk the dog                   [x] │
-│  [ ] Write code                     [x] │
-├─────────────────────────────────────────┤
-│  2 items left                           │
-│  [All] [Active] [Completed]  [Clear ✓]  │
-└─────────────────────────────────────────┘
+## Commands
+### `sierpinski`
+Generates a Sierpinski triangle using recursive subdivision.
+Flags:
+- `--size` (default: 32) - Width of the triangle base in characters
+- `--depth` (default: 5) - Recursion depth
+- `--char` (default: '*') - Character to use for filled points
+Output: Triangle printed to stdout, one line per row.
+### `mandelbrot`
+Renders the Mandelbrot set as ASCII art. Maps iteration count to characters.
+Flags:
+- `--width` (default: 80) - Output width in characters
+- `--height` (default: 24) - Output height in characters
+- `--iterations` (default: 100) - Maximum iterations for escape calculation
+- `--char` (default: gradient) - Single character, or omit for gradient " .:-=+*#%@"
+Output: Rectangle printed to stdout.
+## Architecture
 ```
-## Components
+cmd/
+  fractals/
+    main.go           # Entry point, CLI setup
+internal/
+  sierpinski/
+    sierpinski.go     # Algorithm
+    sierpinski_test.go
+  mandelbrot/
+    mandelbrot.go     # Algorithm
+    mandelbrot_test.go
+  cli/
+    root.go           # Root command, help
+    sierpinski.go     # Sierpinski subcommand
+    mandelbrot.go     # Mandelbrot subcommand
 ```
-src/
-  App.svelte           # Main app, state management
-  lib/
-    TodoInput.svelte   # Text input + Add button
-    TodoList.svelte    # List container
-    TodoItem.svelte    # Single todo with checkbox, text, delete
-    FilterBar.svelte   # Filter buttons + clear completed
-    store.ts           # Svelte store for todos
-    storage.ts         # localStorage persistence
-```
-## Data Model
-```typescript
-interface Todo {
-  id: string;        // UUID
-  text: string;      // Todo text
-  completed: boolean;
-}
-
-type Filter = 'all' | 'active' | 'completed';
-```
+## Dependencies
+- Go 1.21+
+- `github.com/spf13/cobra` for CLI
 ## Acceptance Criteria
-1. Can add a todo by typing and pressing Enter or clicking Add
-2. Can toggle todo completion by clicking checkbox
-3. Can delete a todo by clicking X button
-4. Filter buttons show correct subset of todos
-5. "X items left" shows count of incomplete todos
-6. "Clear completed" removes all completed todos
-7. Todos persist across page refresh (localStorage)
-8. Empty state shows helpful message
-9. All tests pass
+1. `fractals --help` shows usage
+2. `fractals sierpinski` outputs a recognizable triangle
+3. `fractals mandelbrot` outputs a recognizable Mandelbrot set
+4. `--size`, `--width`, `--height`, `--depth`, `--iterations` flags work
+5. `--char` customizes output character
+6. Invalid inputs produce clear error messages
+7. All tests pass
 ## ⚠️ Tratamento de Exceções e Edge Cases
-- **Validação de entrada**: Verificar se o texto do todo é vazio antes de adicioná-lo à lista.
-- **Tratamento de erros de localStorage**: Lidar com erros que ocorrem ao tentar salvar ou carregar dados do localStorage.
-- **Prevenção de duplicatas**: Verificar se um todo com o mesmo texto já existe antes de adicioná-lo à lista.
-- **Lidando com IDs inválidos**: Verificar se o ID do todo é válido antes de tentar deletá-lo ou atualizá-lo.
-- **Manuseio de filtros**: Verificar se o filtro selecionado é válido antes de aplicá-lo à lista de todos.
-- **Controle de concorrência**: Lidar com situações em que múltiplos usuários estão tentando atualizar a lista de todos ao mesmo tempo.
-- **Tratamento de erros de renderização**: Lidar com erros que ocorrem durante a renderização da lista de todos.
-- **Testes de unidade e integração**: Realizar testes para garantir que a aplicação funcione corretamente em diferentes cenários. 
-Exemplos de código para tratamento de exceções e edge cases:
-```typescript
-// Validando entrada
-if (todoText.trim() === '') {
-  alert('Por favor, insira um texto para o todo');
-  return;
-}
-
-// Tratando erros de localStorage
-try {
-  localStorage.setItem('todos', JSON.stringify(todos));
-} catch (error) {
-  console.error('Erro ao salvar dados no localStorage:', error);
-}
-
-// Prevenindo duplicatas
-if (todos.find(todo => todo.text === todoText)) {
-  alert('Todo com o mesmo texto já existe');
-  return;
-}
+### Exceções
+*   **Entradas inválidas**: O programa deve lidar com entradas inválidas, como valores negativos para `--size`, `--width`, `--height`, `--depth` e `--iterations`. Deve ser exibida uma mensagem de erro clara e concisa.
+*   **Caracteres inválidos**: O programa deve lidar com caracteres inválidos para o flag `--char`. Deve ser exibida uma mensagem de erro clara e concisa.
+*   **Tamanho máximo**: O programa deve lidar com tamanhos máximos para `--size`, `--width` e `--height`. Deve ser exibida uma mensagem de erro clara e concisa.
+### Edge Cases
+*   **Tamanho mínimo**: O programa deve lidar com tamanhos mínimos para `--size`, `--width` e `--height`. Deve ser exibida uma saída válida.
+*   **Profundidade mínima**: O programa deve lidar com profundidades mínimas para `--depth`. Deve ser exibida uma saída válida.
+*   **Iterações mínimas**: O programa deve lidar com iterações mínimas para `--iterations`. Deve ser exibida uma saída válida.
+*   **Caracteres especiais**: O programa deve lidar com caracteres especiais para o flag `--char`. Deve ser exibida uma saída válida.
+### Exemplos de Exceções e Edge Cases
+*   `fractals sierpinski --size -1` deve exibir uma mensagem de erro clara e concisa.
+*   `fractals mandelbrot --width 0` deve exibir uma mensagem de erro clara e concisa.
+*   `fractals sierpinski --char abc` deve exibir uma mensagem de erro clara e concisa.
+*   `fractals mandelbrot --iterations 0` deve exibir uma mensagem de erro clara e concisa.
+*   `fractals sierpinski --size 1` deve exibir uma saída válida.
+*   `fractals mandelbrot --width 1` deve exibir uma saída válida.
+*   `fractals sierpinski --depth 1` deve exibir uma saída válida.
+*   `fractals mandelbrot --iterations 1` deve exibir uma saída válida.
+*   `fractals sierpinski --char !` deve exibir uma saída válida.
