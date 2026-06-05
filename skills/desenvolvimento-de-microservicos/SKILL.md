@@ -1,128 +1,109 @@
 ---
-name: Desenvolvimento de Microsserviços
-description: Ensina como projetar e implementar microsserviços escaláveis e resilientes
+name: Desenvolvimento de Microserviços
+description: Habilidade para projetar, desenvolver e implantar sistemas baseados em microserviços
 ---
 
 ## Objetivo
-O objetivo deste guia é fornecer uma visão geral prática sobre como projetar e implementar microsserviços escaláveis e resilientes. Ao final deste guia, você estará capacitado a desenvolver sistemas distribuídos eficientes e manuteníveis.
+O objetivo desta habilidade é capacitar os desenvolvedores a projetar, desenvolver e implantar sistemas baseados em microserviços, utilizando tecnologias como Docker, Kubernetes e API Gateway. Com isso, os desenvolvedores poderão criar sistemas escaláveis, flexíveis e de alta disponibilidade.
 
 ## Pré-requisitos
-Para seguir este guia, é recomendado que você tenha conhecimento básico em:
-- Programação em linguagens como Java, Python ou C#
-- Conceitos de desenvolvimento de software orientado a serviços
-- Ferramentas de gerenciamento de containers como Docker
-- Orquestração de containers com Kubernetes
+Para iniciar o desenvolvimento de microserviços, é necessário ter conhecimento em:
+* Programação em linguagens como Java, Python ou Node.js
+* Conceitos de arquitetura de software
+* Ferramentas de versionamento como Git
+* Bases de dados relacionais e NoSQL
 
 ## Passo a Passo Técnico / Exemplos de Código
-### 1. Definição do Microsserviço
-Um microsserviço é uma parte autônoma de um sistema de software que comunica-se com outros microsserviços para atingir um objetivo comum. Para definir um microsserviço, você deve:
-- Identificar as funcionalidades do sistema que podem ser isoladas
-- Definir as interfaces de comunicação entre os microsserviços
+### 1. Projetando o Microserviço
+Para projetar um microserviço, é necessário definir as seguintes etapas:
+* Identificar as funcionalidades do sistema
+* Definir as APIs e os endpoints
+* Escolher a linguagem de programação e o framework
 
-### 2. Projetando o Microsserviço
-Para projetar um microsserviço, você pode seguir os seguintes passos:
-- Escolha uma linguagem de programação adequada para o microsserviço
-- Defina a estrutura do microsserviço, incluindo as dependências e as configurações
-- Implemente as funcionalidades do microsserviço
+Exemplo de definição de API em Node.js com Express:
+```javascript
+const express = require('express');
+const app = express();
 
-Exemplo de código em Python para um microsserviço simples:
-```python
-from flask import Flask, jsonify
+app.get('/users', (req, res) => {
+  res.json([{ name: 'João', age: 30 }, { name: 'Maria', age: 25 }]);
+});
 
-app = Flask(__name__)
-
-@app.route('/hello', methods=['GET'])
-def hello():
-    try:
-        return jsonify({'message': 'Hello, World!'})
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-if __name__ == '__main__':
-    app.run(debug=True)
+app.listen(3000, () => {
+  console.log('Servidor iniciado na porta 3000');
+});
 ```
 
-### 3. Implementando a Comunicação entre Microsserviços
-Para implementar a comunicação entre microsserviços, você pode usar protocolos como HTTP ou mensageria. Exemplo de código em Python para comunicação entre microsserviços usando HTTP:
-```python
-import requests
+### 2. Desenvolvendo o Microserviço
+Para desenvolver o microserviço, é necessário:
+* Criar o código fonte do microserviço
+* Utilizar ferramentas de versionamento como Git
+* Realizar testes unitários e de integração
 
-def get_data_from_service(url):
-    try:
-        response = requests.get(url)
-        response.raise_for_status()
-        return response.json()
-    except requests.exceptions.RequestException as e:
-        return {'error': str(e)}
-
-# Exemplo de uso
-url = 'http://localhost:5000/hello'
-data = get_data_from_service(url)
-print(data)
+Exemplo de teste unitário em Java com JUnit:
+```java
+public class UserServiceTest {
+  @Test
+  public void testGetUser() {
+    UserService userService = new UserService();
+    User user = userService.getUser(1);
+    assertNotNull(user);
+    assertEquals("João", user.getName());
+  }
+}
 ```
 
-### 4. Orquestração de Microsserviços
-Para orquestrar microsserviços, você pode usar ferramentas como Kubernetes. Exemplo de arquivo de configuração para um deployment em Kubernetes:
-```yml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: hello-deployment
-spec:
-  replicas: 3
-  selector:
-    matchLabels:
-      app: hello
-  template:
-    metadata:
-      labels:
-        app: hello
-    spec:
-      containers:
-      - name: hello
-        image: hello:latest
-        ports:
-        - containerPort: 5000
+### 3. Implantando o Microserviço
+Para implantar o microserviço, é necessário:
+* Utilizar contêineres como Docker
+* Orquestrar os contêineres com Kubernetes
+* Utilizar API Gateway para gerenciar as requisições
+
+Exemplo de arquivo Dockerfile:
+```dockerfile
+FROM node:14
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
+EXPOSE 3000
+CMD [ "node", "index.js" ]
 ```
 
 ## Validação
-Para validar o funcionamento dos microsserviços, você pode usar ferramentas de teste como Pytest ou Unittest. Exemplo de código em Python para teste de um microsserviço:
-```python
-import unittest
-from app import app
+Para validar o microserviço, é necessário:
+* Realizar testes de carga e estresse
+* Monitorar o desempenho do sistema
+* Realizar auditorias de segurança
 
-class TestHelloService(unittest.TestCase):
-    def test_hello(self):
-        tester = app.test_client()
-        response = tester.get('/hello')
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json, {'message': 'Hello, World!'})
-
-    def test_hello_error(self):
-        # Simula um erro no microsserviço
-        app.config['TESTING'] = True
-        tester = app.test_client()
-        response = tester.get('/hello')
-        self.assertEqual(response.status_code, 500)
-
-if __name__ == '__main__':
-    unittest.main()
+Exemplo de comando para realizar teste de carga com Apache JMeter:
+```bash
+jmeter -n -t teste.jmx -l resultado.jtl
+```
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-Ao desenvolver microsserviços, é importante considerar os seguintes casos de borda e exceções:
-- **Timeouts**: Defina timeouts para as requisições entre microsserviços para evitar que o sistema fique travado.
-- **Erros de rede**: Trate erros de rede, como conexões perdidas ou timeouts, para garantir que o sistema continue funcionando.
-- **Erros de dados**: Trate erros de dados, como dados inválidos ou inconsistentes, para garantir que o sistema continue funcionando.
-- **Segurança**: Implemente medidas de segurança, como autenticação e autorização, para proteger os microsserviços contra acessos não autorizados.
-- **Escalabilidade**: Desenvolva os microsserviços para serem escaláveis, para que possam lidar com aumentos de carga sem afetar o desempenho.
-- **Monitoramento**: Implemente monitoramento e logging para detectar e diagnosticar problemas nos microsserviços.
+Para garantir a robustez do microserviço, é necessário considerar os seguintes casos:
+* **Tratamento de erros**: Implementar mecanismos de tratamento de erros para lidar com exceções e erros inesperados.
+* **Validação de entrada**: Validar as entradas dos usuários para evitar ataques de injeção de SQL ou cross-site scripting (XSS).
+* **Autenticação e autorização**: Implementar mecanismos de autenticação e autorização para controlar o acesso ao microserviço.
+* **Limitação de recursos**: Implementar limites de recursos para evitar sobrecarga do sistema.
+* **Monitoramento de logs**: Monitorar os logs do sistema para detectar problemas e erros.
+* **Testes de segurança**: Realizar testes de segurança regularmente para identificar vulnerabilidades.
 
-Exemplo de código em Python para tratamento de exceções:
-```python
-try:
-    # Código que pode gerar exceção
-except Exception as e:
-    # Tratamento da exceção
-    logging.error(str(e))
-    return jsonify({'error': str(e)}), 500
+Exemplo de tratamento de erros em Node.js com Express:
+```javascript
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(500).send('Erro interno do servidor');
+});
 ```
+Exemplo de validação de entrada em Java com Hibernate Validator:
+```java
+public class User {
+  @NotNull
+  @Size(min = 1, max = 50)
+  private String name;
+  
+  // getters e setters
+}
