@@ -1,0 +1,3 @@
+# Gradio for Spaces
+Patterns and quirks specific to running Gradio inside a Space. Assumes you're already comfortable with stock Gradio components and `gr.Blocks` / `gr.Interface`.
+...
