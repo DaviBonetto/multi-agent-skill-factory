@@ -1,78 +1,84 @@
 ---
-name: Desenvolvimento de Aplicativos Móveis
-description: Ensina técnicas avançadas de desenvolvimento de aplicativos móveis usando linguagens como Java, Swift e Kotlin
+name: Desenvolvimento de Aplicativos Móveis com Kotlin
+description: Esta habilidade ensina como criar aplicativos móveis robustos e escaláveis utilizando a linguagem de programação Kotlin
 ---
-### Objetivo
-O objetivo deste guia é fornecer uma visão geral abrangente do desenvolvimento de aplicativos móveis, cobrindo técnicas avançadas e melhores práticas para criar aplicativos móveis de alta qualidade usando linguagens como Java, Swift e Kotlin. Este guia é direcionado a desenvolvedores seniores que buscam aprimorar suas habilidades e conhecimentos em desenvolvimento de aplicativos móveis.
 
-### Pré-requisitos
-Antes de começar, é necessário ter conhecimento básico em programação e experiência em desenvolvimento de aplicativos móveis. Os pré-requisitos incluem:
-- Conhecimento de linguagens de programação como Java, Swift ou Kotlin
-- Experiência com frameworks e bibliotecas de desenvolvimento de aplicativos móveis
-- Familiaridade com ferramentas de desenvolvimento integrado (IDEs) como Android Studio ou Xcode
+## Objetivo
+O objetivo desta habilidade é capacitar os desenvolvedores a criar aplicativos móveis robustos e escaláveis utilizando a linguagem de programação Kotlin. Com essa habilidade, os desenvolvedores poderão criar aplicativos móveis de alta qualidade, utilizando as melhores práticas e padrões de desenvolvimento.
 
-### Passo a Passo Técnico / Exemplos de Código
-#### Configurando o Ambiente de Desenvolvimento
-1. Instale o Android Studio ou Xcode, dependendo da plataforma que você deseja desenvolver.
-2. Configure o ambiente de desenvolvimento, incluindo a instalação de SDKs e bibliotecas necessárias.
+## Pré-requisitos
+Antes de iniciar esta habilidade, é necessário ter conhecimento básico em:
+* Programação orientada a objetos
+* Linguagem de programação Java ou similar
+* Desenvolvimento de aplicativos móveis
 
-#### Desenvolvendo um Aplicativo Móvel
-```java
-// Exemplo de código em Java para criar um aplicativo móvel
-public class MainActivity extends AppCompatActivity {
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+## Passo a Passo Técnico / Exemplos de Código
+### Configurando o Ambiente de Desenvolvimento
+Para começar a desenvolver aplicativos móveis com Kotlin, é necessário configurar o ambiente de desenvolvimento. Isso inclui:
+* Instalar o Android Studio
+* Configurar o SDK do Android
+* Criar um novo projeto Android com Kotlin como linguagem de programação
+
+```kotlin
+// Exemplo de código em Kotlin para criar uma atividade Android
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
     }
 }
 ```
 
-```swift
-// Exemplo de código em Swift para criar um aplicativo móvel
-import UIKit
+### Desenvolvendo a Interface do Usuário
+A interface do usuário é uma parte fundamental de qualquer aplicativo móvel. Com Kotlin, é possível criar interfaces de usuário robustas e escaláveis utilizando layouts e componentes Android.
 
-class ViewController: UIViewController {
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Configuração do aplicativo
+```kotlin
+// Exemplo de código em Kotlin para criar um layout Android
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val textView = TextView(this)
+        textView.text = "Hello, World!"
+        setContentView(textView)
     }
 }
 ```
 
-#### Implementando Recursos Avançados
-- Implemente recursos como autenticação, autorização e armazenamento de dados.
-- Use bibliotecas e frameworks para simplificar o desenvolvimento e melhorar a performance do aplicativo.
+## Validação
+Para validar a habilidade de desenvolver aplicativos móveis com Kotlin, é necessário criar um aplicativo móvel completo que demonstre as habilidades adquiridas. Isso inclui:
+* Criar um aplicativo móvel com uma interface de usuário robusta e escalável
+* Implementar funcionalidades de negócios utilizando Kotlin
+* Testar e depurar o aplicativo móvel para garantir a qualidade e a estabilidade.
 
-### Validação
-Para validar o aplicativo, é necessário realizar testes unitários e de integração, além de testes de usabilidade e performance. Use ferramentas como JUnit ou XCTest para criar testes automatizados e garantir que o aplicativo atenda aos requisitos e padrões de qualidade. Além disso, realize testes de campo e coletar feedback dos usuários para identificar e corrigir problemas.
+## ⚠️ Tratamento de Exceções e Edge Cases
+Ao desenvolver aplicativos móveis com Kotlin, é importante considerar os seguintes casos de exceção e edge cases:
+* **Tratamento de erros de rede**: Implementar mecanismos de tratamento de erros de rede, como retry e timeout, para garantir que o aplicativo continue funcionando mesmo em caso de falhas de rede.
+* **Validação de dados**: Validar os dados de entrada para evitar erros e exceções, como NullPointerException ou IllegalArgumentException.
+* **Tratamento de exceções de banco de dados**: Implementar mecanismos de tratamento de exceções de banco de dados, como SQLException, para garantir que o aplicativo continue funcionando mesmo em caso de erros de banco de dados.
+* **Testes de unidade e integração**: Realizar testes de unidade e integração para garantir que o aplicativo funcione corretamente em diferentes cenários e condições.
+* **Segurança**: Implementar medidas de segurança, como criptografia e autenticação, para proteger os dados do usuário e garantir a integridade do aplicativo.
 
-### Tratamento de Exceções e Edge Cases
-- **Tratamento de Erros**: Implemente mecanismos de tratamento de erros para lidar com exceções inesperadas, como erros de rede, erros de banco de dados, etc.
-- **Validação de Entrada**: Valide todas as entradas de usuário para evitar ataques de injeção de código malicioso, como SQL Injection ou Cross-Site Scripting (XSS).
-- **Autenticação e Autorização**: Implemente mecanismos de autenticação e autorização para garantir que apenas usuários autorizados acessem recursos sensíveis.
-- **Armazenamento de Dados**: Use mecanismos de armazenamento de dados seguros, como criptografia, para proteger dados sensíveis.
-- **Testes de Edge Cases**: Realize testes de edge cases para garantir que o aplicativo funcione corretamente em diferentes cenários, como:
-  - Conexão de rede instável
-  - Dispositivos com recursos limitados (memória, processamento, etc.)
-  - Entradas de usuário inválidas ou maliciosas
-  - Erros de sistema ou hardware
-
-Exemplo de tratamento de exceções em Java:
-```java
+Exemplo de código em Kotlin para tratamento de exceções:
+```kotlin
 try {
     // Código que pode lançar uma exceção
-} catch (Exception e) {
+} catch (e: Exception) {
     // Tratamento da exceção
-    Log.e("Erro", e.getMessage());
+    Log.e("Erro", e.message)
 }
 ```
-
-Exemplo de tratamento de exceções em Swift:
-```swift
-do {
-    // Código que pode lançar uma exceção
-} catch {
-    // Tratamento da exceção
-    print("Erro: (error)")
+Exemplo de código em Kotlin para validação de dados:
+```kotlin
+if (nome.isEmpty() || nome.length < 3) {
+    // Tratamento do erro
+    Toast.makeText(this, "Nome inválido", Toast.LENGTH_SHORT).show()
+} else {
+    // Código que continua a execução
 }
