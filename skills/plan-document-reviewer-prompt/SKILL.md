@@ -47,11 +47,20 @@ Task tool (general-purpose):
 
     ⚠️ Tratamento de Exceções e Edge Cases
 
-    *   **Planos incompletos:** Se o plano estiver incompleto ou faltar informações cruciais, o revisor deve solicitar mais detalhes antes de aprovar.
-    *   **Conflitos de especificação:** Se houver conflitos entre a especificação e o plano, o revisor deve identificar e relatar esses conflitos para resolução.
-    *   **Tarefas ambíguas:** Se as tarefas forem ambíguas ou não tiverem limites claros, o revisor deve solicitar esclarecimentos para garantir que as tarefas sejam executáveis.
-    *   **Problemas de segurança:** Se o plano apresentar riscos de segurança, como a falta de autenticação ou autorização adequadas, o revisor deve destacar esses problemas e recomendar soluções.
-    *   **Dependências não declaradas:** Se o plano depende de recursos ou serviços externos não declarados, o revisor deve identificar essas dependências e garantir que sejam documentadas e gerenciadas adequadamente.
-    *   **Cenários de erro:** O revisor deve considerar cenários de erro e garantir que o plano inclua mecanismos para lidar com falhas e exceções de forma robusta.
+    Em caso de planos incompletos ou com informações faltantes, o revisor deve:
+    - Verificar se o plano contém referências a outros documentos ou recursos que possam estar faltando.
+    - Identificar se há dependências entre tarefas que possam afetar a implementação.
+    - Considerar a possibilidade de que o plano possa ter sido alterado após a última atualização do spec.
+    - Avaliar se o plano contém informações sensíveis ou confidenciais que devem ser protegidas.
+
+    Em caso de erros ou inconsistências no plano, o revisor deve:
+    - Documentar claramente os erros ou inconsistências encontrados.
+    - Propor soluções ou correções para os erros ou inconsistências.
+    - Considerar a possibilidade de que os erros ou inconsistências possam ter sido introduzidos durante a criação do plano.
+
+    Em caso de dúvidas ou incertezas durante a revisão, o revisor deve:
+    - Solicitar esclarecimentos ou informações adicionais ao criador do plano.
+    - Considerar a possibilidade de que o plano possa precisar ser revisado ou atualizado.
+    - Documentar as dúvidas ou incertezas e propor soluções ou correções.
 
 **Reviewer returns:** Status, Issues (if any), Recommendations
