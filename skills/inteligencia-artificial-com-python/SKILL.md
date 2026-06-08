@@ -1,80 +1,77 @@
 ---
-name: Inteligência Artificial com Python e TensorFlow
-description: Desenvolvimento de aplicações de inteligência artificial utilizando Python, TensorFlow e outras bibliotecas de aprendizado de máquina.
+name: Inteligência Artificial com Python
+description: Introduz conceitos e técnicas de IA com o uso da linguagem Python
 ---
 
 ## Objetivo
-O objetivo desta skill é ensinar como desenvolver aplicações de inteligência artificial utilizando Python, TensorFlow e outras bibliotecas de aprendizado de máquina. Ao final desta skill, você será capaz de criar modelos de inteligência artificial para resolver problemas complexos.
+O objetivo deste guia é introduzir conceitos e técnicas de Inteligência Artificial (IA) utilizando a linguagem Python. Com isso, os leitores poderão entender como aplicar princípios de IA em seus projetos, explorando a capacidade da linguagem Python em lidar com tarefas complexas de processamento de dados e aprendizado de máquina.
 
 ## Pré-requisitos
-Para seguir esta skill, você deve ter conhecimento básico em:
-* Programação Python
-* Conceitos de inteligência artificial e aprendizado de máquina
-* Instalação e configuração do TensorFlow e outras bibliotecas necessárias
+Para seguir este guia, é recomendado que os leitores tenham conhecimento básico em:
+- Programação Python (sintaxe, estruturas de controle, funções, etc.)
+- Conceitos básicos de matemática (álgebra linear, cálculo, etc.)
+- Familiaridade com bibliotecas Python como NumPy, Pandas e Scikit-learn
 
 ## Passo a Passo Técnico / Exemplos de Código
-### Instalação do TensorFlow
-Para começar, você precisa instalar o TensorFlow. Isso pode ser feito utilizando o pip:
+### Instalação das Bibliotecas Necessárias
+Antes de começar, é necessário instalar as bibliotecas Python necessárias. Isso pode ser feito via pip:
 ```bash
-pip install tensorflow
+pip install numpy pandas scikit-learn
 ```
-### Criando um Modelo Simples
-Aqui está um exemplo simples de como criar um modelo de inteligência artificial utilizando o TensorFlow:
+
+### Exemplo de Aprendizado de Máquina
+Um exemplo simples de aprendizado de máquina é o uso do algoritmo de regressão linear. Vamos criar um modelo que prediz o valor de uma variável baseada em outra:
 ```python
-import tensorflow as tf
-from tensorflow import keras
+import numpy as np
+from sklearn.linear_model import LinearRegression
+import matplotlib.pyplot as plt
 
-# Criar um modelo simples
-modelo = keras.Sequential([
-    keras.layers.Dense(64, activation='relu', input_shape=(784,)),
-    keras.layers.Dense(32, activation='relu'),
-    keras.layers.Dense(10, activation='softmax')
-])
+# Gerar dados aleatórios
+np.random.seed(0)
+X = np.random.rand(100, 1)
+y = 3 + 2 * X + np.random.randn(100, 1)
 
-# Compilar o modelo
-modelo.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+# Criar e treinar o modelo
+modelo = LinearRegression()
+modelo.fit(X, y)
+
+# Fazer previsões
+previsoes = modelo.predict(X)
+
+# Plotar os dados e as previsões
+plt.scatter(X, y, label='Dados')
+plt.plot(X, previsoes, color='red', label='Previsões')
+plt.legend()
+plt.show()
 ```
-### Treinando o Modelo
-Para treinar o modelo, você precisa de um conjunto de dados. Vamos usar o conjunto de dados MNIST como exemplo:
-```python
-# Carregar o conjunto de dados MNIST
-(x_treino, y_treino), (x_teste, y_teste) = keras.datasets.mnist.load_data()
 
-# Normalizar os dados
-x_treino = x_treino.astype('float32') / 255
-x_teste = x_teste.astype('float32') / 255
-
-# Treinar o modelo
-modelo.fit(x_treino, y_treino, epochs=10, batch_size=128)
-```
 ## Validação
-Para validar o modelo, você pode usar o conjunto de dados de teste:
+Para validar o modelo, é importante avaliar seu desempenho em dados que não foram utilizados no treinamento. Isso pode ser feito dividindo o conjunto de dados em partes para treinamento e teste. Além disso, métricas como o erro quadrático médio (MSE) ou o coeficiente de determinação (R²) podem ser usadas para avaliar a precisão do modelo. Por exemplo:
 ```python
+from sklearn.metrics import mean_squared_error, r2_score
+
 # Avaliar o modelo
-perda, precisao = modelo.evaluate(x_teste, y_teste)
-print(f'Precisão: {precisao:.2f}%')
-```
-Isso irá imprimir a precisão do modelo no conjunto de dados de teste. Se a precisão for alta, isso significa que o modelo está funcionando bem. Caso contrário, você pode precisar ajustar o modelo ou o conjunto de dados.
+mse = mean_squared_error(y, previsoes)
+r2 = r2_score(y, previsoes)
+
+print(f"Erro Quadrático Médio (MSE): {mse}")
+print(f"Coeficiente de Determinação (R²): {r2}")
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-Ao trabalhar com modelos de inteligência artificial, é importante considerar os seguintes casos:
-* **Erros de instalação**: Certifique-se de que o TensorFlow e outras bibliotecas necessárias estejam instaladas corretamente.
-* **Erros de carregamento de dados**: Verifique se os dados estão sendo carregados corretamente e se estão no formato esperado.
-* **Erros de treinamento**: Verifique se o modelo está sendo treinado corretamente e se os hiperparâmetros estão ajustados corretamente.
-* **Erros de validação**: Verifique se o modelo está sendo validado corretamente e se os resultados estão dentro do esperado.
-* **Casos de bordo**: Considere os casos de bordo, como:
- + **Dados vazios**: O que acontece se os dados estiverem vazios?
- + **Dados inválidos**: O que acontece se os dados estiverem inválidos?
- + **Modelo não convergente**: O que acontece se o modelo não convergir durante o treinamento?
- + **Recursos insuficientes**: O que acontece se os recursos (memória, processamento) forem insuficientes para treinar o modelo?
+É fundamental considerar possíveis exceções e edge cases ao trabalhar com aprendizado de máquina. Aqui estão algumas considerações importantes:
+- **Dados ausentes ou nulos**: Certifique-se de que os dados sejam limpos e não contenham valores nulos ou ausentes. Isso pode afetar significativamente a precisão do modelo.
+- **Dados desequilibrados**: Se o conjunto de dados for desequilibrado, com uma classe tendo muito mais instâncias do que as outras, isso pode levar a um modelo tendencioso. Técnicas como oversampling, undersampling ou SMOTE podem ser usadas para equilibrar os dados.
+- **Erros de tipo**: Verifique se os dados estão no tipo correto. Por exemplo, se um modelo espera números, certifique-se de que os dados sejam numéricos.
+- **Exceções durante o treinamento**: Use try-except para capturar e tratar exceções que possam ocorrer durante o treinamento do modelo, como falta de memória ou problemas de convergência.
+- **Segurança**: Ao trabalhar com dados sensíveis, é crucial considerar a segurança. Use técnicas de criptografia e anonimização para proteger os dados.
+- **Validação cruzada**: Use validação cruzada para avaliar o desempenho do modelo em diferentes conjuntos de dados, o que ajuda a evitar sobre-ajuste.
 
-Exemplo de como tratar exceções:
+Exemplo de tratamento de exceção:
 ```python
 try:
-    # Carregar o conjunto de dados MNIST
-    (x_treino, y_treino), (x_teste, y_teste) = keras.datasets.mnist.load_data()
+    # Treinar o modelo
+    modelo.fit(X, y)
+except MemoryError:
+    print("Erro: Memória insuficiente para treinar o modelo.")
 except Exception as e:
-    print(f"Erro ao carregar os dados: {e}")
-    # Tratar o erro, por exemplo, carregando os dados de um arquivo local
-```
-Lembre-se de que o tratamento de exceções e edge cases é fundamental para garantir a robustez e a confiabilidade do modelo.
+    print(f"Erro inesperado: {e}")
