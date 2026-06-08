@@ -1,109 +1,84 @@
 ---
 name: Desenvolvimento de Microserviços
-description: Habilidade para projetar, desenvolver e implantar sistemas baseados em microserviços
+description: Ensina como projetar e implementar sistemas de microserviços escaláveis e resilientes
 ---
 
 ## Objetivo
-O objetivo desta habilidade é capacitar os desenvolvedores a projetar, desenvolver e implantar sistemas baseados em microserviços, utilizando tecnologias como Docker, Kubernetes e API Gateway. Com isso, os desenvolvedores poderão criar sistemas escaláveis, flexíveis e de alta disponibilidade.
+O objetivo deste guia é fornecer uma visão geral completa sobre o desenvolvimento de microserviços, abordando desde a concepção até a implementação de sistemas escaláveis e resilientes. Este guia é destinado a profissionais seniores que buscam aprimorar suas habilidades em arquitetura de software.
 
 ## Pré-requisitos
-Para iniciar o desenvolvimento de microserviços, é necessário ter conhecimento em:
-* Programação em linguagens como Java, Python ou Node.js
-* Conceitos de arquitetura de software
-* Ferramentas de versionamento como Git
-* Bases de dados relacionais e NoSQL
+Antes de iniciar este guia, é recomendado que os participantes tenham conhecimento prévio em:
+- Programação em linguagens como Java, Python ou Node.js
+- Conceitos básicos de arquitetura de software
+- Experiência com bancos de dados relacionais e NoSQL
+- Conhecimento básico de contêineres e orquestração com Docker e Kubernetes
 
 ## Passo a Passo Técnico / Exemplos de Código
-### 1. Projetando o Microserviço
-Para projetar um microserviço, é necessário definir as seguintes etapas:
-* Identificar as funcionalidades do sistema
-* Definir as APIs e os endpoints
-* Escolher a linguagem de programação e o framework
+### 1. Definição de Requisitos
+Defina os requisitos do sistema de microserviços, incluindo as funcionalidades, a escala esperada e os padrões de segurança.
 
-Exemplo de definição de API em Node.js com Express:
-```javascript
-const express = require('express');
-const app = express();
+### 2. Escolha da Tecnologia
+Escolha as tecnologias a serem utilizadas, como linguagens de programação, frameworks, bancos de dados e ferramentas de orquestração.
 
-app.get('/users', (req, res) => {
-  res.json([{ name: 'João', age: 30 }, { name: 'Maria', age: 25 }]);
-});
+### 3. Projeto de Arquitetura
+Projetar a arquitetura do sistema de microserviços, considerando a comunicação entre os serviços, a escalabilidade e a resiliência.
+```python
+# Exemplo de comunicação entre microserviços usando REST
+import requests
 
-app.listen(3000, () => {
-  console.log('Servidor iniciado na porta 3000');
-});
+def obter_dados(id):
+    url = f'http://microservico-dados:8080/dados/{id}'
+    try:
+        resposta = requests.get(url)
+        resposta.raise_for_status()
+        return resposta.json()
+    except requests.exceptions.RequestException as e:
+        print(f"Erro ao obter dados: {e}")
+        return None
 ```
 
-### 2. Desenvolvendo o Microserviço
-Para desenvolver o microserviço, é necessário:
-* Criar o código fonte do microserviço
-* Utilizar ferramentas de versionamento como Git
-* Realizar testes unitários e de integração
-
-Exemplo de teste unitário em Java com JUnit:
+### 4. Implementação
+Implementar os microserviços, utilizando as tecnologias escolhidas e seguindo as boas práticas de desenvolvimento de software.
 ```java
-public class UserServiceTest {
-  @Test
-  public void testGetUser() {
-    UserService userService = new UserService();
-    User user = userService.getUser(1);
-    assertNotNull(user);
-    assertEquals("João", user.getName());
-  }
+// Exemplo de implementação de um microserviço em Java
+@RestController
+@RequestMapping("/microservico")
+public class MicroservicoController {
+    @GetMapping("/{id}")
+    public ResponseEntity<Dados> obterDados(@PathVariable Long id) {
+        try {
+            Dados dados = dadosService.obterDados(id);
+            return ResponseEntity.ok(dados);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 }
-```
-
-### 3. Implantando o Microserviço
-Para implantar o microserviço, é necessário:
-* Utilizar contêineres como Docker
-* Orquestrar os contêineres com Kubernetes
-* Utilizar API Gateway para gerenciar as requisições
-
-Exemplo de arquivo Dockerfile:
-```dockerfile
-FROM node:14
-WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
-RUN npm run build
-EXPOSE 3000
-CMD [ "node", "index.js" ]
 ```
 
 ## Validação
-Para validar o microserviço, é necessário:
-* Realizar testes de carga e estresse
-* Monitorar o desempenho do sistema
-* Realizar auditorias de segurança
-
-Exemplo de comando para realizar teste de carga com Apache JMeter:
-```bash
-jmeter -n -t teste.jmx -l resultado.jtl
-```
+Validar o sistema de microserviços, garantindo que ele atenda aos requisitos definidos e seja escalável e resiliente.
+- Realizar testes unitários e de integração
+- Realizar testes de desempenho e escalabilidade
+- Implementar monitoramento e logging para garantir a visibilidade do sistema.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-Para garantir a robustez do microserviço, é necessário considerar os seguintes casos:
-* **Tratamento de erros**: Implementar mecanismos de tratamento de erros para lidar com exceções e erros inesperados.
-* **Validação de entrada**: Validar as entradas dos usuários para evitar ataques de injeção de SQL ou cross-site scripting (XSS).
-* **Autenticação e autorização**: Implementar mecanismos de autenticação e autorização para controlar o acesso ao microserviço.
-* **Limitação de recursos**: Implementar limites de recursos para evitar sobrecarga do sistema.
-* **Monitoramento de logs**: Monitorar os logs do sistema para detectar problemas e erros.
-* **Testes de segurança**: Realizar testes de segurança regularmente para identificar vulnerabilidades.
-
-Exemplo de tratamento de erros em Node.js com Express:
-```javascript
-app.use((err, req, res, next) => {
-  console.error(err);
-  res.status(500).send('Erro interno do servidor');
-});
+É fundamental tratar exceções e edge cases para garantir a robustez e a confiabilidade do sistema de microserviços. Alguns exemplos incluem:
+- **Tratamento de erros de rede**: Implementar retry e timeout para lidar com erros de rede.
+- **Tratamento de erros de banco de dados**: Implementar retry e logging para lidar com erros de banco de dados.
+- **Tratamento de erros de segurança**: Implementar autenticação e autorização para lidar com erros de segurança.
+- **Tratamento de edge cases**: Implementar validação de entrada e saída para lidar com edge cases, como dados inválidos ou ausentes.
+```python
+# Exemplo de tratamento de exceções
+try:
+    # Código que pode gerar exceção
+    dados = obter_dados(id)
+except Exception as e:
+    # Tratamento de exceção
+    print(f"Erro ao obter dados: {e}")
+    return None
 ```
-Exemplo de validação de entrada em Java com Hibernate Validator:
-```java
-public class User {
-  @NotNull
-  @Size(min = 1, max = 50)
-  private String name;
-  
-  // getters e setters
-}
+Além disso, é importante considerar os seguintes edge cases:
+- **Sobrecarga de tráfego**: Implementar load balancing e autoscaling para lidar com sobrecarga de tráfego.
+- **Falha de componente**: Implementar circuit breakers e fallbacks para lidar com falha de componente.
+- **Ataques de segurança**: Implementar firewalls e intrusion detection systems para lidar com ataques de segurança.
