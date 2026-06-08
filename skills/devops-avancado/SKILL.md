@@ -1,49 +1,71 @@
 ---
 name: DevOps Avançado
-description: Aprofunda conhecimentos em DevOps, incluindo automação de deploy e monitoramento
+description: Aprofunda conhecimentos em DevOps, incluindo automação de infraestrutura e entrega contínua
 ---
 
 ## Objetivo
-O objetivo deste guia é fornecer uma visão aprofundada sobre DevOps Avançado, abordando tópicos como automação de deploy e monitoramento. Com isso, os participantes poderão entender e aplicar práticas avançadas de DevOps em seus projetos, melhorando a eficiência e a qualidade dos processos de desenvolvimento e entrega de software.
+O objetivo deste guia é proporcionar uma visão aprofundada sobre DevOps Avançado, abordando tópicos como automação de infraestrutura e entrega contínua. Com isso, os participantes poderão entender como implementar práticas de DevOps de forma eficaz em ambientes complexos.
 
 ## Pré-requisitos
 Para aproveitar ao máximo este guia, é recomendado que os participantes tenham conhecimentos básicos em:
 - Desenvolvimento de software
-- Infraestrutura como código (IaC)
-- Ferramentas de automação de deploy (como Jenkins, GitLab CI/CD, etc.)
-- Conceitos de monitoramento e logging
+- Infraestrutura de TI
+- Ferramentas de automação (como Ansible ou Terraform)
+- Conceitos de entrega contínua (CI/CD)
 
 ## Passo a Passo Técnico / Exemplos de Código
-### Automatizando o Deploy com Jenkins
-1. **Instalação do Jenkins**: Primeiro, é necessário instalar o Jenkins em um servidor. Isso pode ser feito utilizando Docker:
-   ```bash
-   docker run -p 8080:8080 -v jenkins_home:/var/jenkins_home jenkins/jenkins:lts
-   ```
-2. **Configuração do Jenkins**: Após a instalação, configure o Jenkins para utilizar o seu repositório Git e defina as etapas de build e deploy.
-3. **Criação de um Job**: Crie um novo job no Jenkins que execute os scripts de build e deploy do seu projeto.
+### Automatização de Infraestrutura
+A automação de infraestrutura é crucial para ambientes DevOps. Uma ferramenta popular para isso é o Terraform. Aqui está um exemplo básico de como provisionar uma instância EC2 na AWS usando Terraform:
+```terraform
+provider "aws" {
+  region = "us-west-2"
+}
 
-### Monitoramento com Prometheus e Grafana
-1. **Instalação do Prometheus**: Instale o Prometheus em um servidor para começar a coletar métricas.
-   ```bash
-   docker run -p 9090:9090 prom/prometheus
-   ```
-2. **Configuração do Prometheus**: Configure o Prometheus para coletar métricas do seu aplicativo.
-3. **Instalação e Configuração do Grafana**: Instale o Grafana e configure dashboards para visualizar as métricas coletadas pelo Prometheus.
+resource "aws_instance" "example" {
+  ami           = "ami-0c94855ba95c71c99"
+  instance_type = "t2.micro"
+}
+```
+No entanto, é importante considerar os seguintes pontos:
+- **Segurança**: Certifique-se de que as credenciais da AWS estejam seguras e não expostas no código.
+- **Regiões**: Escolha a região certa para a sua infraestrutura, considerando fatores como latência e disponibilidade.
+- **Tipos de instância**: Escolha o tipo de instância certo para a sua aplicação, considerando fatores como desempenho e custo.
+
+### Entrega Contínua
+A entrega contínua envolve a automação de testes, builds e deployments. Uma ferramenta comum para isso é o Jenkins. Aqui está um exemplo de como configurar um job no Jenkins para buildar e deployar uma aplicação:
+```groovy
+pipeline {
+    agent any
+
+    stages {
+        stage('Build') {
+            steps {
+                sh 'make build'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                sh 'make deploy'
+            }
+        }
+    }
+}
+```
+No entanto, é importante considerar os seguintes pontos:
+- **Autenticação**: Certifique-se de que as credenciais de acesso estejam seguras e não expostas no código.
+- **Testes**: Inclua testes automatizados para garantir a qualidade da aplicação.
+- **Rollback**: Implemente um mecanismo de rollback para caso de falha no deployment.
 
 ## Validação
-Para validar o conhecimento adquirido, é recomendado:
-- Implementar um pipeline de deploy automatizado para um projeto simples.
-- Configurar o monitoramento de um aplicativo utilizando Prometheus e Grafana.
-- Realizar testes de desempenho e escalabilidade no aplicativo monitorado.
+Para validar o conhecimento adquirido, é recomendado que os participantes apliquem os conceitos aprendidos em projetos práticos. Isso pode incluir:
+- Automatizar a infraestrutura de um projeto pessoal
+- Implementar pipelines de entrega contínua para aplicativos existentes
+- Participar de discussões em comunidades de DevOps para aprofundar o entendimento dos tópicos abordados.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-Ao trabalhar com automação de deploy e monitoramento, é importante considerar os seguintes casos de exceção e edge cases:
-- **Falha na instalação do Jenkins**: Verifique se o Docker está instalado e funcionando corretamente. Se o problema persistir, tente instalar o Jenkins utilizando um método diferente.
-- **Erros de configuração do Jenkins**: Verifique se as credenciais do repositório Git estão corretas e se as etapas de build e deploy estão configuradas corretamente.
-- **Problemas de conectividade com o Prometheus**: Verifique se o Prometheus está instalado e funcionando corretamente. Se o problema persistir, tente verificar as configurações de rede e firewall.
-- **Erros de configuração do Grafana**: Verifique se as credenciais do Prometheus estão corretas e se os dashboards estão configurados corretamente.
-- **Casos de exceção em pipelines de deploy**: Implemente tratamento de exceções para lidar com erros inesperados durante o processo de deploy, como falhas de conexão ou erros de compilação.
-- **Monitoramento de aplicativos com alta carga**: Ajuste as configurações de monitoramento para lidar com aplicativos que têm alta carga ou tráfego, evitando sobrecarga no sistema de monitoramento.
-- **Segurança**: Implemente medidas de segurança para proteger o acesso ao Jenkins, Prometheus e Grafana, como autenticação e autorização.
-
-Ao seguir estes passos e validar os conhecimentos adquiridos, você estará bem equipado para aplicar práticas avançadas de DevOps em seus projetos, melhorando a eficiência e a qualidade dos processos de desenvolvimento e entrega de software.
+É importante considerar os seguintes casos de exceção e edge cases:
+- **Falha na provisionação de infraestrutura**: Implemente um mecanismo de retry e logging para lidar com falhas na provisionação de infraestrutura.
+- **Falha no deployment**: Implemente um mecanismo de rollback e logging para lidar com falhas no deployment.
+- **Segurança**: Implemente medidas de segurança para proteger a infraestrutura e a aplicação, como firewalls, SSL/TLS e autenticação.
+- **Desempenho**: Monitorize o desempenho da aplicação e da infraestrutura para identificar e solucionar problemas de desempenho.
+- **Escalabilidade**: Implemente medidas para garantir a escalabilidade da infraestrutura e da aplicação, como auto-escalamento e load balancing.
