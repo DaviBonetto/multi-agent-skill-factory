@@ -58,22 +58,17 @@ internal/
 6. Invalid inputs produce clear error messages
 7. All tests pass
 ## ⚠️ Tratamento de Exceções e Edge Cases
-### Exceções
-*   **Entradas inválidas**: O programa deve lidar com entradas inválidas, como valores negativos para `--size`, `--width`, `--height`, `--depth` e `--iterations`. Deve ser exibida uma mensagem de erro clara e concisa.
-*   **Caracteres inválidos**: O programa deve lidar com caracteres inválidos para o flag `--char`. Deve ser exibida uma mensagem de erro clara e concisa.
-*   **Tamanho máximo**: O programa deve lidar com tamanhos máximos para `--size`, `--width` e `--height`. Deve ser exibida uma mensagem de erro clara e concisa.
-### Edge Cases
-*   **Tamanho mínimo**: O programa deve lidar com tamanhos mínimos para `--size`, `--width` e `--height`. Deve ser exibida uma saída válida.
-*   **Profundidade mínima**: O programa deve lidar com profundidades mínimas para `--depth`. Deve ser exibida uma saída válida.
-*   **Iterações mínimas**: O programa deve lidar com iterações mínimas para `--iterations`. Deve ser exibida uma saída válida.
-*   **Caracteres especiais**: O programa deve lidar com caracteres especiais para o flag `--char`. Deve ser exibida uma saída válida.
-### Exemplos de Exceções e Edge Cases
-*   `fractals sierpinski --size -1` deve exibir uma mensagem de erro clara e concisa.
-*   `fractals mandelbrot --width 0` deve exibir uma mensagem de erro clara e concisa.
-*   `fractals sierpinski --char abc` deve exibir uma mensagem de erro clara e concisa.
-*   `fractals mandelbrot --iterations 0` deve exibir uma mensagem de erro clara e concisa.
-*   `fractals sierpinski --size 1` deve exibir uma saída válida.
-*   `fractals mandelbrot --width 1` deve exibir uma saída válida.
-*   `fractals sierpinski --depth 1` deve exibir uma saída válida.
-*   `fractals mandelbrot --iterations 1` deve exibir uma saída válida.
-*   `fractals sierpinski --char !` deve exibir uma saída válida.
+- **Tratamento de Erros**: Implementar tratamento de erros para lidar com situações como:
+  - Entradas inválidas (por exemplo, tamanho negativo ou profundidade não numérica).
+  - Falhas na execução dos algoritmos (por exemplo, divisão por zero).
+  - Problemas de saída (por exemplo, falha ao imprimir na saída padrão).
+- **Edge Cases**: Considerar casos de bordo como:
+  - Tamanho mínimo e máximo para os fractais.
+  - Profundidade mínima e máxima para o triângulo de Sierpinski.
+  - Número máximo de iterações para o conjunto de Mandelbrot.
+  - Uso de caracteres inválidos ou não impressíveis.
+- **Segurança**: Garantir que o programa não contenha vulnerabilidades de segurança, como:
+  - Injeção de comandos.
+  - Leitura ou escrita de arquivos não autorizados.
+  - Uso de bibliotecas ou dependências desatualizadas ou vulneráveis.
+- **Testes**: Desenvolver testes abrangentes para cobrir todos os casos de uso, incluindo os edge cases e tratamento de erros, para garantir a robustez e confiabilidade do programa.
