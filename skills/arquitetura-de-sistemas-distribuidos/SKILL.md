@@ -1,41 +1,48 @@
 ---
 name: Arquitetura de Sistemas Distribuídos
-description: Esta habilidade aborda as principais arquiteturas de sistemas distribuídos, incluindo modelo de cliente-servidor, peer-to-peer e microserviços.
+description: Estuda como projetar sistemas distribuídos escaláveis e confiáveis
 ---
 
 ## Objetivo
-O objetivo desta habilidade é fornecer uma compreensão profunda das principais arquiteturas de sistemas distribuídos, permitindo que os desenvolvedores projetem e implementem soluções escaláveis e eficientes.
+O objetivo desta habilidade é capacitar os desenvolvedores a projetar e implementar sistemas distribuídos escaláveis e confiáveis, garantindo a eficiência e a robustez das aplicações em ambientes de rede.
 
 ## Pré-requisitos
-Para aproveitar ao máximo esta habilidade, é recomendado ter conhecimento em:
-* Programação em linguagens como Java, Python ou C++
-* Conceitos básicos de redes de computadores e protocolos de comunicação
-* Experiência com desenvolvimento de software em ambientes distribuídos
+Para trabalhar com arquitetura de sistemas distribuídos, é necessário ter conhecimento em:
+- Programação em linguagens como Java, Python ou C++
+- Conceitos de redes de computadores e protocolos de comunicação
+- Ferramentas de gerenciamento de banco de dados
+- Experiência com sistemas operacionais Unix ou Windows
 
 ## Passo a Passo Técnico / Exemplos de Código
-### Modelo de Cliente-Servidor
-O modelo de cliente-servidor é uma das arquiteturas mais comuns em sistemas distribuídos. Neste modelo, os clientes solicitam recursos ou serviços a um servidor centralizado.
+### 1. Definição da Arquitetura
+A arquitetura de sistemas distribuídos pode ser definida como um conjunto de componentes que trabalham juntos para fornecer um serviço. Existem várias abordagens, incluindo:
+- Arquitetura em Camadas
+- Arquitetura Orientada a Serviços (SOA)
+- Arquitetura de Microserviços
+
+### 2. Implementação de Comunicação entre Componentes
+A comunicação entre componentes pode ser implementada utilizando protocolos como HTTP, TCP/IP ou mensagens assíncronas. Exemplo de comunicação utilizando socket em Python:
 ```python
 import socket
 
-# Criação de um socket
+# Criação do socket
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 # Conexão ao servidor
 try:
     sock.connect(("localhost", 8080))
 except ConnectionRefusedError:
-    print("Erro: Servidor não disponível")
+    print("Erro: Servidor não está disponível")
     exit(1)
 
-# Envio de uma solicitação
+# Envio de mensagem
 try:
     sock.sendall(b"Olá, servidor!")
 except BrokenPipeError:
     print("Erro: Conexão fechada inesperadamente")
     exit(1)
 
-# Recebimento da resposta
+# Recebimento de resposta
 try:
     resposta = sock.recv(1024)
     print(resposta.decode())
@@ -43,50 +50,48 @@ except ConnectionResetError:
     print("Erro: Conexão resetada")
     exit(1)
 
-# Fechamento da conexão
+# Fechamento do socket
 finally:
     sock.close()
 ```
-### Peer-to-Peer
-A arquitetura peer-to-peer permite que os nós da rede atuem como clientes e servidores simultaneamente.
-```java
-import java.net.ServerSocket;
-import java.net.Socket;
 
-public class Peer {
-    public static void main(String[] args) throws Exception {
-        // Criação de um servidor
-        try (ServerSocket serverSocket = new ServerSocket(8080)) {
-            // Aceitação de conexões
-            try (Socket socket = serverSocket.accept()) {
-                // Envio de uma mensagem
-                socket.getOutputStream().write("Olá, peer!".getBytes());
-            } catch (IOException e) {
-                System.err.println("Erro: " + e.getMessage());
-            }
-        } catch (IOException e) {
-            System.err.println("Erro: " + e.getMessage());
-        }
-    }
-}
+### 3. Gerenciamento de Estado e Dados
+O gerenciamento de estado e dados é fundamental em sistemas distribuídos. Isso pode ser alcançado utilizando bancos de dados distribuídos ou mecanismos de replicação de dados. Exemplo de utilização do Redis para armazenamento de dados:
+```python
+import redis
+
+# Conexão ao Redis
+try:
+    redis_client = redis.Redis(host="localhost", port=6379, db=0)
+except redis.ConnectionError:
+    print("Erro: Conexão com o Redis falhou")
+    exit(1)
+
+# Armazenamento de dado
+try:
+    redis_client.set("chave", "valor")
+except redis.RedisError:
+    print("Erro: Falha ao armazenar dado")
+    exit(1)
+
+# Recuperação de dado
+try:
+    valor = redis_client.get("chave")
+    print(valor.decode())
+except redis.RedisError:
+    print("Erro: Falha ao recuperar dado")
+    exit(1)
 ```
-### Microserviços
-A arquitetura de microserviços é uma abordagem que divide um sistema em serviços independentes e escaláveis.
-```bash
-# Criação de um serviço
-docker run -d -p 8080:8080 meu-servico
-```
+
 ## Validação
-Para validar a compreensão das arquiteturas de sistemas distribuídos, é recomendado:
-* Desenvolver projetos práticos que implementem as diferentes arquiteturas
-* Realizar testes de desempenho e escalabilidade
-* Analisar casos de uso reais e discutir as vantagens e desvantagens de cada abordagem
+A validação da arquitetura de sistemas distribuídos é crucial para garantir a escalabilidade e confiabilidade. Isso pode ser feito através de testes de desempenho, testes de carga e monitoramento do sistema em produção. Ferramentas como Apache JMeter ou Gatling podem ser utilizadas para testar a performance do sistema. Além disso, é importante monitorar o sistema utilizando ferramentas como Prometheus e Grafana para detectar possíveis problemas e melhorar a arquitetura.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-Ao trabalhar com sistemas distribuídos, é fundamental considerar os seguintes casos de borda e exceções:
-* **Conexão perdida**: O que acontece quando a conexão entre o cliente e o servidor é perdida?
-* **Servidor não disponível**: O que acontece quando o servidor não está disponível ou não responde?
-* **Dados corrompidos**: O que acontece quando os dados enviados ou recebidos estão corrompidos ou inválidos?
-* **Ataques de segurança**: O que acontece quando o sistema é alvo de ataques de segurança, como ataques de negação de serviço ou injeção de código malicioso?
-* **Escalabilidade**: O que acontece quando o sistema precisa ser escalado para atender a uma demanda crescente?
-* **Falhas de hardware**: O que acontece quando ocorre uma falha de hardware, como a perda de um nó da rede ou a falha de um disco rígido?
+Além dos exemplos acima, é importante considerar os seguintes casos de borda e exceções:
+- **Conexão perdida**: Implementar mecanismos de reconexão e retry para lidar com conexões perdidas.
+- **Timeouts**: Definir timeouts adequados para evitar bloqueios infinitos.
+- **Erros de serialização**: Lidar com erros de serialização de dados ao enviar ou receber mensagens.
+- **Inconsistências de dados**: Implementar mecanismos de detecção e resolução de inconsistências de dados em sistemas distribuídos.
+- **Segurança**: Implementar medidas de segurança, como autenticação e criptografia, para proteger a comunicação e os dados em sistemas distribuídos.
+- **Escalabilidade**: Projetar sistemas que possam escalar horizontalmente para lidar com aumentos de carga.
+- **Falhas de componente**: Implementar mecanismos de detecção e recuperação de falhas de componentes para garantir a confiabilidade do sistema.
