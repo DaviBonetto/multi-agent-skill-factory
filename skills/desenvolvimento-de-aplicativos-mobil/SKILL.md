@@ -1,84 +1,64 @@
 ---
-name: Desenvolvimento de Aplicativos Móveis com Kotlin
-description: Esta habilidade ensina como criar aplicativos móveis robustos e escaláveis utilizando a linguagem de programação Kotlin
+name: Desenvolvimento de Aplicativos Móveis com React Native
+description: Esta habilidade ensina como criar aplicativos móveis cross-plataforma utilizando React Native, abordando desde a configuração do ambiente de desenvolvimento até a publicação nas lojas de aplicativos.
 ---
 
 ## Objetivo
-O objetivo desta habilidade é capacitar os desenvolvedores a criar aplicativos móveis robustos e escaláveis utilizando a linguagem de programação Kotlin. Com essa habilidade, os desenvolvedores poderão criar aplicativos móveis de alta qualidade, utilizando as melhores práticas e padrões de desenvolvimento.
+O objetivo desta habilidade é capacitar os desenvolvedores a criar aplicativos móveis cross-plataforma utilizando React Native, abordando todas as etapas do desenvolvimento, desde a configuração do ambiente até a publicação nas lojas de aplicativos.
 
 ## Pré-requisitos
-Antes de iniciar esta habilidade, é necessário ter conhecimento básico em:
-* Programação orientada a objetos
-* Linguagem de programação Java ou similar
-* Desenvolvimento de aplicativos móveis
+Para iniciar o desenvolvimento de aplicativos móveis com React Native, é necessário ter:
+* Conhecimento em JavaScript e React
+* Node.js instalado no computador
+* Um editor de código ou IDE (como Visual Studio Code)
+* Um emulador de dispositivos móveis ou um dispositivo físico para testes
 
 ## Passo a Passo Técnico / Exemplos de Código
-### Configurando o Ambiente de Desenvolvimento
-Para começar a desenvolver aplicativos móveis com Kotlin, é necessário configurar o ambiente de desenvolvimento. Isso inclui:
-* Instalar o Android Studio
-* Configurar o SDK do Android
-* Criar um novo projeto Android com Kotlin como linguagem de programação
+### Configuração do Ambiente de Desenvolvimento
+1. Instalar o React Native CLI: `npm install -g react-native-cli`
+2. Criar um novo projeto React Native: `npx react-native init NomeDoProjeto`
+3. Instalar as dependências necessárias: `npm install`
 
-```kotlin
-// Exemplo de código em Kotlin para criar uma atividade Android
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
+### Desenvolvimento do Aplicativo
+```javascript
+// Exemplo de código em JavaScript para um componente React Native
+import React from 'react';
+import { View, Text } from 'react-native';
 
-class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-    }
-}
+const App = () => {
+  return (
+    <View>
+      <Text>Olá, Mundo!</Text>
+    </View>
+  );
+};
+
+export default App;
 ```
 
-### Desenvolvendo a Interface do Usuário
-A interface do usuário é uma parte fundamental de qualquer aplicativo móvel. Com Kotlin, é possível criar interfaces de usuário robustas e escaláveis utilizando layouts e componentes Android.
-
-```kotlin
-// Exemplo de código em Kotlin para criar um layout Android
-import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-
-class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val textView = TextView(this)
-        textView.text = "Hello, World!"
-        setContentView(textView)
-    }
-}
-```
+### Publicação do Aplicativo
+1. Preparar o aplicativo para publicação: `npm run build`
+2. Criar uma conta nas lojas de aplicativos (Apple App Store e/ou Google Play Store)
+3. Enviar o aplicativo para as lojas de aplicativos
 
 ## Validação
-Para validar a habilidade de desenvolver aplicativos móveis com Kotlin, é necessário criar um aplicativo móvel completo que demonstre as habilidades adquiridas. Isso inclui:
-* Criar um aplicativo móvel com uma interface de usuário robusta e escalável
-* Implementar funcionalidades de negócios utilizando Kotlin
-* Testar e depurar o aplicativo móvel para garantir a qualidade e a estabilidade.
+Para validar o conhecimento adquirido, é necessário:
+* Desenvolver um aplicativo móvel cross-plataforma utilizando React Native
+* Testar o aplicativo em diferentes dispositivos e plataformas
+* Publicar o aplicativo nas lojas de aplicativos e monitorar seu desempenho
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-Ao desenvolver aplicativos móveis com Kotlin, é importante considerar os seguintes casos de exceção e edge cases:
-* **Tratamento de erros de rede**: Implementar mecanismos de tratamento de erros de rede, como retry e timeout, para garantir que o aplicativo continue funcionando mesmo em caso de falhas de rede.
-* **Validação de dados**: Validar os dados de entrada para evitar erros e exceções, como NullPointerException ou IllegalArgumentException.
-* **Tratamento de exceções de banco de dados**: Implementar mecanismos de tratamento de exceções de banco de dados, como SQLException, para garantir que o aplicativo continue funcionando mesmo em caso de erros de banco de dados.
-* **Testes de unidade e integração**: Realizar testes de unidade e integração para garantir que o aplicativo funcione corretamente em diferentes cenários e condições.
-* **Segurança**: Implementar medidas de segurança, como criptografia e autenticação, para proteger os dados do usuário e garantir a integridade do aplicativo.
+### Erros Comuns
+* **Erro de instalação do React Native CLI**: Verificar se o Node.js está instalado e se o comando `npm install -g react-native-cli` foi executado com sucesso.
+* **Erro de criação do projeto**: Verificar se o nome do projeto é válido e se o comando `npx react-native init NomeDoProjeto` foi executado com sucesso.
+* **Erro de instalação de dependências**: Verificar se as dependências necessárias estão instaladas e se o comando `npm install` foi executado com sucesso.
 
-Exemplo de código em Kotlin para tratamento de exceções:
-```kotlin
-try {
-    // Código que pode lançar uma exceção
-} catch (e: Exception) {
-    // Tratamento da exceção
-    Log.e("Erro", e.message)
-}
-```
-Exemplo de código em Kotlin para validação de dados:
-```kotlin
-if (nome.isEmpty() || nome.length < 3) {
-    // Tratamento do erro
-    Toast.makeText(this, "Nome inválido", Toast.LENGTH_SHORT).show()
-} else {
-    // Código que continua a execução
-}
+### Edge Cases
+* **Desenvolvimento em diferentes plataformas**: Testar o aplicativo em diferentes dispositivos e plataformas, como Android e iOS.
+* **Compatibilidade com diferentes versões do React Native**: Verificar se o aplicativo é compatível com diferentes versões do React Native.
+* **Tratamento de erros de rede**: Implementar tratamento de erros de rede para lidar com situações de perda de conexão ou erro de comunicação com o servidor.
+
+### Segurança
+* **Validação de dados**: Validar todos os dados de entrada para evitar ataques de injeção de código malicioso.
+* **Uso de criptografia**: Usar criptografia para proteger dados sensíveis, como senhas e informações de pagamento.
+* **Atualização de dependências**: Manter as dependências atualizadas para evitar vulnerabilidades de segurança conhecidas.
