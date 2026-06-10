@@ -56,13 +56,29 @@ type Filter = 'all' | 'active' | 'completed';
 8. Empty state shows helpful message
 9. All tests pass
 ## ⚠️ Tratamento de Exceções e Edge Cases
-### Exceções
-*   **Erro ao salvar no localStorage**: Caso ocorra um erro ao salvar os dados no localStorage, o aplicativo deve exibir uma mensagem de erro ao usuário e tentar salvar novamente após um curto período de tempo.
-*   **Erro ao carregar do localStorage**: Caso ocorra um erro ao carregar os dados do localStorage, o aplicativo deve exibir uma mensagem de erro ao usuário e inicializar com um estado vazio.
-*   **Entrada de usuário inválida**: Caso o usuário insira um texto vazio ou somente espaços, o aplicativo deve exibir uma mensagem de erro e não adicionar o todo.
-### Edge Cases
-*   **Lista de todos vazia**: Quando a lista de todos estiver vazia, o aplicativo deve exibir uma mensagem indicando que não há todos e fornecer uma opção para adicionar um novo todo.
-*   **Todos completados**: Quando todos os todos estiverem completados, o aplicativo deve exibir uma mensagem indicando que não há todos ativos e fornecer uma opção para adicionar um novo todo.
-*   **Filtro**: Quando o filtro estiver definido para "ativos" ou "completados" e não houver todos que atendam ao critério, o aplicativo deve exibir uma mensagem indicando que não há todos que atendam ao critério.
-*   **Tamanho máximo de texto**: O aplicativo deve ter um tamanho máximo de texto para os todos e exibir uma mensagem de erro se o usuário tentar inserir um texto maior que o permitido.
-*   **ID único**: O aplicativo deve garantir que cada todo tenha um ID único e exibir uma mensagem de erro se ocorrer um erro ao gerar um ID único.
+- **Validação de entrada**: Verificar se o texto do todo é vazio antes de adicioná-lo à lista.
+- **Tratamento de erros de armazenamento**: Lidar com erros que ocorrem ao salvar ou carregar dados do localStorage.
+- **Prevenção de duplicatas**: Verificar se um todo com o mesmo texto já existe antes de adicioná-lo à lista.
+- **Limite de tamanho de texto**: Definir um limite de tamanho para o texto do todo e truncá-lo se necessário.
+- **Tratamento de erros de filtro**: Lidar com erros que ocorrem ao aplicar filtros à lista de todos.
+- **Prevenção de exclusão acidental**: Solicitar confirmação antes de excluir um todo.
+- **Tratamento de erros de inicialização**: Lidar com erros que ocorrem ao inicializar a aplicação, como falhas ao carregar dados do localStorage.
+- **Testes de unidade e integração**: Implementar testes para garantir que a aplicação funcione corretamente em diferentes cenários. 
+Exemplos de código para tratamento de exceções e edge cases:
+```typescript
+// Validação de entrada
+if (todoText.trim() === '') {
+  alert('Por favor, insira um texto para o todo.');
+  return;
+}
+// Tratamento de erros de armazenamento
+try {
+  localStorage.setItem('todos', JSON.stringify(todos));
+} catch (error) {
+  console.error('Erro ao salvar dados:', error);
+}
+// Prevenção de duplicatas
+if (todos.find(todo => todo.text === todoText)) {
+  alert('Um todo com o mesmo texto já existe.');
+  return;
+}
