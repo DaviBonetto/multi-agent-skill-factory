@@ -47,20 +47,14 @@ Task tool (general-purpose):
 
     ⚠️ Tratamento de Exceções e Edge Cases
 
-    Em caso de planos incompletos ou com informações faltantes, o revisor deve:
-    - Verificar se o plano contém referências a outros documentos ou recursos que possam estar faltando.
-    - Identificar se há dependências entre tarefas que possam afetar a implementação.
-    - Considerar a possibilidade de que o plano possa ter sido alterado após a última atualização do spec.
-    - Avaliar se o plano contém informações sensíveis ou confidenciais que devem ser protegidas.
-
-    Em caso de erros ou inconsistências no plano, o revisor deve:
-    - Documentar claramente os erros ou inconsistências encontrados.
-    - Propor soluções ou correções para os erros ou inconsistências.
-    - Considerar a possibilidade de que os erros ou inconsistências possam ter sido introduzidos durante a criação do plano.
-
-    Em caso de dúvidas ou incertezas durante a revisão, o revisor deve:
-    - Solicitar esclarecimentos ou informações adicionais ao criador do plano.
-    - Considerar a possibilidade de que o plano possa precisar ser revisado ou atualizado.
-    - Documentar as dúvidas ou incertezas e propor soluções ou correções.
+    - **Planos incompletos:** Se o plano estiver incompleto, verifique se há uma explicação clara sobre o que está faltando e como será completado.
+    - **Especificações conflitantes:** Se as especificações forem conflitantes, verifique se há uma explicação clara sobre como resolver o conflito.
+    - **Tarefas vagas:** Se as tarefas forem vagas, verifique se há uma explicação clara sobre como torná-las mais específicas.
+    - **Erros de formatação:** Se houver erros de formatação, verifique se eles afetam a compreensão do plano.
+    - **Falta de recursos:** Se houver falta de recursos, verifique se há uma explicação clara sobre como obter os recursos necessários.
+    - **Dependências não claras:** Se as dependências não forem claras, verifique se há uma explicação clara sobre como elas afetam o plano.
+    - **Riscos não identificados:** Se houver riscos não identificados, verifique se há uma explicação clara sobre como mitigá-los.
+    - **Cronograma inviável:** Se o cronograma for inviável, verifique se há uma explicação clara sobre como ajustá-lo.
+    - **Orçamento insuficiente:** Se o orçamento for insuficiente, verifique se há uma explicação clara sobre como ajustá-lo.
 
 **Reviewer returns:** Status, Issues (if any), Recommendations
