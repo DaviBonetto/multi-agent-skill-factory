@@ -47,14 +47,11 @@ Task tool (general-purpose):
 
     ⚠️ Tratamento de Exceções e Edge Cases
 
-    - **Planos incompletos:** Se o plano estiver incompleto, verifique se há uma explicação clara sobre o que está faltando e como será completado.
-    - **Especificações conflitantes:** Se as especificações forem conflitantes, verifique se há uma explicação clara sobre como resolver o conflito.
-    - **Tarefas vagas:** Se as tarefas forem vagas, verifique se há uma explicação clara sobre como torná-las mais específicas.
-    - **Erros de formatação:** Se houver erros de formatação, verifique se eles afetam a compreensão do plano.
-    - **Falta de recursos:** Se houver falta de recursos, verifique se há uma explicação clara sobre como obter os recursos necessários.
-    - **Dependências não claras:** Se as dependências não forem claras, verifique se há uma explicação clara sobre como elas afetam o plano.
-    - **Riscos não identificados:** Se houver riscos não identificados, verifique se há uma explicação clara sobre como mitigá-los.
-    - **Cronograma inviável:** Se o cronograma for inviável, verifique se há uma explicação clara sobre como ajustá-lo.
-    - **Orçamento insuficiente:** Se o orçamento for insuficiente, verifique se há uma explicação clara sobre como ajustá-lo.
+    *   **Planos vazios ou inexistentes:** Se o plano estiver vazio ou não for encontrado, registre um problema com a descrição "Plano não encontrado ou vazio" e explique por que isso é um problema para a implementação.
+    *   **Especificações inconsistentes:** Se a especificação contiver informações contraditórias ou estiver incompleta, registre um problema com a descrição "Especificação inconsistente" e explique como isso afeta a implementação.
+    *   **Tarefas mal definidas:** Se as tarefas não tiverem limites claros ou estiverem mal definidas, registre um problema com a descrição "Tarefa mal definida" e explique por que isso causaria problemas durante a implementação.
+    *   **Problemas de segurança:** Se o plano contiver riscos de segurança, como a exposição de dados sensíveis ou a falta de autenticação, registre um problema com a descrição "Risco de segurança" e explique como isso pode ser mitigado.
+    *   **Dependências não declaradas:** Se o plano depender de recursos ou bibliotecas não declaradas, registre um problema com a descrição "Dependência não declarada" e explique por que isso é um problema para a implementação.
+    *   **Erros de formatação:** Se o plano contiver erros de formatação que dificultem a leitura ou a compreensão, registre um problema com a descrição "Erro de formatação" e sugira melhorias.
 
 **Reviewer returns:** Status, Issues (if any), Recommendations
