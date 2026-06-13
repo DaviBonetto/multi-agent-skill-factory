@@ -47,11 +47,12 @@ Task tool (general-purpose):
 
     ⚠️ Tratamento de Exceções e Edge Cases
 
-    *   **Planos vazios ou inexistentes:** Se o plano estiver vazio ou não for encontrado, registre um problema com a descrição "Plano não encontrado ou vazio" e explique por que isso é um problema para a implementação.
-    *   **Especificações inconsistentes:** Se a especificação contiver informações contraditórias ou estiver incompleta, registre um problema com a descrição "Especificação inconsistente" e explique como isso afeta a implementação.
-    *   **Tarefas mal definidas:** Se as tarefas não tiverem limites claros ou estiverem mal definidas, registre um problema com a descrição "Tarefa mal definida" e explique por que isso causaria problemas durante a implementação.
-    *   **Problemas de segurança:** Se o plano contiver riscos de segurança, como a exposição de dados sensíveis ou a falta de autenticação, registre um problema com a descrição "Risco de segurança" e explique como isso pode ser mitigado.
-    *   **Dependências não declaradas:** Se o plano depender de recursos ou bibliotecas não declaradas, registre um problema com a descrição "Dependência não declarada" e explique por que isso é um problema para a implementação.
-    *   **Erros de formatação:** Se o plano contiver erros de formatação que dificultem a leitura ou a compreensão, registre um problema com a descrição "Erro de formatação" e sugira melhorias.
+    *   **Planos vazios ou inexistentes:** Se o plano estiver vazio ou não for encontrado, relatar como um problema crítico, pois não há nada para revisar.
+    *   **Especificações inconsistentes:** Se a especificação for contraditória ou ambígua, relatar como um problema, pois isso pode levar a implementações erradas.
+    *   **Tarefas mal definidas:** Se as tarefas não tiverem limites claros ou se as etapas não forem passíveis de ação, relatar como um problema, pois isso pode causar confusão durante a implementação.
+    *   **Problemas de segurança:** Se o plano não considerar aspectos de segurança importantes, como a proteção de dados sensíveis ou a autenticação de usuários, relatar como um problema crítico.
+    *   **Dependências não declaradas:** Se o plano depende de recursos ou serviços externos não declarados, relatar como um problema, pois isso pode causar falhas durante a implementação.
+    *   **Cenários de bordo:** Considerar cenários de bordo, como o que acontece se um recurso necessário não estiver disponível, ou se houver uma falha na comunicação entre serviços.
+    *   **Revisão de segurança:** Realizar uma revisão de segurança para garantir que o plano não introduza vulnerabilidades ou riscos de segurança.
 
 **Reviewer returns:** Status, Issues (if any), Recommendations
