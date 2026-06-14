@@ -1,118 +1,100 @@
-# Arquitetura de Microsserviços
+# Arquitetura de Microsserviços com Docker e Kubernetes
+## Descrição
+Ensina a projetar e implementar arquiteturas de microsserviços utilizando Docker e Kubernetes
+
 ## Objetivo
-O objetivo deste guia é fornecer uma visão geral de como projetar e implementar sistemas de microsserviços, abordando os principais conceitos, benefícios e desafios associados a essa arquitetura. Ao final deste guia, você estará capacitado a criar sistemas de microsserviços escaláveis, flexíveis e fáceis de manter.
+O objetivo deste guia é fornecer uma visão geral de como projetar e implementar arquiteturas de microsserviços utilizando Docker e Kubernetes. Ao final deste guia, você estará apto a criar e gerenciar microsserviços escaláveis e confiáveis.
 
 ## Pré-requisitos
-Para seguir este guia, é recomendado que você tenha conhecimento em:
+Para seguir este guia, você deve ter conhecimento básico em:
 * Desenvolvimento de software
-* Arquitetura de sistemas
-* Linguagens de programação (como Java, Python ou Node.js)
-* Ferramentas de gerenciamento de containers (como Docker)
-* Ferramentas de orquestração de containers (como Kubernetes)
+* Containers (Docker)
+* Orquestração de containers (Kubernetes)
+* Arquitetura de microsserviços
 
 ## Passo a Passo Técnico / Exemplos de Código
-### 1. Definição de Microsserviços
-Um microsserviço é um componente de software que fornece uma funcionalidade específica e pode ser desenvolvido, testado e implantado de forma independente.
+### 1. Preparação do Ambiente
+Antes de começar, você precisará ter o Docker e o Kubernetes instalados em sua máquina. Você pode seguir os passos abaixo para instalar:
+```bash
+# Instalar o Docker
+sudo apt-get update
+sudo apt-get install docker.io
 
-### 2. Projetando a Arquitetura de Microsserviços
-Para projetar a arquitetura de microsserviços, é necessário considerar os seguintes fatores:
-* Identificar as funcionalidades do sistema que podem ser separadas em microsserviços
-* Definir as interfaces de comunicação entre os microsserviços
-* Escolher as tecnologias e ferramentas a serem utilizadas
-
-### 3. Implementando Microsserviços
-Aqui está um exemplo de como implementar um microsserviço em Node.js:
-```javascript
-const express = require('express');
-const app = express();
-
-app.get('/users', (req, res) => {
-  try {
-    // Lógica para recuperar os usuários
-    const users = [{ id: 1, name: 'João' }, { id: 2, name: 'Maria' }];
-    res.json(users);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Erro ao recuperar usuários' });
-  }
-});
-
-app.listen(3000, () => {
-  console.log('Microsserviço de usuários rodando na porta 3000');
-});
+# Instalar o Kubernetes
+sudo apt-get update
+sudo apt-get install kubeadm
 ```
-### 4. Orquestrando Microsserviços com Kubernetes
-Para orquestrar os microsserviços com Kubernetes, é necessário criar um arquivo de configuração YAML que defina os serviços e os pods:
+### 2. Criação de Microsserviços
+Aqui está um exemplo de como criar um microsserviço simples em Python:
+```python
+from flask import Flask
+app = Flask(__name__)
+
+@app.route("/")
+def hello():
+    return "Olá, Mundo!"
+
+if __name__ == "__main__":
+    app.run()
+```
+### 3. Containerização com Docker
+Agora, vamos criar um arquivo `Dockerfile` para containerizar o microsserviço:
+```dockerfile
+FROM python:3.9-slim
+
+WORKDIR /app
+
+COPY . /app
+
+RUN pip install flask
+
+CMD ["python", "app.py"]
+```
+### 4. Orquestração com Kubernetes
+Aqui está um exemplo de como criar um arquivo `deployment.yaml` para orquestrar o microsserviço:
 ```yml
-apiVersion: v1
-kind: Service
-metadata:
-  name: users-service
-spec:
-  selector:
-    app: users
-  ports:
-  - name: http
-    port: 80
-    targetPort: 3000
-  type: LoadBalancer
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: users-deployment
+  name: microsservico
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: users
+      app: microsservico
   template:
     metadata:
       labels:
-        app: users
+        app: microsservico
     spec:
       containers:
-      - name: users
-        image: users:latest
+      - name: microsservico
+        image: microsservico:latest
         ports:
-        - containerPort: 3000
+        - containerPort: 5000
 ```
 ## Validação
-Para validar a arquitetura de microsserviços, é necessário realizar testes de funcionalidade, desempenho e escalabilidade. Além disso, é importante monitorar o sistema e realizar ajustes conforme necessário para garantir a estabilidade e a confiabilidade do sistema.
+Para validar a implementação, você pode seguir os passos abaixo:
+1. Verificar se o microsserviço está rodando: `kubectl get pods`
+2. Verificar se o microsserviço está respondendo: `curl http://localhost:5000`
+3. Verificar se o microsserviço está escalando: `kubectl scale deployment microsservico --replicas=5`
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
 ### Tratamento de Erros
-* Utilize blocos try-catch para capturar e tratar erros em cada microsserviço
-* Registre os erros em um sistema de logging para análise posterior
-* Retorne respostas de erro personalizadas para os clientes
+* Certifique-se de que o seu microsserviço esteja configurado para lidar com erros e exceções de forma adequada.
+* Utilize try-except para capturar erros e exceções em seu código.
+* Registre os erros e exceções para que possam ser analisados e resolvidos.
 
 ### Edge Cases
-* **Microsserviço indisponível**: Implemente um mecanismo de retry e timeout para lidar com microsserviços indisponíveis
-* **Comunicação entre microsserviços**: Utilize um sistema de mensageria para garantir a comunicação entre os microsserviços
-* **Segurança**: Implemente autenticação e autorização em cada microsserviço para garantir a segurança do sistema
+* Certifique-se de que o seu microsserviço esteja configurado para lidar com casos de bordo, como:
+ + Requisições inválidas ou malformadas.
+ + Falhas de rede ou conectividade.
+ + Erros de autenticação ou autorização.
+* Utilize testes de unidade e integração para garantir que o seu microsserviço esteja funcionando corretamente em diferentes cenários.
 
-### Exemplos de Código para Tratamento de Exceções
-```javascript
-// Exemplo de tratamento de erro em um microsserviço
-app.get('/users', (req, res) => {
-  try {
-    // Lógica para recuperar os usuários
-    const users = [{ id: 1, name: 'João' }, { id: 2, name: 'Maria' }];
-    res.json(users);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Erro ao recuperar usuários' });
-  }
-});
-
-// Exemplo de tratamento de edge case em um microsserviço
-app.get('/users', (req, res) => {
-  // Verifica se o microsserviço de usuários está disponível
-  if (!usersServiceAvailable) {
-    res.status(503).json({ message: 'Microsserviço de usuários indisponível' });
-  } else {
-    // Lógica para recuperar os usuários
-    const users = [{ id: 1, name: 'João' }, { id: 2, name: 'Maria' }];
-    res.json(users);
-  }
-});
+### Segurança
+* Certifique-se de que o seu microsserviço esteja configurado para ser seguro, utilizando:
+ + Autenticação e autorização adequadas.
+ + Criptografia de dados em trânsito e em repouso.
+ + Firewalls e regras de segurança para controlar o acesso ao microsserviço.
+* Utilize ferramentas de segurança, como scanners de vulnerabilidade e firewalls, para proteger o seu microsserviço contra ataques e vulnerabilidades.
