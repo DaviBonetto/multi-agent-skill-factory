@@ -47,12 +47,10 @@ Task tool (general-purpose):
 
     ⚠️ Tratamento de Exceções e Edge Cases
 
-    *   **Planos vazios ou inexistentes:** Se o plano estiver vazio ou não for encontrado, relatar como um problema crítico, pois não há nada para revisar.
-    *   **Especificações inconsistentes:** Se a especificação for contraditória ou ambígua, relatar como um problema, pois isso pode levar a implementações erradas.
-    *   **Tarefas mal definidas:** Se as tarefas não tiverem limites claros ou se as etapas não forem passíveis de ação, relatar como um problema, pois isso pode causar confusão durante a implementação.
-    *   **Problemas de segurança:** Se o plano não considerar aspectos de segurança importantes, como a proteção de dados sensíveis ou a autenticação de usuários, relatar como um problema crítico.
-    *   **Dependências não declaradas:** Se o plano depende de recursos ou serviços externos não declarados, relatar como um problema, pois isso pode causar falhas durante a implementação.
-    *   **Cenários de bordo:** Considerar cenários de bordo, como o que acontece se um recurso necessário não estiver disponível, ou se houver uma falha na comunicação entre serviços.
-    *   **Revisão de segurança:** Realizar uma revisão de segurança para garantir que o plano não introduza vulnerabilidades ou riscos de segurança.
+    *   **Planos vazios ou inexistentes:** Verifique se o arquivo do plano está vazio ou não existe. Se isso ocorrer, registre um problema e forneça uma explicação clara sobre como o plano deve ser revisado.
+    *   **Especificações ausentes ou incompletas:** Se a especificação estiver ausente ou for incompleta, verifique se o plano pode ser aprovado com base nas informações disponíveis. Se não for possível, registre um problema e solicite mais informações.
+    *   **Tarefas mal definidas ou contraditórias:** Se as tarefas forem mal definidas ou contraditórias, registre um problema e forneça uma explicação clara sobre como as tarefas devem ser revisadas.
+    *   **Problemas de segurança:** Se o plano apresentar problemas de segurança, como a falta de autenticação ou autorização, registre um problema e forneça uma explicação clara sobre como o problema deve ser resolvido.
+    *   **Erros de formatação ou sintaxe:** Se o plano apresentar erros de formatação ou sintaxe, registre um problema e forneça uma explicação clara sobre como o erro deve ser corrigido.
 
 **Reviewer returns:** Status, Issues (if any), Recommendations
