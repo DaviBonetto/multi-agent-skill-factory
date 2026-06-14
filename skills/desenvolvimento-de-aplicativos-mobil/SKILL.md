@@ -1,64 +1,96 @@
 ---
-name: Desenvolvimento de Aplicativos Móveis com React Native
-description: Esta habilidade ensina como criar aplicativos móveis cross-plataforma utilizando React Native, abordando desde a configuração do ambiente de desenvolvimento até a publicação nas lojas de aplicativos.
+name: Desenvolvimento de Aplicativos Móveis com Kotlin
+description: Ensina a desenvolver aplicativos móveis para Android utilizando a linguagem Kotlin e as melhores práticas de desenvolvimento
 ---
 
 ## Objetivo
-O objetivo desta habilidade é capacitar os desenvolvedores a criar aplicativos móveis cross-plataforma utilizando React Native, abordando todas as etapas do desenvolvimento, desde a configuração do ambiente até a publicação nas lojas de aplicativos.
+O objetivo deste guia é fornecer uma visão geral completa sobre como desenvolver aplicativos móveis para Android utilizando a linguagem Kotlin. Com foco nas melhores práticas de desenvolvimento, este guia visa capacitar os desenvolvedores a criar aplicativos móveis robustos, escaláveis e de alta qualidade.
 
 ## Pré-requisitos
-Para iniciar o desenvolvimento de aplicativos móveis com React Native, é necessário ter:
-* Conhecimento em JavaScript e React
-* Node.js instalado no computador
-* Um editor de código ou IDE (como Visual Studio Code)
-* Um emulador de dispositivos móveis ou um dispositivo físico para testes
+Antes de iniciar o desenvolvimento de aplicativos móveis com Kotlin, é necessário ter conhecimento em:
+- Programação orientada a objetos
+- Linguagem Java (conhecimento básico)
+- Desenvolvimento de aplicativos móveis para Android
+- Ferramentas de desenvolvimento como Android Studio
 
 ## Passo a Passo Técnico / Exemplos de Código
-### Configuração do Ambiente de Desenvolvimento
-1. Instalar o React Native CLI: `npm install -g react-native-cli`
-2. Criar um novo projeto React Native: `npx react-native init NomeDoProjeto`
-3. Instalar as dependências necessárias: `npm install`
+### Configurando o Ambiente de Desenvolvimento
+1. Instale o Android Studio e configure o ambiente de desenvolvimento.
+2. Crie um novo projeto Android com Kotlin como linguagem de programação.
 
-### Desenvolvimento do Aplicativo
-```javascript
-// Exemplo de código em JavaScript para um componente React Native
-import React from 'react';
-import { View, Text } from 'react-native';
-
-const App = () => {
-  return (
-    <View>
-      <Text>Olá, Mundo!</Text>
-    </View>
-  );
-};
-
-export default App;
+### Criando a Estrutura do Aplicativo
+```kotlin
+// Exemplo de uma classe simples em Kotlin
+class HelloWorld {
+    fun sayHello() {
+        println("Hello, World!")
+    }
+}
 ```
 
-### Publicação do Aplicativo
-1. Preparar o aplicativo para publicação: `npm run build`
-2. Criar uma conta nas lojas de aplicativos (Apple App Store e/ou Google Play Store)
-3. Enviar o aplicativo para as lojas de aplicativos
+### Implementando Funcionalidades
+1. Desenvolva as funcionalidades do aplicativo, como telas de login, cadastro, etc.
+2. Utilize bibliotecas e frameworks populares para agilizar o desenvolvimento.
+
+### Tratamento de Erros e Exceções
+```kotlin
+// Exemplo de tratamento de erros em Kotlin
+try {
+    // Código que pode gerar erro
+} catch (e: Exception) {
+    // Tratamento do erro
+    println("Erro: ${e.message}")
+}
+```
 
 ## Validação
-Para validar o conhecimento adquirido, é necessário:
-* Desenvolver um aplicativo móvel cross-plataforma utilizando React Native
-* Testar o aplicativo em diferentes dispositivos e plataformas
-* Publicar o aplicativo nas lojas de aplicativos e monitorar seu desempenho
+Para validar o aplicativo, é necessário realizar testes unitários, de integração e de sistema. Além disso, é importante realizar testes de usabilidade e experiência do usuário para garantir que o aplicativo atenda às necessidades dos usuários. 
+```kotlin
+// Exemplo de teste unitário em Kotlin
+import org.junit.Assert.assertEquals
+import org.junit.Test
+
+class HelloWorldTest {
+    @Test
+    fun testSayHello() {
+        val helloWorld = HelloWorld()
+        assertEquals("Hello, World!", helloWorld.sayHello())
+    }
+}
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-### Erros Comuns
-* **Erro de instalação do React Native CLI**: Verificar se o Node.js está instalado e se o comando `npm install -g react-native-cli` foi executado com sucesso.
-* **Erro de criação do projeto**: Verificar se o nome do projeto é válido e se o comando `npx react-native init NomeDoProjeto` foi executado com sucesso.
-* **Erro de instalação de dependências**: Verificar se as dependências necessárias estão instaladas e se o comando `npm install` foi executado com sucesso.
+### Tratamento de Exceções
+- **NullPointerException**: Verifique se as variáveis estão sendo inicializadas antes de serem usadas.
+- **IOException**: Trate erros de leitura e escrita de arquivos e streams.
+- **NetworkException**: Trate erros de conexão de rede e timeout.
 
 ### Edge Cases
-* **Desenvolvimento em diferentes plataformas**: Testar o aplicativo em diferentes dispositivos e plataformas, como Android e iOS.
-* **Compatibilidade com diferentes versões do React Native**: Verificar se o aplicativo é compatível com diferentes versões do React Native.
-* **Tratamento de erros de rede**: Implementar tratamento de erros de rede para lidar com situações de perda de conexão ou erro de comunicação com o servidor.
+- **Entrada de usuário inválida**: Verifique se a entrada do usuário está dentro dos parâmetros esperados.
+- **Conexão de rede instável**: Implemente retry e timeout para lidar com conexões de rede instáveis.
+- **Dispositivo com recursos limitados**: Otimize o aplicativo para dispositivos com recursos limitados, como memória e processamento.
 
-### Segurança
-* **Validação de dados**: Validar todos os dados de entrada para evitar ataques de injeção de código malicioso.
-* **Uso de criptografia**: Usar criptografia para proteger dados sensíveis, como senhas e informações de pagamento.
-* **Atualização de dependências**: Manter as dependências atualizadas para evitar vulnerabilidades de segurança conhecidas.
+### Exemplos de Código para Tratamento de Exceções e Edge Cases
+```kotlin
+// Exemplo de tratamento de NullPointerException
+var nome: String? = null
+if (nome != null) {
+    println(nome)
+} else {
+    println("Nome não informado")
+}
+
+// Exemplo de tratamento de IOException
+try {
+    // Código que pode gerar erro de leitura ou escrita
+} catch (e: IOException) {
+    // Tratamento do erro
+    println("Erro de leitura ou escrita: ${e.message}")
+}
+
+// Exemplo de tratamento de NetworkException
+try {
+    // Código que pode gerar erro de conexão de rede
+} catch (e: NetworkException) {
+    // Tratamento do erro
+    println("Erro de conexão de rede: ${e.message}")
+}
