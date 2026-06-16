@@ -1,4 +1,4 @@
-# Introdução às Habilidades Adicionais
+# SKILL
 Você tem habilidades adicionais documentadas em diretórios que contêm um arquivo "SKILL.md".
 
 Essas habilidades são:
@@ -6,7 +6,7 @@ Essas habilidades são:
  - {{name}} -> "{{path}}/SKILL.md"
 {{/skills}}
 
-**Importante:** Você DEVE ler o arquivo SKILL.md sempre que a descrição da habilidade corresponder à intenção do usuário ou possa ajudar a realizar sua tarefa.
+IMPORTANTE: Você DEVE ler o arquivo SKILL.md sempre que a descrição das habilidades corresponder à intenção do usuário ou possa ajudar a realizar sua tarefa.
 
 ## Habilidades Disponíveis
 {{#skills}}
@@ -18,16 +18,11 @@ Os caminhos referenciados dentro das pastas de habilidades são relativos àquel
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
 ### Tratamento de Erros
-- **Erro de Arquivo Não Encontrado:** Caso o arquivo SKILL.md não seja encontrado no diretório especificado, uma mensagem de erro será exibida informando o caminho incorreto.
-- **Erro de Formatação:** Se o arquivo SKILL.md estiver com formatação inválida, uma mensagem de erro será exibida solicitando a correção da formatação.
-- **Erro de Permissão:** Se o usuário não tiver permissão para acessar o arquivo SKILL.md, uma mensagem de erro será exibida informando a falta de permissão.
+- **Erro de Arquivo Não Encontrado**: Se o arquivo "SKILL.md" não for encontrado no diretório especificado, uma mensagem de erro deve ser exibida informando ao usuário sobre o problema e fornecendo orientações sobre como resolver.
+- **Erro de Permissão**: Se o usuário não tiver permissão para acessar o arquivo "SKILL.md" ou o diretório, uma mensagem de erro deve ser exibida explicando a situação e sugerindo como obter as permissões necessárias.
+- **Erro de Formatação**: Se o arquivo "SKILL.md" estiver mal formatado ou não seguir as convenções esperadas, uma mensagem de erro deve ser exibida ao usuário, indicando o problema e como corrigi-lo.
 
 ### Edge Cases
-- **Habilidades Duplicadas:** Caso haja habilidades duplicadas, apenas a primeira ocorrência será considerada.
-- **Caminhos Relativos:** Os caminhos relativos devem ser usados com cautela para evitar erros de referência.
-- **Descrições Vazias:** Se a descrição de uma habilidade estiver vazia, uma mensagem padrão será exibida em seu lugar.
-
-## Segurança
-- **Validação de Entrada:** Todas as entradas de usuário devem ser validadas para evitar ataques de injeção de código.
-- **Uso de Bibliotecas Seguras:** Somente bibliotecas seguras e atualizadas devem ser usadas para evitar vulnerabilidades.
-- **Controle de Acesso:** O acesso às habilidades deve ser controlado para garantir que apenas usuários autorizados possam visualizar e executar as habilidades.
+- **Habilidades com Nomes Duplicados**: Se houver habilidades com nomes idênticos, o sistema deve ser capaz de lidar com essa situação, possivelmente solicitando ao usuário que especifique qual habilidade deseja acessar ou implementando uma lógica para resolver automaticamente a ambiguidade.
+- **Caminhos Relativos**: O sistema deve ser capaz de lidar corretamente com caminhos relativos dentro das pastas de habilidades, garantindo que os recursos sejam acessados corretamente independentemente do local de onde a habilidade é acessada.
+- **Segurança**: Todas as habilidades e arquivos acessados devem ser verificados para garantir que não contenham código malicioso ou vulnerabilidades de segurança, protegendo assim o sistema e os usuários.
