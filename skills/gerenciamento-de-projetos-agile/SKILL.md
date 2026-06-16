@@ -1,41 +1,72 @@
 ---
 name: Gerenciamento de Projetos Ágil
-description: Esta habilidade ensina como aplicar metodologias ágeis, como Scrum e Kanban, para gerenciar projetos de desenvolvimento de software.
+description: Aborda as metodologias ágeis para gerenciamento de projetos, incluindo Scrum, Kanban e Lean
 ---
 
 ## Objetivo
-O objetivo desta habilidade é capacitar os desenvolvedores a aplicar metodologias ágeis, como Scrum e Kanban, para gerenciar projetos de desenvolvimento de software de forma eficaz. Isso inclui entender os princípios básicos do gerenciamento ágil, como a importância da colaboração, flexibilidade e entrega contínua de valor.
+O objetivo deste guia é fornecer uma visão geral das metodologias ágeis para gerenciamento de projetos, incluindo Scrum, Kanban e Lean, e como elas podem ser aplicadas em projetos de desenvolvimento de software.
 
 ## Pré-requisitos
-Para aproveitar ao máximo esta habilidade, é recomendado que os desenvolvedores tenham:
-- Conhecimento básico de desenvolvimento de software
-- Experiência em trabalhar em equipes
-- Familiaridade com conceitos de gerenciamento de projetos
+Para aproveitar ao máximo este guia, é recomendado que o leitor tenha conhecimento básico em:
+* Desenvolvimento de software
+* Gerenciamento de projetos
+* Metodologias ágeis
 
 ## Passo a Passo Técnico / Exemplos de Código
 ### Introdução ao Scrum
-1. **Definição do Projeto**: Identifique o projeto e estabeleça os objetivos.
-2. **Formação da Equipe**: Selecione os membros da equipe, incluindo o Product Owner, Scrum Master e Desenvolvedores.
-3. **Sprint Planning**: Planeje o sprint, definindo os objetivos e as tarefas.
-4. **Daily Scrum**: Realize reuniões diárias para discutir o progresso e os obstáculos.
+O Scrum é uma metodologia ágil que se concentra em entregas incrementais e iterativas. Ele é baseado em três papéis principais:
+* Product Owner: responsável por priorizar e refinar os requisitos do produto
+* Scrum Master: responsável por garantir que o time siga as práticas do Scrum
+* Development Team: responsável por desenvolver o produto
 
 ### Introdução ao Kanban
-1. **Visualização do Fluxo de Trabalho**: Crie um quadro Kanban para visualizar o fluxo de trabalho.
-2. **Definição de Limites**: Estabeleça limites para cada coluna do quadro.
-3. **Priorização**: Priorize as tarefas com base na importância e na urgência.
-4. **Revisão Contínua**: Revise e ajuste o fluxo de trabalho regularmente.
+O Kanban é uma metodologia ágil que se concentra em visualizar o fluxo de trabalho e limitar o trabalho em andamento. Ele é baseado em quatro princípios principais:
+* Visualizar o fluxo de trabalho
+* Limitar o trabalho em andamento
+* Focar na entrega contínua
+* Melhorar continuamente
+
+### Introdução ao Lean
+O Lean é uma metodologia ágil que se concentra em eliminar desperdício e maximizar o valor para o cliente. Ele é baseado em cinco princípios principais:
+* Definir o valor
+* Mapear o fluxo de valor
+* Criar um fluxo contínuo
+* Estabelecer um ritmo de produção
+* Melhorar continuamente
 
 ## Validação
-Para validar a aplicação eficaz das metodologias ágeis, é importante:
-- Monitorar o progresso do projeto
-- Realizar retrospectivas regulares para identificar oportunidades de melhoria
-- Ajustar o processo ágil conforme necessário para garantir a entrega contínua de valor.
+Para validar a implementação das metodologias ágeis, é importante monitorar os seguintes indicadores:
+* Velocidade de entrega
+* Qualidade do produto
+* Satisfação do cliente
+* Morale da equipe
+
+Exemplo de código para monitorar a velocidade de entrega:
+```python
+import pandas as pd
+
+# Carregar os dados de entrega
+try:
+    data = pd.read_csv('entregas.csv')
+except FileNotFoundError:
+    print("Arquivo de entregas não encontrado.")
+    data = None
+
+# Calcular a velocidade de entrega
+if data is not None:
+    try:
+        velocidade = data['entregas'].mean()
+        print(f'Velocidade de entrega: {velocidade:.2f}')
+    except KeyError:
+        print("Coluna de entregas não encontrada no arquivo.")
+else:
+    print("Não é possível calcular a velocidade de entrega.")
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-- **Gerenciamento de Dependências**: Certifique-se de que as dependências entre as tarefas sejam claramente definidas e gerenciadas para evitar bloqueios.
-- **Tratamento de Erros**: Estabeleça um processo para lidar com erros e exceções, garantindo que o time possa aprender com os erros e melhorar o processo.
-- **Comunicação Ineficaz**: Desenvolva um plano para lidar com problemas de comunicação dentro da equipe, como falta de feedback ou mal-entendidos.
-- **Mudanças nos Requisitos**: Tenha um processo para lidar com mudanças nos requisitos do projeto, garantindo que a equipe possa adaptar-se rapidamente e de forma eficaz.
-- **Segurança**: Implemente práticas de segurança para proteger o código e os dados do projeto, como autenticação, autorização e criptografia.
-- **Escalabilidade**: Considere a escalabilidade do projeto e planeje para lidar com aumentos no tráfego ou na demanda, garantindo que o sistema possa lidar com a carga adicional.
-- **Documentação**: Mantenha uma documentação atualizada do projeto, incluindo o processo ágil, as decisões tomadas e as lições aprendidas, para garantir que o conhecimento seja compartilhado e preservado.
+Além do exemplo acima, é importante considerar os seguintes casos de exceção e edge cases:
+* **Dados inconsistentes**: Verificar se os dados de entrega estão consistentes e não contêm erros de digitação ou formatação.
+* **Dados faltantes**: Verificar se há dados faltantes ou inconsistentes que possam afetar a precisão da velocidade de entrega.
+* **Erros de cálculo**: Verificar se os cálculos estão corretos e não contêm erros de arredondamento ou truncamento.
+* **Limitações de escalabilidade**: Verificar se a solução é escalável e pode lidar com grandes volumes de dados.
+* **Segurança**: Verificar se a solução é segura e não expõe dados sensíveis ou confidenciais.
+* **Manutenção**: Verificar se a solução é fácil de manter e atualizar, e se os logs de erro são claros e úteis para depuração.
