@@ -47,10 +47,18 @@ Task tool (general-purpose):
 
     ⚠️ Tratamento de Exceções e Edge Cases
 
-    *   **Planos vazios ou inexistentes:** Verifique se o arquivo do plano está vazio ou não existe. Se isso ocorrer, registre um problema e forneça uma explicação clara sobre como o plano deve ser revisado.
-    *   **Especificações ausentes ou incompletas:** Se a especificação estiver ausente ou for incompleta, verifique se o plano pode ser aprovado com base nas informações disponíveis. Se não for possível, registre um problema e solicite mais informações.
-    *   **Tarefas mal definidas ou contraditórias:** Se as tarefas forem mal definidas ou contraditórias, registre um problema e forneça uma explicação clara sobre como as tarefas devem ser revisadas.
-    *   **Problemas de segurança:** Se o plano apresentar problemas de segurança, como a falta de autenticação ou autorização, registre um problema e forneça uma explicação clara sobre como o problema deve ser resolvido.
-    *   **Erros de formatação ou sintaxe:** Se o plano apresentar erros de formatação ou sintaxe, registre um problema e forneça uma explicação clara sobre como o erro deve ser corrigido.
+    **Cenários de Erro:**
+    - Arquivo de plano não encontrado: Verifique se o caminho do arquivo está correto e se o arquivo existe.
+    - Arquivo de especificação não encontrado: Verifique se o caminho do arquivo está correto e se o arquivo existe.
+    - Planos incompletos ou com erros de formatação: Verifique se o plano está completo e se não há erros de formatação.
+    - Conflitos de versão: Verifique se há conflitos de versão entre o plano e a especificação.
 
-**Reviewer returns:** Status, Issues (if any), Recommendations
+    **Tratamento de Exceções:**
+    - Se o arquivo de plano ou especificação não for encontrado, retorne um erro e solicite que o usuário verifique os caminhos dos arquivos.
+    - Se o plano estiver incompleto ou tiver erros de formatação, retorne um aviso e solicite que o usuário revise o plano.
+    - Se houver conflitos de versão, retorne um aviso e solicite que o usuário verifique as versões do plano e da especificação.
+
+    **Segurança:**
+    - Verifique se o plano não contém informações confidenciais ou sensíveis.
+    - Verifique se o plano está de acordo com as políticas de segurança da empresa.
+    - Se o plano contiver informações confidenciais ou sensíveis, retorne um erro e solicite que o usuário remova essas informações.
