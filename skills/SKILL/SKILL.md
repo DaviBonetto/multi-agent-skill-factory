@@ -1,142 +1,141 @@
 ---
-name: huggingface-local-models
-description: "Use to select models to run locally with llama.cpp and GGUF on CPU, Mac Metal, CUDA, or ROCm. Covers finding GGUFs, quant selection, running servers, exact GGUF file lookup, conversion, and OpenAI-compatible local serving."
+name: huggingface-tool-builder
+description: Use this skill when the user wants to build tool/scripts or achieve a task where using data from the Hugging Face API would help. This is especially useful when chaining or combining API calls or the task will be repeated/automated. This Skill creates a reusable script to fetch, enrich or process data.
 ---
 
-# Hugging Face Local Models
+# Hugging Face API Tool Builder
 
-Search the Hugging Face Hub for llama.cpp-compatible GGUF repos, choose the right quant, and launch the model with `llama-cli` or `llama-server`.
+Your purpose is now is to create reusable command line scripts and utilities for using the Hugging Face API, allowing chaining, piping and intermediate processing where helpful. You can access the API directly, as well as use the `hf` command line tool. Model and Dataset cards can be accessed from repositories directly.
 
-## Default Workflow
+## Script Rules
 
-1. Search the Hub with `apps=llama.cpp`.
-2. Open `https://huggingface.co/<repo>?local-app=llama.cpp`.
-3. Prefer the exact HF local-app snippet and quant recommendation when it is visible.
-4. Confirm exact `.gguf` filenames with `https://huggingface.co/api/models/<repo>/tree/main?recursive=true`.
-5. Launch with `llama-cli -hf <repo>:<QUANT>` or `llama-server -hf <repo>:<QUANT>`.
-6. Fall back to `--hf-repo` plus `--hf-file` when the repo uses custom file naming.
-7. Convert from Transformers weights only if the repo does not already expose GGUF files.
+Make sure to follow these rules:
+ - Scripts must take a `--help` command line argument to describe their inputs and outputs
+ - Non-destructive scripts should be tested before handing over to the User
+ - Shell scripts are preferred, but use Python or TSX if complexity or user need requires it.
+ - IMPORTANT: Use the `HF_TOKEN` environment variable as an Authorization header. For example: `curl -H "Authorization: Bearer ${HF_TOKEN}" https://huggingface.co/api/`. This provides higher rate limits and appropriate authorization for data access.
+ - Investigate the shape of the API results before commiting to a final design; make use of piping and chaining where composability would be an advantage - prefer simple solutions where possible.
+ - Share usage examples once complete.
+ - Handle errors and exceptions properly, including API rate limits, network errors, and invalid input.
 
-## Quick Start
+Be sure to confirm User preferences where there are questions or clarifications needed.
 
-### Install llama.cpp
+## Sample Scripts
+
+Paths below are relative to this skill directory.
+
+Reference examples:
+- `references/hf_model_papers_auth.sh` — uses `HF_TOKEN` automatically and chains trending → model metadata → model card parsing with fallbacks; it demonstrates multi-step API usage plus auth hygiene for gated/private content.
+- `references/find_models_by_paper.sh` — optional `HF_TOKEN` usage via `--token`, consistent authenticated search, and a retry path when arXiv-prefixed searches are too narrow; it shows resilient query strategy and clear user-facing help.
+- `references/hf_model_card_frontmatter.sh` — uses the `hf` CLI to download model cards, extracts YAML frontmatter, and emits NDJSON summaries (license, pipeline tag, tags, gated prompt flag) for easy filtering.
+
+Baseline examples (ultra-simple, minimal logic, raw JSON output with `HF_TOKEN` header):
+- `references/baseline_hf_api.sh` — bash
+- `references/baseline_hf_api.py` — python
+- `references/baseline_hf_api.tsx` — typescript executable
+
+Composable utility (stdin → NDJSON):
+- `references/hf_enrich_models.sh` — reads model IDs from stdin, fetches metadata per ID, emits one JSON object per line for streaming pipelines.
+
+Composability through piping (shell-friendly JSON output):
+- `references/baseline_hf_api.sh 25 | jq -r '.[].id' | references/hf_enrich_models.sh | jq -s 'sort_by(.downloads) | reverse | .[:10]'`
+- `references/baseline_hf_api.sh 50 | jq '[.[] | {id, downloads}] | sort_by(.downloads) | reverse | .[:10]'`
+- `printf '%s
+' openai/gpt-oss-120b meta-llama/Meta-Llama-3.1-8B | references/hf_model_card_frontmatter.sh | jq -s 'map({id, license, has_extra_gated_prompt})'`
+
+## High Level Endpoints
+
+The following are the main API endpoints available at `https://huggingface.co`
+
+```
+/api/datasets
+/api/models
+/api/spaces
+/api/collections
+/api/daily_papers
+/api/notifications
+/api/settings
+/api/whoami-v2
+/api/trending
+/oauth/userinfo
+```
+
+## Accessing the API
+
+The API is documented with the OpenAPI standard at `https://huggingface.co/.well-known/openapi.json`.
+
+**IMPORTANT:** DO NOT ATTEMPT to read `https://huggingface.co/.well-known/openapi.json` directly as it is too large to process. 
+
+**IMPORTANT** Use `jq` to query and extract relevant parts. For example, 
+
+ Command to Get All 160 Endpoints
 
 ```bash
-brew install llama.cpp
-winget install llama.cpp
+curl -s "https://huggingface.co/.well-known/openapi.json" | jq '.paths | keys | sort'
 ```
+
+Model Search Endpoint Details
 
 ```bash
-git clone https://github.com/ggml-org/llama.cpp
-cd llama.cpp
-make
+curl -s "https://huggingface.co/.well-known/openapi.json" | jq '.paths["/api/models"]'
 ```
 
-### Authenticate for gated repos
+You can also query endpoints to see the shape of the data. When doing so constrain results to low numbers to make them easy to process, yet representative.
+
+## Using the HF command line tool
+
+The `hf` command line tool gives you further access to Hugging Face repository content and infrastructure. 
 
 ```bash
-hf auth login
+❯ hf --help
+Usage: hf [OPTIONS] COMMAND [ARGS]...
+
+  Hugging Face Hub CLI
+
+Options:
+  --help                Show this message and exit.
+
+Commands:
+  auth                 Manage authentication (login, logout, etc.).
+  buckets              Commands to interact with buckets.
+  cache                Manage local cache directory.
+  collections          Interact with collections on the Hub.
+  datasets             Interact with datasets on the Hub.
+  discussions          Manage discussions and pull requests on the Hub.
+  download             Download files from the Hub.
+  endpoints            Manage Hugging Face Inference Endpoints.
+  env                  Print information about the environment.
+  extensions           Manage hf CLI extensions.
+  jobs                 Run and manage Jobs on the Hub.
+  models               Interact with models on the Hub.
+  papers               Interact with papers on the Hub.
+  repos                Manage repos on the Hub.
+  skills               Manage skills for AI assistants.
+  spaces               Interact with spaces on the Hub.
+  sync                 Sync files between local directory and a bucket.
+  upload               Upload a file or a folder to the Hub.
+  upload-large-folder  Upload a large folder to the Hub.
+  version              Print information about the hf version.
+  webhooks             Manage webhooks on the Hub.
 ```
 
-### Search the Hub
-
-```text
-https://huggingface.co/models?apps=llama.cpp&sort=trending
-https://huggingface.co/models?search=Qwen3.6&apps=llama.cpp&sort=trending
-https://huggingface.co/models?search=<term>&apps=llama.cpp&num_parameters=min:0,max:24B&sort=trending
-```
-
-### Run directly from the Hub
-
-```bash
-llama-cli -hf unsloth/Qwen3.6-35B-A3B-GGUF:UD-Q4_K_M
-llama-server -hf unsloth/Qwen3.6-35B-A3B-GGUF:UD-Q4_K_M
-```
-
-### Run an exact GGUF file
-
-```bash
-llama-server 
-    --hf-repo unsloth/Qwen3.6-35B-A3B-GGUF 
-    --hf-file Qwen3.6-35B-A3B-UD-Q4_K_M.gguf 
-    -c 4096
-```
-
-### Convert only when no GGUF is available
-
-```bash
-hf download <repo-without-gguf> --local-dir ./model-src
-python convert_hf_to_gguf.py ./model-src 
-    --outfile model-f16.gguf 
-    --outtype f16
-llama-quantize model-f16.gguf model-q4_k_m.gguf Q4_K_M
-```
-
-### Smoke test a local server
-
-```bash
-llama-server -hf unsloth/Qwen3.6-35B-A3B-GGUF:UD-Q4_K_M
-```
-
-```bash
-curl http://localhost:8080/v1/chat/completions 
-  -H "Content-Type: application/json" 
-  -H "Authorization: Bearer no-key" 
-  -d '{
-    "messages": [
-      {"role": "user", "content": "Write a limerick about exception handling"}
-    ]
-  }'
-```
-
-## Quant Choice
-
-- Prefer the exact quant that HF marks as compatible on the `?local-app=llama.cpp` page.
-- Keep repo-native labels such as `UD-Q4_K_M` instead of normalizing them.
-- Default to `Q4_K_M` unless the repo page or hardware profile suggests otherwise.
-- Prefer `Q5_K_M` or `Q6_K` for code or technical workloads when memory allows.
-- Consider `Q3_K_M`, `Q4_K_S`, or repo-specific `IQ` / `UD-*` variants for tighter RAM or VRAM budgets.
-- Treat `mmproj-*.gguf` files as projector weights, not the main checkpoint.
-
-## Load References
-
-- Read [hub-discovery.md](references/hub-discovery.md) for URL-first workflows, model search, tree API extraction, and command reconstruction.
-- Read [quantization.md](references/quantization.md) for format tables, model scaling, quality tradeoffs, and `imatrix`.
-- Read [hardware.md](references/hardware.md) for Metal, CUDA, ROCm, or CPU build and acceleration details.
-
-## Resources
-
-- llama.cpp: `https://github.com/ggml-org/llama.cpp`
-- Hugging Face GGUF + llama.cpp docs: `https://huggingface.co/docs/hub/gguf-llamacpp`
-- Hugging Face Local Apps docs: `https://huggingface.co/docs/hub/main/local-apps`
-- Hugging Face Local Agents docs: `https://huggingface.co/docs/hub/agents-local`
-- GGUF converter Space: `https://huggingface.co/spaces/ggml-org/gguf-my-repo`
+The `hf` CLI command has replaced the now deprecated `huggingface-cli` command.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
 
-### Erros de Autenticação
+Ao criar scripts para interagir com a API do Hugging Face, é importante considerar os seguintes casos de exceção e edge cases:
 
-- Verifique se as credenciais de autenticação estão corretas e se o token de acesso está válido.
-- Se o erro persistir, tente revogar o token de acesso e solicitar um novo.
+* **Rate limits**: A API do Hugging Face tem limites de taxa para evitar abusos. Se o script exceder esses limites, ele receberá um erro 429. Nesse caso, o script deve esperar um tempo antes de tentar novamente.
+* **Erros de rede**: Erros de rede podem ocorrer durante a comunicação com a API. O script deve ser capaz de lidar com esses erros e tentar novamente se necessário.
+* **Entrada inválida**: O script deve validar a entrada do usuário para garantir que ela seja válida e consistente. Se a entrada for inválida, o script deve retornar um erro ou uma mensagem de ajuda.
+* **Respostas inválidas**: A API do Hugging Face pode retornar respostas inválidas ou inconsistentes. O script deve ser capaz de lidar com essas respostas e retornar um erro ou uma mensagem de ajuda se necessário.
+* **Autenticação**: O script deve lidar com a autenticação corretamente, usando o token de autenticação fornecido pelo usuário ou solicitando-o se necessário.
 
-### Erros de Conexão
+Para lidar com esses casos de exceção e edge cases, o script pode usar técnicas como:
 
-- Verifique se a conexão com a internet está estável e se o servidor está respondendo.
-- Se o erro persistir, tente aumentar o tempo de espera para a conexão ou verificar se há problemas de rede.
+* **Tentativas**: O script pode tentar novamente após um erro, com um tempo de espera entre as tentativas.
+* **Validação de entrada**: O script pode validar a entrada do usuário antes de enviá-la para a API.
+* **Verificação de respostas**: O script pode verificar as respostas da API para garantir que elas sejam válidas e consistentes.
+* **Uso de bibliotecas**: O script pode usar bibliotecas como `jq` para lidar com respostas JSON e `curl` para lidar com requisições HTTP.
 
-### Erros de Modelos
-
-- Verifique se o modelo está correto e se as dependências estão instaladas.
-- Se o erro persistir, tente atualizar o modelo ou verificar se há problemas de compatibilidade.
-
-### Edge Cases
-
-- **Modelos muito grandes**: Verifique se o modelo está dentro do limite de tamanho suportado pelo servidor.
-- **Modelos com dependências específicas**: Verifique se as dependências estão instaladas e se o modelo está configurado corretamente.
-- **Erros de quantização**: Verifique se a quantização está configurada corretamente e se o modelo está compatível com a quantização escolhida.
-
-### Tratamento de Exceções
-
-- **Try-except**: Use blocos try-except para capturar e tratar exceções específicas.
-- **Logging**: Registre os erros e exceções para facilitar a depuração e o diagnóstico.
-- **Recuperação**: Implemente mecanismos de recuperação para minimizar o impacto dos erros e exceções.
+Ao considerar esses casos de exceção e edge cases, o script pode ser mais robusto e confiável, e fornecer uma melhor experiência para o usuário.
