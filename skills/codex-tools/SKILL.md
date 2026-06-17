@@ -1,17 +1,30 @@
 # Codex Tool Mapping
 
-Skills use Claude Code tool names. When you encounter these in a skill, use your platform equivalent:
+Skills speak in actions ("dispatch a subagent", "create a todo", "read a file"). On Codex these resolve to the tools below.
 
-| Skill references | Codex equivalent |
-|-----------------|------------------|
-| `Task` tool (dispatch subagent) | `spawn_agent` (see [Subagent dispatch requires multi-agent support](#subagent-dispatch-requires-multi-agent-support)) |
-| Multiple `Task` calls (parallel) | Multiple `spawn_agent` calls |
-| Task returns result | `wait_agent` |
-| Task completes automatically | `close_agent` to free slot |
-| `TodoWrite` (task tracking) | `update_plan` |
-| `Skill` tool (invoke a skill) | Skills load natively — just follow the instructions |
-| `Read`, `Write`, `Edit` (files) | Use your native file tools |
-| `Bash` (run commands) | Use your native shell tools |
+| Action skills request | Codex equivalent |
+|----------------------|------------------|
+| Read a file | `shell` (e.g., `cat`, `head`, `tail`) — Codex reads files via shell |
+| Create / edit / delete a file | `apply_patch` (structured diff for create, update, delete) |
+| Run a shell command | `shell` |
+| Search file contents | `shell` (e.g., `grep`, `rg`) |
+| Find files by name | `shell` (e.g., `find`, `ls`) |
+| Fetch a URL | `shell` with `curl` / `wget` — Codex has no native fetch tool |
+| Search the web | `web_search` (enabled by default; configurable in `config.toml` via the top-level `web_search` setting — `live`, `cached`, or `disabled`) |
+| Invoke a skill | Skills load natively — just follow the instructions |
+| Dispatch a subagent (`Subagent (general-purpose):` template) | `spawn_agent` (see [Subagent dispatch requires multi-agent support](#subagent-dispatch-requires-multi-agent-support)) |
+| Multiple parallel dispatches | Multiple `spawn_agent` calls in one response |
+| Wait for subagent result | `wait_agent` |
+| Free up subagent slot when done | `close_agent` |
+| Task tracking ("create a todo", "mark complete") | `update_plan` |
+
+## Instructions file
+
+When a skill mentions "your instructions file", on Codex this is **`AGENTS.md`** at the project root. Codex also reads `~/.codex/AGENTS.md` for global context, and an `AGENTS.override.md` (in the project tree or `~/.codex/`) takes precedence when present. Codex walks from the project root down to the current working directory, concatenating `AGENTS.md` files it finds along the way, up to `project_doc_max_bytes` (32 KiB by default).
+
+## Personal skills directory
+
+User-level skills live at **`$CODEX_HOME/skills/`** (default `~/.codex/skills/`). Codex also reads the cross-runtime path **`~/.agents/skills/`** (shared with Copilot CLI and Gemini CLI). When both directories exist at the same scope, Codex loads them both as separate skill catalogs — Codex's docs don't currently document a precedence between them. Each skill is a subdirectory containing a `SKILL.md` (with `name` and `description` frontmatter).
 
 ## Subagent dispatch requires multi-agent support
 
@@ -60,34 +73,24 @@ names, commit messages, and PR descriptions for the user to copy.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
 
-### Erros de Configuração
+### Erros de Leitura de Arquivos
 
-*   Verifique se o arquivo `~/.codex/config.toml` existe e se a chave `multi_agent` está definida como `true`.
-*   Se o arquivo não existir, crie-o e adicione a chave `multi_agent` com valor `true`.
+- **Erro de permissão**: Ao tentar ler um arquivo sem permissão, o agente deve retornar um erro com uma mensagem clara indicando a falta de permissão.
+- **Arquivo não encontrado**: Se o arquivo não for encontrado, o agente deve retornar um erro com uma mensagem indicando que o arquivo não existe.
 
-### Erros de Execução
+### Erros de Execução de Comandos
 
-*   Se ocorrer um erro durante a execução de um skill, verifique os logs para identificar a causa do erro.
-*   Se o erro for relacionado à falta de permissões, verifique se o usuário tem as permissões necessárias para executar o skill.
+- **Comando inválido**: Se o comando for inválido, o agente deve retornar um erro com uma mensagem clara indicando que o comando é inválido.
+- **Erro de execução**: Se ocorrer um erro durante a execução do comando, o agente deve retornar um erro com uma mensagem indicando o erro ocorrido.
 
-### Edge Cases
+### Erros de Rede
 
-*   **Detached HEAD**: se o sandbox estiver em um estado de detached HEAD, o agente não poderá criar branches ou fazer push. Nesse caso, o agente deve informar o usuário para usar os controles nativos do App.
-*   **Worktree vinculado**: se o sandbox estiver em um worktree vinculado, o agente não deve criar um novo worktree. Em vez disso, o agente deve usar o worktree existente.
-*   **Falta de recursos**: se o sandbox não tiver recursos suficientes (por exemplo, memória ou CPU) para executar um skill, o agente deve informar o usuário e solicitar que ele aloque mais recursos.
+- **Erro de conexão**: Se ocorrer um erro de conexão ao tentar acessar uma URL, o agente deve retornar um erro com uma mensagem clara indicando o erro de conexão.
+- **Erro de timeout**: Se ocorrer um timeout ao tentar acessar uma URL, o agente deve retornar um erro com uma mensagem indicando o timeout.
 
-### Tratamento de Exceções
+### Outros Erros
 
-*   **Try-except**: use blocos try-except para capturar e tratar exceções que ocorram durante a execução de um skill.
-*   **Logging**: use logs para registrar erros e exceções, para que possam ser analisados e resolvidos posteriormente.
+- **Erro de configuração**: Se ocorrer um erro de configuração, o agente deve retornar um erro com uma mensagem clara indicando o erro de configuração.
+- **Erro desconhecido**: Se ocorrer um erro desconhecido, o agente deve retornar um erro com uma mensagem indicando que um erro desconhecido ocorreu.
 
-Exemplo de tratamento de exceções:
-```python
-try:
-    # Executar o skill
-    spawn_agent()
-except Exception as e:
-    # Registrar o erro no log
-    logging.error(f"Erro ao executar o skill: {e}")
-    # Informar o usuário sobre o erro
-    print(f"Erro ao executar o skill: {e}")
+Esses tratamentos de exceções e edge cases devem ser implementados para garantir que o agente seja robusto e forneça mensagens de erro claras e úteis para o usuário.
