@@ -1,141 +1,135 @@
 ---
-name: huggingface-tool-builder
-description: Use this skill when the user wants to build tool/scripts or achieve a task where using data from the Hugging Face API would help. This is especially useful when chaining or combining API calls or the task will be repeated/automated. This Skill creates a reusable script to fetch, enrich or process data.
+name: huggingface-trackio
+description: Track and visualize ML training experiments with Trackio. Use when logging metrics during training (Python API), firing alerts for training diagnostics, or retrieving/analyzing logged metrics (CLI). Supports real-time dashboard visualization, alerts with webhooks, HF Space syncing, and JSON output for automation.
 ---
 
-# Hugging Face API Tool Builder
+# Trackio - Experiment Tracking for ML Training
 
-Your purpose is now is to create reusable command line scripts and utilities for using the Hugging Face API, allowing chaining, piping and intermediate processing where helpful. You can access the API directly, as well as use the `hf` command line tool. Model and Dataset cards can be accessed from repositories directly.
+Trackio is an experiment tracking library for logging and visualizing ML training metrics. It syncs to Hugging Face Spaces for real-time monitoring dashboards.
 
-## Script Rules
+## Three Interfaces
 
-Make sure to follow these rules:
- - Scripts must take a `--help` command line argument to describe their inputs and outputs
- - Non-destructive scripts should be tested before handing over to the User
- - Shell scripts are preferred, but use Python or TSX if complexity or user need requires it.
- - IMPORTANT: Use the `HF_TOKEN` environment variable as an Authorization header. For example: `curl -H "Authorization: Bearer ${HF_TOKEN}" https://huggingface.co/api/`. This provides higher rate limits and appropriate authorization for data access.
- - Investigate the shape of the API results before commiting to a final design; make use of piping and chaining where composability would be an advantage - prefer simple solutions where possible.
- - Share usage examples once complete.
- - Handle errors and exceptions properly, including API rate limits, network errors, and invalid input.
+| Task | Interface | Reference |
+|------|-----------|-----------|
+| **Logging metrics** during training | Python API | [references/logging_metrics.md](references/logging_metrics.md) |
+| **Firing alerts** for training diagnostics | Python API | [references/alerts.md](references/alerts.md) |
+| **Retrieving metrics & alerts** after/during training | CLI | [references/retrieving_metrics.md](references/retrieving_metrics.md) |
 
-Be sure to confirm User preferences where there are questions or clarifications needed.
+## When to Use Each
 
-## Sample Scripts
+### Python API → Logging
 
-Paths below are relative to this skill directory.
+Use `import trackio` in your training scripts to log metrics:
 
-Reference examples:
-- `references/hf_model_papers_auth.sh` — uses `HF_TOKEN` automatically and chains trending → model metadata → model card parsing with fallbacks; it demonstrates multi-step API usage plus auth hygiene for gated/private content.
-- `references/find_models_by_paper.sh` — optional `HF_TOKEN` usage via `--token`, consistent authenticated search, and a retry path when arXiv-prefixed searches are too narrow; it shows resilient query strategy and clear user-facing help.
-- `references/hf_model_card_frontmatter.sh` — uses the `hf` CLI to download model cards, extracts YAML frontmatter, and emits NDJSON summaries (license, pipeline tag, tags, gated prompt flag) for easy filtering.
+- Initialize tracking with `trackio.init()`
+- Log metrics with `trackio.log()` or use TRL's `report_to="trackio"`
+- Finalize with `trackio.finish()`
 
-Baseline examples (ultra-simple, minimal logic, raw JSON output with `HF_TOKEN` header):
-- `references/baseline_hf_api.sh` — bash
-- `references/baseline_hf_api.py` — python
-- `references/baseline_hf_api.tsx` — typescript executable
+**Key concept**: For remote/cloud training, pass `space_id` — metrics sync to a Space dashboard so they persist after the instance terminates.
 
-Composable utility (stdin → NDJSON):
-- `references/hf_enrich_models.sh` — reads model IDs from stdin, fetches metadata per ID, emits one JSON object per line for streaming pipelines.
+→ See [references/logging_metrics.md](references/logging_metrics.md) for setup, TRL integration, and configuration options.
 
-Composability through piping (shell-friendly JSON output):
-- `references/baseline_hf_api.sh 25 | jq -r '.[].id' | references/hf_enrich_models.sh | jq -s 'sort_by(.downloads) | reverse | .[:10]'`
-- `references/baseline_hf_api.sh 50 | jq '[.[] | {id, downloads}] | sort_by(.downloads) | reverse | .[:10]'`
-- `printf '%s
-' openai/gpt-oss-120b meta-llama/Meta-Llama-3.1-8B | references/hf_model_card_frontmatter.sh | jq -s 'map({id, license, has_extra_gated_prompt})'`
+### Python API → Alerts
 
-## High Level Endpoints
+Insert `trackio.alert()` calls in training code to flag important events — like inserting print statements for debugging, but structured and queryable:
 
-The following are the main API endpoints available at `https://huggingface.co`
+- `trackio.alert(title="...", level=trackio.AlertLevel.WARN)` — fire an alert
+- Three severity levels: `INFO`, `WARN`, `ERROR`
+- Alerts are printed to terminal, stored in the database, shown in the dashboard, and optionally sent to webhooks (Slack/Discord)
 
+**Key concept for LLM agents**: Alerts are the primary mechanism for autonomous experiment iteration. An agent should insert alerts into training code for diagnostic conditions (loss spikes, NaN gradients, low accuracy, training stalls). Since alerts are printed to the terminal, an agent that is watching the training script's output will see them automatically. For background or detached runs, the agent can poll via CLI instead.
+
+→ See [references/alerts.md](references/alerts.md) for the full alerts API, webhook setup, and autonomous agent workflows.
+
+### CLI → Retrieving
+
+Use the `trackio` command to query logged metrics and alerts:
+
+- `trackio list projects/runs/metrics` — discover what's available
+- `trackio get project/run/metric` — retrieve summaries and values
+- `trackio list alerts --project <name> --json` — retrieve alerts
+- `trackio show` — launch the dashboard
+- `trackio sync` — sync to HF Space
+
+**Key concept**: Add `--json` for programmatic output suitable for automation and LLM agents.
+
+→ See [references/retrieving_metrics.md](references/retrieving_metrics.md) for all commands, workflows, and JSON output formats.
+
+## Minimal Logging Setup
+
+```python
+import trackio
+
+try:
+    trackio.init(project="my-project", space_id="username/trackio")
+    trackio.log({"loss": 0.1, "accuracy": 0.9})
+    trackio.log({"loss": 0.09, "accuracy": 0.91})
+    trackio.finish()
+except trackio.TrackioException as e:
+    print(f"Trackio error: {e}")
 ```
-/api/datasets
-/api/models
-/api/spaces
-/api/collections
-/api/daily_papers
-/api/notifications
-/api/settings
-/api/whoami-v2
-/api/trending
-/oauth/userinfo
-```
 
-## Accessing the API
-
-The API is documented with the OpenAPI standard at `https://huggingface.co/.well-known/openapi.json`.
-
-**IMPORTANT:** DO NOT ATTEMPT to read `https://huggingface.co/.well-known/openapi.json` directly as it is too large to process. 
-
-**IMPORTANT** Use `jq` to query and extract relevant parts. For example, 
-
- Command to Get All 160 Endpoints
+### Minimal Retrieval
 
 ```bash
-curl -s "https://huggingface.co/.well-known/openapi.json" | jq '.paths | keys | sort'
+trackio list projects --json
+trackio get metric --project my-project --run my-run --metric loss --json
 ```
 
-Model Search Endpoint Details
+## Autonomous ML Experiment Workflow
+
+When running experiments autonomously as an LLM agent, the recommended workflow is:
+
+1. **Set up training with alerts** — insert `trackio.alert()` calls for diagnostic conditions
+2. **Launch training** — run the script in the background
+3. **Poll for alerts** — use `trackio list alerts --project <name> --json --since <timestamp>` to check for new alerts
+4. **Read metrics** — use `trackio get metric ...` to inspect specific values
+5. **Iterate** — based on alerts and metrics, stop the run, adjust hyperparameters, and launch a new run
+
+```python
+import trackio
+
+try:
+    trackio.init(project="my-project", config={"lr": 1e-4})
+
+    for step in range(num_steps):
+        loss = train_step()
+        trackio.log({"loss": loss, "step": step})
+
+        if step > 100 and loss > 5.0:
+            trackio.alert(
+                title="Loss divergence",
+                text=f"Loss {loss:.4f} still high after {step} steps",
+                level=trackio.AlertLevel.ERROR,
+            )
+        if step > 0 and abs(loss) < 1e-8:
+            trackio.alert(
+                title="Vanishing loss",
+                text="Loss near zero — possible gradient collapse",
+                level=trackio.AlertLevel.WARN,
+            )
+
+    trackio.finish()
+except trackio.TrackioException as e:
+    print(f"Trackio error: {e}")
+```
+
+Then poll from a separate terminal/process:
 
 ```bash
-curl -s "https://huggingface.co/.well-known/openapi.json" | jq '.paths["/api/models"]'
+trackio list alerts --project my-project --json --since "2025-01-01T00:00:00"
 ```
-
-You can also query endpoints to see the shape of the data. When doing so constrain results to low numbers to make them easy to process, yet representative.
-
-## Using the HF command line tool
-
-The `hf` command line tool gives you further access to Hugging Face repository content and infrastructure. 
-
-```bash
-❯ hf --help
-Usage: hf [OPTIONS] COMMAND [ARGS]...
-
-  Hugging Face Hub CLI
-
-Options:
-  --help                Show this message and exit.
-
-Commands:
-  auth                 Manage authentication (login, logout, etc.).
-  buckets              Commands to interact with buckets.
-  cache                Manage local cache directory.
-  collections          Interact with collections on the Hub.
-  datasets             Interact with datasets on the Hub.
-  discussions          Manage discussions and pull requests on the Hub.
-  download             Download files from the Hub.
-  endpoints            Manage Hugging Face Inference Endpoints.
-  env                  Print information about the environment.
-  extensions           Manage hf CLI extensions.
-  jobs                 Run and manage Jobs on the Hub.
-  models               Interact with models on the Hub.
-  papers               Interact with papers on the Hub.
-  repos                Manage repos on the Hub.
-  skills               Manage skills for AI assistants.
-  spaces               Interact with spaces on the Hub.
-  sync                 Sync files between local directory and a bucket.
-  upload               Upload a file or a folder to the Hub.
-  upload-large-folder  Upload a large folder to the Hub.
-  version              Print information about the hf version.
-  webhooks             Manage webhooks on the Hub.
-```
-
-The `hf` CLI command has replaced the now deprecated `huggingface-cli` command.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
 
-Ao criar scripts para interagir com a API do Hugging Face, é importante considerar os seguintes casos de exceção e edge cases:
+### Exceções
 
-* **Rate limits**: A API do Hugging Face tem limites de taxa para evitar abusos. Se o script exceder esses limites, ele receberá um erro 429. Nesse caso, o script deve esperar um tempo antes de tentar novamente.
-* **Erros de rede**: Erros de rede podem ocorrer durante a comunicação com a API. O script deve ser capaz de lidar com esses erros e tentar novamente se necessário.
-* **Entrada inválida**: O script deve validar a entrada do usuário para garantir que ela seja válida e consistente. Se a entrada for inválida, o script deve retornar um erro ou uma mensagem de ajuda.
-* **Respostas inválidas**: A API do Hugging Face pode retornar respostas inválidas ou inconsistentes. O script deve ser capaz de lidar com essas respostas e retornar um erro ou uma mensagem de ajuda se necessário.
-* **Autenticação**: O script deve lidar com a autenticação corretamente, usando o token de autenticação fornecido pelo usuário ou solicitando-o se necessário.
+- **Conexão perdida**: Se a conexão com o servidor Trackio for perdida durante a execução do treinamento, o agente deve tentar reconectar e continuar o treinamento.
+- **Erros de logging**: Se ocorrer um erro ao logar métricas, o agente deve registrar o erro e continuar o treinamento.
+- **Erros de alertas**: Se ocorrer um erro ao disparar um alerta, o agente deve registrar o erro e continuar o treinamento.
 
-Para lidar com esses casos de exceção e edge cases, o script pode usar técnicas como:
+### Edge Cases
 
-* **Tentativas**: O script pode tentar novamente após um erro, com um tempo de espera entre as tentativas.
-* **Validação de entrada**: O script pode validar a entrada do usuário antes de enviá-la para a API.
-* **Verificação de respostas**: O script pode verificar as respostas da API para garantir que elas sejam válidas e consistentes.
-* **Uso de bibliotecas**: O script pode usar bibliotecas como `jq` para lidar com respostas JSON e `curl` para lidar com requisições HTTP.
-
-Ao considerar esses casos de exceção e edge cases, o script pode ser mais robusto e confiável, e fornecer uma melhor experiência para o usuário.
+- **Treinamento com muitas iterações**: Se o treinamento tiver muitas iterações, o agente deve garantir que o logging e os alertas sejam eficientes e não afetem o desempenho do treinamento.
+- **Treinamento com muitos parâmetros**: Se o treinamento tiver muitos parâmetros, o agente deve garantir que o logging e os alertas sejam personalizados para lidar com a complexidade do treinamento.
+- **Treinamento em ambientes distribuídos**: Se o treinamento for realizado em ambientes distribuídos, o agente deve garantir que o logging e os alertas sejam sincronizados e consistentes em todos os nós.
