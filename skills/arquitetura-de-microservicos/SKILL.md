@@ -1,100 +1,104 @@
-# Arquitetura de Microsserviços com Docker e Kubernetes
-## Descrição
-Ensina a projetar e implementar arquiteturas de microsserviços utilizando Docker e Kubernetes
+---
+name: Arquitetura de Microsserviços com Docker e Kubernetes
+description: Aprenda a projetar e implementar microsserviços utilizando Docker e Kubernetes, incluindo orquestração de contêineres e gerenciamento de escalabilidade.
+---
 
 ## Objetivo
-O objetivo deste guia é fornecer uma visão geral de como projetar e implementar arquiteturas de microsserviços utilizando Docker e Kubernetes. Ao final deste guia, você estará apto a criar e gerenciar microsserviços escaláveis e confiáveis.
+O objetivo deste guia é fornecer uma visão geral completa sobre como projetar e implementar microsserviços utilizando Docker e Kubernetes. Isso inclui entender como orquestrar contêineres e gerenciar a escalabilidade de aplicações em ambientes de produção.
 
 ## Pré-requisitos
-Para seguir este guia, você deve ter conhecimento básico em:
-* Desenvolvimento de software
-* Containers (Docker)
-* Orquestração de containers (Kubernetes)
-* Arquitetura de microsserviços
+Antes de começar, é necessário ter conhecimento básico sobre:
+- Docker e contêineres
+- Kubernetes e orquestração de contêineres
+- Conceitos de microsserviços e arquitetura de software
+- Ferramentas de linha de comando para Docker e Kubernetes
 
 ## Passo a Passo Técnico / Exemplos de Código
-### 1. Preparação do Ambiente
-Antes de começar, você precisará ter o Docker e o Kubernetes instalados em sua máquina. Você pode seguir os passos abaixo para instalar:
+### 1. Configuração Inicial do Docker
+Primeiramente, certifique-se de que o Docker esteja instalado e funcionando corretamente em seu sistema. Você pode verificar o status do Docker com o comando:
 ```bash
-# Instalar o Docker
-sudo apt-get update
-sudo apt-get install docker.io
-
-# Instalar o Kubernetes
-sudo apt-get update
-sudo apt-get install kubeadm
+docker --version
 ```
-### 2. Criação de Microsserviços
-Aqui está um exemplo de como criar um microsserviço simples em Python:
-```python
-from flask import Flask
-app = Flask(__name__)
+Em caso de erros, verifique se o Docker está instalado e se o serviço está ativo.
 
-@app.route("/")
-def hello():
-    return "Olá, Mundo!"
-
-if __name__ == "__main__":
-    app.run()
-```
-### 3. Containerização com Docker
-Agora, vamos criar um arquivo `Dockerfile` para containerizar o microsserviço:
+### 2. Criação de Imagens Docker
+Crie uma imagem Docker para seu microsserviço. Por exemplo, se você tiver uma aplicação Node.js, seu `Dockerfile` poderia ser similar a:
 ```dockerfile
-FROM python:3.9-slim
+FROM node:14
 
 WORKDIR /app
 
-COPY . /app
+COPY package*.json ./
 
-RUN pip install flask
+RUN npm install
 
-CMD ["python", "app.py"]
+COPY . .
+
+RUN npm run build
+
+EXPOSE 3000
+
+CMD [ "node", "server.js" ]
 ```
-### 4. Orquestração com Kubernetes
-Aqui está um exemplo de como criar um arquivo `deployment.yaml` para orquestrar o microsserviço:
+Certifique-se de que o `Dockerfile` esteja no diretório raiz do seu projeto e que o arquivo `package.json` esteja configurado corretamente.
+
+### 3. Orquestração com Kubernetes
+Depois de criar a imagem Docker, você precisará definir como o Kubernetes irá orquestrar seus contêineres. Isso é feito através de manifestos YAML, como o exemplo abaixo para um deployment:
 ```yml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: microsservico
+  name: meu-microsservico
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: microsservico
+      app: meu-microsservico
   template:
     metadata:
       labels:
-        app: microsservico
+        app: meu-microsservico
     spec:
       containers:
-      - name: microsservico
-        image: microsservico:latest
+      - name: meu-microsservico
+        image: meu-repositorio/meu-microsservico:latest
         ports:
-        - containerPort: 5000
+        - containerPort: 3000
 ```
+Verifique se o manifesto YAML está correto e se o repositório da imagem Docker está configurado corretamente.
+
+### 4. Implantação no Kubernetes
+Para implantar seu microsserviço no Kubernetes, use o comando:
+```bash
+kubectl apply -f deployment.yaml
+```
+Substitua `deployment.yaml` pelo nome do seu arquivo de manifesto. Em caso de erros, verifique se o arquivo de manifesto está correto e se o cluster Kubernetes está funcionando corretamente.
+
 ## Validação
-Para validar a implementação, você pode seguir os passos abaixo:
-1. Verificar se o microsserviço está rodando: `kubectl get pods`
-2. Verificar se o microsserviço está respondendo: `curl http://localhost:5000`
-3. Verificar se o microsserviço está escalando: `kubectl scale deployment microsservico --replicas=5`
+Para validar se seu microsserviço está funcionando corretamente, você pode usar o comando:
+```bash
+kubectl get deployments
+```
+Isso mostrará o status dos deployments no seu cluster Kubernetes. Além disso, você pode verificar os logs dos contêineres para garantir que a aplicação está executando como esperado:
+```bash
+kubectl logs -f deployment/meu-microsservico
+```
+Substitua `meu-microsservico` pelo nome do seu deployment.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-### Tratamento de Erros
-* Certifique-se de que o seu microsserviço esteja configurado para lidar com erros e exceções de forma adequada.
-* Utilize try-except para capturar erros e exceções em seu código.
-* Registre os erros e exceções para que possam ser analisados e resolvidos.
+### Erros de Instalação do Docker
+Se ocorrer um erro durante a instalação do Docker, verifique se o sistema operacional está compatível e se os requisitos de hardware estão atendidos.
+
+### Erros de Criação de Imagens Docker
+Se ocorrer um erro durante a criação da imagem Docker, verifique se o `Dockerfile` está correto e se o arquivo `package.json` está configurado corretamente.
+
+### Erros de Orquestração com Kubernetes
+Se ocorrer um erro durante a orquestração com Kubernetes, verifique se o manifesto YAML está correto e se o repositório da imagem Docker está configurado corretamente.
+
+### Erros de Implantação no Kubernetes
+Se ocorrer um erro durante a implantação no Kubernetes, verifique se o arquivo de manifesto está correto e se o cluster Kubernetes está funcionando corretamente.
 
 ### Edge Cases
-* Certifique-se de que o seu microsserviço esteja configurado para lidar com casos de bordo, como:
- + Requisições inválidas ou malformadas.
- + Falhas de rede ou conectividade.
- + Erros de autenticação ou autorização.
-* Utilize testes de unidade e integração para garantir que o seu microsserviço esteja funcionando corretamente em diferentes cenários.
-
-### Segurança
-* Certifique-se de que o seu microsserviço esteja configurado para ser seguro, utilizando:
- + Autenticação e autorização adequadas.
- + Criptografia de dados em trânsito e em repouso.
- + Firewalls e regras de segurança para controlar o acesso ao microsserviço.
-* Utilize ferramentas de segurança, como scanners de vulnerabilidade e firewalls, para proteger o seu microsserviço contra ataques e vulnerabilidades.
+- **Falha de rede**: Verifique se a rede está funcionando corretamente e se o cluster Kubernetes está acessível.
+- **Falha de armazenamento**: Verifique se o armazenamento está funcionando corretamente e se o repositório da imagem Docker está configurado corretamente.
+- **Falha de segurança**: Verifique se as configurações de segurança estão corretas e se o cluster Kubernetes está seguro.
