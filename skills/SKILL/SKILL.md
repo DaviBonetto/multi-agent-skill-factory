@@ -1,135 +1,175 @@
+# writing-plans
+description: Use when you have a spec or requirements for a multi-step task, before touching code
+
+# Writing Plans
+
+## Overview
+Write comprehensive implementation plans assuming the engineer has zero context for our codebase and questionable taste. Document everything they need to know: which files to touch for each task, code, testing, docs they might need to check, how to test it. Give them the whole plan as bite-sized tasks. DRY. YAGNI. TDD. Frequent commits.
+
+Assume they are a skilled developer, but know almost nothing about our toolset or problem domain. Assume they don't know good test design very well.
+
+**Announce at start:** "I'm using the writing-plans skill to create the implementation plan."
+
+**Context:** If working in an isolated worktree, it should have been created via the `superpowers:using-git-worktrees` skill at execution time.
+
+**Save plans to:** `docs/superpowers/plans/YYYY-MM-DD-<feature-name>.md`
+- (User preferences for plan location override this default)
+
+## Scope Check
+
+If the spec covers multiple independent subsystems, it should have been broken into sub-project specs during brainstorming. If it wasn't, suggest breaking this into separate plans — one per subsystem. Each plan should produce working, testable software on its own.
+
+## File Structure
+
+Before defining tasks, map out which files will be created or modified and what each one is responsible for. This is where decomposition decisions get locked in.
+
+- Design units with clear boundaries and well-defined interfaces. Each file should have one clear responsibility.
+- You reason best about code you can hold in context at once, and your edits are more reliable when files are focused. Prefer smaller, focused files over large ones that do too much.
+- Files that change together should live together. Split by responsibility, not by technical layer.
+- In existing codebases, follow established patterns. If the codebase uses large files, don't unilaterally restructure - but if a file you're modifying has grown unwieldy, including a split in the plan is reasonable.
+
+This structure informs the task decomposition. Each task should produce self-contained changes that make sense independently.
+
+## Task Right-Sizing
+
+A task is the smallest unit that carries its own test cycle and is worth a fresh reviewer's gate. When drawing task boundaries: fold setup, configuration, scaffolding, and documentation steps into the task whose deliverable needs them; split only where a reviewer could meaningfully reject one task while approving its neighbor. Each task ends with an independently testable deliverable.
+
+## Bite-Sized Task Granularity
+
+**Each step is one action (2-5 minutes):**
+- "Write the failing test" - step
+- "Run it to make sure it fails" - step
+- "Implement the minimal code to make the test pass" - step
+- "Run the tests and make sure they pass" - step
+- "Commit" - step
+
+## Plan Document Header
+
+**Every plan MUST start with this header:**
+
+```markdown
+# [Feature Name] Implementation Plan
+
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+
+**Goal:** [One sentence describing what this builds]
+
+**Architecture:** [2-3 sentences about approach]
+
+**Tech Stack:** [Key technologies/libraries]
+
+## Global Constraints
+
+[The spec's project-wide requirements — version floors, dependency limits, naming and copy rules, platform requirements — one line each, with exact values copied verbatim from the spec. Every task's requirements implicitly include this section.]
+
 ---
-name: huggingface-trackio
-description: Track and visualize ML training experiments with Trackio. Use when logging metrics during training (Python API), firing alerts for training diagnostics, or retrieving/analyzing logged metrics (CLI). Supports real-time dashboard visualization, alerts with webhooks, HF Space syncing, and JSON output for automation.
----
 
-# Trackio - Experiment Tracking for ML Training
+## Task Structure
 
-Trackio is an experiment tracking library for logging and visualizing ML training metrics. It syncs to Hugging Face Spaces for real-time monitoring dashboards.
+```markdown
+### Task N: [Component Name]
 
-## Three Interfaces
+**Files:**
+- Create: `exact/path/to/file.py`
+- Modify: `exact/path/to/existing.py:123-145`
+- Test: `tests/exact/path/to/test.py`
 
-| Task | Interface | Reference |
-|------|-----------|-----------|
-| **Logging metrics** during training | Python API | [references/logging_metrics.md](references/logging_metrics.md) |
-| **Firing alerts** for training diagnostics | Python API | [references/alerts.md](references/alerts.md) |
-| **Retrieving metrics & alerts** after/during training | CLI | [references/retrieving_metrics.md](references/retrieving_metrics.md) |
+**Interfaces:**
+- Consumes: [what this task uses from earlier tasks — exact signatures]
+- Produces: [what later tasks rely on — exact function names, parameter and return types. A task's implementer sees only their own task; this block is how they learn the names and types neighboring tasks use.]
 
-## When to Use Each
-
-### Python API → Logging
-
-Use `import trackio` in your training scripts to log metrics:
-
-- Initialize tracking with `trackio.init()`
-- Log metrics with `trackio.log()` or use TRL's `report_to="trackio"`
-- Finalize with `trackio.finish()`
-
-**Key concept**: For remote/cloud training, pass `space_id` — metrics sync to a Space dashboard so they persist after the instance terminates.
-
-→ See [references/logging_metrics.md](references/logging_metrics.md) for setup, TRL integration, and configuration options.
-
-### Python API → Alerts
-
-Insert `trackio.alert()` calls in training code to flag important events — like inserting print statements for debugging, but structured and queryable:
-
-- `trackio.alert(title="...", level=trackio.AlertLevel.WARN)` — fire an alert
-- Three severity levels: `INFO`, `WARN`, `ERROR`
-- Alerts are printed to terminal, stored in the database, shown in the dashboard, and optionally sent to webhooks (Slack/Discord)
-
-**Key concept for LLM agents**: Alerts are the primary mechanism for autonomous experiment iteration. An agent should insert alerts into training code for diagnostic conditions (loss spikes, NaN gradients, low accuracy, training stalls). Since alerts are printed to the terminal, an agent that is watching the training script's output will see them automatically. For background or detached runs, the agent can poll via CLI instead.
-
-→ See [references/alerts.md](references/alerts.md) for the full alerts API, webhook setup, and autonomous agent workflows.
-
-### CLI → Retrieving
-
-Use the `trackio` command to query logged metrics and alerts:
-
-- `trackio list projects/runs/metrics` — discover what's available
-- `trackio get project/run/metric` — retrieve summaries and values
-- `trackio list alerts --project <name> --json` — retrieve alerts
-- `trackio show` — launch the dashboard
-- `trackio sync` — sync to HF Space
-
-**Key concept**: Add `--json` for programmatic output suitable for automation and LLM agents.
-
-→ See [references/retrieving_metrics.md](references/retrieving_metrics.md) for all commands, workflows, and JSON output formats.
-
-## Minimal Logging Setup
+- [ ] **Step 1: Write the failing test**
 
 ```python
-import trackio
-
-try:
-    trackio.init(project="my-project", space_id="username/trackio")
-    trackio.log({"loss": 0.1, "accuracy": 0.9})
-    trackio.log({"loss": 0.09, "accuracy": 0.91})
-    trackio.finish()
-except trackio.TrackioException as e:
-    print(f"Trackio error: {e}")
+def test_specific_behavior():
+    result = function(input)
+    assert result == expected
 ```
 
-### Minimal Retrieval
+- [ ] **Step 2: Run test to verify it fails**
 
-```bash
-trackio list projects --json
-trackio get metric --project my-project --run my-run --metric loss --json
-```
+Run: `pytest tests/path/test.py::test_name -v`
+Expected: FAIL with "function not defined"
 
-## Autonomous ML Experiment Workflow
-
-When running experiments autonomously as an LLM agent, the recommended workflow is:
-
-1. **Set up training with alerts** — insert `trackio.alert()` calls for diagnostic conditions
-2. **Launch training** — run the script in the background
-3. **Poll for alerts** — use `trackio list alerts --project <name> --json --since <timestamp>` to check for new alerts
-4. **Read metrics** — use `trackio get metric ...` to inspect specific values
-5. **Iterate** — based on alerts and metrics, stop the run, adjust hyperparameters, and launch a new run
+- [ ] **Step 3: Write minimal implementation**
 
 ```python
-import trackio
-
-try:
-    trackio.init(project="my-project", config={"lr": 1e-4})
-
-    for step in range(num_steps):
-        loss = train_step()
-        trackio.log({"loss": loss, "step": step})
-
-        if step > 100 and loss > 5.0:
-            trackio.alert(
-                title="Loss divergence",
-                text=f"Loss {loss:.4f} still high after {step} steps",
-                level=trackio.AlertLevel.ERROR,
-            )
-        if step > 0 and abs(loss) < 1e-8:
-            trackio.alert(
-                title="Vanishing loss",
-                text="Loss near zero — possible gradient collapse",
-                level=trackio.AlertLevel.WARN,
-            )
-
-    trackio.finish()
-except trackio.TrackioException as e:
-    print(f"Trackio error: {e}")
+def function(input):
+    return expected
 ```
 
-Then poll from a separate terminal/process:
+- [ ] **Step 4: Run test to verify it passes**
+
+Run: `pytest tests/path/test.py::test_name -v`
+Expected: PASS
+
+- [ ] **Step 5: Commit**
 
 ```bash
-trackio list alerts --project my-project --json --since "2025-01-01T00:00:00"
+git add tests/path/test.py src/path/file.py
+git commit -m "feat: add specific feature"
 ```
+
+## No Placeholders
+
+Every step must contain the actual content an engineer needs. These are **plan failures** — never write them:
+- "TBD", "TODO", "implement later", "fill in details"
+- "Add appropriate error handling" / "add validation" / "handle edge cases"
+- "Write tests for the above" (without actual test code)
+- "Similar to Task N" (repeat the code — the engineer may be reading tasks out of order)
+- Steps that describe what to do without showing how (code blocks required for code steps)
+- References to types, functions, or methods not defined in any task
+
+## Remember
+- Exact file paths always
+- Complete code in every step — if a step changes code, show the code
+- Exact commands with expected output
+- DRY, YAGNI, TDD, frequent commits
+
+## Self-Review
+
+After writing the complete plan, look at the spec with fresh eyes and check the plan against it. This is a checklist you run yourself — not a subagent dispatch.
+
+**1. Spec coverage:** Skim each section/requirement in the spec. Can you point to a task that implements it? List any gaps.
+
+**2. Placeholder scan:** Search your plan for red flags — any of the patterns from the "No Placeholders" section above. Fix them.
+
+**3. Type consistency:** Do the types, method signatures, and property names you used in later tasks match what you defined in earlier tasks? A function called `clearLayers()` in Task 3 but `clearFullLayers()` in Task 7 is a bug.
+
+If you find issues, fix them inline. No need to re-review — just fix and move on. If you find a spec requirement with no task, add the task.
+
+## Execution Handoff
+
+After saving the plan, offer execution choice:
+
+**"Plan complete and saved to `docs/superpowers/plans/<filename>.md`. Two execution options:**
+
+**1. Subagent-Driven (recommended)** - I dispatch a fresh subagent per task, review between tasks, fast iteration
+
+**2. Inline Execution** - Execute tasks in this session using executing-plans, batch execution with checkpoints
+
+**Which approach?"
+
+**If Subagent-Driven chosen:**
+- **REQUIRED SUB-SKILL:** Use superpowers:subagent-driven-development
+- Fresh subagent per task + two-stage review
+
+**If Inline Execution chosen:**
+- **REQUIRED SUB-SKILL:** Use superpowers:executing-plans
+- Batch execution with checkpoints for review
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
 
-### Exceções
+Ao criar o plano de implementação, é fundamental considerar os possíveis erros e exceções que podem ocorrer durante a execução das tarefas. Aqui estão algumas diretrizes para lidar com esses casos:
 
-- **Conexão perdida**: Se a conexão com o servidor Trackio for perdida durante a execução do treinamento, o agente deve tentar reconectar e continuar o treinamento.
-- **Erros de logging**: Se ocorrer um erro ao logar métricas, o agente deve registrar o erro e continuar o treinamento.
-- **Erros de alertas**: Se ocorrer um erro ao disparar um alerta, o agente deve registrar o erro e continuar o treinamento.
+- **Tratamento de Erros:** Cada tarefa deve incluir um plano para lidar com erros que possam ocorrer durante a execução. Isso pode incluir a criação de testes para verificar se o código lida corretamente com erros, bem como a implementação de mecanismos de recuperação de erros.
 
-### Edge Cases
+- **Edge Cases:** Os casos de bordo são situações extremas ou incomuns que podem ocorrer durante a execução das tarefas. É fundamental considerar esses casos e criar planos para lidar com eles. Por exemplo, se uma tarefa envolve a leitura de um arquivo, é importante considerar o que acontece se o arquivo não existir ou se for muito grande para ser lido.
 
-- **Treinamento com muitas iterações**: Se o treinamento tiver muitas iterações, o agente deve garantir que o logging e os alertas sejam eficientes e não afetem o desempenho do treinamento.
-- **Treinamento com muitos parâmetros**: Se o treinamento tiver muitos parâmetros, o agente deve garantir que o logging e os alertas sejam personalizados para lidar com a complexidade do treinamento.
-- **Treinamento em ambientes distribuídos**: Se o treinamento for realizado em ambientes distribuídos, o agente deve garantir que o logging e os alertas sejam sincronizados e consistentes em todos os nós.
+- **Exceções:** As exceções são erros que ocorrem durante a execução do código. É fundamental criar planos para lidar com exceções, incluindo a criação de testes para verificar se o código lida corretamente com exceções.
+
+- **Validação de Dados:** A validação de dados é fundamental para garantir que os dados sejam consistentes e válidos. É importante criar planos para validar os dados durante a execução das tarefas.
+
+- **Segurança:** A segurança é fundamental para garantir que o código seja executado de forma segura. É importante criar planos para lidar com questões de segurança, incluindo a criação de testes para verificar se o código lida corretamente com questões de segurança.
+
+Ao considerar esses fatores, é possível criar um plano de implementação robusto e seguro que lidere com os possíveis erros e exceções que podem ocorrer durante a execução das tarefas.
