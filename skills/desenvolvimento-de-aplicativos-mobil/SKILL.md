@@ -1,135 +1,189 @@
 ---
-name: Desenvolvimento de Aplicativos Móveis
-description: Ensina como desenvolver aplicativos móveis para Android e iOS, utilizando tecnologias como React Native e Flutter
+name: Desenvolvimento de Aplicativos Móveis com React Native
+description: Aprenda a criar aplicativos móveis para Android e iOS utilizando React Native
 ---
 
 ## Objetivo
-O objetivo deste guia é ensinar como desenvolver aplicativos móveis para Android e iOS, utilizando tecnologias como React Native e Flutter. Com isso, os desenvolvedores poderão criar aplicativos móveis de alta qualidade e escaláveis.
+O objetivo deste guia é fornecer uma visão geral detalhada de como criar aplicativos móveis para Android e iOS utilizando React Native. Isso inclui design de interface de usuário, funcionalidades de rede e armazenamento de dados, visando o desenvolvimento de aplicativos móveis de alta qualidade e escalabilidade.
 
 ## Pré-requisitos
-Para seguir este guia, é necessário ter conhecimentos básicos em:
-* Programação em JavaScript (para React Native)
-* Programação em Dart (para Flutter)
-* Desenvolvimento de aplicativos móveis
-* Ferramentas de desenvolvimento como Node.js, npm e yarn
+Antes de começar, é necessário ter conhecimento em:
+- JavaScript
+- React
+- Node.js
+- Git
+- Familiaridade com o ambiente de desenvolvimento móvel (Android Studio ou Xcode)
+- Conhecimento básico de CSS e HTML
+
+Além disso, é recomendado ter:
+- Um computador com sistema operacional de 64 bits (Windows, macOS ou Linux)
+- Android Studio ou Xcode instalado
+- Node.js e npm instalados
+- Um dispositivo móvel para testes (opcional, mas recomendado)
 
 ## Passo a Passo Técnico / Exemplos de Código
-### Configurando o Ambiente
-Para começar a desenvolver aplicativos móveis, é necessário configurar o ambiente de desenvolvimento. Isso inclui:
-* Instalar o Node.js e o npm
-* Instalar o React Native ou o Flutter
-* Configurar o emulador ou o dispositivo físico para testar o aplicativo
+### Instalação do React Native
+Primeiramente, é necessário instalar o React Native CLI globalmente no seu sistema. Isso pode ser feito executando o seguinte comando no terminal:
+```bash
+npm install -g react-native-cli
+```
+### Criando um Novo Projeto
+Para criar um novo projeto React Native, execute:
+```bash
+npx react-native init NomeDoSeuApp
+```
+Substitua `NomeDoSeuApp` pelo nome do seu aplicativo.
 
-```javascript
-// Exemplo de código em React Native
+### Estrutura do Projeto
+A estrutura básica de um projeto React Native inclui:
+- `android`: Pasta contendo o código específico para Android
+- `ios`: Pasta contendo o código específico para iOS
+- `node_modules`: Pasta contendo as dependências do projeto
+- `App.js`: Arquivo principal do aplicativo
+
+### Desenvolvimento da Interface de Usuário
+O desenvolvimento da interface de usuário é feito utilizando JSX, que é uma extensão de JavaScript. Por exemplo, para criar um componente de botão, você pode usar:
+```jsx
 import React from 'react';
+import { View, Text, TouchableOpacity } from 'react-native';
+
+const Botao = () => {
+  return (
+    <TouchableOpacity>
+      <Text>Botão</Text>
+    </TouchableOpacity>
+  );
+};
+
+export default Botao;
+```
+### Funcionalidades de Rede
+Para realizar requisições de rede, você pode usar a biblioteca `fetch` ou uma biblioteca de terceiros como `axios`. Exemplo com `fetch`:
+```jsx
+import React, { useState, useEffect } from 'react';
 import { View, Text } from 'react-native';
 
-const App = () => {
+const Dados = () => {
+  const [dados, setDados] = useState([]);
+  const [erro, setErro] = useState(null);
+
+  useEffect(() => {
+    fetch('https://api.example.com/dados')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(response.statusText);
+        }
+        return response.json();
+      })
+      .then(data => setDados(data))
+      .catch(error => setErro(error.message));
+  }, []);
+
+  if (erro) {
+    return <Text>Erro: {erro}</Text>;
+  }
+
   return (
     <View>
-      <Text>Olá, Mundo!</Text>
+      {dados.map(item => (
+        <Text key={item.id}>{item.nome}</Text>
+      ))}
     </View>
   );
 };
 
-export default App;
+export default Dados;
 ```
+### Armazenamento de Dados
+Para armazenar dados localmente, você pode usar o `AsyncStorage` do React Native. Exemplo:
+```jsx
+import React, { useState } from 'react';
+import { View, Text, TextInput } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-```dart
-// Exemplo de código em Flutter
-import 'package:flutter/material.dart';
+const Armazenamento = () => {
+  const [nome, setNome] = useState('');
+  const [erro, setErro] = useState(null);
 
-void main() {
-  runApp(MyApp());
-}
+  const salvar = async () => {
+    try {
+      await AsyncStorage.setItem('nome', nome);
+    } catch (error) {
+      setErro(error.message);
+    }
+  };
 
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Olá, Mundo!',
-      home: Scaffold(
-        body: Center(
-          child: Text('Olá, Mundo!'),
-        ),
-      ),
-    );
+  const carregar = async () => {
+    try {
+      const valor = await AsyncStorage.getItem('nome');
+      setNome(valor);
+    } catch (error) {
+      setErro(error.message);
+    }
+  };
+
+  if (erro) {
+    return <Text>Erro: {erro}</Text>;
   }
-}
+
+  return (
+    <View>
+      <TextInput
+        value={nome}
+        onChangeText={setNome}
+        placeholder="Digite seu nome"
+      />
+      <Text>Nome: {nome}</Text>
+      <Button title="Salvar" onPress={salvar} />
+      <Button title="Carregar" onPress={carregar} />
+    </View>
+  );
+};
+
+export default Armazenamento;
 ```
-
-### Desenvolvendo o Aplicativo
-Com o ambiente configurado, é possível começar a desenvolver o aplicativo. Isso inclui:
-* Criar a estrutura do aplicativo
-* Desenvolver as telas e os componentes
-* Implementar a lógica de negócios
-
-### Testando o Aplicativo
-Para garantir que o aplicativo esteja funcionando corretamente, é necessário testá-lo. Isso inclui:
-* Testar o aplicativo em emuladores ou dispositivos físicos
-* Verificar a compatibilidade com diferentes plataformas e dispositivos
-
 ## Validação
-Para validar o aplicativo, é necessário verificar se ele atende aos requisitos e expectativas. Isso inclui:
-* Verificar a funcionalidade e a usabilidade do aplicativo
-* Verificar a compatibilidade com diferentes plataformas e dispositivos
-* Verificar a segurança e a privacidade do aplicativo
+Para validar o funcionamento do aplicativo, é importante testá-lo em diferentes dispositivos e plataformas. Além disso, é recomendado utilizar ferramentas de teste como o Jest e o Detox para automatizar os testes.
+
+Certifique-se de que o aplicativo atende aos requisitos de segurança e privacidade, como a proteção de dados sensíveis e a conformidade com as políticas de privacidade da Apple e do Google.
+
+Ao finalizar o desenvolvimento, é importante realizar testes de desempenho e otimizar o aplicativo para melhorar a experiência do usuário.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-Além disso, é fundamental considerar os seguintes casos de exceção e edge cases:
-* **Erros de conexão**: lidar com erros de conexão de rede, como perda de conexão ou timeout.
-* **Erros de parsing**: lidar com erros de parsing de dados, como JSON inválido ou dados malformatados.
-* **Erros de segurança**: lidar com erros de segurança, como ataques de injeção de código ou vazamento de dados.
-* **Dispositivos com recursos limitados**: lidar com dispositivos com recursos limitados, como memória ou processamento.
-* **Plataformas não suportadas**: lidar com plataformas não suportadas, como versões antigas do Android ou iOS.
-* **Integração com serviços externos**: lidar com integração com serviços externos, como APIs ou serviços de pagamento.
-* **Testes de desempenho**: realizar testes de desempenho para garantir que o aplicativo funcione bem em diferentes condições.
-
-Exemplos de código para lidar com esses casos:
-```javascript
-// Lidar com erros de conexão em React Native
-import { NetInfo } from 'react-native';
-
-NetInfo.isConnected.fetch().then(isConnected => {
-  if (!isConnected) {
-    console.log('Sem conexão de rede');
-  }
-});
+### Tratamento de Erros de Rede
+Para tratar erros de rede, é importante verificar o status da resposta e lançar um erro se necessário. Exemplo:
+```jsx
+fetch('https://api.example.com/dados')
+  .then(response => {
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+    return response.json();
+  })
+  .then(data => setDados(data))
+  .catch(error => setErro(error.message));
 ```
-
-```dart
-// Lidar com erros de parsing em Flutter
-import 'package:flutter/material.dart';
-import 'package:json/json.dart';
-
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Olá, Mundo!',
-      home: Scaffold(
-        body: Center(
-          child: Text('Olá, Mundo!'),
-        ),
-      ),
-    );
-  }
-}
-
-void parseJson(String json) {
-  try {
-    JsonDecoder decoder = JsonDecoder();
-    Map<String, dynamic> mapa = decoder.convert(json);
-    print(mapa);
-  } catch (e) {
-    print('Erro de parsing: $e');
-  }
+### Tratamento de Erros de Armazenamento
+Para tratar erros de armazenamento, é importante verificar se o erro ocorreu durante a operação de armazenamento e lançar um erro se necessário. Exemplo:
+```jsx
+try {
+  await AsyncStorage.setItem('nome', nome);
+} catch (error) {
+  setErro(error.message);
 }
 ```
+### Tratamento de Edge Cases
+Para tratar edge cases, é importante considerar cenários como:
+- Usuário sem permissão para acessar o armazenamento
+- Usuário com dispositivo com recursos limitados
+- Usuário com conexão de rede instável
 
-Com esses passos e considerando os casos de exceção e edge cases, é possível desenvolver um aplicativo móvel de alta qualidade e escalável, utilizando tecnologias como React Native e Flutter.
+Exemplo de como tratar esses cenários:
+```jsx
+if (!permission) {
+  // Tratar erro de permissão
+} else if (deviceResourcesLimited) {
+  // Otimizar aplicativo para dispositivos com recursos limitados
+} else if (networkConnectionUnstable) {
+  // Tratar erro de conexão de rede
+}
