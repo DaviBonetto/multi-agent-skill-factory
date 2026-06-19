@@ -29,10 +29,9 @@ Pi core does not ship a standard task-list tool. If a todo/task extension is ins
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
 
-- **Erro de Permissão**: Ao tentar executar uma ação que requer permissão de administrador, o agente deve verificar se o usuário atual tem as permissões necessárias. Se não, o agente deve retornar uma mensagem de erro indicando a falta de permissão.
-- **Arquivo não Encontrado**: Ao tentar ler ou editar um arquivo, o agente deve verificar se o arquivo existe. Se não, o agente deve retornar uma mensagem de erro indicando que o arquivo não foi encontrado.
-- **Subagente não Instalado**: Ao tentar dispatchar um subagente, o agente deve verificar se o subagente está instalado. Se não, o agente deve retornar uma mensagem de erro indicando que o subagente não está instalado.
-- **Erro de Sintaxe**: Ao tentar executar uma ação que requer uma sintaxe específica, o agente deve verificar se a sintaxe está correta. Se não, o agente deve retornar uma mensagem de erro indicando o erro de sintaxe.
-- **Limite de Recursos**: Ao tentar executar uma ação que requer recursos (como memória ou CPU), o agente deve verificar se os recursos estão disponíveis. Se não, o agente deve retornar uma mensagem de erro indicando o limite de recursos.
-- **Conflito de Versão**: Ao tentar executar uma ação que requer uma versão específica de um pacote, o agente deve verificar se a versão está instalada. Se não, o agente deve retornar uma mensagem de erro indicando o conflito de versão.
-- **Timeout**: Ao tentar executar uma ação que demora muito tempo para ser concluída, o agente deve verificar se o timeout foi alcançado. Se sim, o agente deve retornar uma mensagem de erro indicando o timeout.
+*   **Erro de permissão**: Ao tentar executar uma ação que exige permissão de administrador, o agente deve verificar se o usuário atual tem as permissões necessárias. Se não, o agente deve retornar uma mensagem de erro indicando a falta de permissão.
+*   **Arquivo não encontrado**: Ao tentar ler ou editar um arquivo, o agente deve verificar se o arquivo existe. Se o arquivo não existir, o agente deve retornar uma mensagem de erro indicando que o arquivo não foi encontrado.
+*   **Comando inválido**: Ao receber um comando inválido, o agente deve retornar uma mensagem de erro indicando que o comando é inválido e fornecer ajuda sobre como usar o comando corretamente.
+*   **Subagente não instalado**: Ao tentar dispatchar um subagente, o agente deve verificar se o subagente está instalado. Se o subagente não estiver instalado, o agente deve retornar uma mensagem de erro indicando que o subagente não está instalado e fornecer instruções sobre como instalá-lo.
+*   **Ferramenta de tarefa não instalada**: Ao tentar criar ou marcar uma tarefa como completa, o agente deve verificar se uma ferramenta de tarefa está instalada. Se a ferramenta de tarefa não estiver instalada, o agente deve usar o plano ou o arquivo `TODO.md` para rastrear as tarefas.
+*   **Exceção de sintaxe**: Ao tentar executar uma ação que exige sintaxe específica, o agente deve verificar se a sintaxe está correta. Se a sintaxe estiver incorreta, o agente deve retornar uma mensagem de erro indicando a exceção de sintaxe e fornecer ajuda sobre como corrigir a sintaxe.
