@@ -1,76 +1,54 @@
 ---
-name: Introdução ao DevOps
-description: Introduz conceitos básicos de DevOps, incluindo automação de deploy, monitoramento e gerenciamento de infraestrutura
+name: Introdução a DevOps e Automatização de Processos
+description: Esta habilidade apresenta os fundamentos de DevOps, incluindo ferramentas e técnicas para automatizar processos de desenvolvimento e implantação de software.
 ---
 
 ## Objetivo
-O objetivo desta introdução é fornecer uma visão geral dos conceitos básicos de DevOps, permitindo que os iniciantes entendam como integrar desenvolvimento e operações para melhorar a eficiência e a qualidade dos produtos de software.
+O objetivo desta habilidade é apresentar os fundamentos de DevOps e automatização de processos, permitindo que os desenvolvedores junior entendam como integrar desenvolvimento e operações para melhorar a eficiência e a qualidade dos produtos de software.
 
 ## Pré-requisitos
 - Conhecimento básico de desenvolvimento de software
-- Familiaridade com conceitos de infraestrutura de TI
-- Experiência com linha de comando (terminal ou prompt de comando)
+- Familiaridade com linha de comando (terminal)
+- Noções de versionamento de código (Git)
 
 ## Passo a Passo Técnico / Exemplos de Código
-### Automatização de Deploy
-A automatização de deploy é um dos pilares do DevOps. Isso envolve o uso de ferramentas para automatizar a implantação de software em ambientes de produção. Uma ferramenta comum para isso é o Jenkins.
+### Introdução a DevOps
+DevOps é uma abordagem que busca unir desenvolvimento (Dev) e operações (Ops) para melhorar a colaboração e a eficiência na entrega de software. Isso inclui a automação de processos, como build, testes, deploy e monitoramento.
 
+### Ferramentas de Automatização
+Algumas ferramentas comuns usadas em DevOps incluem:
+- **Jenkins**: Para automação de build e deploy
+- **Docker**: Para containerização de aplicações
+- **Kubernetes**: Para orquestração de contêineres
+
+### Exemplo de Automatização com Jenkins
 ```bash
-# Exemplo de comando para instalar o Jenkins em um sistema Ubuntu
-sudo apt update
-sudo apt install default-jdk
-wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | sudo apt-key add -
-sudo sh -c 'echo deb https://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
-sudo apt update
-sudo apt install jenkins
-```
+# Instalar o Jenkins
+sudo apt-get update
+sudo apt-get install jenkins
 
-### Monitoramento
-O monitoramento é crucial para garantir que os sistemas estejam funcionando corretamente e para identificar problemas antes que eles afetem os usuários. Ferramentas como Prometheus e Grafana são amplamente usadas para monitoramento.
-
-```yml
-# Exemplo de configuração do Prometheus
-global:
-  scrape_interval: 15s
-
-scrape_configs:
-  - job_name: 'node'
-    static_configs:
-      - targets: ['localhost:9090']
-```
-
-### Gerenciamento de Infraestrutura
-O gerenciamento de infraestrutura envolve a gestão de recursos de TI, como servidores, redes e armazenamento. Ferramentas como Ansible são úteis para automatizar tarefas de configuração e gerenciamento.
-
-```yaml
-# Exemplo de playbook do Ansible para configurar um servidor web
----
-- name: Configuração do Servidor Web
-  hosts: servidores
-  become: yes
-
-  tasks:
-  - name: Instalar o Apache
-    apt:
-      name: apache2
-      state: present
+# Configurar o Jenkins
+sudo systemctl start jenkins
+sudo systemctl enable jenkins
 ```
 
 ## Validação
-Para validar o conhecimento adquirido, é recomendável:
-- Implementar um pipeline de deploy automatizado usando Jenkins para um projeto simples.
-- Configurar o monitoramento básico usando Prometheus e visualizar os dados com o Grafana.
-- Criar um playbook do Ansible para configurar um servidor web e executá-lo em um ambiente de teste.
+Para validar o conhecimento adquirido, é recomendado:
+- Criar um pipeline de deploy automático usando Jenkins
+- Implementar containerização com Docker
+- Configurar um ambiente de desenvolvimento com ferramentas de DevOps
 
-Essas atividades práticas ajudarão a solidificar a compreensão dos conceitos de DevOps e preparar o caminho para estudos mais avançados e especializados na área.
+Com a conclusão dessas etapas, você terá uma compreensão sólida dos fundamentos de DevOps e como aplicá-los para melhorar a eficiência e a qualidade dos produtos de software.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-Ao trabalhar com DevOps, é importante considerar os seguintes casos de bordo e exceções:
-- **Falha na instalação do Jenkins**: Verifique se o repositório está configurado corretamente e se há problemas de conectividade de rede.
-- **Problemas de configuração do Prometheus**: Certifique-se de que a configuração esteja correta e que os targets estejam acessíveis.
-- **Erros de execução do Ansible**: Verifique se o playbook está correto e se as permissões de acesso estão configuradas corretamente.
-- **Segurança**: Sempre utilize práticas de segurança, como autenticação e autorização, ao trabalhar com ferramentas de DevOps.
-- **Recuperação de desastres**: Tenha um plano de recuperação de desastres para minimizar o impacto de falhas nos sistemas.
-- **Monitoramento de desempenho**: Monitore o desempenho dos sistemas e ajuste as configurações conforme necessário para garantir a eficiência e a escalabilidade.
-- **Integração contínua**: Implemente integração contínua para garantir que as alterações no código sejam testadas e validadas automaticamente.
-- **Gerenciamento de dependências**: Gerencie as dependências dos projetos para evitar problemas de compatibilidade e segurança.
+Ao trabalhar com DevOps e automatização de processos, é importante considerar os seguintes casos:
+- **Falha na instalação do Jenkins**: Verifique se o repositório está atualizado e se o pacote está disponível.
+- **Erro na configuração do Docker**: Verifique se o Docker está instalado e configurado corretamente, e se o contêiner está sendo executado com as permissões necessárias.
+- **Problemas de compatibilidade com Kubernetes**: Verifique se a versão do Kubernetes é compatível com a versão do Docker e do Jenkins.
+- **Erros de segurança**: Verifique se as permissões de acesso estão configuradas corretamente e se os dados sensíveis estão sendo protegidos.
+- **Desempenho ruim**: Verifique se o hardware está sobrecarregado e se o pipeline de deploy está otimizado para o ambiente de produção.
+
+Além disso, é importante ter um plano de contingência para lidar com falhas inesperadas, como:
+- **Backup e restauração de dados**: Verifique se os dados estão sendo backupados regularmente e se é possível restaurá-los em caso de falha.
+- **Monitoramento e alertas**: Verifique se o sistema está sendo monitorado e se os alertas estão sendo enviados em caso de falha.
+- **Equipe de suporte**: Verifique se a equipe de suporte está treinada e disponível para lidar com problemas inesperados.
