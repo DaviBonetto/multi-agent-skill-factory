@@ -1,175 +1,151 @@
-# writing-plans
-description: Use when you have a spec or requirements for a multi-step task, before touching code
-
-# Writing Plans
-
-## Overview
-Write comprehensive implementation plans assuming the engineer has zero context for our codebase and questionable taste. Document everything they need to know: which files to touch for each task, code, testing, docs they might need to check, how to test it. Give them the whole plan as bite-sized tasks. DRY. YAGNI. TDD. Frequent commits.
-
-Assume they are a skilled developer, but know almost nothing about our toolset or problem domain. Assume they don't know good test design very well.
-
-**Announce at start:** "I'm using the writing-plans skill to create the implementation plan."
-
-**Context:** If working in an isolated worktree, it should have been created via the `superpowers:using-git-worktrees` skill at execution time.
-
-**Save plans to:** `docs/superpowers/plans/YYYY-MM-DD-<feature-name>.md`
-- (User preferences for plan location override this default)
-
-## Scope Check
-
-If the spec covers multiple independent subsystems, it should have been broken into sub-project specs during brainstorming. If it wasn't, suggest breaking this into separate plans — one per subsystem. Each plan should produce working, testable software on its own.
-
-## File Structure
-
-Before defining tasks, map out which files will be created or modified and what each one is responsible for. This is where decomposition decisions get locked in.
-
-- Design units with clear boundaries and well-defined interfaces. Each file should have one clear responsibility.
-- You reason best about code you can hold in context at once, and your edits are more reliable when files are focused. Prefer smaller, focused files over large ones that do too much.
-- Files that change together should live together. Split by responsibility, not by technical layer.
-- In existing codebases, follow established patterns. If the codebase uses large files, don't unilaterally restructure - but if a file you're modifying has grown unwieldy, including a split in the plan is reasonable.
-
-This structure informs the task decomposition. Each task should produce self-contained changes that make sense independently.
-
-## Task Right-Sizing
-
-A task is the smallest unit that carries its own test cycle and is worth a fresh reviewer's gate. When drawing task boundaries: fold setup, configuration, scaffolding, and documentation steps into the task whose deliverable needs them; split only where a reviewer could meaningfully reject one task while approving its neighbor. Each task ends with an independently testable deliverable.
-
-## Bite-Sized Task Granularity
-
-**Each step is one action (2-5 minutes):**
-- "Write the failing test" - step
-- "Run it to make sure it fails" - step
-- "Implement the minimal code to make the test pass" - step
-- "Run the tests and make sure they pass" - step
-- "Commit" - step
-
-## Plan Document Header
-
-**Every plan MUST start with this header:**
-
-```markdown
-# [Feature Name] Implementation Plan
-
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
-
-**Goal:** [One sentence describing what this builds]
-
-**Architecture:** [2-3 sentences about approach]
-
-**Tech Stack:** [Key technologies/libraries]
-
-## Global Constraints
-
-[The spec's project-wide requirements — version floors, dependency limits, naming and copy rules, platform requirements — one line each, with exact values copied verbatim from the spec. Every task's requirements implicitly include this section.]
-
+---
+name: verification-before-completion
+description: Use when about to claim work is complete, fixed, or passing, before committing or creating PRs - requires running verification commands and confirming output before making any success claims; evidence before assertions always
 ---
 
-## Task Structure
+# Verification Before Completion
 
-```markdown
-### Task N: [Component Name]
+## Overview
 
-**Files:**
-- Create: `exact/path/to/file.py`
-- Modify: `exact/path/to/existing.py:123-145`
-- Test: `tests/exact/path/to/test.py`
+Claiming work is complete without verification is dishonesty, not efficiency.
 
-**Interfaces:**
-- Consumes: [what this task uses from earlier tasks — exact signatures]
-- Produces: [what later tasks rely on — exact function names, parameter and return types. A task's implementer sees only their own task; this block is how they learn the names and types neighboring tasks use.]
+**Core principle:** Evidence before claims, always.
 
-- [ ] **Step 1: Write the failing test**
+**Violating the letter of this rule is violating the spirit of this rule.**
 
-```python
-def test_specific_behavior():
-    result = function(input)
-    assert result == expected
+## The Iron Law
+
+```
+NO COMPLETION CLAIMS WITHOUT FRESH VERIFICATION EVIDENCE
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+If you haven't run the verification command in this message, you cannot claim it passes.
 
-Run: `pytest tests/path/test.py::test_name -v`
-Expected: FAIL with "function not defined"
+## The Gate Function
 
-- [ ] **Step 3: Write minimal implementation**
+```
+BEFORE claiming any status or expressing satisfaction:
 
-```python
-def function(input):
-    return expected
+1. IDENTIFY: What command proves this claim?
+2. RUN: Execute the FULL command (fresh, complete)
+3. READ: Full output, check exit code, count failures
+4. VERIFY: Does output confirm the claim?
+   - If NO: State actual status with evidence
+   - If YES: State claim WITH evidence
+5. ONLY THEN: Make the claim
+
+Skip any step = lying, not verifying
 ```
 
-- [ ] **Step 4: Run test to verify it passes**
+## Common Failures
 
-Run: `pytest tests/path/test.py::test_name -v`
-Expected: PASS
+| Claim | Requires | Not Sufficient |
+|-------|----------|----------------|
+| Tests pass | Test command output: 0 failures | Previous run, "should pass" |
+| Linter clean | Linter output: 0 errors | Partial check, extrapolation |
+| Build succeeds | Build command: exit 0 | Linter passing, logs look good |
+| Bug fixed | Test original symptom: passes | Code changed, assumed fixed |
+| Regression test works | Red-green cycle verified | Test passes once |
+| Agent completed | VCS diff shows changes | Agent reports "success" |
+| Requirements met | Line-by-line checklist | Tests passing |
 
-- [ ] **Step 5: Commit**
+## Red Flags - STOP
 
-```bash
-git add tests/path/test.py src/path/file.py
-git commit -m "feat: add specific feature"
+- Using "should", "probably", "seems to"
+- Expressing satisfaction before verification ("Great!", "Perfect!", "Done!", etc.)
+- About to commit/push/PR without verification
+- Trusting agent success reports
+- Relying on partial verification
+- Thinking "just this once"
+- Tired and wanting work over
+- **ANY wording implying success without having run verification**
+
+## Rationalization Prevention
+
+| Excuse | Reality |
+|--------|---------|
+| "Should work now" | RUN the verification |
+| "I'm confident" | Confidence ≠ evidence |
+| "Just this once" | No exceptions |
+| "Linter passed" | Linter ≠ compiler |
+| "Agent said success" | Verify independently |
+| "I'm tired" | Exhaustion ≠ excuse |
+| "Partial check is enough" | Partial proves nothing |
+| "Different words so rule doesn't apply" | Spirit over letter |
+
+## Key Patterns
+
+**Tests:**
+```
+ [Run test command] [See: 34/34 pass] "All tests pass"
+ "Should pass now" / "Looks correct"
 ```
 
-## No Placeholders
+**Regression tests (TDD Red-Green):**
+```
+ Write → Run (pass) → Revert fix → Run (MUST FAIL) → Restore → Run (pass)
+ "I've written a regression test" (without red-green verification)
+```
 
-Every step must contain the actual content an engineer needs. These are **plan failures** — never write them:
-- "TBD", "TODO", "implement later", "fill in details"
-- "Add appropriate error handling" / "add validation" / "handle edge cases"
-- "Write tests for the above" (without actual test code)
-- "Similar to Task N" (repeat the code — the engineer may be reading tasks out of order)
-- Steps that describe what to do without showing how (code blocks required for code steps)
-- References to types, functions, or methods not defined in any task
+**Build:**
+```
+ [Run build] [See: exit 0] "Build passes"
+ "Linter passed" (linter doesn't check compilation)
+```
 
-## Remember
-- Exact file paths always
-- Complete code in every step — if a step changes code, show the code
-- Exact commands with expected output
-- DRY, YAGNI, TDD, frequent commits
+**Requirements:**
+```
+ Re-read plan → Create checklist → Verify each → Report gaps or completion
+ "Tests pass, phase complete"
+```
 
-## Self-Review
+**Agent delegation:**
+```
+ Agent reports success → Check VCS diff → Verify changes → Report actual state
+ Trust agent report
+```
 
-After writing the complete plan, look at the spec with fresh eyes and check the plan against it. This is a checklist you run yourself — not a subagent dispatch.
+## Why This Matters
 
-**1. Spec coverage:** Skim each section/requirement in the spec. Can you point to a task that implements it? List any gaps.
+From 24 failure memories:
+- your human partner said "I don't believe you" - trust broken
+- Undefined functions shipped - would crash
+- Missing requirements shipped - incomplete features
+- Time wasted on false completion → redirect → rework
+- Violates: "Honesty is a core value. If you lie, you'll be replaced."
 
-**2. Placeholder scan:** Search your plan for red flags — any of the patterns from the "No Placeholders" section above. Fix them.
+## When To Apply
 
-**3. Type consistency:** Do the types, method signatures, and property names you used in later tasks match what you defined in earlier tasks? A function called `clearLayers()` in Task 3 but `clearFullLayers()` in Task 7 is a bug.
+**ALWAYS before:**
+- ANY variation of success/completion claims
+- ANY expression of satisfaction
+- ANY positive statement about work state
+- Committing, PR creation, task completion
+- Moving to next task
+- Delegating to agents
 
-If you find issues, fix them inline. No need to re-review — just fix and move on. If you find a spec requirement with no task, add the task.
+**Rule applies to:**
+- Exact phrases
+- Paraphrases and synonyms
+- Implications of success
+- ANY communication suggesting completion/correctness
 
-## Execution Handoff
+## The Bottom Line
 
-After saving the plan, offer execution choice:
+**No shortcuts for verification.**
 
-**"Plan complete and saved to `docs/superpowers/plans/<filename>.md`. Two execution options:**
+Run the command. Read the output. THEN claim the result.
 
-**1. Subagent-Driven (recommended)** - I dispatch a fresh subagent per task, review between tasks, fast iteration
+This is non-negotiable.
 
-**2. Inline Execution** - Execute tasks in this session using executing-plans, batch execution with checkpoints
+## Tratamento de Exceções e Edge Cases
 
-**Which approach?"
+Além dos casos comuns e padrões, é importante considerar exceções e edge cases que possam surgir durante o processo de verificação. Aqui estão algumas diretrizes adicionais:
 
-**If Subagent-Driven chosen:**
-- **REQUIRED SUB-SKILL:** Use superpowers:subagent-driven-development
-- Fresh subagent per task + two-stage review
+- **Erros inesperados:** Se ocorrer um erro inesperado durante a execução do comando de verificação, não ignore-o. Em vez disso, investigue a causa raiz do erro e verifique se o problema está relacionado à implementação ou ao comando de verificação.
+- **Saídas inconsistentes:** Se a saída do comando de verificação for inconsistente ou ambígua, não faça suposições. Em vez disso, verifique a documentação do comando ou consulte um especialista para garantir que a saída seja interpretada corretamente.
+- **Comandos de verificação complexos:** Se o comando de verificação for complexo ou tiver muitos parâmetros, certifique-se de que todos os parâmetros sejam configurados corretamente e que o comando seja executado como esperado.
+- **Dependências:** Se o comando de verificação depender de outras ferramentas ou bibliotecas, certifique-se de que todas as dependências estejam instaladas e configuradas corretamente.
+- **Limitações do comando de verificação:** Se o comando de verificação tiver limitações ou restrições, certifique-se de que essas limitações sejam consideradas ao interpretar a saída do comando.
 
-**If Inline Execution chosen:**
-- **REQUIRED SUB-SKILL:** Use superpowers:executing-plans
-- Batch execution with checkpoints for review
-
-## ⚠️ Tratamento de Exceções e Edge Cases
-
-Ao criar o plano de implementação, é fundamental considerar os possíveis erros e exceções que podem ocorrer durante a execução das tarefas. Aqui estão algumas diretrizes para lidar com esses casos:
-
-- **Tratamento de Erros:** Cada tarefa deve incluir um plano para lidar com erros que possam ocorrer durante a execução. Isso pode incluir a criação de testes para verificar se o código lida corretamente com erros, bem como a implementação de mecanismos de recuperação de erros.
-
-- **Edge Cases:** Os casos de bordo são situações extremas ou incomuns que podem ocorrer durante a execução das tarefas. É fundamental considerar esses casos e criar planos para lidar com eles. Por exemplo, se uma tarefa envolve a leitura de um arquivo, é importante considerar o que acontece se o arquivo não existir ou se for muito grande para ser lido.
-
-- **Exceções:** As exceções são erros que ocorrem durante a execução do código. É fundamental criar planos para lidar com exceções, incluindo a criação de testes para verificar se o código lida corretamente com exceções.
-
-- **Validação de Dados:** A validação de dados é fundamental para garantir que os dados sejam consistentes e válidos. É importante criar planos para validar os dados durante a execução das tarefas.
-
-- **Segurança:** A segurança é fundamental para garantir que o código seja executado de forma segura. É importante criar planos para lidar com questões de segurança, incluindo a criação de testes para verificar se o código lida corretamente com questões de segurança.
-
-Ao considerar esses fatores, é possível criar um plano de implementação robusto e seguro que lidere com os possíveis erros e exceções que podem ocorrer durante a execução das tarefas.
+Ao considerar esses exceções e edge cases, você pode garantir que o processo de verificação seja mais robusto e confiável, e que os resultados sejam precisos e confiáveis.
