@@ -1,5 +1,6 @@
 # UV Rules
-## Introdução
+=====================================
+
 Use estas regras para scripts Python neste repositório:
 
 1. **Use PEP 723 inline dependencies** em cada script executável:
@@ -9,16 +10,16 @@ Use estas regras para scripts Python neste repositório:
    # dependencies = ["requests"]
    # ///
    ```
-   Certifique-se de que as dependências estejam atualizadas e sejam compatíveis com a versão do Python utilizada.
+   Certifique-se de que as dependências sejam especificadas corretamente e que o Python tenha a versão mínima requerida.
 
 2. **Execute scripts com `uv run`**, não `python ...`:
    ```bash
    uv run scripts/my_script.py --help
    ```
-   Isso garante que as dependências sejam carregadas corretamente e que o script seja executado no ambiente apropriado.
+   Isso garante que as dependências sejam resolvidas corretamente e que o script seja executado no ambiente adequado.
 
-3. **Não documente `pip install -r requirements.txt` para scripts do repositório** a menos que haja um motivo específico para isso. O uso normal não deve exigir instalação manual.
-   Se houver dependências que não possam ser instaladas via `uv run`, forneça instruções claras sobre como instalá-las manualmente.
+3. **Não documente `pip install -r requirements.txt` para scripts do repositório**, a menos que haja um motivo específico para isso. O uso normal não deve exigir instalação manual.
+   Se houver uma dependência que não pode ser resolvida por `uv run`, considere adicionar uma exceção explícita.
 
 4. **Não instrua os usuários a `source .venv/bin/activate` para scripts de habilidade.** `uv run` deve ser suficiente.
    Se o ambiente virtual for necessário, certifique-se de que ele seja ativado automaticamente pelo `uv run`.
@@ -27,20 +28,13 @@ Use estas regras para scripts Python neste repositório:
    Isso ajuda a manter a consistência e a evitar conflitos de dependências.
 
 6. **Para Hugging Face Jobs UV workloads, use `hf jobs uv run ...`**.
-   Isso garante que as cargas de trabalho sejam executadas no ambiente correto e com as dependências necessárias.
+   Certifique-se de que as configurações do Hugging Face estejam corretas e que o workload seja executado no ambiente adequado.
 
-## ⚠️ Tratamento de Exceções e Edge Cases
-### Erros Comuns
-- **Dependências não instaladas**: Se uma dependência não estiver instalada, o script falhará. Certifique-se de que todas as dependências estejam listadas no bloco de dependências do script.
-- **Versão incompatível do Python**: Se a versão do Python for incompatível com as dependências, o script pode falhar. Verifique a versão do Python antes de executar o script.
-- **Ambiente virtual não ativado**: Se o ambiente virtual não estiver ativado, as dependências podem não ser carregadas corretamente. Certifique-se de que o ambiente virtual esteja ativado antes de executar o script.
+⚠️ Tratamento de Exceções e Edge Cases
+----------------------------------------
 
-### Edge Cases
-- **Scripts com dependências circulares**: Se dois ou mais scripts tiverem dependências circulares, pode haver problemas de instalação. Nesse caso, é necessário reestruturar as dependências para evitar ciclos.
-- **Scripts com dependências opcionais**: Se um script tiver dependências opcionais, é importante documentar claramente como instalá-las e como o script se comportará sem elas.
-- **Execução de scripts em ambientes restritos**: Em ambientes com restrições de segurança, como ambientes de produção, é importante testar os scripts antes de executá-los para garantir que eles funcionem corretamente e não causem problemas de segurança.
-
-### Melhores Práticas
-- **Teste os scripts regularmente**: Teste os scripts regularmente para garantir que eles funcionem corretamente e não causem problemas de segurança.
-- **Documente as dependências**: Documente claramente as dependências de cada script, incluindo as versões necessárias e como instalá-las.
-- **Use ambientes virtuais**: Use ambientes virtuais para isolar as dependências de cada script e evitar conflitos.
+* **Tratamento de erros**: Certifique-se de que todos os scripts tenham tratamento de erros adequado, incluindo try-except blocks e logging de erros.
+* **Dependências conflitantes**: Se houver dependências conflitantes, considere usar ambientes virtuais separados ou especificar versões explícitas das dependências.
+* **Problemas de permissão**: Se houver problemas de permissão, certifique-se de que o script tenha as permissões necessárias para executar e que o usuário tenha as permissões necessárias para executar o script.
+* **Edge cases**: Considere edge cases, como entrada inválida, falta de recursos ou condições de rede, e certifique-se de que o script possa lidar com esses casos de forma robusta.
+* **Testes**: Certifique-se de que todos os scripts sejam testados adequadamente, incluindo testes unitários e de integração, para garantir que eles funcionem corretamente em diferentes ambientes e condições.
