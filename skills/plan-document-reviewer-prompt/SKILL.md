@@ -7,7 +7,7 @@ Use this template when dispatching a plan document reviewer subagent.
 **Dispatch after:** The complete plan is written.
 
 ```
-Task tool (general-purpose):
+Subagent (general-purpose):
   description: "Review plan document"
   prompt: |
     You are a plan document reviewer. Verify this plan is complete and ready for implementation.
@@ -23,6 +23,7 @@ Task tool (general-purpose):
     | Spec Alignment | Plan covers spec requirements, no major scope creep |
     | Task Decomposition | Tasks have clear boundaries, steps are actionable |
     | Buildability | Could an engineer follow this plan without getting stuck? |
+    | Security | Potential security risks, data protection, and access control |
 
     ## Calibration
 
@@ -47,18 +48,11 @@ Task tool (general-purpose):
 
     ⚠️ Tratamento de Exceções e Edge Cases
 
-    **Cenários de Erro:**
-    - Arquivo de plano não encontrado: Verifique se o caminho do arquivo está correto e se o arquivo existe.
-    - Arquivo de especificação não encontrado: Verifique se o caminho do arquivo está correto e se o arquivo existe.
-    - Planos incompletos ou com erros de formatação: Verifique se o plano está completo e se não há erros de formatação.
-    - Conflitos de versão: Verifique se há conflitos de versão entre o plano e a especificação.
+    *   **Arquivos ausentes ou corrompidos:** Verifique se os arquivos `[PLAN_FILE_PATH]` e `[SPEC_FILE_PATH]` existem e estão intactos. Se não, relatar o problema e solicitar os arquivos corretos.
+    *   **Especificação incompleta:** Se a especificação for incompleta ou ambígua, relatar o problema e solicitar esclarecimentos.
+    *   **Tarefas mal definidas:** Se as tarefas forem mal definidas ou não tiverem claro propósito, relatar o problema e solicitar revisão.
+    *   **Riscos de segurança:** Se forem identificados riscos de segurança, relatar o problema e solicitar a implementação de medidas de segurança.
+    *   **Limitações de recursos:** Se houver limitações de recursos (tempo, dinheiro, etc.) que afetem a implementação do plano, relatar o problema e solicitar ajustes no plano.
+    *   **Dependências externas:** Se o plano depender de fatores externos (terceiros, infraestrutura, etc.), relatar o problema e solicitar um plano de contingência.
 
-    **Tratamento de Exceções:**
-    - Se o arquivo de plano ou especificação não for encontrado, retorne um erro e solicite que o usuário verifique os caminhos dos arquivos.
-    - Se o plano estiver incompleto ou tiver erros de formatação, retorne um aviso e solicite que o usuário revise o plano.
-    - Se houver conflitos de versão, retorne um aviso e solicite que o usuário verifique as versões do plano e da especificação.
-
-    **Segurança:**
-    - Verifique se o plano não contém informações confidenciais ou sensíveis.
-    - Verifique se o plano está de acordo com as políticas de segurança da empresa.
-    - Se o plano contiver informações confidenciais ou sensíveis, retorne um erro e solicite que o usuário remova essas informações.
+**Reviewer returns:** Status, Issues (if any), Recommendations
