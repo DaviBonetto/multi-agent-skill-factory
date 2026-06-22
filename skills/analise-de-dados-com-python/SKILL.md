@@ -1,80 +1,77 @@
 ---
-name: Análise de Dados com Python e Pandas
-description: Ensina a realizar análise de dados utilizando a linguagem Python e a biblioteca Pandas
+name: Análise de Dados com Python
+description: Ensina como utilizar bibliotecas Python para análise e visualização de dados
 ---
-
 ## Objetivo
-O objetivo deste guia é ensinar a realizar análise de dados utilizando a linguagem Python e a biblioteca Pandas, permitindo que os usuários possam extrair insights valiosos de conjuntos de dados.
+O objetivo deste guia é fornecer uma introdução prática à análise de dados utilizando Python, abordando as principais bibliotecas e técnicas para manipulação, análise e visualização de dados.
 
 ## Pré-requisitos
-Para seguir este guia, é necessário ter conhecimento básico em programação Python e experiência em trabalhar com dados. Além disso, é recomendado ter instalado o Python e a biblioteca Pandas em seu ambiente de desenvolvimento.
+Para seguir este guia, é necessário ter conhecimento básico em programação Python e ter instalado o Python 3.x em seu ambiente de desenvolvimento. Além disso, é recomendado ter familiaridade com conceitos básicos de análise de dados.
 
 ## Passo a Passo Técnico / Exemplos de Código
-### Instalação da Biblioteca Pandas
-Para começar a trabalhar com a biblioteca Pandas, é necessário instalá-la. Isso pode ser feito utilizando o gerenciador de pacotes pip:
-```python
-pip install pandas
+### Instalação das Bibliotecas Necessárias
+Para começar, você precisará instalar as bibliotecas `pandas`, `numpy` e `matplotlib`. Isso pode ser feito utilizando o `pip`:
+```bash
+pip install pandas numpy matplotlib
 ```
-### Carregamento de Dados
-A biblioteca Pandas fornece várias maneiras de carregar dados, incluindo a leitura de arquivos CSV e Excel. Aqui está um exemplo de como carregar um arquivo CSV:
+### Importação das Bibliotecas
+Em seguida, importe as bibliotecas necessárias no seu script Python:
 ```python
 import pandas as pd
-
-# Carregar o arquivo CSV
+import numpy as np
+import matplotlib.pyplot as plt
+```
+### Carregamento de Dados
+Carregue um conjunto de dados exemplo utilizando `pandas`:
+```python
+# Carregue um conjunto de dados exemplo
 try:
-    df = pd.read_csv('dados.csv')
+    df = pd.read_csv('dados_exemplo.csv')
 except FileNotFoundError:
-    print("Arquivo não encontrado. Verifique o caminho do arquivo.")
+    print("O arquivo 'dados_exemplo.csv' não foi encontrado.")
+    df = None
 except pd.errors.EmptyDataError:
-    print("Arquivo vazio. Verifique se o arquivo contém dados.")
+    print("O arquivo 'dados_exemplo.csv' está vazio.")
+    df = None
 except pd.errors.ParserError:
-    print("Erro ao parsear o arquivo. Verifique se o arquivo está no formato correto.")
-
-# Exibir as primeiras linhas do DataFrame
-if 'df' in locals():
-    print(df.head())
+    print("Erro ao parsear o arquivo 'dados_exemplo.csv'.")
+    df = None
 ```
 ### Análise de Dados
-Com os dados carregados, é possível começar a analisá-los. A biblioteca Pandas fornece várias funções para realizar operações de análise de dados, como a calculação de médias e medianas:
+Agora, você pode começar a analisar os dados. Por exemplo, para visualizar a distribuição de uma variável:
 ```python
-# Calcular a média da coluna 'valor'
-if 'df' in locals() and 'valor' in df.columns:
+# Verifique se o DataFrame não é None antes de prosseguir
+if df is not None:
+    # Visualize a distribuição de uma variável
     try:
-        media = df['valor'].mean()
-        print(f'Média: {media}')
-    except TypeError:
-        print("A coluna 'valor' contém valores não numéricos. Verifique os dados.")
-
-# Calcular a mediana da coluna 'valor'
-if 'df' in locals() and 'valor' in df.columns:
-    try:
-        mediana = df['valor'].median()
-        print(f'Mediana: {mediana}')
-    except TypeError:
-        print("A coluna 'valor' contém valores não numéricos. Verifique os dados.")
+        plt.hist(df['variavel'], bins=10)
+        plt.show()
+    except KeyError:
+        print("A variável 'variavel' não existe no DataFrame.")
+    except Exception as e:
+        print(f"Erro ao visualizar a distribuição: {e}")
 ```
 ### Visualização de Dados
-A visualização de dados é uma parte importante da análise de dados. A biblioteca Matplotlib pode ser utilizada para criar gráficos e visualizar os dados:
+Para visualizar a relação entre duas variáveis, você pode usar um gráfico de dispersão:
 ```python
-import matplotlib.pyplot as plt
-
-# Criar um gráfico de barras
-if 'df' in locals() and 'categoria' in df.columns and 'valor' in df.columns:
+# Verifique se o DataFrame não é None antes de prosseguir
+if df is not None:
+    # Visualize a relação entre duas variáveis
     try:
-        plt.bar(df['categoria'], df['valor'])
-        plt.xlabel('Categoria')
-        plt.ylabel('Valor')
+        plt.scatter(df['variavel1'], df['variavel2'])
         plt.show()
+    except KeyError:
+        print("Uma ou ambas as variáveis 'variavel1' e 'variavel2' não existem no DataFrame.")
     except Exception as e:
-        print(f"Erro ao criar o gráfico: {e}")
+        print(f"Erro ao visualizar a relação: {e}")
 ```
 ## Validação
-Para validar os resultados da análise de dados, é importante verificar se os dados estão corretos e se as operações de análise foram realizadas corretamente. Isso pode ser feito revisando os códigos e os resultados, além de realizar testes e validações adicionais. Além disso, é importante documentar os processos e resultados da análise de dados para que possam ser facilmente reproduzidos e compartilhados.
+Para validar os resultados da análise, é importante verificar a consistência dos dados e a precisão dos modelos utilizados. Isso pode ser feito através de métodos estatísticos e visualização de dados. Além disso, é fundamental documentar todo o processo de análise e os resultados obtidos para garantir a reprodutibilidade e a transparência do trabalho.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-Além dos exemplos acima, é importante considerar os seguintes casos de borda e exceções:
-* **Arquivos vazios**: Verifique se o arquivo está vazio antes de tentar carregá-lo.
-* **Arquivos com formato incorreto**: Verifique se o arquivo está no formato correto antes de tentar carregá-lo.
-* **Colunas com valores não numéricos**: Verifique se as colunas contêm valores numéricos antes de tentar realizar operações de análise.
-* **Erros ao criar gráficos**: Verifique se os dados estão corretos e se as bibliotecas necessárias estão instaladas antes de tentar criar gráficos.
-* **Outros erros**: Verifique se os códigos estão corretos e se as bibliotecas necessárias estão instaladas antes de tentar realizar qualquer operação.
+- **Arquivos não encontrados**: Verifique se o arquivo existe antes de tentar carregá-lo.
+- **Dados vazios**: Verifique se o arquivo está vazio antes de tentar carregá-lo.
+- **Erros de parseamento**: Verifique se o arquivo está no formato correto antes de tentar carregá-lo.
+- **Variáveis não existentes**: Verifique se as variáveis existem no DataFrame antes de tentar acessá-las.
+- **Erros de visualização**: Verifique se os dados estão no formato correto antes de tentar visualizá-los.
+- **Outros erros**: Utilize blocos try-except para capturar e tratar qualquer erro inesperado que possa ocorrer durante a análise.
