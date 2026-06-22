@@ -1,19 +1,56 @@
-# Desenvolvimento de Microsserviços com Kubernetes
-## name: Desenvolvimento de Microsserviços com Kubernetes
-## description: Esta habilidade aborda a criação e gerenciamento de microsserviços utilizando Kubernetes, incluindo deploy, escalabilidade e monitoramento.
+# Desenvolvimento de Microserviços
+## name: Desenvolvimento de Microserviços
+## description: Ensina como projetar e implementar sistemas baseados em microserviços, utilizando tecnologias como Docker e Kubernetes
 
 ## Objetivo
-O objetivo desta habilidade é capacitar os desenvolvedores a criar e gerenciar microsserviços utilizando Kubernetes, abordando tópicos como deploy, escalabilidade e monitoramento. Com isso, os desenvolvedores poderão criar sistemas mais escaláveis, flexíveis e confiáveis.
+O objetivo deste guia é fornecer uma abordagem prática para o desenvolvimento de microserviços, utilizando tecnologias como Docker e Kubernetes. Ao final, você estará capacitado a projetar e implementar sistemas baseados em microserviços de forma eficiente.
 
 ## Pré-requisitos
-Antes de iniciar esta habilidade, é necessário ter conhecimento básico em:
-* Desenvolvimento de software
-* Containerização com Docker
-* Conceitos básicos de nuvem e orquestração de contêineres
+Para seguir este guia, é necessário ter conhecimentos básicos em:
+- Programação em linguagens como Java, Python ou C#
+- Conceitos de arquitetura de software
+- Ferramentas de gerenciamento de containers como Docker
+- Orquestração de containers com Kubernetes
 
 ## Passo a Passo Técnico / Exemplos de Código
-### Criando um Microsserviço
-1. **Criar um arquivo Dockerfile** para o microsserviço:
+### 1. Preparação do Ambiente
+Primeiramente, é necessário ter o Docker e o Kubernetes instalados no seu ambiente de desenvolvimento. Você pode seguir as instruções oficiais para instalação:
+```bash
+# Instalar Docker no Ubuntu
+sudo apt update
+sudo apt install apt-transport-https ca-certificates curl software-properties-common
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+sudo apt update
+sudo apt install docker-ce
+
+# Instalar Kubernetes no Ubuntu
+sudo curl -sfL https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+sudo echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+sudo apt update
+sudo apt install kubectl
+```
+
+### 2. Desenvolvimento do Microserviço
+Desenvolva um microserviço simples utilizando uma linguagem de programação de sua escolha. Por exemplo, em Python com Flask:
+```python
+from flask import Flask, jsonify
+
+app = Flask(__name__)
+
+@app.route('/api/saudacao', methods=['GET'])
+def saudacao():
+    try:
+        return jsonify({'mensagem': 'Olá, mundo!'})
+    except Exception as e:
+        return jsonify({'erro': str(e)}), 500
+
+if __name__ == '__main__':
+    app.run(debug=True)
+```
+
+### 3. Containerização com Docker
+Crie um arquivo `Dockerfile` para containerizar o seu microserviço:
 ```dockerfile
 FROM python:3.9-slim
 
@@ -27,61 +64,48 @@ COPY . .
 
 CMD ["python", "app.py"]
 ```
-2. **Criar um arquivo de configuração para o Kubernetes**:
+
+### 4. Orquestração com Kubernetes
+Crie um arquivo de definição para o seu microserviço em Kubernetes:
 ```yml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: meu-microsservico
+  name: microservico
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: meu-microsservico
+      app: microservico
   template:
     metadata:
       labels:
-        app: meu-microsservico
+        app: microservico
     spec:
       containers:
-      - name: meu-microsservico
-        image: meu-microsservico:latest
+      - name: microservico
+        image: microservico:latest
         ports:
-        - containerPort: 80
-```
-3. **Aplicar a configuração no cluster do Kubernetes**:
-```bash
-kubectl apply -f deployment.yaml
+        - containerPort: 5000
 ```
 
 ## Validação
-Para validar a criação e gerenciamento do microsserviço, é necessário:
-1. **Verificar o status do deployment**:
-```bash
-kubectl get deployments
-```
-2. **Verificar o status dos pods**:
-```bash
-kubectl get pods
-```
-3. **Testar a funcionalidade do microsserviço**:
-```bash
-kubectl port-forward deployment/meu-microsservico 8080:80 &
-curl http://localhost:8080
-```
+Para validar a implementação, execute os seguintes passos:
+1. Construa a imagem Docker do seu microserviço.
+2. Publique a imagem no Docker Hub.
+3. Aplique a configuração do Kubernetes para implantar o microserviço.
+4. Verifique o funcionamento do microserviço acessando a URL exposta pelo serviço do Kubernetes.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-### Erros Comuns
-* **Erro de conexão com o cluster do Kubernetes**: Verifique se o arquivo de configuração do Kubernetes está correto e se o cluster está funcionando corretamente.
-* **Erro de deploy do microsserviço**: Verifique se o arquivo Dockerfile está correto e se a imagem do microsserviço está sendo construída corretamente.
-* **Erro de comunicação entre os microsserviços**: Verifique se as configurações de rede estão corretas e se os microsserviços estão se comunicando corretamente.
+### Tratamento de Erros
+- **Erro ao instalar o Docker**: Verifique se o seu sistema operacional é compatível com o Docker e se você tem permissões de administrador.
+- **Erro ao instalar o Kubernetes**: Verifique se o seu sistema operacional é compatível com o Kubernetes e se você tem permissões de administrador.
+- **Erro ao construir a imagem Docker**: Verifique se o seu arquivo `Dockerfile` está correto e se você tem as dependências necessárias instaladas.
+- **Erro ao implantar o microserviço no Kubernetes**: Verifique se o seu arquivo de definição do Kubernetes está correto e se você tem as permissões necessárias.
 
 ### Edge Cases
-* **Microsserviço com alta carga**: Verifique se o microsserviço está escalando corretamente e se os recursos estão sendo alocados corretamente.
-* **Microsserviço com baixa carga**: Verifique se o microsserviço está sendo desescalado corretamente e se os recursos estão sendo liberados corretamente.
-* **Microsserviço com erro de configuração**: Verifique se o arquivo de configuração do microsserviço está correto e se as configurações estão sendo aplicadas corretamente.
+- **Microserviço com alta carga**: Verifique se o seu microserviço está escalável e se você tem recursos suficientes para lidar com a carga.
+- **Microserviço com baixa disponibilidade**: Verifique se o seu microserviço está configurado para lidar com falhas e se você tem um plano de recuperação em caso de desastre.
+- **Microserviço com problemas de segurança**: Verifique se o seu microserviço está configurado para lidar com ameaças de segurança e se você tem um plano de resposta em caso de incidente.
 
-### Segurança
-* **Autenticação e autorização**: Verifique se as configurações de autenticação e autorização estão corretas e se os acessos estão sendo controlados corretamente.
-* **Criptografia**: Verifique se as comunicações entre os microsserviços estão sendo criptografadas corretamente.
-* **Atualizações de segurança**: Verifique se as atualizações de segurança estão sendo aplicadas corretamente e se os microsserviços estão protegidos contra vulnerabilidades conhecidas.
+Com esses passos, você terá um sistema baseado em microserviços funcionando, utilizando Docker e Kubernetes para gerenciamento e orquestração de containers. Além disso, você terá tratado os principais erros e edge cases que podem ocorrer durante a implementação.
