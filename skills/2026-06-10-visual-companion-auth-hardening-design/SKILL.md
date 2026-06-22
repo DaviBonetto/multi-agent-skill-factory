@@ -1,2 +1,4 @@
 # Visual Companion Auth Hardening Design
-... (conteúdo original)
+**Date:** 2026-06-10
+**Status:** Draft for Drew review
+...
