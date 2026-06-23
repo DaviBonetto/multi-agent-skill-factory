@@ -1,5 +1,4 @@
 # Copilot CLI Tool Mapping
-
 Skills speak in actions ("dispatch a subagent", "create a todo", "read a file"). On Copilot CLI these resolve to the tools below.
 
 | Action skills request | Copilot CLI equivalent |
@@ -50,35 +49,11 @@ Copilot CLI supports persistent async shell sessions:
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
 
-*   **Tratamento de Erros**: É importante tratar erros adequadamente para evitar que o sistema entre em um estado inconsistente. Por exemplo, ao executar um comando `bash`, é necessário verificar se o comando foi executado com sucesso e tratar qualquer erro que possa ocorrer.
-*   **Edge Cases**: É fundamental considerar os casos limite para evitar comportamentos inesperados. Por exemplo, ao criar um novo arquivo, é necessário verificar se o arquivo já existe e tratar esse caso adequadamente.
-*   **Validação de Entradas**: É importante validar as entradas para evitar erros e garantir que o sistema funcione corretamente. Por exemplo, ao executar um comando `web_fetch`, é necessário verificar se a URL é válida e tratar qualquer erro que possa ocorrer.
-*   **Segurança**: É fundamental considerar a segurança ao executar comandos e acessar recursos. Por exemplo, ao executar um comando `bash`, é necessário verificar se o comando é seguro e não pode ser usado para acessar recursos sensíveis.
-*   **Limites de Recursos**: É importante considerar os limites de recursos para evitar que o sistema entre em um estado inconsistente. Por exemplo, ao executar um comando `bash` que consome muitos recursos, é necessário verificar se o sistema tem recursos suficientes para executar o comando.
-
-Exemplos de como tratar exceções e edge cases:
-
-*   `try`-`catch` blocks para tratar erros:
-    ```markdown
-try:
-    # Executar comando bash
-    bash("comando")
-except Exception as e:
-    # Tratar erro
-    print(f"Erro: {e}")
-```
-*   Verificar se um arquivo existe antes de criá-lo:
-    ```markdown
-if not os.path.exists("arquivo.txt"):
-    # Criar arquivo
-    with open("arquivo.txt", "w") as f:
-        f.write("Conteúdo do arquivo")
-```
-*   Validar entradas para evitar erros:
-    ```markdown
-if not isinstance(url, str) or not url.startswith("http"):
-    # Tratar erro
-    print("URL inválida")
-else:
-    # Executar comando web_fetch
-    web_fetch(url)
+*   **Erro de permissão**: Ao executar comandos que requerem permissões específicas, como `apply_patch` ou `bash`, certifique-se de que o usuário tem as permissões necessárias. Caso contrário, o comando falhará com um erro de permissão.
+*   **Arquivos não encontrados**: Ao usar `view` ou `apply_patch`, se o arquivo especificado não existir, o comando retornará um erro de arquivo não encontrado.
+*   **Comandos inválidos**: Se um comando inválido for passado para `bash` ou `write_bash`, o comando falhará com um erro de sintaxe.
+*   **Sessões assíncronas**: Ao usar `bash` com `mode: "async"`, certifique-se de que o comando seja compatível com execução assíncrona. Além disso, ao usar `write_bash` ou `read_bash`, certifique-se de que a sessão assíncrona ainda esteja ativa.
+*   **Limites de tamanho**: Ao usar `store_memory` ou `sql`, certifique-se de que os dados armazenados não excedam os limites de tamanho definidos pelo sistema.
+*   **Erros de rede**: Ao usar `web_fetch` ou `web_search`, certifique-se de que a conexão de rede esteja estável e funcional. Erros de rede podem causar falhas nos comandos.
+*   **Erros de sintaxe**: Ao usar `sql`, certifique-se de que a consulta seja sintaticamente correta. Erros de sintaxe podem causar falhas na execução da consulta.
+*   **Erros de autenticação**: Ao usar GitHub MCP tools, certifique-se de que as credenciais de autenticação sejam válidas e corretas. Erros de autenticação podem causar falhas nos comandos.
