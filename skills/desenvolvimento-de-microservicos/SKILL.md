@@ -1,45 +1,33 @@
-# Desenvolvimento de Microserviços
-## name: Desenvolvimento de Microserviços
-## description: Ensina como projetar e implementar sistemas baseados em microserviços, utilizando tecnologias como Docker e Kubernetes
+---
+name: Desenvolvimento de Microserviços
+description: Esta habilidade ensina como projetar, desenvolver e implantar microserviços escaláveis e resilientes utilizando tecnologias como Docker e Kubernetes
+---
 
 ## Objetivo
-O objetivo deste guia é fornecer uma abordagem prática para o desenvolvimento de microserviços, utilizando tecnologias como Docker e Kubernetes. Ao final, você estará capacitado a projetar e implementar sistemas baseados em microserviços de forma eficiente.
+O objetivo desta habilidade é capacitar os desenvolvedores a projetar, desenvolver e implantar microserviços escaláveis e resilientes, utilizando tecnologias como Docker e Kubernetes. Isso permitirá que os desenvolvedores criem sistemas distribuídos mais eficientes e flexíveis.
 
 ## Pré-requisitos
-Para seguir este guia, é necessário ter conhecimentos básicos em:
-- Programação em linguagens como Java, Python ou C#
-- Conceitos de arquitetura de software
-- Ferramentas de gerenciamento de containers como Docker
-- Orquestração de containers com Kubernetes
+Para começar a desenvolver microserviços, é necessário ter conhecimento em:
+* Programação em linguagens como Java, Python ou Node.js
+* Conceitos de arquitetura de software, incluindo padrões de design e princípios de desenvolvimento de software
+* Ferramentas de gerenciamento de containers, como Docker
+* Ferramentas de orquestração de containers, como Kubernetes
 
 ## Passo a Passo Técnico / Exemplos de Código
-### 1. Preparação do Ambiente
-Primeiramente, é necessário ter o Docker e o Kubernetes instalados no seu ambiente de desenvolvimento. Você pode seguir as instruções oficiais para instalação:
-```bash
-# Instalar Docker no Ubuntu
-sudo apt update
-sudo apt install apt-transport-https ca-certificates curl software-properties-common
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-sudo apt update
-sudo apt install docker-ce
+### 1. Projetando o Microserviço
+Para projetar um microserviço, é necessário definir as seguintes etapas:
+* Identificar as funcionalidades do microserviço
+* Definir as APIs de comunicação entre os microserviços
+* Escolher a linguagem de programação e o framework de desenvolvimento
 
-# Instalar Kubernetes no Ubuntu
-sudo curl -sfL https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
-sudo echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
-sudo apt update
-sudo apt install kubectl
-```
-
-### 2. Desenvolvimento do Microserviço
-Desenvolva um microserviço simples utilizando uma linguagem de programação de sua escolha. Por exemplo, em Python com Flask:
+Exemplo de código em Python para criar um microserviço simples:
 ```python
 from flask import Flask, jsonify
 
 app = Flask(__name__)
 
-@app.route('/api/saudacao', methods=['GET'])
-def saudacao():
+@app.route('/api/microservico', methods=['GET'])
+def get_microservico():
     try:
         return jsonify({'mensagem': 'Olá, mundo!'})
     except Exception as e:
@@ -49,8 +37,8 @@ if __name__ == '__main__':
     app.run(debug=True)
 ```
 
-### 3. Containerização com Docker
-Crie um arquivo `Dockerfile` para containerizar o seu microserviço:
+### 2. Implantando o Microserviço com Docker
+Para implantar o microserviço com Docker, é necessário criar um arquivo `Dockerfile` que defina as etapas de construção da imagem do container:
 ```dockerfile
 FROM python:3.9-slim
 
@@ -65,13 +53,13 @@ COPY . .
 CMD ["python", "app.py"]
 ```
 
-### 4. Orquestração com Kubernetes
-Crie um arquivo de definição para o seu microserviço em Kubernetes:
+### 3. Orquestrando os Microserviços com Kubernetes
+Para orquestrar os microserviços com Kubernetes, é necessário criar um arquivo de configuração `deployment.yaml` que defina as especificações do deployment:
 ```yml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: microservico
+  name: microservico-deployment
 spec:
   replicas: 3
   selector:
@@ -86,26 +74,38 @@ spec:
       - name: microservico
         image: microservico:latest
         ports:
-        - containerPort: 5000
+        - containerPort: 80
 ```
 
 ## Validação
-Para validar a implementação, execute os seguintes passos:
-1. Construa a imagem Docker do seu microserviço.
-2. Publique a imagem no Docker Hub.
-3. Aplique a configuração do Kubernetes para implantar o microserviço.
-4. Verifique o funcionamento do microserviço acessando a URL exposta pelo serviço do Kubernetes.
+Para validar a implantação do microserviço, é necessário verificar se o microserviço está funcionando corretamente e se as APIs de comunicação entre os microserviços estão sendo chamadas corretamente. Isso pode ser feito utilizando ferramentas de teste como o `curl` ou o `Postman`. Além disso, é importante monitorar o desempenho do microserviço e ajustar as configurações de acordo com as necessidades do sistema.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-### Tratamento de Erros
-- **Erro ao instalar o Docker**: Verifique se o seu sistema operacional é compatível com o Docker e se você tem permissões de administrador.
-- **Erro ao instalar o Kubernetes**: Verifique se o seu sistema operacional é compatível com o Kubernetes e se você tem permissões de administrador.
-- **Erro ao construir a imagem Docker**: Verifique se o seu arquivo `Dockerfile` está correto e se você tem as dependências necessárias instaladas.
-- **Erro ao implantar o microserviço no Kubernetes**: Verifique se o seu arquivo de definição do Kubernetes está correto e se você tem as permissões necessárias.
+Para garantir a robustez do microserviço, é importante tratar as exceções e edge cases que podem ocorrer durante a execução. Alguns exemplos incluem:
+* **Tratamento de erros de rede**: Implementar mecanismos de retry e timeout para lidar com erros de rede que possam ocorrer durante a comunicação entre os microserviços.
+* **Tratamento de erros de banco de dados**: Implementar mecanismos de retry e rollback para lidar com erros de banco de dados que possam ocorrer durante a execução de queries.
+* **Tratamento de erros de segurança**: Implementar mecanismos de autenticação e autorização para garantir que apenas usuários autorizados possam acessar o microserviço.
+* **Tratamento de edge cases**: Implementar mecanismos para lidar com edge cases, como por exemplo, lidar com requisições malformadas ou lidar com respostas vazias.
 
-### Edge Cases
-- **Microserviço com alta carga**: Verifique se o seu microserviço está escalável e se você tem recursos suficientes para lidar com a carga.
-- **Microserviço com baixa disponibilidade**: Verifique se o seu microserviço está configurado para lidar com falhas e se você tem um plano de recuperação em caso de desastre.
-- **Microserviço com problemas de segurança**: Verifique se o seu microserviço está configurado para lidar com ameaças de segurança e se você tem um plano de resposta em caso de incidente.
+Exemplo de código em Python para tratar exceções e edge cases:
+```python
+from flask import Flask, jsonify
+import logging
 
-Com esses passos, você terá um sistema baseado em microserviços funcionando, utilizando Docker e Kubernetes para gerenciamento e orquestração de containers. Além disso, você terá tratado os principais erros e edge cases que podem ocorrer durante a implementação.
+app = Flask(__name__)
+
+@app.route('/api/microservico', methods=['GET'])
+def get_microservico():
+    try:
+        # Lógica do microserviço
+        return jsonify({'mensagem': 'Olá, mundo!'})
+    except Exception as e:
+        # Tratamento de exceções
+        logging.error(str(e))
+        return jsonify({'erro': str(e)}), 500
+    finally:
+        # Lógica de limpeza
+        pass
+
+if __name__ == '__main__':
+    app.run(debug=True)
