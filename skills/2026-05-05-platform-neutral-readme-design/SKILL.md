@@ -30,18 +30,9 @@ One atomic commit covering both listings, since changing one without the other w
 - Each install sub-section's body is byte-identical pre/post; only positions changed.
 - `git diff README.md` shows section moves only, no content edits.
 ## ⚠️ Tratamento de Exceções e Edge Cases
-### Erros de Ordenação
-*   Caso haja um erro de ordenação durante a reordenação das listas, o commit não deve ser realizado.
-*   Verificar se as listas estão em ordem alfabética estrita antes de realizar o commit.
-### Erros de Formatação
-*   Caso haja um erro de formatação durante a reordenação das listas, o commit não deve ser realizado.
-*   Verificar se as listas estão formatadas corretamente antes de realizar o commit.
-### Edge Cases
-*   Caso haja um novo item adicionado às listas, ele deve ser adicionado em ordem alfabética.
-*   Caso haja um item removido das listas, as listas devem ser reordenadas para manter a ordem alfabética.
-### Tratamento de Exceções
-*   Caso ocorra um erro durante a reordenação das listas, o erro deve ser tratado e o commit não deve ser realizado.
-*   Caso ocorra um erro durante a verificação das listas, o erro deve ser tratado e o commit não deve ser realizado.
-### Segurança
-*   As listas devem ser verificadas para garantir que não contenham informações sensíveis.
-*   As listas devem ser protegidas contra alterações não autorizadas.
+- **Erros de ordenação**: caso a ordenação alfabética não seja possível devido a caracteres especiais ou acentos, a lista deve ser ordenada de forma que os itens sejam apresentados de maneira lógica e consistente.
+- **Itens faltantes**: se um item estiver faltando na lista, a ordenação deve ser ajustada para refletir a ausência do item.
+- **Duplicatas**: se houver duplicatas na lista, elas devem ser removidas para evitar inconsistências.
+- **Caracteres especiais**: se houver caracteres especiais na lista, eles devem ser tratados de forma a garantir que a ordenação seja feita corretamente.
+- **Limitações de tamanho**: se a lista for muito grande, pode ser necessário implementar uma solução de paginação ou filtragem para evitar problemas de desempenho.
+- **Testes**: a lista deve ser testada para garantir que a ordenação esteja correta e que não haja erros ou inconsistências.
