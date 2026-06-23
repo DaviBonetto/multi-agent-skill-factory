@@ -48,11 +48,18 @@ Subagent (general-purpose):
 
     ⚠️ Tratamento de Exceções e Edge Cases
 
-    *   **Arquivos ausentes ou corrompidos:** Verifique se os arquivos `[PLAN_FILE_PATH]` e `[SPEC_FILE_PATH]` existem e estão intactos. Se não, relatar o problema e solicitar os arquivos corretos.
-    *   **Especificação incompleta:** Se a especificação for incompleta ou ambígua, relatar o problema e solicitar esclarecimentos.
-    *   **Tarefas mal definidas:** Se as tarefas forem mal definidas ou não tiverem claro propósito, relatar o problema e solicitar revisão.
-    *   **Riscos de segurança:** Se forem identificados riscos de segurança, relatar o problema e solicitar a implementação de medidas de segurança.
-    *   **Limitações de recursos:** Se houver limitações de recursos (tempo, dinheiro, etc.) que afetem a implementação do plano, relatar o problema e solicitar ajustes no plano.
-    *   **Dependências externas:** Se o plano depender de fatores externos (terceiros, infraestrutura, etc.), relatar o problema e solicitar um plano de contingência.
+    *   **Planos incompletos:** Se o plano estiver incompleto, verifique se os principais componentes estão presentes, como introdução, objetivos, tarefas e conclusão.
+    *   **Especificações ausentes:** Se a especificação estiver ausente, verifique se o plano contém informações suficientes para prosseguir com a implementação.
+    *   **Tarefas mal definidas:** Se as tarefas estiverem mal definidas, verifique se elas podem ser reescritas para ser mais claras e específicas.
+    *   **Riscos de segurança:** Se houver riscos de segurança potenciais, verifique se o plano inclui medidas para mitigá-los.
+    *   **Conflitos de interesses:** Se houver conflitos de interesses, verifique se o plano inclui uma declaração clara sobre como eles serão resolvidos.
+    *   **Dependências não declaradas:** Se houver dependências não declaradas, verifique se o plano inclui uma lista de dependências necessárias para a implementação.
+    *   **Erros de digitação ou formatação:** Se houver erros de digitação ou formatação, verifique se eles afetam a clareza e a compreensão do plano.
+    *   **Falta de documentação:** Se houver falta de documentação, verifique se o plano inclui informações suficientes para que os desenvolvedores possam implementá-lo sem problemas.
+    *   **Requisitos de conformidade:** Se houver requisitos de conformidade, verifique se o plano inclui medidas para garantir a conformidade com as regulamentações aplicáveis.
 
-**Reviewer returns:** Status, Issues (if any), Recommendations
+    Em caso de exceções ou edge cases, o revisor deve:
+    *   Documentar claramente as exceções ou edge cases encontrados.
+    *   Propor soluções ou alternativas para lidar com as exceções ou edge cases.
+    *   Verificar se as soluções ou alternativas propostas estão alinhadas com os objetivos e requisitos do plano.
+    *   Aprovar ou rejeitar o plano com base nas exceções ou edge cases encontrados e nas soluções ou alternativas propostas.
