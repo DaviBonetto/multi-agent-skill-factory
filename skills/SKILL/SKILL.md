@@ -1,140 +1,222 @@
 ---
-name: huggingface-local-models
-description: "Use to select models to run locally with llama.cpp and GGUF on CPU, Mac Metal, CUDA, or ROCm. Covers finding GGUFs, quant selection, running servers, exact GGUF file lookup, conversion, and OpenAI-compatible local serving."
+name: hf-mcp
+description: Use Hugging Face Hub via MCP server tools. Search models, datasets, Spaces, papers. Get repo details, fetch documentation, run compute jobs, and use Gradio Spaces as AI tools. Available when connected to the HF MCP server.
 ---
 
-# Hugging Face Local Models
+# Hugging Face MCP Server
 
-Search the Hugging Face Hub for llama.cpp-compatible GGUF repos, choose the right quant, and launch the model with `llama-cli` or `llama-server`.
+Connect AI assistants to the Hugging Face Hub. Setup: https://huggingface.co/settings/mcp
 
-## Default Workflow
+## Use Cases & Examples
 
-1. Search the Hub with `apps=llama.cpp`.
-2. Open `https://huggingface.co/<repo>?local-app=llama.cpp`.
-3. Prefer the exact HF local-app snippet and quant recommendation when it is visible.
-4. Confirm exact `.gguf` filenames with `https://huggingface.co/api/models/<repo>/tree/main?recursive=true`.
-5. Launch with `llama-cli -hf <repo>:<QUANT>` or `llama-server -hf <repo>:<QUANT>`.
-6. Fall back to `--hf-repo` plus `--hf-file` when the repo uses custom file naming.
-7. Convert from Transformers weights only if the repo does not already expose GGUF files.
+### Find the Best Model for a Task
 
-## Quick Start
+```
+User: "Find the best model for code generation"
 
-### Install llama.cpp
-
-```bash
-brew install llama.cpp
-winget install llama.cpp
+1. model_search(task="text-generation", query="code", sort="trendingScore", limit=10)
+2. hub_repo_details(repo_ids=["top-result-id"], include_readme=true)
 ```
 
-```bash
-git clone https://github.com/ggml-org/llama.cpp
-cd llama.cpp
-make
+### Compare Models from Different Providers
+
+```
+User: "Compare Llama vs Qwen for text generation"
+
+1. model_search(author="meta-llama", task="text-generation", sort="downloads", limit=5)
+2. model_search(author="Qwen", task="text-generation", sort="downloads", limit=5)
+3. hub_repo_details(repo_ids=["meta-llama/Llama-3.2-1B", "Qwen/Qwen3-8B"], include_readme=true)
 ```
 
-### Authenticate for gated repos
+### Find Training Datasets
 
-```bash
-hf auth login
+```
+User: "Find datasets for sentiment analysis in English"
+
+1. dataset_search(query="sentiment", tags=["language:en", "task_categories:text-classification"], sort="downloads")
+2. hub_repo_details(repo_ids=["top-dataset-id"], repo_type="dataset", include_readme=true)
 ```
 
-### Search the Hub
+### Discover AI Tools (MCP Spaces)
 
-```text
-https://huggingface.co/models?apps=llama.cpp&sort=trending
-https://huggingface.co/models?search=Qwen3.6&apps=llama.cpp&sort=trending
-https://huggingface.co/models?search=<term>&apps=llama.cpp&num_parameters=min:0,max:24B&sort=trending
+```
+User: "Find a tool that can remove image backgrounds"
+
+1. space_search(query="background removal", mcp=true)
+2. dynamic_space(operation="view_parameters", space_name="result-space-id")
+3. dynamic_space(operation="invoke", space_name="result-space-id", parameters="{...}")
 ```
 
-### Run directly from the Hub
+### Generate Images
 
-```bash
-llama-cli -hf unsloth/Qwen3.6-35B-A3B-GGUF:UD-Q4_K_M
-llama-server -hf unsloth/Qwen3.6-35B-A3B-GGUF:UD-Q4_K_M
+```
+User: "Create an image of a robot reading a book"
+
+1. dynamic_space(operation="discover")  # See available tasks
+2. gr1_flux1_schnell_infer(prompt="a robot sitting in a library reading a book, warm lighting, detailed")
 ```
 
-### Run an exact GGUF file
+### Research a Topic
 
-```bash
-llama-server 
-    --hf-repo unsloth/Qwen3.6-35B-A3B-GGUF 
-    --hf-file Qwen3.6-35B-A3B-UD-Q4_K_M.gguf 
-    -c 4096
+```
+User: "What are the latest papers on RLHF?"
+
+1. paper_search(query="reinforcement learning from human feedback", results_limit=10)
+2. hub_repo_details(repo_ids=["paper-linked-model"], include_readme=true)  # If paper links to models
 ```
 
-### Convert only when no GGUF is available
+### Learn How to Use a Library
 
-```bash
-hf download <repo-without-gguf> --local-dir ./model-src
-python convert_hf_to_gguf.py ./model-src 
-    --outfile model-f16.gguf 
-    --outtype f16
-llama-quantize model-f16.gguf model-q4_k_m.gguf Q4_K_M
+```
+User: "How do I fine-tune with LoRA using PEFT?"
+
+1. hf_doc_search(query="LoRA fine-tuning", product="peft")
+2. hf_doc_fetch(doc_url="https://huggingface.co/docs/peft/...")
 ```
 
-### Smoke test a local server
+### Run a Quick GPU Job
 
-```bash
-llama-server -hf unsloth/Qwen3.6-35B-A3B-GGUF:UD-Q4_K_M
+```
+User: "Run this Python script on a GPU"
+
+hf_jobs(operation="uv", args={
+  "script": "# /// script
+# dependencies = [\"torch\"]
+# ///
+import torch
+print(torch.cuda.is_available())",
+  "flavor": "t4-small"
+})
 ```
 
-```bash
-curl http://localhost:8080/v1/chat/completions 
-  -H "Content-Type: application/json" 
-  -H "Authorization: Bearer no-key" 
-  -d '{
-    "messages": [
-      {"role": "user", "content": "Write a limerick about exception handling"}
-    ]
-  }'
+### Train a Model on Cloud GPU
+
+```
+User: "Run my training script on an A10G"
+
+hf_jobs(operation="run", args={
+  "image": "pytorch/pytorch:2.5.1-cuda12.4-cudnn9-runtime",
+  "command": ["/bin/sh", "-lc", "pip install transformers trl && python train.py"],
+  "flavor": "a10g-small",
+  "secrets": {"HF_TOKEN": "$HF_TOKEN"}
+})
 ```
 
-## Quant Choice
+### Check Job Status
 
-- Prefer the exact quant that HF marks as compatible on the `?local-app=llama.cpp` page.
-- Keep repo-native labels such as `UD-Q4_K_M` instead of normalizing them.
-- Default to `Q4_K_M` unless the repo page or hardware profile suggests otherwise.
-- Prefer `Q5_K_M` or `Q6_K` for code or technical workloads when memory allows.
-- Consider `Q3_K_M`, `Q4_K_S`, or repo-specific `IQ` / `UD-*` variants for tighter RAM or VRAM budgets.
-- Treat `mmproj-*.gguf` files as projector weights, not the main checkpoint.
+```
+User: "What's happening with my training job?"
 
-## Load References
+1. hf_jobs(operation="ps")
+2. hf_jobs(operation="logs", args={"job_id": "job-xxxxx"})
+```
 
-- Read [hub-discovery.md](references/hub-discovery.md) for URL-first workflows, model search, tree API extraction, and command reconstruction.
-- Read [quantization.md](references/quantization.md) for format tables, model scaling, quality tradeoffs, and `imatrix`.
-- Read [hardware.md](references/hardware.md) for Metal, CUDA, ROCm, or CPU build and acceleration details.
+### Explore What's Trending
 
-## Resources
+```
+User: "What models are trending right now?"
 
-- llama.cpp: `https://github.com/ggml-org/llama.cpp`
-- Hugging Face GGUF + llama.cpp docs: `https://huggingface.co/docs/hub/gguf-llamacpp`
-- Hugging Face Local Apps docs: `https://huggingface.co/docs/hub/main/local-apps`
-- Hugging Face Local Agents docs: `https://huggingface.co/docs/hub/agents-local`
-- GGUF converter Space: `https://huggingface.co/spaces/ggml-org/gguf-my-repo`
+model_search(sort="trendingScore", limit=20)
+```
+
+### Get Model Card Details
+
+```
+User: "Tell me about Mistral-7B"
+
+hub_repo_details(repo_ids=["mistralai/Mistral-7B-v0.1"], include_readme=true)
+```
+
+### Find Quantized Models
+
+```
+User: "Find GGUF versions of Llama 3"
+
+model_search(query="Llama 3 GGUF", sort="downloads", limit=10)
+```
+
+### Use a Gradio Space as a Tool
+
+```
+User: "Transcribe this audio file"
+
+1. space_search(query="speech to text transcription", mcp=true)
+2. dynamic_space(operation="view_parameters", space_name="openai/whisper")
+3. dynamic_space(operation="invoke", space_name="openai/whisper", parameters="{\"audio\": \"...\"}")
+```
+
+### Schedule Recurring Jobs
+
+```
+User: "Run this data sync every day at midnight"
+
+hf_jobs(operation="scheduled uv", args={
+  "script": "...",
+  "cron": "0 0 * * *",
+  "flavor": "cpu-basic"
+})
+```
+
+## Tool Selection Guide
+
+| Goal | Tool |
+|------|------|
+| Find models | `model_search` |
+| Find datasets | `dataset_search` |
+| Find Spaces/apps | `space_search` |
+| Find papers | `paper_search` |
+| Get repo README/details | `hub_repo_details` |
+| Learn library usage | `hf_doc_search` → `hf_doc_fetch` |
+| Run code on GPU/CPU | `hf_jobs` |
+| Use Gradio apps as tools | `dynamic_space` |
+| Generate images | `gr1_flux1_schnell_infer` or `dynamic_space` |
+| Check auth | `hf_whoami` |
+
+## Tips
+
+- Use `sort="trendingScore"` to find what's popular now
+- Use `sort="downloads"` to find battle-tested options
+- Set `mcp=true` in `space_search` to find Spaces usable as tools
+- Use `include_readme=true` in `hub_repo_details` for full model/dataset documentation
+- For jobs accessing private repos, always include `secrets: {"HF_TOKEN": "$HF_TOKEN"}`
+- Use `dynamic_space(operation="discover")` to see all available Space-based tasks
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
 
 ### Erros de Autenticação
 
-- Verifique se as credenciais de autenticação estão corretas e se o token de acesso está válido.
-- Se o erro persistir, tente revogar o token de acesso e realizar o login novamente.
+* Certifique-se de que o token de acesso está válido e não expirou.
+* Use `hf_whoami` para verificar a autenticação antes de realizar operações.
 
 ### Erros de Rede
 
-- Verifique se a conexão de rede está estável e se o servidor está respondendo.
-- Se o erro persistir, tente aumentar o tempo de espera para a requisição ou verificar se o servidor está sobrecarregado.
+* Verifique a conexão de rede e tente novamente.
+* Use `hf_jobs(operation="ps")` para verificar o status do job e `hf_jobs(operation="logs")` para verificar os logs de erro.
 
-### Erros de Modelo
+### Erros de Limitação de Recursos
 
-- Verifique se o modelo está correto e se as configurações estão de acordo com as especificações do modelo.
-- Se o erro persistir, tente verificar se o modelo está atualizado ou se há problemas de compatibilidade com a versão do llama.cpp.
+* Verifique os limites de recursos (CPU, memória, etc.) e ajuste as configurações de acordo.
+* Use `hf_jobs(operation="scheduled")` para agendar jobs em momentos de baixa demanda.
 
-### Erros de Quantização
+### Erros de Compatibilidade
 
-- Verifique se a quantização está correta e se as configurações estão de acordo com as especificações do modelo.
-- Se o erro persistir, tente verificar se a quantização está compatível com o hardware ou se há problemas de configuração.
+* Verifique a compatibilidade entre as versões de bibliotecas e frameworks.
+* Use `hf_doc_search` e `hf_doc_fetch` para encontrar documentação e exemplos de código compatíveis.
 
-### Outros Erros
+### Edge Cases
 
-- Verifique se os logs de erro estão disponíveis e se há informações úteis para diagnosticar o problema.
-- Se o erro persistir, tente verificar se há problemas de configuração ou se há necessidade de atualizar o software.
+* Trate casos de entrada inválida ou malformada.
+* Use `try-except` para capturar e tratar exceções.
+* Use `logging` para registrar erros e exceções para análise posterior.
+
+Exemplos de tratamento de exceções:
+
+```python
+try:
+    # Operação que pode falhar
+    model_search(task="text-generation", query="code", sort="trendingScore", limit=10)
+except Exception as e:
+    # Tratamento de exceção
+    print(f"Erro: {e}")
+    # Registrar erro no log
+    logging.error(f"Erro: {e}")
