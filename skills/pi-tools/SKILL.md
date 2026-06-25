@@ -29,9 +29,11 @@ Pi core does not ship a standard task-list tool. If a todo/task extension is ins
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
 
-*   **Erro de permissão**: Ao tentar executar uma ação que exige permissão de administrador, o agente deve verificar se o usuário atual tem as permissões necessárias. Se não, o agente deve retornar uma mensagem de erro indicando a falta de permissão.
-*   **Arquivo não encontrado**: Ao tentar ler ou editar um arquivo, o agente deve verificar se o arquivo existe. Se o arquivo não existir, o agente deve retornar uma mensagem de erro indicando que o arquivo não foi encontrado.
-*   **Comando inválido**: Ao receber um comando inválido, o agente deve retornar uma mensagem de erro indicando que o comando é inválido e fornecer ajuda sobre como usar o comando corretamente.
-*   **Subagente não instalado**: Ao tentar dispatchar um subagente, o agente deve verificar se o subagente está instalado. Se o subagente não estiver instalado, o agente deve retornar uma mensagem de erro indicando que o subagente não está instalado e fornecer instruções sobre como instalá-lo.
-*   **Ferramenta de tarefa não instalada**: Ao tentar criar ou marcar uma tarefa como completa, o agente deve verificar se uma ferramenta de tarefa está instalada. Se a ferramenta de tarefa não estiver instalada, o agente deve usar o plano ou o arquivo `TODO.md` para rastrear as tarefas.
-*   **Exceção de sintaxe**: Ao tentar executar uma ação que exige sintaxe específica, o agente deve verificar se a sintaxe está correta. Se a sintaxe estiver incorreta, o agente deve retornar uma mensagem de erro indicando a exceção de sintaxe e fornecer ajuda sobre como corrigir a sintaxe.
+*   **Erro de Permissão**: Ao tentar executar uma ação que exige permissão de administrador, mas o usuário atual não tem permissão, o sistema deve retornar uma mensagem de erro clara e concisa, indicando a necessidade de permissão de administrador.
+*   **Arquivos Não Encontrados**: Se um arquivo solicitado não for encontrado, o sistema deve retornar uma mensagem de erro indicando que o arquivo não foi encontrado e, se possível, sugerir ações alternativas.
+*   **Comandos Inválidos**: Se um comando inválido for passado para o sistema, ele deve retornar uma mensagem de erro clara, indicando o comando inválido e, se possível, sugerir a sintaxe correta.
+*   **Subagentes Não Instalados**: Se um subagente for solicitado, mas não estiver instalado, o sistema deve explicar que o subagente não está instalado e, se possível, fornecer instruções para instalar o subagente.
+*   **Limites de Recursos**: Se o sistema atingir um limite de recursos (como memória ou capacidade de processamento), ele deve retornar uma mensagem de erro indicando o limite atingido e, se possível, sugerir ações para mitigar o problema.
+*   **Erros de Conexão**: Se ocorrer um erro de conexão ao tentar acessar um recurso externo, o sistema deve retornar uma mensagem de erro clara, indicando o erro de conexão e, se possível, sugerir ações para resolver o problema.
+*   **Entrada Inválida**: Se a entrada fornecida for inválida ou inconsistente, o sistema deve retornar uma mensagem de erro clara, indicando a entrada inválida e, se possível, sugerir a entrada correta.
+*   **Dependências Não Atendidas**: Se uma dependência necessária não for atendida, o sistema deve retornar uma mensagem de erro clara, indicando a dependência não atendida e, se possível, fornecer instruções para atender à dependência.
