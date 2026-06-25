@@ -23,8 +23,7 @@ Subagent (general-purpose):
     | Spec Alignment | Plan covers spec requirements, no major scope creep |
     | Task Decomposition | Tasks have clear boundaries, steps are actionable |
     | Buildability | Could an engineer follow this plan without getting stuck? |
-    | Security | Potential security vulnerabilities, data protection, access control |
-    | Error Handling | Proper error handling mechanisms, logging, and debugging |
+    | Security | Potential security risks, data protection, and access control |
 
     ## Calibration
 
@@ -49,15 +48,25 @@ Subagent (general-purpose):
 
     ⚠️ Tratamento de Exceções e Edge Cases
 
-    *   **Erros de sintaxe:** Verifique se o plano contém erros de sintaxe que possam afetar a implementação.
-    *   **Exceções não tratadas:** Verifique se o plano contém exceções não tratadas que possam causar problemas durante a implementação.
-    *   **Casos de bordo:** Verifique se o plano considera casos de bordo, como entrada inválida, condições de erro, etc.
-    *   **Segurança:** Verifique se o plano considera questões de segurança, como proteção de dados, controle de acesso, etc.
-    *   **Desempenho:** Verifique se o plano considera questões de desempenho, como otimização de recursos, tempo de resposta, etc.
-    *   **Manutenção:** Verifique se o plano considera questões de manutenção, como atualizações, patches, etc.
+    *   **Planos incompletos:** Se o plano estiver incompleto, verifique se os principais componentes estão presentes, como introdução, objetivos, escopo, cronograma e recursos necessários.
+    *   **Especificações ausentes:** Se a especificação estiver ausente ou for incompleta, solicite esclarecimentos adicionais antes de proceder com a revisão.
+    *   **Tarefas mal definidas:** Se as tarefas estiverem mal definidas ou forem ambíguas, solicite esclarecimentos adicionais para garantir que as tarefas sejam claras e alcançáveis.
+    *   **Riscos de segurança:** Se forem identificados riscos de segurança, como exposição de dados sensíveis ou falta de autenticação, priorize a resolução desses problemas antes de aprovar o plano.
+    *   **Dependéncias não declaradas:** Se houver dependéncias não declaradas entre tarefas ou componentes, certifique-se de que essas dependéncias sejam claramente documentadas e consideradas no plano.
+    *   **Revisão de atualizações:** Se o plano for uma atualização de um plano existente, verifique se as alterações são compatíveis com o plano original e se não introduzem novos riscos ou problemas.
 
-    Em caso de exceções ou edge cases, o revisor deve:
-    *   **Documentar:** Documentar as exceções ou edge cases encontradas.
-    *   **Recomendar:** Recomendar soluções ou melhorias para lidar com as exceções ou edge cases.
-    *   **Aprovar:** Aprovar o plano se as exceções ou edge cases não forem críticas.
-    *   **Rejeitar:** Rejeitar o plano se as exceções ou edge cases forem críticas e não puderem ser resolvidas.
+    **Erros comuns a evitar:**
+
+    *   Aprovar planos com gaps significativos ou riscos de segurança não abordados.
+    *   Não considerar as dependéncias entre tarefas ou componentes.
+    *   Não verificar a consistència do plano com a especificação e os requisitos.
+    *   Não documentar claramente as tarefas, os passos e as responsabilidades.
+    *   Não considerar os riscos e as consequçâncias potenciais de falhas ou erros.
+
+    **Melhores práticas:**
+
+    *   Manter o plano conciso e focado nos objetivos principais.
+    *   Utilizar linguagem clara e objetiva.
+    *   Incluir todos os componentes necessários, como introdução, objetivos, escopo, cronograma e recursos necessários.
+    *   Verificar a consistència do plano com a especificação e os requisitos.
+    *   Considerar os riscos e as consequçâncias potenciais de falhas ou erros.
