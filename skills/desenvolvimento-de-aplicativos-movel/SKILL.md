@@ -1,178 +1,87 @@
 ---
-name: Desenvolvimento de Aplicativos Móvel com React Native
-description: Ensina como desenvolver aplicativos móveis para Android e iOS utilizando React Native
+name: Desenvolvimento de Aplicativos Móveis com Kotlin
+description: Ensina como criar aplicativos móveis robustos e escaláveis utilizando a linguagem Kotlin
 ---
 
 ## Objetivo
-O objetivo deste guia é ensinar como desenvolver aplicativos móveis para Android e iOS utilizando React Native, abordando os conceitos fundamentais e práticas para criar aplicativos móveis de alta qualidade.
+O objetivo deste guia é fornecer uma visão geral abrangente sobre o desenvolvimento de aplicativos móveis utilizando a linguagem Kotlin. Ao final, os desenvolvedores estarão capacitados a criar aplicativos móveis robustos e escaláveis, explorando as melhores práticas e recursos da linguagem.
 
 ## Pré-requisitos
-Para seguir este guia, é necessário ter conhecimento em:
-* Desenvolvimento de aplicações web com JavaScript e React
-* Conhecimento básico de programação em Java ou Swift
-* Ambiente de desenvolvimento configurado com Node.js, npm e React Native CLI
+Para seguir este guia, é recomendado que os desenvolvedores tenham:
+- Conhecimento básico em programação orientada a objetos
+- Experiência prévia com desenvolvimento de aplicativos móveis (não necessariamente com Kotlin)
+- Ambiente de desenvolvimento configurado (Android Studio, SDK do Android, etc.)
+- Versão estável do Java Development Kit (JDK) instalada
 
 ## Passo a Passo Técnico / Exemplos de Código
-### Instalação do React Native CLI
-Para começar a desenvolver aplicativos móveis com React Native, é necessário instalar o React Native CLI. Execute o seguinte comando no terminal:
-```bash
-npm install -g react-native-cli
+### Configurando o Ambiente
+1. **Instalação do Android Studio**: Baixe e instale a versão mais recente do Android Studio.
+2. **Configuração do SDK do Android**: Certifique-se de que o SDK do Android esteja configurado corretamente no Android Studio.
+3. **Criação de um Novo Projeto**: Abra o Android Studio e crie um novo projeto, selecionando "Empty Activity" e escolhendo Kotlin como a linguagem de programação.
+
+### Desenvolvendo o Aplicativo
+```kotlin
+// Exemplo de uma Activity simples em Kotlin
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+    }
+}
 ```
-Verifique se a instalação foi bem-sucedida executando `react-native --version`.
 
-### Criação de um novo projeto
-Crie um novo projeto React Native com o seguinte comando:
-```bash
-npx react-native init MeuApp
-```
-Se você encontrar erros durante a criação do projeto, verifique se o `npm` e o `npx` estão atualizados.
-
-### Estrutura do Projeto
-A estrutura do projeto React Native é a seguinte:
-```markdown
-MeuApp/
-android/
-ios/
-node_modules/
-App.js
-App.json
-index.js
-package.json
-```
-Certifique-se de que todos os arquivos e pastas estejam presentes e que não haja erros de permissão.
-
-### Desenvolvimento do Aplicativo
-Desenvolva o aplicativo móvel criando componentes React e utilizando as APIs do React Native. Por exemplo:
-```jsx
-import React, { useState } from 'react';
-import { View, Text, Button } from 'react-native';
-
-const App = () => {
-  const [contador, setContador] = useState(0);
-
-  return (
-    <View>
-      <Text>Contador: {contador}</Text>
-      <Button title="Incrementar" onPress={() => setContador(contador + 1)} />
-    </View>
-  );
-};
-
-export default App;
-```
-Trate possíveis erros de renderização e certifique-se de que o componente esteja sendo renderizado corretamente.
-
-### Execução do Aplicativo
-Execute o aplicativo no emulador Android ou iOS com o seguinte comando:
-```bash
-npx react-native run-android
-```
-ou
-```bash
-npx react-native run-ios
-```
-Se você encontrar erros durante a execução, verifique se o emulador ou dispositivo físico está configurado corretamente.
+### Implementando Funcionalidades
+- **Trabalhando com Layouts**: Entenda como criar layouts personalizados e adaptáveis para diferentes tamanhos de tela.
+- **Manipulando Dados**: Aprenda a trabalhar com banco de dados locais e remotos, utilizando Room Persistence Library e Retrofit.
+- **Implementando Navegação**: Veja como implementar navegação entre telas utilizando o Navigation Component.
 
 ## Validação
-Verifique se o aplicativo está funcionando corretamente no emulador ou dispositivo físico. Teste as funcionalidades e verifique se não há erros ou warnings no console.
+Para validar o conhecimento adquirido, é recomendado:
+- Desenvolver um aplicativo móvel completo, aplicando os conceitos aprendidos.
+- Testar o aplicativo em diferentes dispositivos e versões do Android.
+- Realizar revisões de código e otimizações para melhorar o desempenho e a escalabilidade do aplicativo.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-### Tratamento de Erros de Rede
-Verifique se o aplicativo está lidando corretamente com erros de rede, como perda de conexão ou respostas inválidas do servidor.
-```jsx
-import React, { useState, useEffect } from 'react';
-import { View, Text } from 'react-native';
-import axios from 'axios';
+### Tratamento de Exceções
+- **Try-Catch**: Utilize blocos try-catch para lidar com exceções inesperadas, como erros de rede ou banco de dados.
+- **Exceções Personalizadas**: Crie exceções personalizadas para lidar com erros específicos do seu aplicativo.
 
-const App = () => {
-  const [dados, setDados] = useState(null);
-  const [erro, setErro] = useState(null);
-
-  useEffect(() => {
-    axios.get('https://api.example.com/dados')
-      .then(response => {
-        setDados(response.data);
-      })
-      .catch(error => {
-        setErro(error.message);
-      });
-  }, []);
-
-  return (
-    <View>
-      {dados ? (
-        <Text>Dados: {dados}</Text>
-      ) : (
-        <Text>Erro: {erro}</Text>
-      )}
-    </View>
-  );
-};
-
-export default App;
+```kotlin
+try {
+    // Código que pode lançar uma exceção
+} catch (e: Exception) {
+    // Lidar com a exceção
+}
 ```
-### Tratamento de Erros de Renderização
-Verifique se o aplicativo está lidando corretamente com erros de renderização, como componentes inválidos ou falta de recursos.
-```jsx
-import React, { useState, useEffect } from 'react';
-import { View, Text } from 'react-native';
 
-const App = () => {
-  const [erro, setErro] = useState(null);
+### Edge Cases
+- **Validação de Entrada**: Valide as entradas do usuário para evitar erros inesperados.
+- **Tratamento de Null**: Lidar com valores null para evitar NullPointerExceptions.
+- **Condições de Borda**: Considere condições de borda, como valores mínimos e máximos, para evitar erros.
 
-  useEffect(() => {
-    try {
-      // Código que pode causar erro de renderização
-    } catch (error) {
-      setErro(error.message);
-    }
-  }, []);
-
-  return (
-    <View>
-      {erro ? (
-        <Text>Erro: {erro}</Text>
-      ) : (
-        // Componente que pode causar erro de renderização
-      )}
-    </View>
-  );
-};
-
-export default App;
+```kotlin
+// Validando entrada do usuário
+if (input != null && input.isNotEmpty()) {
+    // Processar a entrada
+} else {
+    // Lidar com a entrada inválida
+}
 ```
-### Tratamento de Edge Cases
-Verifique se o aplicativo está lidando corretamente com edge cases, como entrada de usuário inválida ou falta de recursos.
-```jsx
-import React, { useState } from 'react';
-import { View, Text, TextInput } from 'react-native';
 
-const App = () => {
-  const [entrada, setEntrada] = useState('');
-  const [erro, setErro] = useState(null);
+### Segurança
+- **Criptografia**: Utilize criptografia para proteger dados sensíveis, como senhas e informações de pagamento.
+- **Autenticação**: Implemente autenticação segura para proteger o acesso ao aplicativo.
+- **Atualizações de Segurança**: Mantenha o aplicativo atualizado com as últimas patches de segurança.
 
-  const handleEntrada = (texto) => {
-    if (texto.length > 10) {
-      setErro('Entrada inválida');
-    } else {
-      setEntrada(texto);
-    }
-  };
+```kotlin
+// Exemplo de criptografia simples
+import javax.crypto.Cipher
+import javax.crypto.spec.SecretKeySpec
 
-  return (
-    <View>
-      <TextInput
-        placeholder="Digite algo"
-        value={entrada}
-        onChangeText={handleEntrada}
-      />
-      {erro ? (
-        <Text>Erro: {erro}</Text>
-      ) : (
-        <Text>Entrada: {entrada}</Text>
-      )}
-    </View>
-  );
-};
-
-export default App;
+fun encrypt(data: String, key: String): String {
+    // Implementar a lógica de criptografia
+}
+```
