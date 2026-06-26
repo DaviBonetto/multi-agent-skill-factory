@@ -1,63 +1,96 @@
 ---
-name: Engenharia de Dados
-description: Ensina como projetar e implementar sistemas de armazenamento e processamento de dados
+name: Engenharia de Dados para Big Data
+description: Ensina como projetar e implementar soluções de engenharia de dados para lidar com grandes volumes de dados
 ---
+
 ## Objetivo
-O objetivo desta habilidade é capacitar os participantes a projetar e implementar sistemas de armazenamento e processamento de dados eficientes, utilizando tecnologias e ferramentas atuais. Ao final, os participantes serão capazes de criar soluções de engenharia de dados que atendam às necessidades específicas de uma organização.
+O objetivo deste guia é fornecer uma abordagem prática para projetar e implementar soluções de engenharia de dados eficazes para lidar com grandes volumes de dados, conhecidos como Big Data. Isso inclui entender os conceitos fundamentais, escolher as ferramentas certas e aplicar técnicas de processamento de dados em larga escala.
 
 ## Pré-requisitos
-Para participar desta habilidade, é necessário ter conhecimento em:
-* Conceitos básicos de banco de dados
-* Linguagens de programação como Python ou Java
-* Ferramentas de processamento de dados como Apache Spark ou Hadoop
-* Experiência em trabalhar com grandes conjuntos de dados
+Para seguir este guia, é recomendado que você tenha:
+- Conhecimento básico em programação (preferencialmente em Python ou Java)
+- Familiaridade com conceitos de banco de dados relacional e NoSQL
+- Experiência com ambientes de big data (como Hadoop, Spark) é um plus
 
 ## Passo a Passo Técnico / Exemplos de Código
-Aqui estão os passos para projetar e implementar um sistema de armazenamento e processamento de dados:
-1. **Definição dos Requisitos**: Identificar as necessidades da organização e definir os requisitos do sistema.
-2. **Escolha da Tecnologia**: Selecionar as tecnologias e ferramentas mais adequadas para o sistema, como bancos de dados NoSQL ou SQL, e ferramentas de processamento de dados.
-3. **Projeto do Sistema**: Projetar o sistema de armazenamento e processamento de dados, considerando a escalabilidade, segurança e desempenho.
-4. **Implementação**: Implementar o sistema utilizando as tecnologias e ferramentas escolhidas.
+### 1. Definição do Problema e Escolha da Arquitetura
+Primeiramente, é crucial definir o problema que você está tentando resolver. Isso pode incluir questões como:
+- Qual é o volume de dados que você está lidando?
+- Qual é a velocidade com que os dados estão sendo gerados?
+- Qual é a variedade dos dados (estruturados, não estruturados, semiestruturados)?
 
-Exemplo de código em Python para carregar dados em um banco de dados MongoDB:
+Com base nisso, você pode escolher a arquitetura mais adequada. Por exemplo, para dados em larga escala, você pode considerar usar Hadoop para processamento em batch ou Spark para processamento em tempo real.
+
+### 2. Preparação dos Dados
+A preparação dos dados é uma etapa crítica. Isso pode incluir limpeza, transformação e formatação dos dados para que eles estejam prontos para análise. Um exemplo de como fazer isso em Python usando a biblioteca Pandas é:
 ```python
-import pymongo
+import pandas as pd
 
-# Conectar ao banco de dados
-client = pymongo.MongoClient("mongodb://localhost:27017/")
+# Carregar os dados
+df = pd.read_csv('dados.csv')
 
-# Selecionar o banco de dados
-db = client["mydatabase"]
+# Limpar os dados (remover linhas com valores faltantes)
+df_limpo = df.dropna()
 
-# Selecionar a coleção
-collection = db["mycollection"]
+# Transformar os dados (converter tipo de dados)
+df_limpo['coluna'] = pd.to_numeric(df_limpo['coluna'])
+```
 
-# Inserir dados
-data = {"nome": "João", "idade": 30}
-collection.insert_one(data)
+### 3. Processamento dos Dados
+Depois que os dados estão preparados, você pode começar a processá-los. Isso pode ser feito usando várias ferramentas, dependendo da arquitetura que você escolheu. Por exemplo, se você estiver usando Spark, você pode usar o Spark SQL para consultar os dados:
+```python
+from pyspark.sql import SparkSession
+
+# Criar uma sessão Spark
+spark = SparkSession.builder.appName('MeuApp').getOrCreate()
+
+# Registrar os dados como uma tabela
+df.registerTempTable('minha_tabela')
+
+# Realizar uma consulta
+resultados = spark.sql('SELECT * FROM minha_tabela WHERE condicao = True')
 ```
 
 ## Validação
-Para validar o sistema de armazenamento e processamento de dados, é necessário realizar testes e avaliar o desempenho do sistema. Isso pode ser feito utilizando ferramentas de teste e monitoramento, como Apache JMeter ou Prometheus. Além disso, é importante realizar testes de segurança e backups regulares para garantir a integridade dos dados.
+Para validar os resultados, é importante ter métricas claras de sucesso. Isso pode incluir:
+- Acurácia dos modelos de machine learning treinados com os dados
+- Tempo de processamento dos dados
+- Tamanho dos dados processados
+
+Além disso, é crucial monitorar o desempenho do sistema e fazer ajustes conforme necessário para garantir que a solução de engenharia de dados atenda às necessidades do negócio.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-É fundamental considerar os seguintes casos de exceção e edge cases ao projetar e implementar um sistema de armazenamento e processamento de dados:
-* **Erros de conexão**: Tratar erros de conexão ao banco de dados ou às ferramentas de processamento de dados.
-* **Dados inconsistentes**: Lidar com dados inconsistentes ou inválidos que possam afetar a integridade do sistema.
-* **Sobrecarga de dados**: Implementar mecanismos para lidar com grandes volumes de dados e evitar sobrecarga no sistema.
-* **Segurança**: Implementar medidas de segurança para proteger os dados, como autenticação, autorização e criptografia.
-* **Falhas de hardware**: Considerar a possibilidade de falhas de hardware e implementar mecanismos de redundância e backup.
-* **Atualizações de software**: Planejar atualizações de software e garantir que o sistema esteja sempre atualizado e seguro.
+É fundamental considerar os seguintes casos de bordo e exceções:
+- **Dados faltantes ou inconsistentes**: Implemente mecanismos para lidar com dados faltantes ou inconsistentes, como imputação de valores ou remoção de registros.
+- **Erros de conexão**: Trate erros de conexão com os sistemas de dados, como timeouts ou erros de autenticação.
+- **Sobrecarga de processamento**: Implemente mecanismos para lidar com sobrecarga de processamento, como escalonamento horizontal ou vertical.
+- **Segurança**: Implemente medidas de segurança para proteger os dados, como criptografia e autenticação.
+- **Desempenho**: Monitorize o desempenho do sistema e faça ajustes conforme necessário para garantir que a solução de engenharia de dados atenda às necessidades do negócio.
 
-Exemplo de código em Python para tratar erros de conexão ao banco de dados MongoDB:
+Exemplo de tratamento de exceções em Python:
 ```python
-import pymongo
-
 try:
-    client = pymongo.MongoClient("mongodb://localhost:27017/")
-    db = client["mydatabase"]
-    collection = db["mycollection"]
-except pymongo.errors.ConnectionFailure as e:
-    print(f"Erro de conexão: {e}")
+    # Código que pode gerar exceção
+    df = pd.read_csv('dados.csv')
+except FileNotFoundError:
+    # Tratamento da exceção
+    print("Arquivo não encontrado")
+except pd.errors.EmptyDataError:
+    # Tratamento da exceção
+    print("Dados vazios")
 ```
-Além disso, é importante implementar logs e monitoramento para detectar e resolver problemas rapidamente. Isso pode ser feito utilizando ferramentas como ELK Stack (Elasticsearch, Logstash, Kibana) ou Splunk.
+Exemplo de tratamento de edge cases em Spark:
+```python
+from pyspark.sql import SparkSession
+
+# Criar uma sessão Spark
+spark = SparkSession.builder.appName('MeuApp').getOrCreate()
+
+# Registrar os dados como uma tabela
+df.registerTempTable('minha_tabela')
+
+# Realizar uma consulta com tratamento de edge cases
+resultados = spark.sql('SELECT * FROM minha_tabela WHERE condicao = True').cache()
+if resultados.count() == 0:
+    # Tratamento do caso de bordo (nenhum resultado)
+    print("Nenhum resultado encontrado")
