@@ -29,11 +29,9 @@ Pi core does not ship a standard task-list tool. If a todo/task extension is ins
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
 
-*   **Erro de Permissão**: Ao tentar executar uma ação que exige permissão de administrador, mas o usuário atual não tem permissão, o sistema deve retornar uma mensagem de erro clara e concisa, indicando a necessidade de permissão de administrador.
-*   **Arquivos Não Encontrados**: Se um arquivo solicitado não for encontrado, o sistema deve retornar uma mensagem de erro indicando que o arquivo não foi encontrado e, se possível, sugerir ações alternativas.
-*   **Comandos Inválidos**: Se um comando inválido for passado para o sistema, ele deve retornar uma mensagem de erro clara, indicando o comando inválido e, se possível, sugerir a sintaxe correta.
-*   **Subagentes Não Instalados**: Se um subagente for solicitado, mas não estiver instalado, o sistema deve explicar que o subagente não está instalado e, se possível, fornecer instruções para instalar o subagente.
-*   **Limites de Recursos**: Se o sistema atingir um limite de recursos (como memória ou capacidade de processamento), ele deve retornar uma mensagem de erro indicando o limite atingido e, se possível, sugerir ações para mitigar o problema.
-*   **Erros de Conexão**: Se ocorrer um erro de conexão ao tentar acessar um recurso externo, o sistema deve retornar uma mensagem de erro clara, indicando o erro de conexão e, se possível, sugerir ações para resolver o problema.
-*   **Entrada Inválida**: Se a entrada fornecida for inválida ou inconsistente, o sistema deve retornar uma mensagem de erro clara, indicando a entrada inválida e, se possível, sugerir a entrada correta.
-*   **Dependências Não Atendidas**: Se uma dependência necessária não for atendida, o sistema deve retornar uma mensagem de erro clara, indicando a dependência não atendida e, se possível, fornecer instruções para atender à dependência.
+- **Erro de Permissão**: Ao tentar executar uma ação que exige permissão de administrador, o agente deve verificar se o usuário atual tem as permissões necessárias. Se não, o agente deve retornar uma mensagem de erro indicando a falta de permissão.
+- **Arquivo Não Encontrado**: Ao tentar ler ou editar um arquivo, o agente deve verificar se o arquivo existe. Se não, o agente deve retornar uma mensagem de erro indicando que o arquivo não foi encontrado.
+- **Subagente Não Instalado**: Ao tentar dispatchar um subagente, o agente deve verificar se o subagente está instalado. Se não, o agente deve retornar uma mensagem de erro indicando que o subagente não está instalado.
+- **Exceção de Syntax**: Ao tentar executar uma ação que exige uma sintaxe específica, o agente deve verificar se a sintaxe está correta. Se não, o agente deve retornar uma mensagem de erro indicando a exceção de syntax.
+- **Timeout**: Ao tentar executar uma ação que demora muito tempo, o agente deve verificar se o tempo de execução excedeu o limite estabelecido. Se sim, o agente deve retornar uma mensagem de erro indicando que o tempo de execução excedeu o limite.
+- **Conflito de Ações**: Ao tentar executar duas ou mais ações que são mutuamente exclusivas, o agente deve verificar se as ações são compatíveis. Se não, o agente deve retornar uma mensagem de erro indicando o conflito de ações.
