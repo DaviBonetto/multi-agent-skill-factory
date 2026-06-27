@@ -29,9 +29,9 @@ Pi core does not ship a standard task-list tool. If a todo/task extension is ins
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
 
-- **Erro de Permissão**: Ao tentar executar uma ação que exige permissão de administrador, o agente deve verificar se o usuário atual tem as permissões necessárias. Se não, o agente deve retornar uma mensagem de erro indicando a falta de permissão.
-- **Arquivo Não Encontrado**: Ao tentar ler ou editar um arquivo, o agente deve verificar se o arquivo existe. Se não, o agente deve retornar uma mensagem de erro indicando que o arquivo não foi encontrado.
-- **Subagente Não Instalado**: Ao tentar dispatchar um subagente, o agente deve verificar se o subagente está instalado. Se não, o agente deve retornar uma mensagem de erro indicando que o subagente não está instalado.
-- **Exceção de Syntax**: Ao tentar executar uma ação que exige uma sintaxe específica, o agente deve verificar se a sintaxe está correta. Se não, o agente deve retornar uma mensagem de erro indicando a exceção de syntax.
-- **Timeout**: Ao tentar executar uma ação que demora muito tempo, o agente deve verificar se o tempo de execução excedeu o limite estabelecido. Se sim, o agente deve retornar uma mensagem de erro indicando que o tempo de execução excedeu o limite.
-- **Conflito de Ações**: Ao tentar executar duas ou mais ações que são mutuamente exclusivas, o agente deve verificar se as ações são compatíveis. Se não, o agente deve retornar uma mensagem de erro indicando o conflito de ações.
+*   **Erro de Permissão**: Em caso de falta de permissão para executar uma ação, o agente deve retornar uma mensagem de erro clara e concisa, indicando a ação que não pôde ser executada e o motivo.
+*   **Arquivos Não Encontrados**: Se um arquivo solicitado não for encontrado, o agente deve informar o usuário sobre o erro e, se possível, sugerir alternativas ou ações para resolver a situação.
+*   **Comandos Inválidos**: Para comandos inválidos ou malformados, o agente deve retornar uma mensagem de erro que ajude o usuário a entender o que deu errado e como corrigir o comando.
+*   **Subagentes Não Instalados**: Se um subagente necessário não estiver instalado, o agente deve explicar a situação ao usuário e fornecer instruções sobre como instalar o subagente necessário ou alternativas para alcançar o objetivo desejado.
+*   **Exceções de Execução**: Em caso de exceções durante a execução de uma ação, o agente deve capturar a exceção, registrar o erro para análise posterior e retornar uma mensagem de erro ao usuário, mantendo a aplicação estável e segura.
+*   **Limites de Recursos**: Se o agente atingir limites de recursos (como memória ou capacidade de processamento), deve priorizar a estabilidade do sistema, cancelar operações não essenciais e notificar o usuário sobre a situação, sugerindo ajustes ou melhorias para evitar tais limitações no futuro.
