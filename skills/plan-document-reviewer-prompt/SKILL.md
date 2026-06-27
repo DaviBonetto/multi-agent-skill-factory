@@ -23,7 +23,8 @@ Subagent (general-purpose):
     | Spec Alignment | Plan covers spec requirements, no major scope creep |
     | Task Decomposition | Tasks have clear boundaries, steps are actionable |
     | Buildability | Could an engineer follow this plan without getting stuck? |
-    | Security | Potential security risks, data protection, and access control |
+    | Security | Potential security vulnerabilities, data protection, access control |
+    | Error Handling | Proper error handling mechanisms, logging, and debugging |
 
     ## Calibration
 
@@ -48,25 +49,12 @@ Subagent (general-purpose):
 
     ⚠️ Tratamento de Exceções e Edge Cases
 
-    *   **Planos incompletos:** Se o plano estiver incompleto, verifique se os principais componentes estão presentes, como introdução, objetivos, escopo, cronograma e recursos necessários.
-    *   **Especificações ausentes:** Se a especificação estiver ausente ou for incompleta, solicite esclarecimentos adicionais antes de proceder com a revisão.
-    *   **Tarefas mal definidas:** Se as tarefas estiverem mal definidas ou forem ambíguas, solicite esclarecimentos adicionais para garantir que as tarefas sejam claras e alcançáveis.
-    *   **Riscos de segurança:** Se forem identificados riscos de segurança, como exposição de dados sensíveis ou falta de autenticação, priorize a resolução desses problemas antes de aprovar o plano.
-    *   **Dependéncias não declaradas:** Se houver dependéncias não declaradas entre tarefas ou componentes, certifique-se de que essas dependéncias sejam claramente documentadas e consideradas no plano.
-    *   **Revisão de atualizações:** Se o plano for uma atualização de um plano existente, verifique se as alterações são compatíveis com o plano original e se não introduzem novos riscos ou problemas.
-
-    **Erros comuns a evitar:**
-
-    *   Aprovar planos com gaps significativos ou riscos de segurança não abordados.
-    *   Não considerar as dependéncias entre tarefas ou componentes.
-    *   Não verificar a consistència do plano com a especificação e os requisitos.
-    *   Não documentar claramente as tarefas, os passos e as responsabilidades.
-    *   Não considerar os riscos e as consequçâncias potenciais de falhas ou erros.
-
-    **Melhores práticas:**
-
-    *   Manter o plano conciso e focado nos objetivos principais.
-    *   Utilizar linguagem clara e objetiva.
-    *   Incluir todos os componentes necessários, como introdução, objetivos, escopo, cronograma e recursos necessários.
-    *   Verificar a consistència do plano com a especificação e os requisitos.
-    *   Considerar os riscos e as consequçâncias potenciais de falhas ou erros.
+    *   **Planos incompletos:** Se o plano estiver incompleto, verifique se os principais componentes estão presentes, como introdução, objetivos, escopo, cronograma e orçamento.
+    *   **Spec não disponível:** Se a spec não estiver disponível, verifique se o plano contém informações suficientes para prosseguir com a implementação.
+    *   **Tarefas mal definidas:** Se as tarefas estiverem mal definidas, verifique se elas podem ser reescritas para ser mais claras e específicas.
+    *   **Problemas de segurança:** Se forem identificados problemas de segurança, verifique se eles podem ser resolvidos com atualizações ou patches de segurança.
+    *   **Erros de sintaxe:** Se forem encontrados erros de sintaxe, verifique se eles podem ser corrigidos sem afetar a funcionalidade do plano.
+    *   **Divergências de versão:** Se houver divergências de versão entre o plano e a spec, verifique se elas podem ser resolvidas com atualizações ou revisões do plano.
+    *   **Falta de documentação:** Se houver falta de documentação, verifique se ela pode ser fornecida para garantir a clareza e a compreensão do plano.
+    *   **Problemas de compatibilidade:** Se forem identificados problemas de compatibilidade, verifique se eles podem ser resolvidos com atualizações ou ajustes no plano.
+    *   **Erros de lógica:** Se forem encontrados erros de lógica, verifique se eles podem ser corrigidos sem afetar a funcionalidade do plano.
