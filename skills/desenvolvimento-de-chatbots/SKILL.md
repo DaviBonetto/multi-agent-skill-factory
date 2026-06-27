@@ -1,88 +1,104 @@
 ---
 name: Desenvolvimento de Chatbots
-description: Ensina como criar chatbots utilizando linguagens de programação como Python e Node.js
+description: Aborda a criação de chatbots utilizando frameworks como Rasa e Dialogflow, com foco em NLP e respostas personalizadas
 ---
 
 ## Objetivo
-O objetivo deste guia é fornecer uma visão geral completa sobre o desenvolvimento de chatbots, abordando desde os conceitos básicos até a implementação prática utilizando linguagens de programação como Python e Node.js. Ao final deste guia, os desenvolvedores senior estarão equipados com as habilidades necessárias para criar chatbots eficazes e personalizados.
+O objetivo deste guia é fornecer uma visão geral abrangente sobre o desenvolvimento de chatbots, utilizando frameworks como Rasa e Dialogflow, com foco em Processamento de Linguagem Natural (NLP) e respostas personalizadas. O guia visa capacitar desenvolvedores a criar chatbots inteligentes e interativos que possam entender e responder às necessidades dos usuários de forma eficaz.
 
 ## Pré-requisitos
-Para acompanhar este guia, é recomendado que os desenvolvedores tenham:
-- Conhecimento avançado em programação (preferencialmente em Python ou Node.js)
-- Experiência com desenvolvimento de aplicações web ou mobile
-- Familiaridade com conceitos de inteligência artificial e processamento de linguagem natural
+Antes de iniciar o desenvolvimento de um chatbot, é importante ter conhecimento básico em:
+- Programação em Python
+- Conceitos de NLP
+- Familiaridade com frameworks de desenvolvimento de chatbots como Rasa ou Dialogflow
+- Noções de inteligência artificial e machine learning
 
 ## Passo a Passo Técnico / Exemplos de Código
-### Etapa 1: Definição do Chatbot
-Defina o propósito e o escopo do seu chatbot. Isso inclui identificar o público-alvo, os canais de comunicação e as funcionalidades desejadas.
-
-### Etapa 2: Escolha da Tecnologia
-Escolha a linguagem de programação e as bibliotecas ou frameworks adequados para o desenvolvimento do chatbot. Por exemplo, para Python, você pode usar a biblioteca `nltk` para processamento de linguagem natural e `flask` ou `django` para criar a API do chatbot.
-
-```python
-import nltk
-from nltk.stem import WordNetLemmatizer
-lemmatizer = WordNetLemmatizer()
-
-# Exemplo de uso do lematizador
-palavra = "correr"
-print(lemmatizer.lemmatize(palavra))
+### Instalação do Rasa
+Para começar a desenvolver um chatbot com Rasa, você precisa instalar o framework. Isso pode ser feito via pip:
+```bash
+pip install rasa
 ```
+### Criação do Chatbot
+Após a instalação, você pode criar um novo projeto Rasa com:
+```bash
+rasa init mychatbot
+```
+Isso criará uma estrutura básica para o seu chatbot.
 
-### Etapa 3: Implementação do Chatbot
-Implemente as funcionalidades do chatbot, incluindo a lógica de processamento de entrada do usuário e a geração de respostas. Isso pode envolver o uso de algoritmos de aprendizado de máquina para melhorar a precisão das respostas.
+### Definição de Intenções e Entidades
+No arquivo `domain.yml`, você define as intenções e entidades do seu chatbot. Por exemplo:
+```yml
+intents:
+  - saudar
+  - despedir
 
-```javascript
-// Exemplo em Node.js usando o framework Express
-const express = require('express');
-const app = express();
+entities:
+  - nome
+```
+### Implementação de Ações
+No arquivo `actions/actions.py`, você implementa as ações que o chatbot pode realizar. Por exemplo:
+```python
+from typing import Any, Text, Dict, List
 
-app.post('/chat', (req, res) => {
-  const mensagem = req.body.mensagem;
-  // Lógica para processar a mensagem e gerar uma resposta
-  const resposta = processarMensagem(mensagem);
-  res.send(resposta);
-});
+from rasa_sdk import Action, Tracker
+from rasa_sdk.executor import CollectingDispatcher
 
-app.listen(3000, () => {
-  console.log('Chatbot ouvindo na porta 3000');
-});
+class ActionSaudar(Action):
+    def name(self) -> Text:
+        return "action_saudar"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        try:
+            dispatcher.utter_message(text="Olá! Como posso ajudar?")
+            return []
+        except Exception as e:
+            dispatcher.utter_message(text="Desculpe, ocorreu um erro.")
+            return []
+```
+### Treinamento do Modelo
+Para treinar o modelo, você precisa criar um arquivo `data/nlu.yml` com exemplos de frases que o usuário pode dizer, e então treinar o modelo com:
+```bash
+rasa train
 ```
 
 ## Validação
-Para validar o funcionamento do chatbot, é importante realizar testes rigorosos, incluindo:
-- Testes unitários para as funções individuais
-- Testes de integração para garantir que as diferentes partes do sistema funcionem juntas corretamente
-- Testes de usabilidade para garantir que o chatbot atenda às necessidades dos usuários
+Após o treinamento, você pode testar o seu chatbot com:
+```bash
+rasa test
+```
+ou interagir com ele diretamente com:
+```bash
+rasa shell
+```
+Isso permite validar se o chatbot está funcionando como esperado, entendendo e respondendo corretamente às entradas do usuário.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-Para garantir a robustez do chatbot, é fundamental considerar os seguintes casos:
-- **Entradas inválidas**: O chatbot deve ser capaz de lidar com entradas inválidas ou malformadas, como mensagens vazias ou com caracteres especiais.
-- **Exceções de rede**: O chatbot deve ser capaz de lidar com exceções de rede, como perda de conexão ou tempo de resposta excessivo.
-- **Erros de processamento**: O chatbot deve ser capaz de lidar com erros de processamento, como erros de sintaxe ou exceções de runtime.
-- **Ataques de segurança**: O chatbot deve ser capaz de lidar com ataques de segurança, como injeção de SQL ou cross-site scripting (XSS).
-
-Exemplos de código para tratamento de exceções:
+### Tratamento de Erros de Instalação
+Se ocorrer um erro durante a instalação do Rasa, verifique se o pip está atualizado e se o ambiente virtual está configurado corretamente.
+### Tratamento de Erros de Treinamento
+Se ocorrer um erro durante o treinamento do modelo, verifique se os dados de treinamento estão corretos e se o modelo está configurado corretamente.
+### Tratamento de Entradas Inválidas
+Se o usuário inserir uma entrada inválida, o chatbot deve ser capaz de lidar com isso e responder de forma apropriada. Por exemplo:
 ```python
-try:
-  # Lógica para processar a mensagem
-  resposta = processarMensagem(mensagem)
-except Exception as e:
-  # Tratamento de exceção
-  resposta = "Desculpe, ocorreu um erro. Por favor, tente novamente."
-```
+from typing import Any, Text, Dict, List
 
-```javascript
-app.post('/chat', (req, res) => {
-  try {
-    const mensagem = req.body.mensagem;
-    const resposta = processarMensagem(mensagem);
-    res.send(resposta);
-  } catch (error) {
-    // Tratamento de exceção
-    res.status(500).send("Desculpe, ocorreu um erro. Por favor, tente novamente.");
-  }
-});
-```
+from rasa_sdk import Action, Tracker
+from rasa_sdk.executor import CollectingDispatcher
 
-Ao seguir essas etapas e realizar os testes necessários, você estará bem equipado para desenvolver um chatbot eficaz e personalizado que atenda às necessidades específicas do seu projeto. Além disso, o tratamento de exceções e edge cases garante a robustez e a segurança do chatbot.
+class ActionDesconhecido(Action):
+    def name(self) -> Text:
+        return "action_desconhecido"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        dispatcher.utter_message(text="Desculpe, não entendi. Pode repetir?")
+        return []
+```
+### Tratamento de Saída de Dados Sensíveis
+Se o chatbot precisar lidar com dados sensíveis, como informações de pagamento ou dados pessoais, é importante implementar medidas de segurança para proteger esses dados. Por exemplo, utilizando criptografia e autenticação para garantir que apenas usuários autorizados possam acessar esses dados.
+### Tratamento de Ataques de Força Bruta
+Se o chatbot for alvo de ataques de força bruta, é importante implementar medidas de segurança para prevenir esses ataques. Por exemplo, utilizando técnicas de rate limiting e IP blocking para limitar o número de requisições que podem ser feitas em um determinado período de tempo.
