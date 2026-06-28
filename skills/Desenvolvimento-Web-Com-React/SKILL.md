@@ -1,74 +1,91 @@
 ---
 name: Desenvolvimento Web com React
-description: Ensina desenvolver aplicações web escaláveis e responsivas utilizando React
+description: Esta skill ensina como desenvolver aplicações web utilizando o framework React, incluindo conceitos de componentes, estado e props.
 ---
 
 ## Objetivo
-O objetivo deste guia é fornecer uma visão geral completa sobre como desenvolver aplicações web escaláveis e responsivas utilizando o framework React. Ao final deste guia, você estará capacitado a criar aplicações web modernas e eficientes.
+O objetivo desta skill é capacitar os desenvolvedores a criar aplicações web robustas e escaláveis utilizando o framework React, abordando conceitos fundamentais como componentes, estado e props.
 
 ## Pré-requisitos
-Antes de começar, é essencial ter conhecimento básico em:
+Para aproveitar ao máximo esta skill, é recomendado que os desenvolvedores tenham conhecimento básico em:
 - JavaScript (ES6+)
 - HTML5
 - CSS3
 - Conceitos básicos de programação orientada a objetos
-- Familiaridade com o uso de terminais ou prompts de comando
 
 ## Passo a Passo Técnico / Exemplos de Código
 ### Instalação do React
-Para começar a desenvolver com React, você precisará instalar o Create React App, uma ferramenta oficial para criar aplicativos React. Abra seu terminal e execute:
+Para começar a desenvolver com React, é necessário instalar o framework. Isso pode ser feito utilizando o npm ou o yarn:
 ```bash
-npx create-react-app meu-app
+npm install react react-dom
 ```
-Substitua `meu-app` pelo nome do seu aplicativo.
+ou
+```bash
+yarn add react react-dom
+```
+**Tratamento de Erros na Instalação**: Em caso de erros durante a instalação, verifique se o npm ou yarn está atualizado e se o projeto está sendo executado em um ambiente de desenvolvimento compatível.
 
-### Estrutura do Projeto
-Após a instalação, navegue até a pasta do seu projeto e você encontrará a seguinte estrutura:
-```markdown
-meu-app/
-  node_modules/
-  public/
-  src/
-    App.css
-    App.js
-    index.css
-    index.js
-  package.json
-```
-### Desenvolvendo o App
-Edite o arquivo `src/App.js` para começar a desenvolver sua aplicação. Por exemplo, para criar um componente de boas-vindas:
+### Criando Componentes
+Os componentes são a base das aplicações React. Eles podem ser funcionais ou de classe. Aqui está um exemplo de um componente funcional:
 ```jsx
 import React from 'react';
-import './App.css';
 
-function App() {
+function Saudacao() {
+  return <h1>Olá, Mundo!</h1>;
+}
+
+export default Saudacao;
+```
+**Edge Case: Componentes Aninhados**: Ao criar componentes aninhados, é importante garantir que cada componente tenha um único elemento raiz para evitar erros de renderização.
+
+### Gerenciamento de Estado
+O estado é crucial para atualizar a interface do usuário dinamicamente. Aqui está um exemplo de como usar o `useState` para gerenciar o estado:
+```jsx
+import React, { useState } from 'react';
+
+function Contador() {
+  const [contador, setContador] = useState(0);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Bem-vindo ao meu app React!
-        </p>
-      </header>
+    <div>
+      <p>Contador: {contador}</p>
+      <button onClick={() => setContador(contador + 1)}>Incrementar</button>
     </div>
   );
 }
 
+export default Contador;
+```
+**Tratamento de Exceções no Estado**: Em caso de atualizações de estado assíncronas, é importante usar o `useEffect` para garantir que o componente seja re-renderizado corretamente após a atualização do estado.
+
+### Passagem de Props
+As props são usadas para passar dados de um componente pai para um componente filho. Aqui está um exemplo:
+```jsx
+import React from 'react';
+
+function Mensagem({ nome }) {
+  return <p>Olá, {nome}!</p>;
+}
+
+function App() {
+  return <Mensagem nome="João" />;
+}
+
 export default App;
 ```
+**Validação de Props**: É importante validar as props recebidas por um componente para garantir que sejam do tipo correto e contenham os dados esperados.
 
 ## Validação
-Para validar se sua aplicação está funcionando corretamente, execute:
-```bash
-npm start
-```
-Abra seu navegador e acesse `http://localhost:3000`. Você deve ver a página do seu aplicativo carregada com o conteúdo que você desenvolveu.
+Para validar o conhecimento adquirido, é recomendado desenvolver pequenos projetos que apliquem os conceitos aprendidos, como:
+- Criar um contador que incremente e decremente um valor.
+- Desenvolver um formulário que capture e exiba informações do usuário.
+- Construir uma lista de itens que possa ser filtrada e ordenada.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-Ao desenvolver aplicações com React, é importante considerar os seguintes casos de bordo e exceções:
-- **Erro de instalação**: Se o comando `npx create-react-app meu-app` falhar, verifique se você tem permissão para criar pastas e arquivos no diretório atual. Além disso, certifique-se de que o Node.js e o npm estejam instalados e atualizados.
-- **Estrutura de projeto inválida**: Se a estrutura do projeto não for gerada corretamente, verifique se o comando `npx create-react-app meu-app` foi executado com sucesso. Se o problema persistir, tente executar o comando novamente ou criar o projeto manualmente.
-- **Erros de sintaxe em componentes**: Se você encontrar erros de sintaxe em seus componentes, verifique se o código está correto e se as importações estão sendo feitas corretamente. Além disso, certifique-se de que o arquivo `package.json` esteja configurado corretamente.
-- **Problemas de renderização**: Se a aplicação não estiver renderizando corretamente, verifique se o componente `App.js` está sendo importado e renderizado corretamente no arquivo `index.js`. Além disso, certifique-se de que o arquivo `index.html` esteja configurado corretamente.
-- **Erros de dependência**: Se você encontrar erros de dependência, verifique se as dependências estão sendo instaladas corretamente e se as versões estão compatíveis. Além disso, certifique-se de que o arquivo `package.json` esteja configurado corretamente.
+Além dos exemplos específicos acima, é crucial considerar os seguintes pontos para um desenvolvimento robusto:
+- **Tratamento de Erros**: Use `try-catch` para capturar e tratar erros em código assíncrono.
+- **Validação de Dados**: Valide todos os dados recebidos de fontes externas, como APIs ou inputs de usuário.
+- **Segurança**: Implemente práticas de segurança, como a validação de entradas para prevenir ataques de injeção de código.
+- **Acessibilidade**: Desenvolva componentes que sejam acessíveis para todos os usuários, independentemente de suas capacidades.
 
-Lembre-se de que este é apenas o começo. Explore a documentação oficial do React e outros recursos para aprofundar seus conhecimentos e criar aplicações mais complexas e personalizadas.
+Esses projetos e considerações ajudarão a solidificar a compreensão dos conceitos de componentes, estado e props, preparando o desenvolvedor para criar aplicações web mais complexas com React.
