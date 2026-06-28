@@ -1,188 +1,86 @@
 ---
-name: huggingface-tool-builder
-description: Use this skill when the user wants to build tool/scripts or achieve a task where using data from the Hugging Face API would help. This is especially useful when chaining or combining API calls or the task will be repeated/automated. This Skill creates a reusable script to fetch, enrich or process data.
+name: executing-plans
+description: Use quando você tem um plano de implementação escrito para executar em uma sessão separada com pontos de verificação de revisão
 ---
 
-# Hugging Face API Tool Builder
+# Executando Planos
 
-Your purpose is now is to create reusable command line scripts and utilities for using the Hugging Face API, allowing chaining, piping and intermediate processing where helpful. You can access the API directly, as well as use the `hf` command line tool. Model and Dataset cards can be accessed from repositories directly.
+## Visão Geral
 
-## Script Rules
+Carregue o plano, revise criticamente, execute todas as tarefas e informe quando concluído.
 
-Make sure to follow these rules:
- - Scripts must take a `--help` command line argument to describe their inputs and outputs
- - Non-destructive scripts should be tested before handing over to the User
- - Shell scripts are preferred, but use Python or TSX if complexity or user need requires it.
- - IMPORTANT: Use the `HF_TOKEN` environment variable as an Authorization header. For example: `curl -H "Authorization: Bearer ${HF_TOKEN}" https://huggingface.co/api/`. This provides higher rate limits and appropriate authorization for data access.
- - Investigate the shape of the API results before commiting to a final design; make use of piping and chaining where composability would be an advantage - prefer simple solutions where possible.
- - Share usage examples once complete.
- - Handle errors and exceptions properly, including API rate limits, network errors, and invalid user input.
+**Anuncie no início:** "Estou usando a habilidade de executar planos para implementar este plano."
 
-Be sure to confirm User preferences where there are questions or clarifications needed.
+**Nota:** Informe ao seu parceiro humano que Superpowers funciona muito melhor com acesso a subagentes. A qualidade do seu trabalho será significativamente melhor se executado em uma plataforma com suporte a subagentes (Claude Code, Codex CLI, Codex App, Copilot CLI e Gemini CLI são qualificados; consulte as referências de ferramentas por plataforma em `../using-superpowers/references/`). Se os subagentes estiverem disponíveis, use superpowers:subagent-driven-development em vez desta habilidade.
 
-## Sample Scripts
+## O Processo
 
-Paths below are relative to this skill directory.
+### Etapa 1: Carregar e Revisar Plano
+1. Leia o arquivo do plano
+2. Revise criticamente - identifique quaisquer dúvidas ou preocupações sobre o plano
+3. Se houver preocupações: Levante-as com seu parceiro humano antes de começar
+4. Se não houver preocupações: Crie tarefas para os itens do plano e prossiga
 
-Reference examples:
-- `references/hf_model_papers_auth.sh` — uses `HF_TOKEN` automatically and chains trending → model metadata → model card parsing with fallbacks; it demonstrates multi-step API usage plus auth hygiene for gated/private content.
-- `references/find_models_by_paper.sh` — optional `HF_TOKEN` usage via `--token`, consistent authenticated search, and a retry path when arXiv-prefixed searches are too narrow; it shows resilient query strategy and clear user-facing help.
-- `references/hf_model_card_frontmatter.sh` — uses the `hf` CLI to download model cards, extracts YAML frontmatter, and emits NDJSON summaries (license, pipeline tag, tags, gated prompt flag) for easy filtering.
+### Etapa 2: Executar Tarefas
 
-Baseline examples (ultra-simple, minimal logic, raw JSON output with `HF_TOKEN` header):
-- `references/baseline_hf_api.sh` — bash
-- `references/baseline_hf_api.py` — python
-- `references/baseline_hf_api.tsx` — typescript executable
+Para cada tarefa:
+1. Marque como em andamento
+2. Siga cada etapa exatamente (o plano tem etapas de tamanho reduzido)
+3. Execute verificações como especificado
+4. Marque como concluída
 
-Composable utility (stdin → NDJSON):
-- `references/hf_enrich_models.sh` — reads model IDs from stdin, fetches metadata per ID, emits one JSON object per line for streaming pipelines.
+### Etapa 3: Concluir Desenvolvimento
 
-Composability through piping (shell-friendly JSON output):
-- `references/baseline_hf_api.sh 25 | jq -r '.[].id' | references/hf_enrich_models.sh | jq -s 'sort_by(.downloads) | reverse | .[:10]'`
-- `references/baseline_hf_api.sh 50 | jq '[.[] | {id, downloads}] | sort_by(.downloads) | reverse | .[:10]'`
-- `printf '%s
-' openai/gpt-oss-120b meta-llama/Meta-Llama-3.1-8B | references/hf_model_card_frontmatter.sh | jq -s 'map({id, license, has_extra_gated_prompt})'`
+Depois que todas as tarefas forem concluídas e verificadas:
+- Anuncie: "Estou usando a habilidade de concluir um branch de desenvolvimento para concluir este trabalho."
+- **HABILIDADE SUB-REQUERIDA:** Use superpowers:finishing-a-development-branch
+- Siga essa habilidade para verificar testes, apresentar opções, executar escolha
 
-## High Level Endpoints
+## Quando Parar e Pedir Ajuda
 
-The following are the main API endpoints available at `https://huggingface.co`
+**PARE de executar imediatamente quando:**
+- Encontrar um bloqueador (dependência ausente, teste falha, instrução não clara)
+- O plano tem lacunas críticas que impedem o início
+- Você não entender uma instrução
+- Verificação falha repetidamente
 
-```
-/api/datasets
-/api/models
-/api/spaces
-/api/collections
-/api/daily_papers
-/api/notifications
-/api/settings
-/api/whoami-v2
-/api/trending
-/oauth/userinfo
-```
+**Peça esclarecimento em vez de adivinhar.**
 
-## Accessing the API
+## Quando Revisitar Etapas Anteriores
 
-The API is documented with the OpenAPI standard at `https://huggingface.co/.well-known/openapi.json`.
+**Retorne à Revisão (Etapa 1) quando:**
+- Parceiro atualiza o plano com base em seu feedback
+- Abordagem fundamental precisa ser reavaliada
 
-**IMPORTANT:** DO NOT ATTEMPT to read `https://huggingface.co/.well-known/openapi.json` directly as it is too large to process. 
+**Não force a passagem de bloqueadores** - pare e peça.
 
-**IMPORTANT** Use `jq` to query and extract relevant parts. For example, 
+## Lembre-se
+- Revise o plano criticamente primeiro
+- Siga as etapas do plano exatamente
+- Não pule verificações
+- Faça referência a habilidades quando o plano disser para
+- Pare quando bloqueado, não adivinhe
+- Nunca inicie a implementação no branch main/master sem consentimento explícito do usuário
 
- Command to Get All 160 Endpoints
+## Integração
 
-```bash
-curl -s "https://huggingface.co/.well-known/openapi.json" | jq '.paths | keys | sort'
-```
+**Habilidades de fluxo de trabalho necessárias:**
+- **superpowers:using-git-worktrees** - Garante um espaço de trabalho isolado (cria um ou verifica se existe)
+- **superpowers:writing-plans** - Cria o plano que esta habilidade executa
+- **superpowers:finishing-a-development-branch** - Conclui o desenvolvimento após todas as tarefas
 
-Model Search Endpoint Details
+⚠️ Tratamento de Exceções e Edge Cases
+### Tratamento de Erros
+- **Erros de Leitura do Plano:** Se houver um erro ao ler o arquivo do plano, anuncie o erro e peça ajuda.
+- **Erros de Execução de Tarefas:** Se houver um erro ao executar uma tarefa, anuncie o erro e peça ajuda.
+- **Erros de Verificação:** Se houver um erro ao executar uma verificação, anuncie o erro e peça ajuda.
 
-```bash
-curl -s "https://huggingface.co/.well-known/openapi.json" | jq '.paths["/api/models"]'
-```
+### Edge Cases
+- **Plano Vazio:** Se o plano estiver vazio, anuncie que o plano está vazio e peça ajuda.
+- **Tarefa Inválida:** Se uma tarefa for inválida, anuncie que a tarefa é inválida e peça ajuda.
+- **Dependência Ausente:** Se uma dependência for ausente, anuncie que a dependência está ausente e peça ajuda.
 
-You can also query endpoints to see the shape of the data. When doing so constrain results to low numbers to make them easy to process, yet representative.
-
-## Using the HF command line tool
-
-The `hf` command line tool gives you further access to Hugging Face repository content and infrastructure. 
-
-```bash
-❯ hf --help
-Usage: hf [OPTIONS] COMMAND [ARGS]...
-
-  Hugging Face Hub CLI
-
-Options:
-  --help                Show this message and exit.
-
-Commands:
-  auth                 Manage authentication (login, logout, etc.).
-  buckets              Commands to interact with buckets.
-  cache                Manage local cache directory.
-  collections          Interact with collections on the Hub.
-  datasets             Interact with datasets on the Hub.
-  discussions          Manage discussions and pull requests on the Hub.
-  download             Download files from the Hub.
-  endpoints            Manage Hugging Face Inference Endpoints.
-  env                  Print information about the environment.
-  extensions           Manage hf CLI extensions.
-  jobs                 Run and manage Jobs on the Hub.
-  models               Interact with models on the Hub.
-  papers               Interact with papers on the Hub.
-  repos                Manage repos on the Hub.
-  skills               Manage skills for AI assistants.
-  spaces               Interact with spaces on the Hub.
-  sync                 Sync files between local directory and a bucket.
-  upload               Upload a file or a folder to the Hub.
-  upload-large-folder  Upload a large folder to the Hub.
-  version              Print information about the hf version.
-  webhooks             Manage webhooks on the Hub.
-```
-
-The `hf` CLI command has replaced the now deprecated `huggingface-cli` command.
-
-## ⚠️ Tratamento de Exceções e Edge Cases
-
-Ao criar scripts para interagir com a API do Hugging Face, é importante considerar os seguintes casos de exceção e edge cases:
-
-* **Rate limits**: A API do Hugging Face tem limites de taxa para evitar abusos. Certifique-se de que seus scripts respeitem esses limites e implementem retry mechanisms para lidar com erros de taxa.
-* **Erros de rede**: Erros de rede podem ocorrer durante a comunicação com a API. Implemente mecanismos de retry e timeout para lidar com esses erros.
-* **Entrada de usuário inválida**: Os usuários podem fornecer entrada inválida, como IDs de modelo ou parâmetros de busca incorretos. Certifique-se de que seus scripts validem a entrada do usuário e forneçam mensagens de erro claras e úteis.
-* **Respostas da API inválidas**: A API do Hugging Face pode retornar respostas inválidas ou inconsistentes. Implemente mecanismos para lidar com esses casos e fornecer respostas úteis para os usuários.
-* **Autenticação e autorização**: A API do Hugging Face requer autenticação e autorização para acessar certos recursos. Certifique-se de que seus scripts implementem autenticação e autorização corretas para evitar erros de permissão.
-
-Exemplos de como lidar com esses casos de exceção e edge cases:
-
-* **Rate limits**:
-```bash
-while true; do
-  response=$(curl -s -H "Authorization: Bearer ${HF_TOKEN}" https://huggingface.co/api/models)
-  if [ $? -eq 0 ]; then
-    break
-  elif [ $? -eq 429 ]; then
-    sleep 60
-  else
-    echo "Erro ao acessar a API: $?"
-    exit 1
-  fi
-done
-```
-* **Erros de rede**:
-```bash
-while true; do
-  response=$(curl -s -H "Authorization: Bearer ${HF_TOKEN}" https://huggingface.co/api/models)
-  if [ $? -eq 0 ]; then
-    break
-  elif [ $? -eq 28 ]; then
-    sleep 10
-  else
-    echo "Erro ao acessar a API: $?"
-    exit 1
-  fi
-done
-```
-* **Entrada de usuário inválida**:
-```bash
-if [ -z "$modelo_id" ]; then
-  echo "Erro: ID do modelo não fornecido"
-  exit 1
-fi
-```
-* **Respostas da API inválidas**:
-```bash
-response=$(curl -s -H "Authorization: Bearer ${HF_TOKEN}" https://huggingface.co/api/models)
-if [ $? -ne 0 ]; then
-  echo "Erro ao acessar a API: $?"
-  exit 1
-fi
-if [ -z "$response" ]; then
-  echo "Erro: resposta da API vazia"
-  exit 1
-fi
-```
-* **Autenticação e autorização**:
-```bash
-if [ -z "$HF_TOKEN" ]; then
-  echo "Erro: token de autenticação não fornecido"
-  exit 1
-fi
+### Segurança
+- **Validação de Entradas:** Valide todas as entradas para garantir que sejam seguras e válidas.
+- **Prevenção de Injeção de Comandos:** Previna a injeção de comandos ao executar tarefas e verificações.
+- **Uso de Subagentes:** Se os subagentes estiverem disponíveis, use superpowers:subagent-driven-development em vez desta habilidade para garantir a segurança e a qualidade do trabalho.
