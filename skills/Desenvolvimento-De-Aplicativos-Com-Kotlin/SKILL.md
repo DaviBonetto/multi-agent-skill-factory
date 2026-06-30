@@ -1,27 +1,25 @@
 ---
 name: Desenvolvimento de Aplicativos Móveis com Kotlin
-description: Habilidade de criar aplicativos móveis robustos e escaláveis utilizando a linguagem de programação Kotlin
+description: Esta habilidade ensina como desenvolver aplicativos móveis para Android utilizando a linguagem de programação Kotlin
 ---
 
 ## Objetivo
-O objetivo deste guia é fornecer uma visão geral detalhada sobre como desenvolver aplicativos móveis robustos e escaláveis utilizando a linguagem de programação Kotlin. Isso inclui entender os fundamentos da linguagem, como criar interfaces de usuário eficazes, lidar com dados e implementar funcionalidades avançadas.
+O objetivo desta habilidade é capacitar os desenvolvedores a criar aplicativos móveis para Android utilizando a linguagem de programação Kotlin, abordando conceitos de orientação a objetos, programação funcional e boas práticas de desenvolvimento.
 
 ## Pré-requisitos
-Para seguir este guia, é necessário ter:
-- Conhecimento básico em programação
-- Experiência com desenvolvimento de aplicativos móveis (não necessariamente com Kotlin)
-- Ambiente de desenvolvimento configurado (Android Studio, SDK do Android, etc.)
-- Kotlin instalado e configurado no ambiente de desenvolvimento
+Para iniciar esta habilidade, é necessário ter conhecimento básico em:
+* Programação orientada a objetos
+* Conceitos de desenvolvimento de aplicativos móveis
+* Linguagem de programação Java (não obrigatório, mas recomendado)
 
 ## Passo a Passo Técnico / Exemplos de Código
-### Configurando o Ambiente
-1. **Instalar o Android Studio**: Baixe e instale o Android Studio a partir do site oficial.
-2. **Configurar o SDK do Android**: Certifique-se de que o SDK do Android esteja instalado e configurado corretamente.
-3. **Instalar o Kotlin**: Se não estiver instalado, instale o plugin do Kotlin no Android Studio.
+### Instalação do Ambiente de Desenvolvimento
+1. Instalar o Android Studio
+2. Configurar o ambiente de desenvolvimento com o SDK do Android
+3. Criar um novo projeto Android com a linguagem de programação Kotlin
 
-### Criando um Novo Projeto
 ```kotlin
-// Exemplo de código em Kotlin para criar uma atividade básica
+// Exemplo de código em Kotlin para criar um aplicativo Android
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 
@@ -33,65 +31,48 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Implementando Funcionalidades
-- **Lidando com Dados**: Use Room Persistence Library para gerenciar dados locais.
-- **Implementando Redes**: Use Retrofit para fazer requisições de rede.
-- **Criando Interfaces de Usuário**: Use Jetpack Compose para criar interfaces de usuário modernas e eficazes.
+### Desenvolvimento do Aplicativo
+1. Criar a interface do usuário com layouts e componentes
+2. Implementar a lógica de negócios com classes e funções
+3. Utilizar recursos do Android, como banco de dados e armazenamento
 
-### Exemplo de Código para Requisição de Rede
 ```kotlin
-// Exemplo de uso do Retrofit para fazer uma requisição GET
-import retrofit2.Call
-import retrofit2.http.GET
+// Exemplo de código em Kotlin para criar um banco de dados no Android
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
-interface ApiInterface {
-    @GET("endpoint")
-    fun getData(): Call<Data>
-}
-
-// Implementação
-val apiService = Retrofit.Builder()
-    .baseUrl("https://api.example.com/")
-    .addConverterFactory(GsonConverterFactory.create())
-    .build()
-    .create(ApiInterface::class.java)
-
-val call = apiService.getData()
-call.enqueue(object : Callback<Data> {
-    override fun onResponse(call: Call<Data>, response: Response<Data>) {
-        // Lidar com a resposta
-    }
-
-    override fun onFailure(call: Call<Data>, t: Throwable) {
-        // Lidar com o erro
-    }
-})
+@Entity
+data class Usuario(
+    @PrimaryKey val id: Int,
+    val nome: String,
+    val email: String
+)
 ```
 
 ## Validação
-Para validar o seu aplicativo, certifique-se de:
-- Testar em diferentes dispositivos e versões do Android
-- Realizar testes unitários e de integração
-- Utilizar ferramentas de análise de desempenho para otimizar o aplicativo
-- Seguir as diretrizes de design e acessibilidade do Android
+Para validar a habilidade, é necessário:
+1. Criar um aplicativo móvel para Android com a linguagem de programação Kotlin
+2. Implementar conceitos de orientação a objetos e programação funcional
+3. Utilizar boas práticas de desenvolvimento, como modularidade e reutilização de código
+4. Testar o aplicativo em diferentes dispositivos e plataformas
 
-## Tratamento de Exceções e Edge Cases
-Para garantir a robustez do aplicativo, é fundamental tratar exceções e lidar com casos de bordo. Aqui estão algumas dicas:
-- **Tratamento de Erros de Rede**: Implemente um mecanismo de retry para requisições de rede que falham devido a problemas de conectividade.
-- **Lidando com Dados Inválidos**: Verifique a validade dos dados recebidos da rede ou do usuário antes de processá-los.
-- **Manuseio de Exceções**: Use try-catch para capturar e lidar com exceções que possam ocorrer durante a execução do aplicativo.
-- **Casos de Bordo**: Considere casos de bordo, como falta de conectividade, bateria baixa, etc., e implemente soluções para lidar com esses cenários.
+## ⚠️ Tratamento de Exceções e Edge Cases
+Para garantir a robustez e segurança do aplicativo, é fundamental tratar exceções e considerar casos de bordo. Aqui estão algumas diretrizes:
+* **Tratamento de Exceções**: Utilize try-catch para capturar e tratar exceções, como erros de rede, banco de dados ou recursos do sistema.
+* **Validação de Entrada**: Valide as entradas do usuário para evitar ataques de injeção de SQL ou cross-site scripting (XSS).
+* **Segurança de Dados**: Utilize criptografia para proteger dados sensíveis, como senhas ou informações de cartão de crédito.
+* **Testes de Unidade e Integração**: Realize testes de unidade e integração para garantir que o aplicativo funcione corretamente em diferentes cenários.
+* **Casos de Bordo**: Considere casos de bordo, como:
+ + Erros de conexão de rede
+ + Falhas de banco de dados
+ + Limitações de recursos do sistema
+ + Compatibilidade com diferentes versões do Android
 
-Exemplo de tratamento de exceções:
 ```kotlin
+// Exemplo de código em Kotlin para tratar exceções
 try {
     // Código que pode lançar uma exceção
 } catch (e: Exception) {
-    // Lidar com a exceção
+    // Tratamento da exceção
     Log.e("Erro", e.message)
 }
-```
-Além disso, é importante considerar a segurança do aplicativo, garantindo que:
-- **Dados Sensíveis**: Sejam armazenados de forma segura, utilizando criptografia e outros mecanismos de proteção.
-- **Autenticação e Autorização**: Sejam implementadas corretamente, para garantir que apenas usuários autorizados acessem recursos sensíveis.
-- **Atualizações de Segurança**: Sejam aplicadas regularmente, para garantir que o aplicativo esteja protegido contra vulnerabilidades conhecidas.
