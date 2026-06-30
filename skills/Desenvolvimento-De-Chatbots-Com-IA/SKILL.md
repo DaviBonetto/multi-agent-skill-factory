@@ -1,69 +1,106 @@
 ---
-name: Desenvolvimento de Chatbots com IA
-description: Ensina a criar chatbots inteligentes utilizando técnicas de inteligência artificial
+name: Desenvolvimento de Chatbots com Inteligência Artificial
+description: Esta habilidade ensina como desenvolver chatbots inteligentes utilizando técnicas de processamento de linguagem natural e aprendizado de máquina, para criar interfaces de usuário conversacionais eficazes.
 ---
 
 ## Objetivo
-O objetivo deste guia é fornecer uma abordagem prática e técnica para o desenvolvimento de chatbots inteligentes utilizando técnicas de inteligência artificial. Com isso, os desenvolvedores poderão criar soluções personalizadas e eficazes para interações humanas.
+O objetivo desta habilidade é capacitar os desenvolvedores a criar chatbots inteligentes utilizando técnicas de processamento de linguagem natural (NLP) e aprendizado de máquina (Machine Learning), permitindo a criação de interfaces de usuário conversacionais eficazes e personalizadas.
 
 ## Pré-requisitos
-Para seguir este guia, é necessário ter conhecimento em:
-- Programação em linguagens como Python ou JavaScript
-- Conceitos básicos de inteligência artificial e machine learning
-- Familiaridade com bibliotecas e frameworks de desenvolvimento de chatbots
+Para desenvolver chatbots com Inteligência Artificial, é necessário ter conhecimento em:
+* Programação em linguagens como Python ou JavaScript
+* Conceitos básicos de NLP e Machine Learning
+* Familiaridade com bibliotecas e frameworks de NLP e Machine Learning, como NLTK, spaCy, scikit-learn e TensorFlow
 
 ## Passo a Passo Técnico / Exemplos de Código
-### 1. Definição do Escopo do Projeto
-Defina o escopo do seu projeto de chatbot, incluindo o público-alvo, as funcionalidades desejadas e os canais de comunicação.
+### Etapa 1: Definição do Projeto
+Defina o objetivo e o escopo do seu chatbot, incluindo as funcionalidades e características desejadas.
 
-### 2. Escolha da Tecnologia
-Escolha a tecnologia adequada para o desenvolvimento do seu chatbot, como o uso de bibliotecas como Rasa, Dialogflow ou Microsoft Bot Framework.
-
-### 3. Implementação do Chatbot
-Implemente o chatbot utilizando a tecnologia escolhida. Por exemplo, utilizando Python e a biblioteca Rasa:
+### Etapa 2: Escolha da Tecnologia
+Escolha as bibliotecas e frameworks de NLP e Machine Learning que melhor se adequam ao seu projeto. Por exemplo:
 ```python
-from rasa_core.interpreter import RasaNLUInterpreter
-from rasa_core.agent import Agent
-
-# Carregar o modelo de linguagem natural
-try:
-    interpreter = RasaNLUInterpreter("models/nlu")
-except Exception as e:
-    print(f"Erro ao carregar o modelo de linguagem natural: {e}")
-
-# Criar o agente
-try:
-    agent = Agent("domain.yml", interpreter=interpreter)
-except Exception as e:
-    print(f"Erro ao criar o agente: {e}")
-
-# Treinar o agente
-try:
-    agent.train("stories.md")
-except Exception as e:
-    print(f"Erro ao treinar o agente: {e}")
+import nltk
+from nltk.tokenize import word_tokenize
+from sklearn.naive_bayes import MultinomialNB
 ```
 
-### 4. Integração com Serviços de IA
-Integre o seu chatbot com serviços de IA, como o processamento de linguagem natural ou o reconhecimento de voz.
+### Etapa 3: Coleta e Preparação dos Dados
+Coletar e preparar os dados para treinar o modelo de Machine Learning. Isso pode incluir a criação de um conjunto de dados de treinamento e teste.
+```python
+# Carregar os dados
+train_data = pd.read_csv('train.csv')
+test_data = pd.read_csv('test.csv')
+
+# Preparar os dados
+X_train = train_data['text']
+y_train = train_data['label']
+X_test = test_data['text']
+y_test = test_data['label']
+```
+
+### Etapa 4: Treinamento do Modelo
+Treinar o modelo de Machine Learning utilizando os dados preparados.
+```python
+# Treinar o modelo
+clf = MultinomialNB()
+clf.fit(X_train, y_train)
+```
+
+### Etapa 5: Implementação do Chatbot
+Implementar o chatbot utilizando o modelo treinado e as bibliotecas de NLP escolhidas.
+```python
+# Implementar o chatbot
+def chatbot(message):
+    try:
+        # Tokenizar a mensagem
+        tokens = word_tokenize(message)
+        
+        # Classificar a mensagem
+        classification = clf.predict(tokens)
+        
+        # Retornar a resposta
+        return classification
+    except Exception as e:
+        return "Erro ao processar a mensagem: " + str(e)
+```
 
 ## Validação
-Para validar o funcionamento do seu chatbot, execute testes unitários e de integração, além de testes de usabilidade com usuários reais. Isso ajudará a identificar e corrigir problemas, garantindo que o chatbot atenda às necessidades dos usuários.
+Validar o desempenho do chatbot utilizando métricas como precisão, recall e F1-score. Isso pode ser feito utilizando os dados de teste e as bibliotecas de Machine Learning.
+```python
+# Validar o desempenho do chatbot
+y_pred = clf.predict(X_test)
+print('Precisão:', accuracy_score(y_test, y_pred))
+print('Recall:', recall_score(y_test, y_pred))
+print('F1-score:', f1_score(y_test, y_pred))
+```
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-Além dos passos anteriores, é importante considerar os seguintes casos de exceção e edge cases:
-- **Erros de sintaxe**: Verifique se o código está sintaticamente correto e se os modelos de linguagem natural estão carregados corretamente.
-- **Erros de lógica**: Verifique se a lógica do chatbot está correta e se as respostas estão sendo geradas de acordo com as expectativas.
-- **Casos de uso não previstos**: Verifique se o chatbot pode lidar com casos de uso não previstos, como entrada de usuário inválida ou comportamento inesperado.
-- **Problemas de desempenho**: Verifique se o chatbot está funcionando dentro dos limites de desempenho esperados, como tempo de resposta e uso de recursos.
-- **Segurança**: Verifique se o chatbot está seguro e se os dados dos usuários estão sendo protegidos de acordo com as políticas de segurança da empresa.
-Exemplos de código para tratamento de exceções:
+### Tratamento de Exceções
+*   **Erro ao carregar os dados**: Verificar se os arquivos de dados estão no local correto e se o formato está correto.
+*   **Erro ao treinar o modelo**: Verificar se os dados estão preparados corretamente e se o modelo está configurado corretamente.
+*   **Erro ao processar a mensagem**: Verificar se a mensagem está no formato correto e se o modelo está treinado para lidar com esse tipo de mensagem.
+
+### Edge Cases
+*   **Mensagens vazias**: Retornar uma mensagem de erro ou uma resposta padrão.
+*   **Mensagens com caracteres especiais**: Utilizar técnicas de pré-processamento para remover ou substituir caracteres especiais.
+*   **Mensagens com linguagem ofensiva**: Utilizar técnicas de detecção de linguagem ofensiva para bloquear ou reportar a mensagem.
+
+Exemplo de código para lidar com edge cases:
 ```python
-try:
-    # Código que pode gerar exceção
-except ValueError as e:
-    print(f"Erro de valor: {e}")
-except TypeError as e:
-    print(f"Erro de tipo: {e}")
-except Exception as e:
-    print(f"Erro genérico: {e}")
+def chatbot(message):
+    if not message:
+        return "Mensagem vazia. Por favor, insira uma mensagem válida."
+    elif not message.isalnum():
+        return "Mensagem contém caracteres especiais. Por favor, insira uma mensagem válida."
+    else:
+        try:
+            # Tokenizar a mensagem
+            tokens = word_tokenize(message)
+            
+            # Classificar a mensagem
+            classification = clf.predict(tokens)
+            
+            # Retornar a resposta
+            return classification
+        except Exception as e:
+            return "Erro ao processar a mensagem: " + str(e)
