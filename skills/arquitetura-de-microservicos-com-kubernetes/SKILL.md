@@ -1,69 +1,87 @@
----
-name: Arquitetura de Microserviços com Kubernetes
-description: Esta habilidade técnica avançada ensina como projetar e implementar arquiteturas de microserviços escaláveis utilizando Kubernetes
----
-
+# Arquitetura de Microsserviços com Kubernetes
 ## Objetivo
-O objetivo desta habilidade técnica é capacitar os desenvolvedores a projetar e implementar arquiteturas de microserviços escaláveis e eficientes utilizando Kubernetes. Isso inclui entender como criar e gerenciar clusters de Kubernetes, implantar e gerenciar aplicativos em contêineres, e garantir a escalabilidade e a confiabilidade dos sistemas.
+O objetivo desta skill é capacitar os desenvolvedores a projetar e implementar arquiteturas de microsserviços escaláveis e resilientes utilizando Kubernetes, abordando desde o deploy até o gerenciamento de clusters.
 
 ## Pré-requisitos
-Para aproveitar ao máximo esta habilidade técnica, é recomendado que os participantes tenham:
-* Conhecimento básico em contêineres e Docker
-* Experiência em desenvolvimento de aplicativos em linguagens como Java, Python ou Node.js
-* Familiaridade com conceitos de nuvem e infraestrutura como código
-* Nível de complexidade: Senior
+- Conhecimento básico em contêineres (Docker)
+- Experiência com desenvolvimento de aplicações em microsserviços
+- Familiaridade com linha de comando e scripts de automação
+- Conhecimento em redes e segurança de aplicações
 
 ## Passo a Passo Técnico / Exemplos de Código
-### Criando um Cluster de Kubernetes
-Para criar um cluster de Kubernetes, você precisará de uma ferramenta como o `kubectl`. Aqui está um exemplo de como criar um cluster simples:
+### 1. Configuração do Ambiente
+Para começar, é necessário ter o Docker e o Kubernetes instalados. Você pode instalar o Minikube para testar o Kubernetes localmente.
 ```bash
-# Crie um cluster de Kubernetes
-kubectl create cluster my-cluster
+# Instalar o Minikube
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+sudo install minikube-linux-amd64 /usr/local/bin/minikube
 ```
-### Implantando um Aplicativo em Kubernetes
-Para implantar um aplicativo em Kubernetes, você precisará criar um arquivo de definição de implantação. Aqui está um exemplo de como criar um arquivo `deployment.yaml`:
+
+### 2. Criando um Cluster
+Inicie o Minikube para criar um cluster local.
+```bash
+# Iniciar o Minikube
+minikube start
+```
+
+### 3. Deploy de um Microsserviço
+Crie um arquivo `deployment.yaml` para definir o deploy do seu microsserviço.
 ```yml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: my-app
+  name: meu-microsservico
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: my-app
+      app: meu-microsservico
   template:
     metadata:
       labels:
-        app: my-app
+        app: meu-microsservico
     spec:
       containers:
-      - name: my-app
-        image: my-app:latest
+      - name: meu-microsservico
+        image: meu-docker-registry/meu-microsservico:latest
         ports:
-        - containerPort: 80
+        - containerPort: 8080
 ```
-### Gerenciando o Aplicativo em Kubernetes
-Para gerenciar o aplicativo em Kubernetes, você pode usar o `kubectl` para verificar o status do aplicativo, escalar o número de réplicas, etc. Aqui está um exemplo de como verificar o status do aplicativo:
+Aplique a configuração para deployar o microsserviço.
 ```bash
-# Verifique o status do aplicativo
-kubectl get deployments my-app
+# Aplicar a configuração
+kubectl apply -f deployment.yaml
+```
+
+### 4. Gerenciamento do Cluster
+Use o `kubectl` para gerenciar o cluster, incluindo a escala do deploy.
+```bash
+# Escalar o deploy
+kubectl scale deployment meu-microsservico --replicas=5
 ```
 
 ## Validação
-Para validar a implementação da arquitetura de microserviços com Kubernetes, você pode realizar os seguintes testes:
-* Verifique se o cluster de Kubernetes está funcionando corretamente
-* Verifique se o aplicativo está implantado e funcionando corretamente
-* Verifique se o aplicativo está escalando corretamente em resposta à demanda
-* Verifique se o aplicativo está sendo gerenciado corretamente pelo Kubernetes
+Para validar a implementação, verifique se o microsserviço está funcionando corretamente e se o cluster está escalando conforme esperado. Use comandos como `kubectl get pods` e `kubectl logs` para monitorar o estado dos pods e logs da aplicação.
+```bash
+# Verificar os pods
+kubectl get pods
+```
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-Além dos passos básicos, é importante considerar os seguintes casos de exceção e edge cases:
-* **Falha na criação do cluster**: Se o cluster não for criado corretamente, verifique se o `kubectl` está configurado corretamente e se o provedor de nuvem está funcionando corretamente.
-* **Erro na implantação do aplicativo**: Se o aplicativo não for implantado corretamente, verifique se o arquivo `deployment.yaml` está correto e se o imagem do contêiner está disponível.
-* **Problemas de escalabilidade**: Se o aplicativo não estiver escalando corretamente, verifique se o número de réplicas está configurado corretamente e se o recurso de escalabilidade automática está habilitado.
-* **Problemas de segurança**: Se o aplicativo estiver vulnerável a ataques, verifique se as políticas de segurança estão configuradas corretamente e se o aplicativo está atualizado com as últimas patches de segurança.
-* **Limitações de recursos**: Se o aplicativo estiver consumindo muitos recursos, verifique se o número de réplicas está configurado corretamente e se o recurso de escalabilidade automática está habilitado.
-* **Interrupções de rede**: Se o aplicativo estiver experimentando interrupções de rede, verifique se a configuração de rede está correta e se o provedor de nuvem está funcionando corretamente.
+### Erros de Instalação do Minikube
+- **Erro de permissão**: Certifique-se de que você tem permissão de superusuário para instalar o Minikube.
+- **Erro de conexão**: Verifique se a sua conexão de internet está estável e se o servidor de downloads do Minikube está acessível.
 
-Ao completar esses passos e considerar os casos de exceção e edge cases, você terá uma arquitetura de microserviços escalável e eficiente utilizando Kubernetes.
+### Erros de Inicialização do Cluster
+- **Erro de inicialização do Minikube**: Verifique se o Minikube está corretamente instalado e se há recursos suficientes (memória RAM, CPU) disponíveis para executar o cluster.
+- **Erro de rede**: Certifique-se de que a configuração de rede do seu sistema permite a comunicação entre os pods do cluster.
+
+### Erros de Deploy do Microsserviço
+- **Erro de imagem**: Verifique se a imagem Docker do microsserviço está corretamente construída e disponível no registry.
+- **Erro de configuração**: Certifique-se de que o arquivo `deployment.yaml` está corretamente formatado e que as configurações de deploy estão de acordo com as necessidades do seu microsserviço.
+
+### Erros de Gerenciamento do Cluster
+- **Erro de escala**: Verifique se o cluster tem recursos suficientes para escalar o deploy para o número desejado de réplicas.
+- **Erro de comunicação**: Certifique-se de que a comunicação entre os pods e os serviços do cluster está funcionando corretamente.
+
+Com esses passos e considerando os tratamentos de exceções e edge cases, você terá uma arquitetura de microsserviços escalável e resiliente utilizando Kubernetes.
