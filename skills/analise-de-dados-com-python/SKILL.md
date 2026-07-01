@@ -1,77 +1,79 @@
 ---
 name: Análise de Dados com Python
-description: Ensina como utilizar bibliotecas Python para análise e visualização de dados
+description: Esta skill ensina como utilizar bibliotecas Python como Pandas, NumPy e Matplotlib para análise e visualização de dados, preparação para machine learning e ciência de dados.
 ---
+
 ## Objetivo
-O objetivo deste guia é fornecer uma introdução prática à análise de dados utilizando Python, abordando as principais bibliotecas e técnicas para manipulação, análise e visualização de dados.
+O objetivo desta skill é capacitar os usuários a realizar análise e visualização de dados utilizando as bibliotecas Python Pandas, NumPy e Matplotlib, preparando-os para tarefas de machine learning e ciência de dados.
 
 ## Pré-requisitos
-Para seguir este guia, é necessário ter conhecimento básico em programação Python e ter instalado o Python 3.x em seu ambiente de desenvolvimento. Além disso, é recomendado ter familiaridade com conceitos básicos de análise de dados.
+Para iniciar esta skill, é necessário ter conhecimento básico em programação Python e ter as bibliotecas Pandas, NumPy e Matplotlib instaladas. Além disso, é recomendado ter um ambiente de desenvolvimento Python configurado, como o Jupyter Notebook ou o PyCharm.
 
 ## Passo a Passo Técnico / Exemplos de Código
-### Instalação das Bibliotecas Necessárias
-Para começar, você precisará instalar as bibliotecas `pandas`, `numpy` e `matplotlib`. Isso pode ser feito utilizando o `pip`:
+### Instalação das Bibliotecas
+Para instalar as bibliotecas necessárias, execute o seguinte comando no terminal:
 ```bash
 pip install pandas numpy matplotlib
 ```
 ### Importação das Bibliotecas
-Em seguida, importe as bibliotecas necessárias no seu script Python:
+Para importar as bibliotecas, utilize o seguinte código:
 ```python
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 ```
 ### Carregamento de Dados
-Carregue um conjunto de dados exemplo utilizando `pandas`:
+Carregue um conjunto de dados utilizando o Pandas:
 ```python
-# Carregue um conjunto de dados exemplo
 try:
-    df = pd.read_csv('dados_exemplo.csv')
+    df = pd.read_csv('dados.csv')
 except FileNotFoundError:
-    print("O arquivo 'dados_exemplo.csv' não foi encontrado.")
-    df = None
+    print("Arquivo não encontrado. Verifique o caminho do arquivo.")
 except pd.errors.EmptyDataError:
-    print("O arquivo 'dados_exemplo.csv' está vazio.")
-    df = None
+    print("Arquivo vazio. Verifique se o arquivo contém dados.")
 except pd.errors.ParserError:
-    print("Erro ao parsear o arquivo 'dados_exemplo.csv'.")
-    df = None
+    print("Erro ao parsear o arquivo. Verifique a formatação do arquivo.")
 ```
 ### Análise de Dados
-Agora, você pode começar a analisar os dados. Por exemplo, para visualizar a distribuição de uma variável:
+Realize análise de dados utilizando o Pandas e o NumPy:
 ```python
-# Verifique se o DataFrame não é None antes de prosseguir
-if df is not None:
-    # Visualize a distribuição de uma variável
-    try:
-        plt.hist(df['variavel'], bins=10)
-        plt.show()
-    except KeyError:
-        print("A variável 'variavel' não existe no DataFrame.")
-    except Exception as e:
-        print(f"Erro ao visualizar a distribuição: {e}")
+try:
+    # Cálculo da média e do desvio padrão
+    media = df['coluna'].mean()
+    desvio_padrao = df['coluna'].std()
+
+    # Criação de um gráfico de barras
+    plt.bar(df['coluna'], df['outra_coluna'])
+    plt.show()
+except KeyError:
+    print("Coluna não encontrada. Verifique o nome da coluna.")
+except TypeError:
+    print("Tipo de dado inválido. Verifique o tipo de dado da coluna.")
 ```
 ### Visualização de Dados
-Para visualizar a relação entre duas variáveis, você pode usar um gráfico de dispersão:
+Crie gráficos utilizando o Matplotlib:
 ```python
-# Verifique se o DataFrame não é None antes de prosseguir
-if df is not None:
-    # Visualize a relação entre duas variáveis
-    try:
-        plt.scatter(df['variavel1'], df['variavel2'])
-        plt.show()
-    except KeyError:
-        print("Uma ou ambas as variáveis 'variavel1' e 'variavel2' não existem no DataFrame.")
-    except Exception as e:
-        print(f"Erro ao visualizar a relação: {e}")
+try:
+    # Criação de um gráfico de linha
+    plt.plot(df['coluna'])
+    plt.show()
+except TypeError:
+    print("Tipo de dado inválido. Verifique o tipo de dado da coluna.")
 ```
+
 ## Validação
-Para validar os resultados da análise, é importante verificar a consistência dos dados e a precisão dos modelos utilizados. Isso pode ser feito através de métodos estatísticos e visualização de dados. Além disso, é fundamental documentar todo o processo de análise e os resultados obtidos para garantir a reprodutibilidade e a transparência do trabalho.
+Para validar o conhecimento adquirido, realize os seguintes exercícios:
+
+* Carregue um conjunto de dados e realize análise de dados utilizando o Pandas e o NumPy.
+* Crie gráficos utilizando o Matplotlib para visualizar os dados.
+* Utilize as bibliotecas para preparar os dados para tarefas de machine learning e ciência de dados.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-- **Arquivos não encontrados**: Verifique se o arquivo existe antes de tentar carregá-lo.
-- **Dados vazios**: Verifique se o arquivo está vazio antes de tentar carregá-lo.
-- **Erros de parseamento**: Verifique se o arquivo está no formato correto antes de tentar carregá-lo.
-- **Variáveis não existentes**: Verifique se as variáveis existem no DataFrame antes de tentar acessá-las.
-- **Erros de visualização**: Verifique se os dados estão no formato correto antes de tentar visualizá-los.
-- **Outros erros**: Utilize blocos try-except para capturar e tratar qualquer erro inesperado que possa ocorrer durante a análise.
+Além dos exemplos acima, é importante considerar os seguintes casos:
+
+* **Dados faltantes**: Utilize o método `dropna()` ou `fillna()` para lidar com dados faltantes.
+* **Dados duplicados**: Utilize o método `drop_duplicates()` para remover dados duplicados.
+* **Tipos de dados inconsistentes**: Utilize o método `astype()` para converter os tipos de dados para o tipo correto.
+* **Erros de sintaxe**: Utilize try-except para capturar erros de sintaxe e fornecer mensagens de erro claras.
+* **Limites de memória**: Utilize o método `chunksize` para processar grandes conjuntos de dados em partes menores.
+* **Segurança**: Utilize bibliotecas seguras e atualizadas para evitar vulnerabilidades de segurança. Além disso, é importante ter cuidado ao trabalhar com dados sensíveis e sigilosos, garantindo que eles sejam armazenados e processados de forma segura. Isso inclui o uso de criptografia, autenticação e autorização adequadas.
