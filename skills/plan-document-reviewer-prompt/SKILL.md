@@ -23,8 +23,7 @@ Subagent (general-purpose):
     | Spec Alignment | Plan covers spec requirements, no major scope creep |
     | Task Decomposition | Tasks have clear boundaries, steps are actionable |
     | Buildability | Could an engineer follow this plan without getting stuck? |
-    | Security | Potential security vulnerabilities, data protection, access control |
-    | Error Handling | Proper error handling mechanisms, logging, and debugging |
+    | Security | Potential security risks, data protection, and access control |
 
     ## Calibration
 
@@ -49,12 +48,12 @@ Subagent (general-purpose):
 
     ⚠️ Tratamento de Exceções e Edge Cases
 
-    *   **Planos incompletos:** Se o plano estiver incompleto, verifique se os principais componentes estão presentes, como introdução, objetivos, escopo, cronograma e orçamento.
-    *   **Spec não disponível:** Se a spec não estiver disponível, verifique se o plano contém informações suficientes para prosseguir com a implementação.
-    *   **Tarefas mal definidas:** Se as tarefas estiverem mal definidas, verifique se elas podem ser reescritas para ser mais claras e específicas.
-    *   **Problemas de segurança:** Se forem identificados problemas de segurança, verifique se eles podem ser resolvidos com atualizações ou patches de segurança.
-    *   **Erros de sintaxe:** Se forem encontrados erros de sintaxe, verifique se eles podem ser corrigidos sem afetar a funcionalidade do plano.
-    *   **Divergências de versão:** Se houver divergências de versão entre o plano e a spec, verifique se elas podem ser resolvidas com atualizações ou revisões do plano.
-    *   **Falta de documentação:** Se houver falta de documentação, verifique se ela pode ser fornecida para garantir a clareza e a compreensão do plano.
-    *   **Problemas de compatibilidade:** Se forem identificados problemas de compatibilidade, verifique se eles podem ser resolvidos com atualizações ou ajustes no plano.
-    *   **Erros de lógica:** Se forem encontrados erros de lógica, verifique se eles podem ser corrigidos sem afetar a funcionalidade do plano.
+    *   **Planos incompletos:** Se o plano estiver incompleto, o revisor deve verificar se os principais componentes estão presentes, como introdução, objetivos, escopo, cronograma e orçamento.
+    *   **Specs desatualizadas:** Se a especificação estiver desatualizada, o revisor deve verificar se o plano está alinhado com as últimas versões das especificações.
+    *   **Tarefas mal definidas:** Se as tarefas estiverem mal definidas, o revisor deve verificar se as tarefas têm objetivos claros, prazos e recursos necessários.
+    *   **Riscos de segurança:** Se houver riscos de segurança, o revisor deve verificar se o plano inclui medidas para mitigar esses riscos, como autenticação, autorização e criptografia.
+    *   **Dependências não declaradas:** Se houver dependências não declaradas, o revisor deve verificar se o plano inclui todas as dependências necessárias para a implementação.
+    *   **Erros de sintaxe:** Se houver erros de sintaxe, o revisor deve verificar se o plano está escrito de forma clara e concisa, sem erros de digitação ou formatação.
+    *   **Falta de documentação:** Se houver falta de documentação, o revisor deve verificar se o plano inclui toda a documentação necessária para a implementação, como diagramas, fluxogramas e especificações técnicas.
+
+**Reviewer returns:** Status, Issues (if any), Recommendations
