@@ -4,20 +4,8 @@ Skills speak in actions ("dispatch a subagent", "create a todo", "read a file").
 
 | Action skills request | Pi equivalent |
 | --- | --- |
-| Invoke a skill | Pi native skills: load the relevant `SKILL.md` with `read`, or let the human use `/skill:name` |
-| Read a file | `read` |
-| Create a file | `write` |
-| Edit a file | `edit` |
-| Run a shell command | `bash` |
-| Search file contents | `grep` when active; otherwise `bash` with `rg`/`grep` |
-| Find files by name | `find` or `bash` with shell globs |
-| List files and subdirectories | `ls` when active; otherwise `bash` with `ls` |
 | Dispatch a subagent (`Subagent (general-purpose):` template) | Use an installed subagent tool such as `subagent` from `pi-subagents` if available |
 | Task tracking ("create a todo", "mark complete") | Use an installed todo/task tool if available, otherwise track tasks in the plan or `TODO.md` |
-
-## Skills
-
-Pi discovers skills from configured skill directories and installed Pi packages. A Superpowers Pi package should expose `skills/` through its `pi.skills` manifest entry. Pi does not expose Claude Code's `Skill` tool, but the agent should still follow the Superpowers rule: when a skill applies, load and follow it before responding.
 
 ## Subagents
 
@@ -27,11 +15,23 @@ Pi core does not ship a standard subagent tool. The `pi-subagents` package is a 
 
 Pi core does not ship a standard task-list tool. If a todo/task extension is installed, use its documented tool. Otherwise use Superpowers plan files, checklists in Markdown, or a repo-local `TODO.md` for task tracking. Older Superpowers docs may refer to `TodoWrite`; treat that as the task-tracking action above.
 
+## Segurança
+
+Para garantir a segurança, é importante verificar se as ferramentas instaladas estão atualizadas e se os pacotes utilizados são de fontes confiáveis. Além disso, é fundamental implementar controles de acesso e autenticação para evitar o acesso não autorizado às ferramentas e aos dados.
+
 ## ⚠️ Tratamento de Exceções e Edge Cases
 
-*   **Erro de Permissão**: Em caso de falta de permissão para executar uma ação, o agente deve retornar uma mensagem de erro clara e concisa, indicando a ação que não pôde ser executada e o motivo.
-*   **Arquivos Não Encontrados**: Se um arquivo solicitado não for encontrado, o agente deve informar o usuário sobre o erro e, se possível, sugerir alternativas ou ações para resolver a situação.
-*   **Comandos Inválidos**: Para comandos inválidos ou malformados, o agente deve retornar uma mensagem de erro que ajude o usuário a entender o que deu errado e como corrigir o comando.
-*   **Subagentes Não Instalados**: Se um subagente necessário não estiver instalado, o agente deve explicar a situação ao usuário e fornecer instruções sobre como instalar o subagente necessário ou alternativas para alcançar o objetivo desejado.
-*   **Exceções de Execução**: Em caso de exceções durante a execução de uma ação, o agente deve capturar a exceção, registrar o erro para análise posterior e retornar uma mensagem de erro ao usuário, mantendo a aplicação estável e segura.
-*   **Limites de Recursos**: Se o agente atingir limites de recursos (como memória ou capacidade de processamento), deve priorizar a estabilidade do sistema, cancelar operações não essenciais e notificar o usuário sobre a situação, sugerindo ajustes ou melhorias para evitar tais limitações no futuro.
+### Exceções
+
+*   Caso o pacote `pi-subagents` não esteja instalado, uma exceção será lançada. Nesse caso, o sistema deve executar as ações sequencialmente na sessão atual ou explicar que a funcionalidade de subagente opcional não está instalada.
+*   Se a extensão todo/task não estiver instalada, o sistema deve usar os arquivos de plano do Superpowers, listas de tarefas em Markdown ou um arquivo `TODO.md` local para rastrear as tarefas.
+*   Em caso de falha na execução de uma ação, o sistema deve registrar o erro e notificar o usuário.
+
+### Edge Cases
+
+*   **Subagente não instalado**: Se o pacote `pi-subagents` não estiver instalado, o sistema deve ser capaz de executar as ações sequencialmente na sessão atual ou explicar que a funcionalidade de subagente opcional não está instalada.
+*   **Extensão todo/task não instalada**: Se a extensão todo/task não estiver instalada, o sistema deve ser capaz de usar os arquivos de plano do Superpowers, listas de tarefas em Markdown ou um arquivo `TODO.md` local para rastrear as tarefas.
+*   **Ação inválida**: Se uma ação inválida for solicitada, o sistema deve lançar uma exceção e notificar o usuário.
+*   **Falta de permissão**: Se o usuário não tiver permissão para executar uma ação, o sistema deve lançar uma exceção e notificar o usuário.
+
+Ao tratar esses casos, o sistema pode garantir que as ações sejam executadas de forma segura e confiável, mesmo em situações inesperadas.
