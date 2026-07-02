@@ -1,62 +1,80 @@
-# DevOps com Azure DevOps
+---
+name: DevOps com Azure DevOps
+description: Ensina como utilizar o Azure DevOps para automatizar o ciclo de vida de desenvolvimento de software
+---
+
 ## Objetivo
-O objetivo desta skill é ensinar a implementar práticas de DevOps utilizando Azure DevOps, abordando conceitos como integração contínua e entrega contínua. Com isso, os participantes serão capazes de automatizar processos de desenvolvimento, teste e implantação de software de forma eficiente e escalável.
+O objetivo deste guia é fornecer uma visão geral de como utilizar o Azure DevOps para automatizar o ciclo de vida de desenvolvimento de software, abordando as melhores práticas e ferramentas necessárias para implementar DevOps de forma eficaz.
+
 ## Pré-requisitos
-Para aproveitar ao máximo esta skill, é recomendado que os participantes tenham conhecimentos básicos em:
-* Desenvolvimento de software
-* Conceitos de DevOps
-* Azure DevOps (ou similar)
+Antes de começar, é necessário ter:
+- Conhecimento básico em desenvolvimento de software
+- Experiência com ferramentas de versionamento de código, como Git
+- Conta no Azure DevOps
+- Conhecimento em linguagens de programação como C#, Java, Python ou similares
+
 ## Passo a Passo Técnico / Exemplos de Código
-### Configurando o Ambiente
-1. Criar uma conta no Azure DevOps
-2. Criar um novo projeto no Azure DevOps
-3. Instalar as extensões necessárias (por exemplo, Azure Pipelines)
-### Implementando Integração Contínua
+### Configurando o Projeto no Azure DevOps
+1. Acesse o portal do Azure DevOps e crie um novo projeto.
+2. Configure o versionamento de código utilizando o Git.
+3. Crie um novo repositório e inicialize-o com um arquivo `README.md`.
+
+### Implementando o Pipeline de Build
 ```yml
 trigger:
 - main
+
 pool:
   vmImage: 'ubuntu-latest'
+
+variables:
+  buildConfiguration: 'Release'
+
 steps:
-- task: NodeTool@0
+- task: DotNetCoreCLI@2
+  displayName: 'Restaurar Pacotes'
   inputs:
-    version: '14.x'
-  displayName: 'Instalar Node.js'
-- script: |
-    npm install
-    npm run build
-  displayName: 'Build e Instalar Dependências'
-```
-### Implementando Entrega Contínua
-```yml
-trigger:
-- main
-pool:
-  vmImage: 'ubuntu-latest'
-steps:
-- task: AzureRmWebAppDeployment@4
+    command: 'restore'
+    projects: '**/*.csproj'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Build'
   inputs:
-    ConnectionType: 'AzureRM'
-    azureSubscription: 'Nome da Assinatura'
-    appName: 'Nome do Aplicativo'
-    package: '$(System.DefaultWorkingDirectory)/**/*.zip'
-  displayName: 'Implantação no Azure'
+    projects: '**/*.csproj'
+    maxCpuCount: true
+
+- task: DotNetCoreCLI@2
+  displayName: 'Publicar'
+  inputs:
+    command: 'publish'
+    projects: '**/*.csproj'
+    TargetProfile: '$(buildConfiguration)'
+    publishWebProjects: '**/*.csproj'
+    PackageAsSingleFile: true
+    OutputArguments: '-o $(System.ArtifactsDirectory)/$(buildConfiguration)'
 ```
+
+### Implementando o Pipeline de Release
+1. Crie um novo pipeline de release.
+2. Adicione um estágio para o ambiente de produção.
+3. Configure as tarefas necessárias para implantar o aplicativo.
+
 ## Validação
-Para validar a implementação, é possível:
-* Verificar a execução dos pipelines de integração contínua e entrega contínua
-* Verificar a implantação do aplicativo no Azure
-* Realizar testes de funcionalidade e desempenho do aplicativo implantado
+Para validar a implementação, verifique se:
+- O pipeline de build está sendo executado corretamente.
+- O pipeline de release está implantando o aplicativo no ambiente de produção.
+- O aplicativo está funcionando corretamente após a implantação.
+
 ## ⚠️ Tratamento de Exceções e Edge Cases
-### Erros Comuns
-* **Erro de Autenticação**: Verificar se as credenciais de autenticação estão corretas e se o token de acesso está válido.
-* **Erro de Permissão**: Verificar se o usuário tem permissão para executar as ações necessárias no Azure DevOps.
-* **Erro de Conexão**: Verificar se a conexão com o Azure DevOps está estabelecida corretamente.
-### Edge Cases
-* **Pipeline com Múltiplos Stages**: Implementar lógica para lidar com pipelines que têm múltiplos stages e garantir que cada stage seja executado corretamente.
-* **Dependências de Terceiros**: Lidar com dependências de terceiros que podem afetar a execução do pipeline.
-* **Limites de Recursos**: Verificar se os recursos disponíveis (como memória e CPU) são suficientes para executar o pipeline.
-### Melhores Práticas
-* **Monitorar os Logs**: Monitorar os logs do pipeline para detectar erros e problemas.
-* **Testar Regularmente**: Testar regularmente o pipeline para garantir que ele esteja funcionando corretamente.
-* **Documentar o Pipeline**: Documentar o pipeline para que outros possam entender como ele funciona e como ele pode ser modificado.
+- **Erro de Autenticação**: Verifique se as credenciais de acesso ao Azure DevOps estão corretas e se o token de acesso está válido.
+- **Erro de Compilação**: Verifique se o código-fonte está correto e se as dependências necessárias estão instaladas.
+- **Erro de Implantação**: Verifique se o ambiente de produção está configurado corretamente e se as permissões necessárias estão concedidas.
+- **Edge Case: Branches**: Verifique se o pipeline de build está configurado para executar em diferentes branches (por exemplo, main, dev, feature).
+- **Edge Case: Dependências**: Verifique se as dependências necessárias estão instaladas e se as versões estão compatíveis.
+- **Edge Case: Segurança**: Verifique se as configurações de segurança estão habilitadas e se as permissões necessárias estão concedidas.
+
+## Segurança
+- **Autenticação**: Utilize autenticação de dois fatores para acessar o Azure DevOps.
+- **Autorização**: Verifique se as permissões necessárias estão concedidas para executar as tarefas.
+- **Criptografia**: Utilize criptografia para proteger os dados sensíveis.
+- **Monitoramento**: Monitore os logs e os relatórios de segurança para detectar possíveis ameaças.
