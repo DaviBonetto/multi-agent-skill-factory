@@ -1,31 +1,3 @@
-# Codex Tool Mapping
-
-Skills speak in actions ("dispatch a subagent", "create a todo", "read a file"). On Codex these resolve to the tools below.
-
-| Action skills request | Codex equivalent |
-|----------------------|------------------|
-| Read a file | `shell` (e.g., `cat`, `head`, `tail`) — Codex reads files via shell |
-| Create / edit / delete a file | `apply_patch` (structured diff for create, update, delete) |
-| Run a shell command | `shell` |
-| Search file contents | `shell` (e.g., `grep`, `rg`) |
-| Find files by name | `shell` (e.g., `find`, `ls`) |
-| Fetch a URL | `shell` with `curl` / `wget` — Codex has no native fetch tool |
-| Search the web | `web_search` (enabled by default; configurable in `config.toml` via the top-level `web_search` setting — `live`, `cached`, or `disabled`) |
-| Invoke a skill | Skills load natively — just follow the instructions |
-| Dispatch a subagent (`Subagent (general-purpose):` template) | `spawn_agent` (see [Subagent dispatch requires multi-agent support](#subagent-dispatch-requires-multi-agent-support)) |
-| Multiple parallel dispatches | Multiple `spawn_agent` calls in one response |
-| Wait for subagent result | `wait_agent` |
-| Free up subagent slot when done | `close_agent` |
-| Task tracking ("create a todo", "mark complete") | `update_plan` |
-
-## Instructions file
-
-When a skill mentions "your instructions file", on Codex this is **`AGENTS.md`** at the project root. Codex also reads `~/.codex/AGENTS.md` for global context, and an `AGENTS.override.md` (in the project tree or `~/.codex/`) takes precedence when present. Codex walks from the project root down to the current working directory, concatenating `AGENTS.md` files it finds along the way, up to `project_doc_max_bytes` (32 KiB by default).
-
-## Personal skills directory
-
-User-level skills live at **`$CODEX_HOME/skills/`** (default `~/.codex/skills/`). Codex also reads the cross-runtime path **`~/.agents/skills/`** (shared with Copilot CLI and Gemini CLI). When both directories exist at the same scope, Codex loads them both as separate skill catalogs — Codex's docs don't currently document a precedence between them. Each skill is a subdirectory containing a `SKILL.md` (with `name` and `description` frontmatter).
-
 ## Subagent dispatch requires multi-agent support
 
 Add to your Codex config (`~/.codex/config.toml`):
@@ -35,17 +7,11 @@ Add to your Codex config (`~/.codex/config.toml`):
 multi_agent = true
 ```
 
-This enables `spawn_agent`, `wait_agent`, and `close_agent` for skills like `dispatching-parallel-agents` and `subagent-driven-development`.
-
-Legacy note: Codex builds before `rust-v0.115.0` exposed spawned-agent
-waiting as `wait`. Current Codex uses `wait_agent` for spawned agents. The
-`wait` name now belongs to code-mode `exec/wait`, which resumes a yielded exec
-cell by `cell_id`; it is not the spawned-agent result tool.
+This enables `spawn_agent`, `wait_agent`, and `close_agent` for skills like `dispatching-parallel-agents` and `subagent-driven-development`. When using subagent-driven-development, you should always close implementer and reviewer subagents when they have finished all their work.
 
 ## Environment Detection
 
-Skills that create worktrees or finish branches should detect their
-environment with read-only git commands before proceeding:
+Skills that create worktrees or finish branches should detect their environment with read-only git commands before proceeding:
 
 ```bash
 GIT_DIR=$(cd "$(git rev-parse --git-dir)" 2>/dev/null && pwd -P)
@@ -56,41 +22,38 @@ BRANCH=$(git branch --show-current)
 - `GIT_DIR != GIT_COMMON` → already in a linked worktree (skip creation)
 - `BRANCH` empty → detached HEAD (cannot branch/push/PR from sandbox)
 
-See `using-git-worktrees` Step 0 and `finishing-a-development-branch`
-Step 1 for how each skill uses these signals.
+See `using-git-worktrees` Step 0 and `finishing-a-development-branch` Step 1 for how each skill uses these signals.
 
 ## Codex App Finishing
 
-When the sandbox blocks branch/push operations (detached HEAD in an
-externally managed worktree), the agent commits all work and informs
-the user to use the App's native controls:
+When the sandbox blocks branch/push operations (detached HEAD in an externally managed worktree), the agent commits all work and informs the user to use the App's native controls:
 
 - **"Create branch"** — names the branch, then commit/push/PR via App UI
 - **"Hand off to local"** — transfers work to the user's local checkout
 
-The agent can still run tests, stage files, and output suggested branch
-names, commit messages, and PR descriptions for the user to copy.
+The agent can still run tests, stage files, and output suggested branch names, commit messages, and PR descriptions for the user to copy.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
 
-### Erros de Leitura de Arquivos
+### Erros de Configuração
 
-- **Erro de permissão**: Ao tentar ler um arquivo sem permissão, o agente deve retornar um erro com uma mensagem clara indicando a falta de permissão.
-- **Arquivo não encontrado**: Se o arquivo não for encontrado, o agente deve retornar um erro com uma mensagem indicando que o arquivo não existe.
+*   Verifique se o arquivo `config.toml` está correto e se a opção `multi_agent` está habilitada.
+*   Em caso de erro de configuração, o agente deve exibir uma mensagem de erro clara e instruir o usuário a verificar a configuração.
 
-### Erros de Execução de Comandos
+### Erros de Ambiente
 
-- **Comando inválido**: Se o comando for inválido, o agente deve retornar um erro com uma mensagem clara indicando que o comando é inválido.
-- **Erro de execução**: Se ocorrer um erro durante a execução do comando, o agente deve retornar um erro com uma mensagem indicando o erro ocorrido.
+*   Verifique se o ambiente Git está configurado corretamente e se o comando `git rev-parse` está funcionando como esperado.
+*   Em caso de erro de ambiente, o agente deve exibir uma mensagem de erro clara e instruir o usuário a verificar a configuração do ambiente.
 
-### Erros de Rede
+### Erros de Comunicação
 
-- **Erro de conexão**: Se ocorrer um erro de conexão ao tentar acessar uma URL, o agente deve retornar um erro com uma mensagem clara indicando o erro de conexão.
-- **Erro de timeout**: Se ocorrer um timeout ao tentar acessar uma URL, o agente deve retornar um erro com uma mensagem indicando o timeout.
+*   Verifique se a comunicação entre o agente e o App está funcionando corretamente.
+*   Em caso de erro de comunicação, o agente deve exibir uma mensagem de erro clara e instruir o usuário a verificar a conexão de rede.
 
-### Outros Erros
+### Edge Cases
 
-- **Erro de configuração**: Se ocorrer um erro de configuração, o agente deve retornar um erro com uma mensagem clara indicando o erro de configuração.
-- **Erro desconhecido**: Se ocorrer um erro desconhecido, o agente deve retornar um erro com uma mensagem indicando que um erro desconhecido ocorreu.
+*   **Detached HEAD**: Em caso de detached HEAD, o agente deve commitar todas as alterações e informar o usuário a usar os controles nativos do App.
+*   **Linked Worktree**: Em caso de linked worktree, o agente deve verificar se o worktree está configurado corretamente e se o comando `git rev-parse` está funcionando como esperado.
+*   **Erros de Permissão**: Em caso de erros de permissão, o agente deve exibir uma mensagem de erro clara e instruir o usuário a verificar as permissões do arquivo ou diretório.
 
-Esses tratamentos de exceções e edge cases devem ser implementados para garantir que o agente seja robusto e forneça mensagens de erro claras e úteis para o usuário.
+Ao lidar com esses edge cases e erros, o agente pode garantir uma experiência mais robusta e confiável para o usuário.
