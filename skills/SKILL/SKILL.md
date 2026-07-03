@@ -1,141 +1,121 @@
 ---
-name: huggingface-local-models
-description: "Use to select models to run locally with llama.cpp and GGUF on CPU, Mac Metal, CUDA, or ROCm. Covers finding GGUFs, quant selection, running servers, exact GGUF file lookup, conversion, and OpenAI-compatible local serving."
+name: huggingface-datasets
+description: Use this skill for Hugging Face Dataset Viewer API workflows that fetch subset/split metadata, paginate rows, search text, apply filters, download parquet URLs, and read size or statistics.
 ---
 
-# Hugging Face Local Models
+# Hugging Face Dataset Viewer
 
-Search the Hugging Face Hub for llama.cpp-compatible GGUF repos, choose the right quant, and launch the model with `llama-cli` or `llama-server`.
+Use this skill to execute read-only Dataset Viewer API calls for dataset exploration and extraction.
 
-## Default Workflow
+## Core workflow
 
-1. Search the Hub with `apps=llama.cpp`.
-2. Open `https://huggingface.co/<repo>?local-app=llama.cpp`.
-3. Prefer the exact HF local-app snippet and quant recommendation when it is visible.
-4. Confirm exact `.gguf` filenames with `https://huggingface.co/api/models/<repo>/tree/main?recursive=true`.
-5. Launch with `llama-cli -hf <repo>:<QUANT>` or `llama-server -hf <repo>:<QUANT>`.
-6. Fall back to `--hf-repo` plus `--hf-file` when the repo uses custom file naming.
-7. Convert from Transformers weights only if the repo does not already expose GGUF files.
+1. Optionally validate dataset availability with `/is-valid`.
+2. Resolve `config` + `split` with `/splits`.
+3. Preview with `/first-rows`.
+4. Paginate content with `/rows` using `offset` and `length` (max 100).
+5. Use `/search` for text matching and `/filter` for row predicates.
+6. Retrieve parquet links via `/parquet` and totals/metadata via `/size` and `/statistics`.
 
-## Quick Start
+## Defaults
 
-### Install llama.cpp
+- Base URL: `https://datasets-server.huggingface.co`
+- Default API method: `GET`
+- Query params should be URL-encoded.
+- `offset` is 0-based.
+- `length` max is usually `100` for row-like endpoints.
+- Gated/private datasets require `Authorization: Bearer <HF_TOKEN>`.
 
-```bash
-brew install llama.cpp
-winget install llama.cpp
-```
+## Dataset Viewer
 
-```bash
-git clone https://github.com/ggml-org/llama.cpp
-cd llama.cpp
-make
-```
+- `Validate dataset`: `/is-valid?dataset=<namespace/repo>`
+- `List subsets and splits`: `/splits?dataset=<namespace/repo>`
+- `Preview first rows`: `/first-rows?dataset=<namespace/repo>&config=<config>&split=<split>`
+- `Paginate rows`: `/rows?dataset=<namespace/repo>&config=<config>&split=<split>&offset=<int>&length=<int>`
+- `Search text`: `/search?dataset=<namespace/repo>&config=<config>&split=<split>&query=<text>&offset=<int>&length=<int>`
+- `Filter with predicates`: `/filter?dataset=<namespace/repo>&config=<config>&split=<split>&where=<predicate>&orderby=<sort>&offset=<int>&length=<int>`
+- `List parquet shards`: `/parquet?dataset=<namespace/repo>`
+- `Get size totals`: `/size?dataset=<namespace/repo>`
+- `Get column statistics`: `/statistics?dataset=<namespace/repo>&config=<config>&split=<split>`
+- `Get Croissant metadata (if available)`: `/croissant?dataset=<namespace/repo>`
 
-### Authenticate for gated repos
-
-```bash
-hf auth login
-```
-
-### Search the Hub
-
-```text
-https://huggingface.co/models?apps=llama.cpp&sort=trending
-https://huggingface.co/models?search=Qwen3.6&apps=llama.cpp&sort=trending
-https://huggingface.co/models?search=<term>&apps=llama.cpp&num_parameters=min:0,max:24B&sort=trending
-```
-
-### Run directly from the Hub
+Pagination pattern:
 
 ```bash
-llama-cli -hf unsloth/Qwen3.6-35B-A3B-GGUF:UD-Q4_K_M
-llama-server -hf unsloth/Qwen3.6-35B-A3B-GGUF:UD-Q4_K_M
+curl "https://datasets-server.huggingface.co/rows?dataset=stanfordnlp/imdb&config=plain_text&split=train&offset=0&length=100"
+curl "https://datasets-server.huggingface.co/rows?dataset=stanfordnlp/imdb&config=plain_text&split=train&offset=100&length=100"
 ```
 
-### Run an exact GGUF file
+When pagination is partial, use response fields such as `num_rows_total`, `num_rows_per_page`, and `partial` to drive continuation logic.
+
+Search/filter notes:
+
+- `/search` matches string columns (full-text style behavior is internal to the API).
+- `/filter` requires predicate syntax in `where` and optional sort in `orderby`.
+- Keep filtering and searches read-only and side-effect free.
+
+For CLI-based parquet URL discovery or SQL, use the `hf-cli` skill with `hf datasets parquet` and `hf datasets sql`.
+
+## Creating and Uploading Datasets
+
+Use one of these flows depending on dependency constraints.
+
+Zero local dependencies (Hub UI):
+
+- Create dataset repo in browser: `https://huggingface.co/new-dataset`
+- Upload parquet files in the repo "Files and versions" page.
+- Verify shards appear in Dataset Viewer:
 
 ```bash
-llama-server 
-    --hf-repo unsloth/Qwen3.6-35B-A3B-GGUF 
-    --hf-file Qwen3.6-35B-A3B-UD-Q4_K_M.gguf 
-    -c 4096
+curl -s "https://datasets-server.huggingface.co/parquet?dataset=<namespace>/<repo>"
 ```
 
-### Convert only when no GGUF is available
+Low dependency CLI flow (`npx @huggingface/hub` / `hfjs`):
+
+- Set auth token:
 
 ```bash
-hf download <repo-without-gguf> --local-dir ./model-src
-python convert_hf_to_gguf.py ./model-src 
-    --outfile model-f16.gguf 
-    --outtype f16
-llama-quantize model-f16.gguf model-q4_k_m.gguf Q4_K_M
+export HF_TOKEN=<your_hf_token>
 ```
 
-### Smoke test a local server
+- Upload parquet folder to a dataset repo (auto-creates repo if missing):
 
 ```bash
-llama-server -hf unsloth/Qwen3.6-35B-A3B-GGUF:UD-Q4_K_M
+npx -y @huggingface/hub upload datasets/<namespace>/<repo> ./local/parquet-folder data
 ```
+
+- Upload as private repo on creation:
 
 ```bash
-curl http://localhost:8080/v1/chat/completions 
-  -H "Content-Type: application/json" 
-  -H "Authorization: Bearer no-key" 
-  -d '{
-    "messages": [
-      {"role": "user", "content": "Write a limerick about exception handling"}
-    ]
-  }'
+npx -y @huggingface/hub upload datasets/<namespace>/<repo> ./local/parquet-folder data --private
 ```
 
-## Quant Choice
+After upload, call `/parquet` to discover `<config>/<split>/<shard>` values for querying with `@~parquet`.
 
-- Prefer the exact quant that HF marks as compatible on the `?local-app=llama.cpp` page.
-- Keep repo-native labels such as `UD-Q4_K_M` instead of normalizing them.
-- Default to `Q4_K_M` unless the repo page or hardware profile suggests otherwise.
-- Prefer `Q5_K_M` or `Q6_K` for code or technical workloads when memory allows.
-- Consider `Q3_K_M`, `Q4_K_S`, or repo-specific `IQ` / `UD-*` variants for tighter RAM or VRAM budgets.
-- Treat `mmproj-*.gguf` files as projector weights, not the main checkpoint.
+## Agent Traces
 
-## Load References
+The Hub supports raw agent session traces from Claude Code, Codex, and Pi Agent. Upload them to Hugging Face Datasets as original JSONL files and the Hub can auto-detect the trace format, tag the dataset as `Traces`, and enable the trace viewer for browsing sessions, turns, tool calls, and model responses. Common local session directories:
 
-- Read [hub-discovery.md](references/hub-discovery.md) for URL-first workflows, model search, tree API extraction, and command reconstruction.
-- Read [quantization.md](references/quantization.md) for format tables, model scaling, quality tradeoffs, and `imatrix`.
-- Read [hardware.md](references/hardware.md) for Metal, CUDA, ROCm, or CPU build and acceleration details.
+- Claude Code: `~/.claude/projects`
+- Codex: `~/.codex/sessions`
+- Pi: `~/.pi/agent/sessions`
 
-## Resources
+Default to private dataset repos because traces can contain prompts, file paths, tool outputs, secrets, or PII. Preserve the raw `.jsonl` files and nest them by project/cwd instead of uploading every session at the dataset root.
 
-- llama.cpp: `https://github.com/ggml-org/llama.cpp`
-- Hugging Face GGUF + llama.cpp docs: `https://huggingface.co/docs/hub/gguf-llamacpp`
-- Hugging Face Local Apps docs: `https://huggingface.co/docs/hub/main/local-apps`
-- Hugging Face Local Agents docs: `https://huggingface.co/docs/hub/agents-local`
-- GGUF converter Space: `https://huggingface.co/spaces/ggml-org/gguf-my-repo`
+```bash
+hf repos create <namespace>/<repo> --type dataset --private --exist-ok
+hf upload <namespace>/<repo> ~/.codex/sessions codex/<project-or-cwd> --type dataset
+```
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
 
-### Erros de Autenticação
-
-- Verifique se as credenciais de autenticação estão corretas e se o token de acesso está válido.
-- Se o erro persistir, tente revogar o token de acesso e autenticar novamente.
-
-### Erros de Conexão
-
-- Verifique se a conexão de rede está estável e se o servidor está disponível.
-- Se o erro persistir, tente aumentar o tempo de espera ou verificar a configuração de rede.
-
-### Erros de Quantização
-
-- Verifique se o modelo está compatível com a quantização escolhida.
-- Se o erro persistir, tente alterar a quantização ou verificar a documentação do modelo.
-
-### Erros de Execução
-
-- Verifique se o modelo está sendo executado corretamente e se os parâmetros estão configurados corretamente.
-- Se o erro persistir, tente verificar a documentação do modelo ou buscar ajuda adicional.
-
-### Casos de Uso Especiais
-
-- **Modelos muito grandes**: Verifique se o hardware está configurado para lidar com modelos de grande escala.
-- **Modelos com requisitos específicos**: Verifique se os requisitos do modelo estão sendo atendidos, como memória ou processamento.
-- **Modelos com problemas de compatibilidade**: Verifique se o modelo está compatível com a versão do llama.cpp e do GGUF.
+- **Tratamento de Erros de Autenticação**: Verifique se o token de autenticação está válido e se o usuário tem permissão para acessar o recurso solicitado. Em caso de erro, retorne um erro 401 (Não Autorizado) com uma mensagem de erro clara.
+- **Tratamento de Erros de Paginação**: Verifique se o offset e o length são válidos e se o usuário tem permissão para acessar a página solicitada. Em caso de erro, retorne um erro 400 (Requisição Inválida) com uma mensagem de erro clara.
+- **Tratamento de Erros de Busca e Filtro**: Verifique se a consulta de busca ou filtro é válida e se o usuário tem permissão para acessar os recursos solicitados. Em caso de erro, retorne um erro 400 (Requisição Inválida) com uma mensagem de erro clara.
+- **Tratamento de Erros de Upload de Dados**: Verifique se o arquivo de upload é válido e se o usuário tem permissão para uploadar dados. Em caso de erro, retorne um erro 400 (Requisição Inválida) com uma mensagem de erro clara.
+- **Tratamento de Exceções de Conexão**: Verifique se a conexão com o servidor é estável e se o usuário tem permissão para acessar os recursos solicitados. Em caso de erro, retorne um erro 500 (Erro Interno do Servidor) com uma mensagem de erro clara.
+- **Tratamento de Exceções de Dados**: Verifique se os dados solicitados são válidos e se o usuário tem permissão para acessar os recursos solicitados. Em caso de erro, retorne um erro 400 (Requisição Inválida) com uma mensagem de erro clara.
+- **Edge Cases**:
+  - **Dataset vazio**: Verifique se o dataset está vazio e retorne um erro 404 (Não Encontrado) com uma mensagem de erro clara.
+  - **Dataset não encontrado**: Verifique se o dataset não foi encontrado e retorne um erro 404 (Não Encontrado) com uma mensagem de erro clara.
+  - **Recurso não encontrado**: Verifique se o recurso solicitado não foi encontrado e retorne um erro 404 (Não Encontrado) com uma mensagem de erro clara.
+  - **Erro de sintaxe**: Verifique se a consulta de busca ou filtro contém erros de sintaxe e retorne um erro 400 (Requisição Inválida) com uma mensagem de erro clara.
