@@ -1,45 +1,58 @@
 ---
-name: Desenvolvimento de Aplicativos Móvel Avançado
-description: Ensina sobre desenvolvimento de aplicativos móveis avançados utilizando tecnologias como React Native, Flutter e Kotlin
+name: Desenvolvimento de Aplicativos Móvel
+description: Ensina o desenvolvimento de aplicativos móveis utilizando tecnologias como React Native e Flutter
 ---
 
 ## Objetivo
-O objetivo deste guia é fornecer uma visão geral abrangente do desenvolvimento de aplicativos móveis avançados, utilizando tecnologias como React Native, Flutter e Kotlin. Este guia visa capacitar os desenvolvedores a criar aplicativos móveis complexos e escaláveis, atendendo às necessidades de usuários modernos.
+O objetivo deste guia é fornecer uma visão geral abrangente do desenvolvimento de aplicativos móveis, utilizando tecnologias como React Native e Flutter. Este guia visa capacitar desenvolvedores a criar aplicativos móveis de alta qualidade, com foco em design, desempenho e usabilidade.
 
 ## Pré-requisitos
 Para seguir este guia, é recomendado que os desenvolvedores tenham conhecimento básico em:
-- Programação orientada a objetos
-- Desenvolvimento de aplicativos móveis
-- Conhecimento em pelo menos uma das tecnologias mencionadas (React Native, Flutter ou Kotlin)
+- Programação em linguagens como JavaScript (para React Native) ou Dart (para Flutter)
+- Desenvolvimento de interfaces de usuário
+- Conceitos de design responsivo e experiência do usuário
+- Familiaridade com o uso de terminais ou prompts de comando
 
 ## Passo a Passo Técnico / Exemplos de Código
 ### Configurando o Ambiente de Desenvolvimento
 1. **Instalação do React Native**:
-   - Instale o Node.js e o npm (Node Package Manager) em sua máquina.
-   - Execute `npm install -g react-native-cli` para instalar o CLI do React Native.
-2. **Configurando o Flutter**:
-   - Baixe e instale o SDK do Flutter.
-   - Adicione o caminho do Flutter ao seu sistema.
-3. **Configurando o Kotlin**:
-   - Instale o Android Studio e configure o ambiente de desenvolvimento para Kotlin.
+   - Instale o Node.js e o npm (se ainda não estiverem instalados)
+   - Execute `npm install -g react-native-cli` para instalar o CLI do React Native
+   - Crie um novo projeto com `npx react-native init NomeDoProjeto`
+2. **Instalação do Flutter**:
+   - Baixe e instale o SDK do Flutter
+   - Configure as variáveis de ambiente para o Flutter
+   - Execute `flutter doctor` para verificar a instalação
 
-### Desenvolvendo um Aplicativo Móvel com React Native
+### Desenvolvendo o Aplicativo
+#### Exemplo com React Native
 ```javascript
-import React from 'react';
-import { View, Text } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, Button } from 'react-native';
 
 const App = () => {
+  const [contador, setContador] = useState(0);
+
   return (
-    <View>
-      <Text>Olá, Mundo!</Text>
+    <View style={styles.container}>
+      <Text>Contador: {contador}</Text>
+      <Button title="Incrementar" onPress={() => setContador(contador + 1)} />
     </View>
   );
 };
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
+
 export default App;
 ```
 
-### Desenvolvendo um Aplicativo Móvel com Flutter
+#### Exemplo com Flutter
 ```dart
 import 'package:flutter/material.dart';
 
@@ -53,7 +66,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Olá, Mundo!',
+      title: 'Contador',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -62,68 +75,62 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
+
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  int _contador = 0;
+
+  void _incrementarContador() {
+    setState(() {
+      _contador++;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Olá, Mundo!'),
-      ),
-      body: const Center(
-        child: Text('Olá, Mundo!'),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const Text('Contador:'),
+            Text(
+              '$_contador',
+              style: Theme.of(context).textTheme.headline4,
+            ),
+            ElevatedButton(
+              onPressed: _incrementarContador,
+              child: const Text('Incrementar'),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 ```
 
-### Desenvolvendo um Aplicativo Móvel com Kotlin
-```kotlin
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import android.widget.TextView
-
-class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        val textView: TextView = findViewById(R.id.textView)
-        textView.text = "Olá, Mundo!"
-    }
-}
-```
-
 ## Validação
-Para validar o desenvolvimento do aplicativo móvel, é importante testar em diferentes dispositivos e plataformas, garantindo que o aplicativo seja compatível e funcione corretamente. Além disso, é recomendado realizar testes unitários e de integração para garantir a qualidade e a estabilidade do aplicativo.
+Para validar o funcionamento do aplicativo, execute-o em um emulador ou dispositivo físico. Verifique se as funcionalidades básicas, como a interface de usuário e a lógica de negócios, estão funcionando corretamente. Realize testes unitários e de integração para garantir a robustez do aplicativo. Utilize ferramentas de debug para identificar e corrigir erros.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
 ### Tratamento de Erros em React Native
-- Utilize `try-catch` para capturar e tratar erros em tempo de execução.
-- Implemente uma política de retry para lidar com falhas de rede.
-- Use `console.error` para registrar erros e facilitar a depuração.
+- Utilize `try-catch` para capturar erros em blocos de código específicos.
+- Implemente um mecanismo de relatórios de erros para monitorar e solucionar problemas.
+- Trate erros de rede e de conexão, como perda de conexão ou respostas inválidas do servidor.
 
 ### Tratamento de Erros em Flutter
-- Utilize `try-catch` para capturar e tratar erros em tempo de execução.
-- Implemente uma política de retry para lidar com falhas de rede.
-- Use `debugPrint` para registrar erros e facilitar a depuração.
-
-### Tratamento de Erros em Kotlin
-- Utilize `try-catch` para capturar e tratar erros em tempo de execução.
-- Implemente uma política de retry para lidar com falhas de rede.
-- Use `Log.e` para registrar erros e facilitar a depuração.
+- Utilize `try-catch` para capturar erros em blocos de código específicos.
+- Implemente um mecanismo de relatórios de erros para monitorar e solucionar problemas.
+- Trate erros de estado, como `setState` chamado em um widget que não está mais na árvore de widgets.
 
 ### Edge Cases
-- Lidar com dispositivos com recursos limitados (memória, processamento, etc.).
-- Lidar com diferentes tamanhos e resoluções de tela.
-- Lidar com diferentes versões do sistema operacional.
-- Lidar com problemas de conectividade de rede.
-- Lidar com ataques de segurança, como injeção de código malicioso.
-
-### Segurança
-- Utilize criptografia para proteger dados sensíveis.
-- Implemente autenticação e autorização para controlar o acesso ao aplicativo.
-- Utilize bibliotecas e frameworks de segurança para proteger contra vulnerabilidades conhecidas.
-- Realize testes de segurança regulares para identificar e corrigir vulnerabilidades.
+- **Tamanho de tela e orientação**: Certifique-se de que o aplicativo se adapte corretamente a diferentes tamanhos de tela e orientações.
+- **Conexão de rede**: Teste o aplicativo com diferentes tipos de conexão de rede, como Wi-Fi, 3G e 4G.
+- **Dispositivos com recursos limitados**: Teste o aplicativo em dispositivos com recursos limitados, como memória RAM baixa ou processador lento.
+- **Compatibilidade com diferentes versões do sistema operacional**: Certifique-se de que o aplicativo seja compatível com diferentes versões do sistema operacional, como Android e iOS.
