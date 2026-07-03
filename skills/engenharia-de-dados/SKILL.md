@@ -1,96 +1,103 @@
 ---
-name: Engenharia de Dados para Big Data
-description: Ensina como projetar e implementar soluções de engenharia de dados para lidar com grandes volumes de dados
+name: Engenharia de Dados
+description: Ensina como projetar e implementar sistemas de armazenamento e processamento de dados
 ---
 
 ## Objetivo
-O objetivo deste guia é fornecer uma abordagem prática para projetar e implementar soluções de engenharia de dados eficazes para lidar com grandes volumes de dados, conhecidos como Big Data. Isso inclui entender os conceitos fundamentais, escolher as ferramentas certas e aplicar técnicas de processamento de dados em larga escala.
+O objetivo desta habilidade é capacitar os participantes a projetar e implementar sistemas de armazenamento e processamento de dados eficientes, utilizando tecnologias e ferramentas adequadas para atender às necessidades de uma organização.
 
 ## Pré-requisitos
-Para seguir este guia, é recomendado que você tenha:
-- Conhecimento básico em programação (preferencialmente em Python ou Java)
-- Familiaridade com conceitos de banco de dados relacional e NoSQL
-- Experiência com ambientes de big data (como Hadoop, Spark) é um plus
+Para aproveitar ao máximo esta habilidade, é recomendado que os participantes tenham conhecimento básico em:
+* Conceitos de banco de dados
+* Linguagens de programação (como Python ou Java)
+* Ferramentas de processamento de dados (como Apache Spark ou Hadoop)
 
 ## Passo a Passo Técnico / Exemplos de Código
-### 1. Definição do Problema e Escolha da Arquitetura
-Primeiramente, é crucial definir o problema que você está tentando resolver. Isso pode incluir questões como:
-- Qual é o volume de dados que você está lidando?
-- Qual é a velocidade com que os dados estão sendo gerados?
-- Qual é a variedade dos dados (estruturados, não estruturados, semiestruturados)?
+### Projeto de Sistema de Armazenamento de Dados
+1. **Definição dos Requisitos**: Identifique as necessidades de armazenamento de dados da organização, incluindo o tipo de dados, volume e frequência de acesso.
+2. **Escolha da Tecnologia**: Selecione a tecnologia de armazenamento de dados mais adequada com base nos requisitos, como bancos de dados relacionais (RDBMS) ou NoSQL.
+3. **Projeto do Esquema de Banco de Dados**: Desenvolva um esquema de banco de dados que atenda às necessidades da organização, incluindo a definição de tabelas, índices e relacionamentos.
 
-Com base nisso, você pode escolher a arquitetura mais adequada. Por exemplo, para dados em larga escala, você pode considerar usar Hadoop para processamento em batch ou Spark para processamento em tempo real.
-
-### 2. Preparação dos Dados
-A preparação dos dados é uma etapa crítica. Isso pode incluir limpeza, transformação e formatação dos dados para que eles estejam prontos para análise. Um exemplo de como fazer isso em Python usando a biblioteca Pandas é:
+Exemplo de código em Python para criar um banco de dados utilizando o SQLite:
 ```python
-import pandas as pd
+import sqlite3
 
-# Carregar os dados
-df = pd.read_csv('dados.csv')
+# Conectar ao banco de dados
+conn = sqlite3.connect('example.db')
 
-# Limpar os dados (remover linhas com valores faltantes)
-df_limpo = df.dropna()
+# Criar uma tabela
+cursor = conn.cursor()
+cursor.execute('''
+    CREATE TABLE users (
+        id INTEGER PRIMARY KEY,
+        name TEXT NOT NULL,
+        email TEXT NOT NULL
+    )
+''')
 
-# Transformar os dados (converter tipo de dados)
-df_limpo['coluna'] = pd.to_numeric(df_limpo['coluna'])
+# Inserir dados
+cursor.execute("INSERT INTO users (name, email) VALUES ('João', 'joao@example.com')")
+
+# Commitar as alterações
+conn.commit()
+
+# Fechar a conexão
+conn.close()
 ```
 
-### 3. Processamento dos Dados
-Depois que os dados estão preparados, você pode começar a processá-los. Isso pode ser feito usando várias ferramentas, dependendo da arquitetura que você escolheu. Por exemplo, se você estiver usando Spark, você pode usar o Spark SQL para consultar os dados:
+### Implementação do Sistema de Processamento de Dados
+1. **Escolha da Ferramenta**: Selecione a ferramenta de processamento de dados mais adequada com base nos requisitos, como Apache Spark ou Hadoop.
+2. **Desenvolvimento do Pipeline de Processamento**: Desenvolva um pipeline de processamento de dados que atenda às necessidades da organização, incluindo a leitura de dados, processamento e escrita de resultados.
+
+Exemplo de código em Python para processar dados utilizando o Apache Spark:
 ```python
 from pyspark.sql import SparkSession
 
-# Criar uma sessão Spark
-spark = SparkSession.builder.appName('MeuApp').getOrCreate()
+# Criar uma sessão do Spark
+spark = SparkSession.builder.appName('Example').getOrCreate()
 
-# Registrar os dados como uma tabela
-df.registerTempTable('minha_tabela')
+# Ler os dados
+df = spark.read.csv('data.csv', header=True, inferSchema=True)
 
-# Realizar uma consulta
-resultados = spark.sql('SELECT * FROM minha_tabela WHERE condicao = True')
+# Processar os dados
+df = df.filter(df['age'] > 18)
+
+# Escrever os resultados
+df.write.csv('result.csv', header=True)
 ```
 
 ## Validação
-Para validar os resultados, é importante ter métricas claras de sucesso. Isso pode incluir:
-- Acurácia dos modelos de machine learning treinados com os dados
-- Tempo de processamento dos dados
-- Tamanho dos dados processados
-
-Além disso, é crucial monitorar o desempenho do sistema e fazer ajustes conforme necessário para garantir que a solução de engenharia de dados atenda às necessidades do negócio.
+Para validar a implementação do sistema de armazenamento e processamento de dados, é importante realizar testes e verificações para garantir que o sistema atenda às necessidades da organização. Isso inclui:
+* Testar a performance do sistema
+* Verificar a integridade dos dados
+* Realizar testes de segurança
+* Monitorar o sistema para garantir a disponibilidade e escalabilidade.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-É fundamental considerar os seguintes casos de bordo e exceções:
-- **Dados faltantes ou inconsistentes**: Implemente mecanismos para lidar com dados faltantes ou inconsistentes, como imputação de valores ou remoção de registros.
-- **Erros de conexão**: Trate erros de conexão com os sistemas de dados, como timeouts ou erros de autenticação.
-- **Sobrecarga de processamento**: Implemente mecanismos para lidar com sobrecarga de processamento, como escalonamento horizontal ou vertical.
-- **Segurança**: Implemente medidas de segurança para proteger os dados, como criptografia e autenticação.
-- **Desempenho**: Monitorize o desempenho do sistema e faça ajustes conforme necessário para garantir que a solução de engenharia de dados atenda às necessidades do negócio.
+Para garantir a robustez do sistema, é importante tratar exceções e edge cases, incluindo:
+* **Tratamento de erros de conexão**: Implementar mecanismos para lidar com erros de conexão ao banco de dados ou às ferramentas de processamento de dados.
+* **Tratamento de erros de dados**: Implementar mecanismos para lidar com erros de dados, como dados inconsistentes ou faltantes.
+* **Tratamento de exceções de segurança**: Implementar mecanismos para lidar com exceções de segurança, como acessos não autorizados ou ataques de força bruta.
+* **Tratamento de edge cases**: Implementar mecanismos para lidar com edge cases, como dados com formatos inválidos ou valores extremos.
 
-Exemplo de tratamento de exceções em Python:
+Exemplo de código em Python para tratar exceções de conexão ao banco de dados:
 ```python
+import sqlite3
+
 try:
-    # Código que pode gerar exceção
-    df = pd.read_csv('dados.csv')
-except FileNotFoundError:
-    # Tratamento da exceção
-    print("Arquivo não encontrado")
-except pd.errors.EmptyDataError:
-    # Tratamento da exceção
-    print("Dados vazios")
+    conn = sqlite3.connect('example.db')
+except sqlite3.Error as e:
+    print(f"Erro de conexão: {e}")
 ```
-Exemplo de tratamento de edge cases em Spark:
+
+Exemplo de código em Python para tratar exceções de dados:
 ```python
 from pyspark.sql import SparkSession
 
-# Criar uma sessão Spark
-spark = SparkSession.builder.appName('MeuApp').getOrCreate()
+spark = SparkSession.builder.appName('Example').getOrCreate()
 
-# Registrar os dados como uma tabela
-df.registerTempTable('minha_tabela')
-
-# Realizar uma consulta com tratamento de edge cases
-resultados = spark.sql('SELECT * FROM minha_tabela WHERE condicao = True').cache()
-if resultados.count() == 0:
-    # Tratamento do caso de bordo (nenhum resultado)
-    print("Nenhum resultado encontrado")
+try:
+    df = spark.read.csv('data.csv', header=True, inferSchema=True)
+except Exception as e:
+    print(f"Erro de dados: {e}")
+```
