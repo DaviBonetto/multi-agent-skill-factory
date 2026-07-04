@@ -17,21 +17,18 @@ Pi core does not ship a standard task-list tool. If a todo/task extension is ins
 
 ## Segurança
 
-Para garantir a segurança, é importante verificar se as ferramentas instaladas estão atualizadas e se os pacotes utilizados são de fontes confiáveis. Além disso, é fundamental implementar controles de acesso e autenticação para evitar o acesso não autorizado às ferramentas e aos dados.
+Para garantir a segurança, é importante verificar se as dependências necessárias estão instaladas e configuradas corretamente. Além disso, é fundamental ter cuidado ao executar comandos que possam afetar o sistema ou os dados.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
 
 ### Exceções
 
-*   Caso o pacote `pi-subagents` não esteja instalado, uma exceção será lançada. Nesse caso, o sistema deve executar as ações sequencialmente na sessão atual ou explicar que a funcionalidade de subagente opcional não está instalada.
+*   Se o pacote `pi-subagents` não estiver instalado, uma exceção será lançada. Nesse caso, o sistema deve executar as ações sequencialmente na sessão atual ou explicar que a funcionalidade de subagente opcional não está instalada.
 *   Se a extensão todo/task não estiver instalada, o sistema deve usar os arquivos de plano do Superpowers, listas de tarefas em Markdown ou um arquivo `TODO.md` local para rastrear as tarefas.
-*   Em caso de falha na execução de uma ação, o sistema deve registrar o erro e notificar o usuário.
 
 ### Edge Cases
 
-*   **Subagente não instalado**: Se o pacote `pi-subagents` não estiver instalado, o sistema deve ser capaz de executar as ações sequencialmente na sessão atual ou explicar que a funcionalidade de subagente opcional não está instalada.
-*   **Extensão todo/task não instalada**: Se a extensão todo/task não estiver instalada, o sistema deve ser capaz de usar os arquivos de plano do Superpowers, listas de tarefas em Markdown ou um arquivo `TODO.md` local para rastrear as tarefas.
-*   **Ação inválida**: Se uma ação inválida for solicitada, o sistema deve lançar uma exceção e notificar o usuário.
-*   **Falta de permissão**: Se o usuário não tiver permissão para executar uma ação, o sistema deve lançar uma exceção e notificar o usuário.
-
-Ao tratar esses casos, o sistema pode garantir que as ações sejam executadas de forma segura e confiável, mesmo em situações inesperadas.
+*   **Subagente não instalado**: Se o subagente não estiver instalado, o sistema deve executar as ações sequencialmente na sessão atual ou explicar que a funcionalidade de subagente opcional não está instalada.
+*   **Extensão todo/task não instalada**: Se a extensão todo/task não estiver instalada, o sistema deve usar os arquivos de plano do Superpowers, listas de tarefas em Markdown ou um arquivo `TODO.md` local para rastrear as tarefas.
+*   **Comandos inválidos**: Se um comando inválido for executado, o sistema deve lançar uma exceção ou exibir uma mensagem de erro para o usuário.
+*   **Permissões insuficientes**: Se o usuário não tiver permissões suficientes para executar uma ação, o sistema deve lançar uma exceção ou exibir uma mensagem de erro para o usuário.
