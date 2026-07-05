@@ -1,89 +1,115 @@
 ---
 name: Inteligência Artificial Aplicada
-description: Esta habilidade ensina como aplicar algoritmos e técnicas de inteligência artificial em problemas reais, utilizando bibliotecas como TensorFlow e PyTorch
+description: Ensina técnicas de inteligência artificial aplicada em problemas reais, incluindo visão computacional e processamento de linguagem natural
 ---
 
 ## Objetivo
-O objetivo desta habilidade é capacitar os desenvolvedores a aplicar algoritmos e técnicas de inteligência artificial em problemas reais, utilizando bibliotecas como TensorFlow e PyTorch. Isso inclui entender como implementar modelos de aprendizado de máquina, treinar e testar esses modelos, e integrá-los em sistemas mais amplos.
+O objetivo deste guia é fornecer uma visão geral das técnicas de inteligência artificial aplicada em problemas reais, incluindo visão computacional e processamento de linguagem natural. Com isso, os desenvolvedores e pesquisadores poderão aplicar essas técnicas em seus projetos e solucionar problemas complexos de forma eficaz.
 
 ## Pré-requisitos
-Para aproveitar ao máximo esta habilidade, é recomendado que os desenvolvedores tenham conhecimento básico em:
-- Programação Python
-- Conceitos de inteligência artificial e aprendizado de máquina
-- Bibliotecas como NumPy, Pandas e Matplotlib
+Para seguir este guia, é necessário ter conhecimento em:
+* Programação em Python
+* Conceitos básicos de inteligência artificial e machine learning
+* Familiaridade com bibliotecas como TensorFlow ou PyTorch
 
 ## Passo a Passo Técnico / Exemplos de Código
-### Instalação das Bibliotecas Necessárias
-Para começar a trabalhar com inteligência artificial aplicada, é necessário instalar as bibliotecas TensorFlow e PyTorch. Isso pode ser feito utilizando o pip:
-```bash
-pip install tensorflow torch
-```
-### Implementação de um Modelo de Aprendizado de Máquina
-Aqui está um exemplo simples de como implementar um modelo de rede neural utilizando PyTorch:
+### Visão Computacional
+A visão computacional é um campo da inteligência artificial que se concentra em dar às máquinas a capacidade de interpretar e entender o mundo visual. Aqui está um exemplo de código em Python que utiliza a biblioteca OpenCV para carregar e exibir uma imagem:
 ```python
-import torch
-import torch.nn as nn
-import torch.optim as optim
+import cv2
 
-# Definição do modelo
-class Modelo(nn.Module):
-    def __init__(self):
-        super(Modelo, self).__init__()
-        self.fc1 = nn.Linear(5, 10)  # Camada de entrada
-        self.fc2 = nn.Linear(10, 5)  # Camada de saída
+# Carregar a imagem
+try:
+    img = cv2.imread('imagem.jpg')
+    if img is None:
+        print("Erro: Imagem não encontrada.")
+        exit()
+except Exception as e:
+    print(f"Erro: {e}")
+    exit()
 
-    def forward(self, x):
-        x = torch.relu(self.fc1(x))  # Função de ativação
-        x = self.fc2(x)
-        return x
-
-# Inicialização do modelo, otimizador e perda
-modelo = Modelo()
-otimizador = optim.SGD(modelo.parameters(), lr=0.01)
-funcao_perda = nn.MSELoss()
-
-# Treinamento do modelo
-for epoch in range(100):
-    try:
-        # Simulação de dados de entrada e saída
-        entrada = torch.randn(10, 5)
-        saida = torch.randn(10, 5)
-
-        # Forward pass
-        saida_prevista = modelo(entrada)
-        perda = funcao_perda(saida_prevista, saida)
-
-        # Backward pass e atualização dos parâmetros
-        otimizador.zero_grad()
-        perda.backward()
-        otimizador.step()
-
-        print(f'Epoch {epoch+1}, Perda: {perda.item()}')
-    except Exception as e:
-        print(f'Erro durante o treinamento: {e}')
+# Exibir a imagem
+try:
+    cv2.imshow('Imagem', img)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+except Exception as e:
+    print(f"Erro: {e}")
+    exit()
 ```
-### Integração com Outros Sistemas
-Após treinar o modelo, é possível integrá-lo com outros sistemas, como aplicativos web ou APIs, para realizar previsões ou classificações.
+### Processamento de Linguagem Natural
+O processamento de linguagem natural é um campo da inteligência artificial que se concentra em dar às máquinas a capacidade de entender e gerar linguagem humana. Aqui está um exemplo de código em Python que utiliza a biblioteca NLTK para tokenizar um texto:
+```python
+import nltk
+
+# Tokenizar o texto
+try:
+    texto = "Este é um exemplo de texto."
+    tokens = nltk.word_tokenize(texto)
+    print(tokens)
+except Exception as e:
+    print(f"Erro: {e}")
+    exit()
+```
 
 ## Validação
-A validação do modelo é crucial para garantir que ele esteja funcionando corretamente e alcançando os objetivos desejados. Isso pode ser feito através de métricas como acurácia, precisão, recall e F1-score, dependendo do tipo de problema que está sendo abordado. Além disso, é importante realizar testes com dados de entrada variados para garantir a robustez do modelo.
+Para validar os resultados dos projetos de inteligência artificial aplicada, é importante utilizar métricas de avaliação adequadas, como precisão, recall e F1-score. Além disso, é fundamental testar os modelos em conjuntos de dados de teste para garantir que eles sejam robustos e generalizáveis. Aqui está um exemplo de código em Python que utiliza a biblioteca Scikit-learn para avaliar a performance de um modelo de classificação:
+```python
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+
+# Avaliar o modelo
+try:
+    y_true = [0, 1, 0, 1, 0, 1]
+    y_pred = [0, 1, 0, 0, 0, 1]
+
+    # Imprimir as métricas de avaliação
+    print("Acurácia:", accuracy_score(y_true, y_pred))
+    print("Relatório de classificação:\n", classification_report(y_true, y_pred))
+    print("Matriz de confusão:\n", confusion_matrix(y_true, y_pred))
+except Exception as e:
+    print(f"Erro: {e}")
+    exit()
+```
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-Durante o desenvolvimento e treinamento do modelo, é importante considerar os seguintes casos:
-- **Dados de entrada inválidos**: Verificar se os dados de entrada estão no formato correto e dentro dos limites esperados.
-- **Erros de inicialização**: Verificar se o modelo e os parâmetros estão sendo inicializados corretamente.
-- **Erros de treinamento**: Verificar se o modelo está sendo treinado corretamente e se os parâmetros estão sendo atualizados corretamente.
-- **Erros de previsão**: Verificar se o modelo está fazendo previsões corretas e se os resultados estão dentro dos limites esperados.
-- **Segurança**: Verificar se o modelo está seguro contra ataques de força bruta ou outros tipos de ataques.
-- **Desempenho**: Verificar se o modelo está funcionando dentro dos limites de desempenho esperados.
-Exemplos de código para tratamento de exceções:
+É fundamental tratar exceções e edge cases para garantir a robustez e a confiabilidade dos projetos de inteligência artificial aplicada. Aqui estão alguns exemplos de como tratar exceções e edge cases:
+* **Erro de arquivo não encontrado**: Verificar se o arquivo existe antes de tentar carregá-lo.
+* **Erro de tipo de dado**: Verificar o tipo de dado antes de realizar operações.
+* **Erro de divisão por zero**: Verificar se o denominador é zero antes de realizar a divisão.
+* **Edge case de texto vazio**: Verificar se o texto está vazio antes de realizar operações de processamento de linguagem natural.
+* **Edge case de imagem vazia**: Verificar se a imagem está vazia antes de realizar operações de visão computacional.
+
+Exemplos de código para tratar exceções e edge cases:
 ```python
+# Erro de arquivo não encontrado
 try:
-    # Código que pode gerar exceção
-except ValueError as e:
-    print(f'Erro de valor: {e}')
-except TypeError as e:
-    print(f'Erro de tipo: {e}')
-except Exception as e:
-    print(f'Erro geral: {e}')
-```
+    with open('arquivo.txt', 'r') as f:
+        conteudo = f.read()
+except FileNotFoundError:
+    print("Erro: Arquivo não encontrado.")
+
+# Erro de tipo de dado
+try:
+    x = 5 / 'a'
+except TypeError:
+    print("Erro: Tipo de dado inválido.")
+
+# Erro de divisão por zero
+try:
+    x = 5 / 0
+except ZeroDivisionError:
+    print("Erro: Divisão por zero.")
+
+# Edge case de texto vazio
+if texto == "":
+    print("Erro: Texto vazio.")
+else:
+    # Realizar operações de processamento de linguagem natural
+    pass
+
+# Edge case de imagem vazia
+if img is None:
+    print("Erro: Imagem vazia.")
+else:
+    # Realizar operações de visão computacional
+    pass
