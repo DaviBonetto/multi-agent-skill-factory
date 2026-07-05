@@ -37,23 +37,25 @@ The agent can still run tests, stage files, and output suggested branch names, c
 
 ### Erros de Configuração
 
-*   Verifique se o arquivo `config.toml` está correto e se a opção `multi_agent` está habilitada.
-*   Em caso de erro de configuração, o agente deve exibir uma mensagem de erro clara e instruir o usuário a verificar a configuração.
+*   Verifique se o arquivo `config.toml` existe e está correto antes de prosseguir.
+*   Certifique-se de que a feature `multi_agent` esteja habilitada.
 
 ### Erros de Ambiente
 
-*   Verifique se o ambiente Git está configurado corretamente e se o comando `git rev-parse` está funcionando como esperado.
-*   Em caso de erro de ambiente, o agente deve exibir uma mensagem de erro clara e instruir o usuário a verificar a configuração do ambiente.
+*   Se o comando `git rev-parse --git-dir` falhar, verifique se o repositório Git está corretamente configurado.
+*   Se o comando `git branch --show-current` retornar um erro, verifique se o HEAD está detached ou se há problemas com o repositório.
+
+### Erros de Subagentes
+
+*   Se um subagente falhar durante a execução, verifique os logs para identificar a causa raiz do problema.
+*   Certifique-se de que os subagentes sejam fechados corretamente após a conclusão do trabalho.
 
 ### Erros de Comunicação
 
-*   Verifique se a comunicação entre o agente e o App está funcionando corretamente.
-*   Em caso de erro de comunicação, o agente deve exibir uma mensagem de erro clara e instruir o usuário a verificar a conexão de rede.
+*   Se houver problemas de comunicação entre o agente e o App, verifique a conectividade de rede e os logs do App.
+*   Certifique-se de que as mensagens sejam enviadas e recebidas corretamente.
 
 ### Edge Cases
 
-*   **Detached HEAD**: Em caso de detached HEAD, o agente deve commitar todas as alterações e informar o usuário a usar os controles nativos do App.
-*   **Linked Worktree**: Em caso de linked worktree, o agente deve verificar se o worktree está configurado corretamente e se o comando `git rev-parse` está funcionando como esperado.
-*   **Erros de Permissão**: Em caso de erros de permissão, o agente deve exibir uma mensagem de erro clara e instruir o usuário a verificar as permissões do arquivo ou diretório.
-
-Ao lidar com esses edge cases e erros, o agente pode garantir uma experiência mais robusta e confiável para o usuário.
+*   Se o usuário estiver trabalhando em um repositório com permissões restritas, certifique-se de que o agente tenha as permissões necessárias para executar as ações.
+*   Se o repositório estiver muito grande, considere otimizar o processo de criação de worktrees e finalização de branches para evitar problemas de desempenho.
