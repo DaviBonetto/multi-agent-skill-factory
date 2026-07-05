@@ -1,146 +1,108 @@
 ---
-name: Desenvolvimento de Aplicativos Móvel Avançado
-description: Ensina técnicas avançadas de desenvolvimento de aplicativos móvel, incluindo arquitetura de sistema, segurança e otimização de desempenho
+name: Desenvolvimento de Aplicativos Móvel
+description: Ensina técnicas avançadas de desenvolvimento de aplicativos móvel utilizando linguagens como Java, Swift e Kotlin
 ---
 
 ## Objetivo
-O objetivo deste guia é fornecer uma visão geral das técnicas avançadas de desenvolvimento de aplicativos móvel, abordando tópicos como arquitetura de sistema, segurança e otimização de desempenho. Com isso, os desenvolvedores móvel poderão criar aplicativos mais robustos, seguros e eficientes.
+O objetivo deste guia é fornecer uma visão geral abrangente sobre o desenvolvimento de aplicativos móveis, abordando técnicas avançadas e melhores práticas para desenvolvedores experientes. Com foco em linguagens como Java, Swift e Kotlin, este guia visa equipar os desenvolvedores com as habilidades necessárias para criar aplicativos móveis robustos, escaláveis e de alta qualidade.
 
 ## Pré-requisitos
-Para seguir este guia, é necessário ter conhecimento prévio em desenvolvimento de aplicativos móvel, incluindo:
-* Conhecimento de linguagens de programação como Java, Swift ou Kotlin
-* Experiência com frameworks de desenvolvimento móvel como React Native, Flutter ou Xamarin
-* Noções básicas de arquitetura de sistema e segurança
+Para aproveitar ao máximo este guia, é recomendado que os desenvolvedores tenham:
+- Experiência sólida em programação com linguagens como Java, Swift ou Kotlin.
+- Conhecimento básico de desenvolvimento de aplicativos móveis, incluindo conceitos de UI/UX, armazenamento de dados e integração de APIs.
+- Familiaridade com ambientes de desenvolvimento integrado (IDEs) como Android Studio, Xcode ou equivalentes.
 
 ## Passo a Passo Técnico / Exemplos de Código
-### Arquitetura de Sistema
-A arquitetura de sistema é fundamental para o desenvolvimento de aplicativos móvel avançados. Aqui estão alguns passos para implementar uma arquitetura de sistema eficaz:
-1. **Defina a estrutura do aplicativo**: Divida o aplicativo em camadas, como apresentação, negócios e dados.
-2. **Escolha um padrão de arquitetura**: Utilize padrões como MVC, MVP ou MVVM para organizar o código.
-3. **Implemente a comunicação entre camadas**: Utilize interfaces e dependências para conectar as camadas.
+### Configuração do Ambiente de Desenvolvimento
+1. **Instalação do Android Studio**: Para desenvolver aplicativos Android, é necessário instalar o Android Studio. Baixe a versão mais recente do [site oficial](https://developer.android.com/studio) e siga as instruções de instalação.
+2. **Configuração do Xcode**: Para desenvolver aplicativos iOS, é necessário ter o Xcode instalado. Baixe a versão mais recente do [Mac App Store](https://apps.apple.com/br/app/xcode/) e siga as instruções de instalação.
+3. **Escolha da Linguagem**: Escolha a linguagem de programação de acordo com a plataforma-alvo (Java ou Kotlin para Android, Swift para iOS).
 
-Exemplo de código em Java:
-```java
-// Definição da estrutura do aplicativo
-public class Aplicativo {
-    private Presentacao presentacao;
-    private Negocios negocios;
-    private Dados dados;
-
-    public Aplicativo() {
-        presentacao = new Presentacao();
-        negocios = new Negocios();
-        dados = new Dados();
-    }
-
-    // Implementação da comunicação entre camadas
-    public void iniciar() {
-        presentacao.iniciar(negocios);
-        negocios.iniciar(dados);
-    }
-}
-```
-
-### Segurança
-A segurança é um aspecto crítico no desenvolvimento de aplicativos móvel. Aqui estão alguns passos para garantir a segurança do aplicativo:
-1. **Utilize criptografia**: Proteja os dados sensíveis com criptografia.
-2. **Valide as entradas**: Verifique as entradas do usuário para evitar ataques de injeção de código.
-3. **Implemente autenticação e autorização**: Controle o acesso ao aplicativo e aos recursos.
-
-Exemplo de código em Swift:
-```swift
-// Utilização de criptografia
-import CryptoKit
-
-class Seguranca {
-    func criptografar(dados: String) -> String {
-        let chave = "minha_chave_secreta"
-        let criptografia = AES.GCM(sealedMessage: dados, using: chave)
-        return criptografia.base64EncodedString()
-    }
-}
-```
-
-### Otimização de Desempenho
-A otimização de desempenho é essencial para garantir que o aplicativo seja rápido e responsivo. Aqui estão alguns passos para otimizar o desempenho do aplicativo:
-1. **Utilize técnicas de caching**: Armazene dados frequentemente acessados em cache.
-2. **Otimizar a renderização**: Reduza o número de operações de renderização.
-3. **Utilize paralelismo**: Execute tarefas em paralelo para melhorar a performance.
-
-Exemplo de código em Kotlin:
+### Exemplo de Código em Kotlin para Android
 ```kotlin
-// Utilização de caching
-class Cache {
-    private val cache: MutableMap<String, Any> = mutableMapOf()
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.widget.Button
+import android.widget.Toast
 
-    fun get(chave: String): Any? {
-        return cache[chave]
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        val button: Button = findViewById(R.id.button)
+        button.setOnClickListener {
+            try {
+                // Código que pode lançar exceção
+                Toast.makeText(this, "Botão pressionado", Toast.LENGTH_SHORT).show()
+            } catch (e: Exception) {
+                // Tratamento de exceção
+                Toast.makeText(this, "Ocorreu um erro: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
+}
+```
 
-    fun set(chave: String, valor: Any) {
-        cache[chave] = valor
+### Exemplo de Código em Swift para iOS
+```swift
+import UIKit
+
+class ViewController: UIViewController {
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // Do any additional setup after loading the view.
+        
+        let button = UIButton(type: .system)
+        button.setTitle("Pressione", for: .normal)
+        button.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
+        view.addSubview(button)
+    }
+    
+    @objc func buttonPressed() {
+        do {
+            // Código que pode lançar exceção
+            print("Botão pressionado")
+        } catch {
+            // Tratamento de exceção
+            print("Ocorreu um erro: (error)")
+        }
     }
 }
 ```
 
 ## Validação
-Para validar o aplicativo, é necessário realizar testes unitários, testes de integração e testes de desempenho. Além disso, é importante realizar testes de segurança e testes de usabilidade para garantir que o aplicativo seja seguro e fácil de usar.
-
-Exemplo de teste unitário em Java:
-```java
-// Teste unitário para a classe Aplicativo
-public class AplicativoTest {
-    @Test
-    public void testIniciar() {
-        Aplicativo aplicativo = new Aplicativo();
-        aplicativo.iniciar();
-        assertNotNull(aplicativo.presentacao);
-        assertNotNull(aplicativo.negocios);
-        assertNotNull(aplicativo.dados);
-    }
-}
+Para validar o conhecimento adquirido, é recomendado que os desenvolvedores:
+- Desenvolvam um aplicativo móvel completo, aplicando as técnicas e conceitos aprendidos.
+- Realizem testes unitários e de integração para garantir a robustez e escalabilidade do aplicativo.
+- Publiquem o aplicativo nas lojas de aplicativos (Google Play Store para Android, Apple App Store para iOS) e monitorem o feedback dos usuários para melhorar continuamente o aplicativo.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-O tratamento de exceções e edge cases é fundamental para garantir a robustez e a confiabilidade do aplicativo. Aqui estão alguns exemplos de como tratar exceções e edge cases:
-* **Tratamento de exceções**: Utilize try-catch para capturar e tratar exceções, evitando que o aplicativo crash.
-* **Validação de entradas**: Verifique as entradas do usuário para evitar ataques de injeção de código e garantir que os dados sejam válidos.
-* **Tratamento de erros de rede**: Implemente mecanismos para tratar erros de rede, como timeouts e erros de conexão.
-* **Tratamento de erros de banco de dados**: Implemente mecanismos para tratar erros de banco de dados, como erros de conexão e erros de query.
+Ao desenvolver aplicativos móveis, é fundamental considerar os seguintes casos de bordo e exceções:
+- **Conexão de rede**: Verifique se o dispositivo tem conexão de rede estável antes de realizar requisições à API.
+- **Erros de parsing**: Trate erros de parsing de dados JSON ou XML para evitar crashes do aplicativo.
+- **Erros de banco de dados**: Trate erros de acesso ao banco de dados para evitar perda de dados ou crashes do aplicativo.
+- **Erros de permissão**: Trate erros de permissão para evitar que o aplicativo seja interrompido ou fechado inesperadamente.
+- **Testes de usabilidade**: Realize testes de usabilidade para garantir que o aplicativo seja fácil de usar e entender.
 
-Exemplo de código em Java:
-```java
-// Tratamento de exceções
-public void iniciar() {
-    try {
-        presentacao.iniciar(negocios);
-        negocios.iniciar(dados);
-    } catch (Exception e) {
-        Log.e("Aplicativo", "Erro ao iniciar o aplicativo", e);
-    }
-}
-
-// Validação de entradas
-public void validarEntradas(String entrada) {
-    if (entrada == null || entrada.isEmpty()) {
-        throw new IllegalArgumentException("Entrada inválida");
-    }
-}
-
-// Tratamento de erros de rede
-public void realizarRequisicao() {
-    try {
-        // Realizar requisição de rede
-    } catch (IOException e) {
-        Log.e("Aplicativo", "Erro de rede", e);
-    }
-}
-
-// Tratamento de erros de banco de dados
-public void realizarQuery() {
-    try {
-        // Realizar query no banco de dados
-    } catch (SQLException e) {
-        Log.e("Aplicativo", "Erro de banco de dados", e);
-    }
+Exemplos de código para tratamento de exceções:
+```kotlin
+try {
+    // Código que pode lançar exceção
+} catch (e: IOException) {
+    // Tratamento de exceção de IO
+} catch (e: JSONException) {
+    // Tratamento de exceção de JSON
+} catch (e: Exception) {
+    // Tratamento de exceção genérica
 }
 ```
+
+```swift
+do {
+    // Código que pode lançar exceção
+} catch let error as NSError {
+    // Tratamento de exceção
+    print("Ocorreu um erro: (error)")
+}
