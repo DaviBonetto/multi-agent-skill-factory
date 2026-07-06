@@ -1,76 +1,78 @@
 ---
-name: Arquitetura de Sistemas Distribuídos
-description: Ensina como projetar e implementar sistemas distribuídos escaláveis e confiáveis
+name: Desenvolvimento de Arquiteturas de Sistemas Distribuídos
+description: Esta habilidade ensina a criar sistemas escaláveis e tolerantes a falhas utilizando arquiteturas distribuídas
 ---
 
 ## Objetivo
-O objetivo deste guia é fornecer uma visão geral detalhada sobre como projetar e implementar sistemas distribuídos escaláveis e confiáveis. Isso inclui entender os princípios fundamentais da arquitetura de sistemas distribuídos, aprender a escolher as tecnologias certas para o problema em questão e aplicar boas práticas de design e implementação.
+O objetivo desta habilidade é capacitar os desenvolvedores a projetar e implementar arquiteturas de sistemas distribuídos escaláveis e tolerantes a falhas, utilizando tecnologias e padrões de design adequados.
 
 ## Pré-requisitos
-Antes de mergulhar nos detalhes da arquitetura de sistemas distribuídos, é importante ter uma base sólida nos seguintes tópicos:
-- Programação em linguagens como Java, Python ou C++
-- Conhecimento básico de redes de computadores e protocolos de comunicação
-- Experiência com bancos de dados relacionais e NoSQL
-- Familiaridade com conceitos de concorrência e paralelismo
+Para aproveitar ao máximo esta habilidade, é recomendado que os desenvolvedores tenham conhecimento prévio em:
+* Programação em linguagens como Java, Python ou C++
+* Conceitos básicos de redes de computadores e protocolos de comunicação
+* Experiência com bancos de dados relacionais e NoSQL
+* Conhecimento de padrões de design de software, como MVC e Microserviços
 
 ## Passo a Passo Técnico / Exemplos de Código
-### 1. Escolhendo a Arquitetura
-A escolha da arquitetura certa para um sistema distribuído depende de vários fatores, incluindo o tipo de aplicação, o volume de dados, a necessidade de escalabilidade e a complexidade do sistema. As arquiteturas mais comuns incluem:
-- Arquitetura em Camadas
-- Arquitetura Orientada a Serviços (SOA)
-- Arquitetura de Microserviços
-
-### 2. Implementação de Comunicação entre Serviços
-A comunicação entre serviços em um sistema distribuído pode ser feita usando várias abordagens, como:
-- API RESTful
-- Mensageria Assíncrona (por exemplo, RabbitMQ, Apache Kafka)
-- GRPC
-
-Exemplo de uma chamada RESTful simples em Python usando Flask:
+### 1. Definição da Arquitetura
+A primeira etapa é definir a arquitetura do sistema distribuído. Isso envolve identificar os componentes do sistema, como servidores, bancos de dados e serviços, e como eles se comunicarão entre si.
 ```python
-from flask import Flask, jsonify
-
-app = Flask(__name__)
-
-@app.route('/users', methods=['GET'])
-def get_users():
-    try:
-        users = [{'id': 1, 'name': 'João'}, {'id': 2, 'name': 'Maria'}]
-        return jsonify(users)
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-if __name__ == '__main__':
-    app.run(debug=True)
+# Exemplo de definição de arquitetura em Python
+arquitetura = {
+    'servidores': ['server1', 'server2', 'server3'],
+    'bancos_de_dados': ['db1', 'db2'],
+    'servicos': ['service1', 'service2']
+}
 ```
+### 2. Implementação dos Componentes
+A próxima etapa é implementar os componentes do sistema. Isso pode envolver escrever código para os servidores, bancos de dados e serviços.
+```java
+// Exemplo de implementação de um servidor em Java
+public class Server {
+    public void start() {
+        // Iniciar o servidor
+    }
+}
+```
+### 3. Comunicação entre Componentes
+A comunicação entre componentes é fundamental em uma arquitetura de sistema distribuído. Isso pode ser feito utilizando protocolos de comunicação como HTTP, TCP/IP, etc.
+```python
+# Exemplo de comunicação entre componentes em Python
+import requests
 
-### 3. Gerenciamento de Estado e Dados
-O gerenciamento de estado e dados em sistemas distribuídos é crucial para a consistência e confiabilidade. Isso pode ser alcançado usando:
-- Bancos de dados distribuídos (por exemplo, Cassandra, MongoDB)
-- Cache (por exemplo, Redis, Memcached)
+def comunicar_com_servidor(servidor):
+    try:
+        resposta = requests.get(f'http://{servidor}/api/dados')
+        return resposta.json()
+    except requests.exceptions.RequestException as e:
+        print(f"Erro ao comunicar com o servidor: {e}")
+        return None
+```
 
 ## Validação
-A validação de um sistema distribuído envolve testes rigorosos para garantir que o sistema atenda aos requisitos de desempenho, escalabilidade e confiabilidade. Isso inclui:
-- Testes de unidade e integração
-- Testes de carga e estresse
-- Monitoramento e logging para detecção de problemas e otimização do sistema
-
-## ⚠️ Tratamento de Exceções e Edge Cases
-No desenvolvimento de sistemas distribuídos, é fundamental considerar os edge cases e implementar um tratamento de exceções robusto. Isso inclui:
-- **Tratamento de falhas de rede**: Implementar retries e timeouts para lidar com falhas de rede.
-- **Tratamento de erros de banco de dados**: Implementar tratamento de erros de banco de dados, como conexões perdidas ou queries malformadas.
-- **Tratamento de erros de serviço**: Implementar tratamento de erros de serviço, como timeouts ou respostas inválidas.
-- **Tratamento de concorrência**: Implementar mecanismos de concorrência para evitar problemas de sincronização e consistência de dados.
-- **Monitoramento e logging**: Implementar monitoramento e logging para detectar e diagnosticar problemas em tempo real.
-
-Exemplo de tratamento de exceções em Python:
-```python
-try:
-    # Código que pode lançar uma exceção
-    users = [{'id': 1, 'name': 'João'}, {'id': 2, 'name': 'Maria'}]
-except Exception as e:
-    # Tratamento de exceção
-    return jsonify({"error": str(e)}), 500
+A validação da arquitetura de sistema distribuído é crucial para garantir que o sistema atenda aos requisitos de escalabilidade e tolerância a falhas. Isso pode ser feito utilizando testes de carga, testes de estresse, etc.
+```bash
+# Exemplo de validação utilizando testes de carga
+ab -n 1000 -c 100 http://server1/api/dados
 ```
 
-Ao seguir esses passos e considerar as melhores práticas, é possível projetar e implementar sistemas distribuídos que sejam escaláveis, confiáveis e capazes de atender às necessidades de negócios em constante evolução.
+## ⚠️ Tratamento de Exceções e Edge Cases
+É fundamental considerar os casos de exceção e edge cases ao projetar e implementar uma arquitetura de sistema distribuído. Alguns exemplos incluem:
+* **Falha de comunicação**: o que acontece se um componente não conseguir se comunicar com outro?
+* **Falha de servidor**: o que acontece se um servidor falhar?
+* **Sobrecarga de tráfego**: o que acontece se o sistema receber uma quantidade excessiva de requisições?
+* **Erros de dados**: o que acontece se os dados forem inconsistentes ou inválidos?
+```python
+# Exemplo de tratamento de exceção em Python
+try:
+    # Código que pode gerar uma exceção
+    resposta = requests.get(f'http://{servidor}/api/dados')
+except requests.exceptions.RequestException as e:
+    # Tratamento da exceção
+    print(f"Erro ao comunicar com o servidor: {e}")
+    return None
+```
+Além disso, é importante considerar a segurança do sistema, incluindo:
+* **Autenticação e autorização**: como os componentes se autenticam e autorizam uns aos outros?
+* **Criptografia**: como os dados são criptografados e protegidos?
+* **Controle de acesso**: como o acesso ao sistema é controlado e limitado?
