@@ -1,105 +1,88 @@
-# Implantação de Aplicativos com Kubernetes
+---
+name: Implementação de DevOps com Kubernetes
+description: Esta habilidade automatiza a implantação de aplicações utilizando Kubernetes e pipelines de DevOps
+---
+
 ## Objetivo
-O objetivo deste guia é fornecer uma visão geral prática de como implantar e gerenciar aplicativos em ambientes de produção utilizando Kubernetes e Docker. Ao final, você estará capacitado a implantar e gerenciar aplicativos de forma eficiente, escalável e segura.
+O objetivo desta habilidade é automatizar a implantação de aplicações utilizando Kubernetes e pipelines de DevOps, proporcionando uma entrega contínua e confiável de software.
+
 ## Pré-requisitos
-Para seguir este guia, você deve ter:
-- Conhecimento básico em Docker e contêineres
-- Experiência em ambientes de desenvolvimento e produção
-- Familiaridade com comandos de terminal ou prompt de comando
-- Acesso a um cluster Kubernetes (pode ser local ou remoto)
+Antes de iniciar a implementação, é necessário ter:
+* Conhecimento em Kubernetes e seus componentes
+* Experiência com pipelines de DevOps (CI/CD)
+* Ambiente de desenvolvimento configurado com Docker, Kubernetes e ferramentas de DevOps
+
 ## Passo a Passo Técnico / Exemplos de Código
-### 1. Preparação do Ambiente
-Primeiramente, certifique-se de que o Docker e o Kubernetes estejam instalados e configurados corretamente em seu ambiente. Você pode verificar a instalação do Docker executando:
-```bash
-docker --version
-```
-E para o Kubernetes, use:
-```bash
-kubectl version --client
-```
-### 2. Criando um Aplicativo Simples
-Vamos criar um aplicativo simples em Python que retornará uma mensagem de boas-vindas. Crie um arquivo chamado `app.py` com o seguinte conteúdo:
-```python
-from http.server import BaseHTTPRequestHandler, HTTPServer
+### 1. Configuração do Ambiente
+Configure o ambiente de desenvolvimento com as seguintes ferramentas:
+* Docker
+* Kubernetes (Minikube ou cluster de produção)
+* Ferramentas de DevOps (Jenkins, GitLab CI/CD, etc.)
 
-class RequestHandler(BaseHTTPRequestHandler):
-    def do_GET(self):
-        self.send_response(200)
-        self.send_header('Content-type', 'text/html')
-        self.end_headers()
-        self.wfile.write(b"Boas-vindas ao meu aplicativo!")
-
-def run(server_class=HTTPServer, handler_class=RequestHandler):
-    server_address = ('', 8000)
-    httpd = server_class(server_address, handler_class)
-    print("Iniciando servidor...")
-    httpd.serve_forever()
-
-if __name__ == "__main__":
-    run()
-```
-### 3. Containerizando o Aplicativo
-Agora, vamos criar um arquivo `Dockerfile` para containerizar nosso aplicativo:
-```dockerfile
-FROM python:3.9-slim
-
-WORKDIR /app
-
-COPY app.py .
-
-CMD ["python", "app.py"]
-```
-Build o container com:
-```bash
-docker build -t meu-aplicativo .
-```
-### 4. Implantando no Kubernetes
-Crie um arquivo `deployment.yaml` com a seguinte configuração:
+### 2. Criação do Pipeline de DevOps
+Crie um pipeline de DevOps que inclua as seguintes etapas:
 ```yml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: meu-aplicativo
-spec:
-  replicas: 3
-  selector:
-    matchLabels:
-      app: meu-aplicativo
-  template:
-    metadata:
-      labels:
-        app: meu-aplicativo
-    spec:
-      containers:
-      - name: meu-aplicativo
-        image: meu-aplicativo:latest
-        ports:
-        - containerPort: 8000
+stages:
+  - build
+  - test
+  - deploy
+
+build:
+  stage: build
+  script:
+    - docker build -t my-app .
+  artifacts:
+    paths:
+      - $CI_PROJECT_DIR/docker-image.tar
+
+test:
+  stage: test
+  script:
+    - docker run -t my-app
+
+deploy:
+  stage: deploy
+  script:
+    - kubectl apply -f deployment.yaml
 ```
-Aplique a configuração com:
+
+### 3. Implantação da Aplicação
+Implante a aplicação utilizando o pipeline de DevOps criado:
 ```bash
-kubectl apply -f deployment.yaml
+kubectl create deployment my-app --image=my-app:latest
 ```
+
 ## Validação
-Para validar a implantação, você pode verificar o status do deployment com:
-```bash
-kubectl get deployments
-```
-E para acessar o aplicativo, use:
-```bash
-kubectl port-forward deployment/meu-aplicativo 8000:8000 &
-```
-Acesse `http://localhost:8000` em seu navegador para ver a mensagem de boas-vindas.
+Verifique se a aplicação foi implantada com sucesso:
+* Verifique o status do deployment: `kubectl get deployments`
+* Verifique o status do pod: `kubectl get pods`
+* Acesse a aplicação: `kubectl port-forward my-app 8080:80` e acesse `http://localhost:8080` no navegador.
+
 ## ⚠️ Tratamento de Exceções e Edge Cases
-### Erros Comuns
-- **Erro de conexão com o cluster Kubernetes**: Verifique se o seu arquivo de configuração do Kubernetes (`~/.kube/config`) está correto e se você tem permissão para acessar o cluster.
-- **Erro ao buildar a imagem Docker**: Verifique se o seu arquivo `Dockerfile` está correto e se você tem as dependências necessárias instaladas.
-- **Erro ao aplicar a configuração do deployment**: Verifique se o seu arquivo `deployment.yaml` está correto e se você tem permissão para aplicar configurações no cluster.
-### Edge Cases
-- **Implantação em um cluster com recursos limitados**: Certifique-se de que o seu deployment esteja configurado para usar recursos adequados para o seu cluster.
-- **Implantação em um ambiente de produção**: Certifique-se de que o seu deployment esteja configurado para usar um registro de imagens seguro e que você tenha um plano de backup e recuperação em caso de falhas.
-- **Segurança**: Certifique-se de que o seu deployment esteja configurado para usar segurança adequada, como autenticação e autorização, e que você tenha um plano para lidar com vulnerabilidades de segurança.
-### Melhores Práticas
-- **Use um registro de imagens seguro**: Use um registro de imagens como o Docker Hub ou o Google Container Registry para armazenar suas imagens.
-- **Use um plano de backup e recuperação**: Use um plano de backup e recuperação para garantir que você possa recuperar seus dados em caso de falhas.
-- **Use segurança adequada**: Use segurança adequada, como autenticação e autorização, para proteger seu deployment.
+### 1. Erros de Configuração
+* Verifique se o arquivo de configuração do Kubernetes (`deployment.yaml`) está correto e se o caminho para o arquivo está correto.
+* Verifique se o Docker está instalado e configurado corretamente.
+* Verifique se o pipeline de DevOps está configurado corretamente e se as etapas estão sendo executadas em ordem.
+
+### 2. Erros de Implantação
+* Verifique se o deployment foi criado com sucesso: `kubectl get deployments`
+* Verifique se o pod está em execução: `kubectl get pods`
+* Verifique se a aplicação está acessível: `kubectl port-forward my-app 8080:80` e acesse `http://localhost:8080` no navegador.
+
+### 3. Edge Cases
+* **Falha na criação do deployment**: se o deployment não for criado com sucesso, verifique se o arquivo de configuração do Kubernetes está correto e se o caminho para o arquivo está correto.
+* **Falha na execução do pod**: se o pod não estiver em execução, verifique se o Docker está instalado e configurado corretamente e se o pipeline de DevOps está configurado corretamente.
+* **Acesso não autorizado**: se o acesso à aplicação for negado, verifique se as permissões de acesso estão configuradas corretamente e se o usuário tem permissão para acessar a aplicação.
+
+## Segurança
+### 1. Autenticação e Autorização
+* Verifique se as permissões de acesso estão configuradas corretamente e se o usuário tem permissão para acessar a aplicação.
+* Verifique se a autenticação está configurada corretamente e se o usuário está autenticado antes de acessar a aplicação.
+
+### 2. Criptografia
+* Verifique se as comunicações entre os componentes estão criptografadas.
+* Verifique se os dados armazenados estão criptografados.
+
+### 3. Monitoramento e Logging
+* Verifique se o monitoramento e logging estão configurados corretamente.
+* Verifique se os logs estão sendo armazenados em um local seguro e se os logs estão sendo monitorados regularmente.
