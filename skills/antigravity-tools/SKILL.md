@@ -15,22 +15,22 @@ At the start of any multi-step task, create the task artifact listing every step
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
 
-### Erros de Invocação de Subagentes
-*   Caso o subagente não seja encontrado, o erro deve ser tratado e uma mensagem de erro clara deve ser exibida.
-*   Se o subagente for invocado com parâmetros inválidos, o erro deve ser tratado e uma mensagem de erro clara deve ser exibida.
+### Erros de Arquivo
 
-### Erros de Criação de Tarefas
-*   Caso a tarefa não possa ser criada devido a permissões insuficientes, o erro deve ser tratado e uma mensagem de erro clara deve ser exibida.
-*   Se a tarefa for criada com um nome inválido, o erro deve ser tratado e uma mensagem de erro clara deve ser exibida.
+*   Se o arquivo de task artifact não puder ser criado, verifique se o diretório de destino existe e se o usuário tem permissão para criar arquivos.
+*   Se o arquivo de task artifact não puder ser editado, verifique se o arquivo existe e se o usuário tem permissão para editá-lo.
 
-### Erros de Edição de Tarefas
-*   Caso a tarefa não possa ser editada devido a permissões insuficientes, o erro deve ser tratado e uma mensagem de erro clara deve ser exibida.
-*   Se a tarefa for editada com um nome inválido, o erro deve ser tratado e uma mensagem de erro clara deve ser exibida.
+### Erros de Formatação
+
+*   Se a formatação do task artifact estiver incorreta, verifique se o arquivo está no formato markdown e se as tags `IsArtifact` e `ArtifactType` estão corretas.
+*   Se as tags `IsArtifact` e `ArtifactType` estiverem ausentes ou incorretas, o arquivo não será reconhecido como um task artifact.
+
+### Erros de Conexão
+
+*   Se a conexão com o servidor Antigravity falhar, verifique se o servidor está online e se a conexão está configurada corretamente.
+*   Se a conexão for interrompida durante a edição do task artifact, o arquivo pode ficar corrompido. Nesse caso, é recomendável criar um novo task artifact e copiar as informações do arquivo corrompido.
 
 ### Edge Cases
-*   Caso a tarefa seja criada com um nome muito longo, o sistema deve truncar o nome e exibir uma mensagem de aviso.
-*   Se a tarefa for criada com um nome que já existe, o sistema deve exibir uma mensagem de erro e solicitar um novo nome.
 
-### Segurança
-*   Todas as operações de criação, edição e exclusão de tarefas devem ser realizadas com autenticação e autorização adequadas.
-*   Os dados das tarefas devem ser armazenados de forma segura e criptografada.
+*   Se o task artifact for muito grande, pode haver problemas de desempenho ao editá-lo. Nesse caso, é recomendável dividir o task artifact em arquivos menores.
+*   Se o task artifact for compartilhado entre várias pessoas, é importante garantir que as permissões sejam configuradas corretamente para evitar conflitos de edição.
