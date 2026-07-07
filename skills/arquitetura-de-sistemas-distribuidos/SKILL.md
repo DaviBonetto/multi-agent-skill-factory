@@ -1,78 +1,125 @@
 ---
-name: Desenvolvimento de Arquiteturas de Sistemas Distribuídos
-description: Esta habilidade ensina a criar sistemas escaláveis e tolerantes a falhas utilizando arquiteturas distribuídas
+name: Arquitetura de Sistemas Distribuídos com Tolerância a Falhas
+description: Projetar e implementar sistemas distribuídos com tolerância a falhas, incluindo replicação de dados e recuperação de falhas
 ---
 
 ## Objetivo
-O objetivo desta habilidade é capacitar os desenvolvedores a projetar e implementar arquiteturas de sistemas distribuídos escaláveis e tolerantes a falhas, utilizando tecnologias e padrões de design adequados.
+O objetivo desta skill é capacitar os desenvolvedores a projetar e implementar sistemas distribuídos com tolerância a falhas, garantindo a disponibilidade e a confiabilidade dos sistemas mesmo em caso de falhas de hardware ou software. Isso inclui a replicação de dados e a recuperação de falhas, assegurando que os sistemas possam se recuperar rapidamente de falhas e minimizar o tempo de inatividade.
 
 ## Pré-requisitos
-Para aproveitar ao máximo esta habilidade, é recomendado que os desenvolvedores tenham conhecimento prévio em:
-* Programação em linguagens como Java, Python ou C++
-* Conceitos básicos de redes de computadores e protocolos de comunicação
-* Experiência com bancos de dados relacionais e NoSQL
-* Conhecimento de padrões de design de software, como MVC e Microserviços
+Para aproveitar ao máximo esta skill, os desenvolvedores devem ter conhecimento prévio em:
+- Programação em linguagens como Java, Python ou C++
+- Conceitos básicos de sistemas distribuídos
+- Noções de redes de computadores e protocolos de comunicação
+- Experiência com bancos de dados e sistemas de armazenamento de dados
 
 ## Passo a Passo Técnico / Exemplos de Código
-### 1. Definição da Arquitetura
-A primeira etapa é definir a arquitetura do sistema distribuído. Isso envolve identificar os componentes do sistema, como servidores, bancos de dados e serviços, e como eles se comunicarão entre si.
-```python
-# Exemplo de definição de arquitetura em Python
-arquitetura = {
-    'servidores': ['server1', 'server2', 'server3'],
-    'bancos_de_dados': ['db1', 'db2'],
-    'servicos': ['service1', 'service2']
-}
-```
-### 2. Implementação dos Componentes
-A próxima etapa é implementar os componentes do sistema. Isso pode envolver escrever código para os servidores, bancos de dados e serviços.
-```java
-// Exemplo de implementação de um servidor em Java
-public class Server {
-    public void start() {
-        // Iniciar o servidor
-    }
-}
-```
-### 3. Comunicação entre Componentes
-A comunicação entre componentes é fundamental em uma arquitetura de sistema distribuído. Isso pode ser feito utilizando protocolos de comunicação como HTTP, TCP/IP, etc.
-```python
-# Exemplo de comunicação entre componentes em Python
-import requests
+### 1. Projetando a Arquitetura do Sistema Distribuído
+- **Definir os requisitos do sistema**: Identificar as necessidades do sistema, incluindo a capacidade de processamento, armazenamento de dados e requisitos de segurança.
+- **Escolher a arquitetura**: Decidir entre arquiteturas como cliente-servidor, peer-to-peer, ou híbridas, com base nos requisitos do sistema.
+- **Implementar a replicação de dados**: Utilizar técnicas como replicação master-slave ou multimaster para garantir a disponibilidade dos dados.
 
-def comunicar_com_servidor(servidor):
-    try:
-        resposta = requests.get(f'http://{servidor}/api/dados')
-        return resposta.json()
-    except requests.exceptions.RequestException as e:
-        print(f"Erro ao comunicar com o servidor: {e}")
-        return None
+### 2. Implementando Tolerância a Falhas
+- **Detecção de falhas**: Implementar mecanismos para detectar falhas de hardware ou software, como heartbeat signals ou verificações de estado.
+- **Recuperação de falhas**: Desenvolver estratégias para recuperar o sistema após uma falha, incluindo a restauração de dados e a reconfiguração do sistema.
+
+Exemplo de código em Python para um simples mecanismo de detecção de falhas usando heartbeat:
+```python
+import time
+import threading
+
+class Heartbeat:
+    def __init__(self, intervalo):
+        self.intervalo = intervalo
+        self.ultimo_heartbeat = time.time()
+
+    def verificar_heartbeat(self):
+        while True:
+            tempo_atual = time.time()
+            if tempo_atual - self.ultimo_heartbeat > self.intervalo:
+                print("Falha detectada!")
+                # Iniciar procedimento de recuperação
+            time.sleep(1)
+
+    def enviar_heartbeat(self):
+        self.ultimo_heartbeat = time.time()
+
+# Iniciar o mecanismo de detecção de falhas
+heartbeat = Heartbeat(5)  # Verificar a cada 5 segundos
+thread = threading.Thread(target=heartbeat.verificar_heartbeat)
+thread.start()
+
+# Enviar heartbeat a cada 3 segundos
+while True:
+    heartbeat.enviar_heartbeat()
+    time.sleep(3)
 ```
 
 ## Validação
-A validação da arquitetura de sistema distribuído é crucial para garantir que o sistema atenda aos requisitos de escalabilidade e tolerância a falhas. Isso pode ser feito utilizando testes de carga, testes de estresse, etc.
-```bash
-# Exemplo de validação utilizando testes de carga
-ab -n 1000 -c 100 http://server1/api/dados
-```
+Para validar a implementação da arquitetura de sistemas distribuídos com tolerância a falhas, é crucial realizar testes abrangentes, incluindo:
+- **Testes de carga**: Verificar o desempenho do sistema sob cargas pesadas.
+- **Testes de failover**: Simular falhas e verificar a capacidade do sistema de se recuperar.
+- **Testes de segurança**: Avaliar a segurança do sistema contra possíveis ameaças.
+
+Esses testes ajudarão a garantir que o sistema distribuído esteja pronto para produção, oferecendo alta disponibilidade e confiabilidade.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-É fundamental considerar os casos de exceção e edge cases ao projetar e implementar uma arquitetura de sistema distribuído. Alguns exemplos incluem:
-* **Falha de comunicação**: o que acontece se um componente não conseguir se comunicar com outro?
-* **Falha de servidor**: o que acontece se um servidor falhar?
-* **Sobrecarga de tráfego**: o que acontece se o sistema receber uma quantidade excessiva de requisições?
-* **Erros de dados**: o que acontece se os dados forem inconsistentes ou inválidos?
+### Tratamento de Exceções
+- **Exceções de rede**: Implementar tratamento para exceções de rede, como perda de conexão ou timeouts, para garantir que o sistema possa se recuperar.
+- **Exceções de dados**: Tratar exceções relacionadas a dados, como dados corrompidos ou inconsistentes, para manter a integridade dos dados.
+
+### Edge Cases
+- **Falha de múltiplos nós**: Desenvolver estratégias para lidar com a falha de múltiplos nós no sistema, garantindo que o sistema possa se recuperar e manter a disponibilidade.
+- **Sobrecarga do sistema**: Implementar mecanismos para lidar com a sobrecarga do sistema, como escalonamento horizontal ou vertical, para garantir que o sistema possa lidar com aumentos na demanda.
+- **Segurança**: Considerar edge cases relacionados à segurança, como ataques de negação de serviço (DoS) ou injeção de código malicioso, e implementar medidas para mitigá-los.
+
+Exemplo de código em Python para tratamento de exceções de rede:
 ```python
-# Exemplo de tratamento de exceção em Python
-try:
-    # Código que pode gerar uma exceção
-    resposta = requests.get(f'http://{servidor}/api/dados')
-except requests.exceptions.RequestException as e:
-    # Tratamento da exceção
-    print(f"Erro ao comunicar com o servidor: {e}")
-    return None
+import socket
+
+def enviar_dados(socket, dados):
+    try:
+        socket.sendall(dados)
+    except socket.error as e:
+        print(f"Erro ao enviar dados: {e}")
+        # Tentar reestabelecer a conexão ou notificar o administrador
 ```
-Além disso, é importante considerar a segurança do sistema, incluindo:
-* **Autenticação e autorização**: como os componentes se autenticam e autorizam uns aos outros?
-* **Criptografia**: como os dados são criptografados e protegidos?
-* **Controle de acesso**: como o acesso ao sistema é controlado e limitado?
+
+Exemplo de código em Python para lidar com edge cases de falha de múltiplos nós:
+```python
+import threading
+
+class No:
+    def __init__(self, id):
+        self.id = id
+        self.falhou = False
+
+    def falhar(self):
+        self.falhou = True
+
+class Sistema:
+    def __init__(self):
+        self.nos = []
+
+    def adicionar_no(self, no):
+        self.nos.append(no)
+
+    def verificar_nos(self):
+        for no in self.nos:
+            if no.falhou:
+                print(f"No {no.id} falhou")
+                # Iniciar procedimento de recuperação
+
+# Criar nós e sistema
+no1 = No(1)
+no2 = No(2)
+sistema = Sistema()
+sistema.adicionar_no(no1)
+sistema.adicionar_no(no2)
+
+# Simular falha de um nó
+no1.falhar()
+
+# Verificar nós
+sistema.verificar_nos()
+```
