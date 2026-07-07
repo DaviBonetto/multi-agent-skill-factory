@@ -1,88 +1,65 @@
----
-name: Implementação de DevOps com Kubernetes
-description: Esta habilidade automatiza a implantação de aplicações utilizando Kubernetes e pipelines de DevOps
----
-
+# Implementação de DevOps com Kubernetes
+Esta skill ensina a implementar práticas de DevOps utilizando Kubernetes, incluindo deploy contínuo, monitoramento e escalabilidade.
 ## Objetivo
-O objetivo desta habilidade é automatizar a implantação de aplicações utilizando Kubernetes e pipelines de DevOps, proporcionando uma entrega contínua e confiável de software.
-
+O objetivo desta skill é capacitar os participantes a implementar práticas de DevOps utilizando Kubernetes, abordando tópicos como deploy contínuo, monitoramento e escalabilidade. Ao final, os participantes estarão aptos a projetar e implementar soluções de DevOps em ambientes Kubernetes.
 ## Pré-requisitos
-Antes de iniciar a implementação, é necessário ter:
-* Conhecimento em Kubernetes e seus componentes
-* Experiência com pipelines de DevOps (CI/CD)
-* Ambiente de desenvolvimento configurado com Docker, Kubernetes e ferramentas de DevOps
-
+- Conhecimento básico em Docker e contêineres
+- Experiência com linha de comando Linux
+- Noções básicas de redes e segurança
+- Conhecimento em programação (preferencialmente em Python ou Bash)
 ## Passo a Passo Técnico / Exemplos de Código
-### 1. Configuração do Ambiente
-Configure o ambiente de desenvolvimento com as seguintes ferramentas:
-* Docker
-* Kubernetes (Minikube ou cluster de produção)
-* Ferramentas de DevOps (Jenkins, GitLab CI/CD, etc.)
-
-### 2. Criação do Pipeline de DevOps
-Crie um pipeline de DevOps que inclua as seguintes etapas:
+### 1. Configuração do Ambiente Kubernetes
+Para começar, você precisará de um cluster Kubernetes. Isso pode ser feito localmente utilizando o Minikube ou em um provedor de nuvem como o Google Kubernetes Engine (GKE), Amazon Elastic Container Service for Kubernetes (EKS) ou Azure Kubernetes Service (AKS).
+### 2. Implementação do Deploy Contínuo
+O deploy contínuo pode ser implementado utilizando o GitOps com ferramentas como o Flux ou o Argo CD. Aqui está um exemplo básico de como configurar o Argo CD:
 ```yml
-stages:
-  - build
-  - test
-  - deploy
-
-build:
-  stage: build
-  script:
-    - docker build -t my-app .
-  artifacts:
-    paths:
-      - $CI_PROJECT_DIR/docker-image.tar
-
-test:
-  stage: test
-  script:
-    - docker run -t my-app
-
-deploy:
-  stage: deploy
-  script:
-    - kubectl apply -f deployment.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: meu-aplicativo
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/meu-usuario/meu-repositorio.git'
+    targetRevision: main
+  destination:
+    server: 'https://kubernetes.default.svc'
 ```
-
-### 3. Implantação da Aplicação
-Implante a aplicação utilizando o pipeline de DevOps criado:
-```bash
-kubectl create deployment my-app --image=my-app:latest
-```
-
+### 3. Monitoramento e Escalabilidade
+Para monitoramento, podemos utilizar o Prometheus e o Grafana. A escalabilidade pode ser alcançada com o Horizontal Pod Autoscaler (HPA) do Kubernetes. Exemplo de como configurar o HPA:
+```yml
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: meu-hpa
+spec:
+  selector:
+    matchLabels:
+      app: meu-aplicativo
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 50
 ## Validação
-Verifique se a aplicação foi implantada com sucesso:
-* Verifique o status do deployment: `kubectl get deployments`
-* Verifique o status do pod: `kubectl get pods`
-* Acesse a aplicação: `kubectl port-forward my-app 8080:80` e acesse `http://localhost:8080` no navegador.
-
+Para validar a implementação, você deve:
+- Verificar se o deploy contínuo está funcionando corretamente, fazendo alterações no código e observando se as mudanças são refletidas no cluster Kubernetes.
+- Monitorar os logs e métricas do aplicativo para garantir que o monitoramento está funcionando como esperado.
+- Testar a escalabilidade, aumentando a carga no aplicativo e verificando se o número de réplicas aumenta conforme configurado.
 ## ⚠️ Tratamento de Exceções e Edge Cases
-### 1. Erros de Configuração
-* Verifique se o arquivo de configuração do Kubernetes (`deployment.yaml`) está correto e se o caminho para o arquivo está correto.
-* Verifique se o Docker está instalado e configurado corretamente.
-* Verifique se o pipeline de DevOps está configurado corretamente e se as etapas estão sendo executadas em ordem.
-
-### 2. Erros de Implantação
-* Verifique se o deployment foi criado com sucesso: `kubectl get deployments`
-* Verifique se o pod está em execução: `kubectl get pods`
-* Verifique se a aplicação está acessível: `kubectl port-forward my-app 8080:80` e acesse `http://localhost:8080` no navegador.
-
-### 3. Edge Cases
-* **Falha na criação do deployment**: se o deployment não for criado com sucesso, verifique se o arquivo de configuração do Kubernetes está correto e se o caminho para o arquivo está correto.
-* **Falha na execução do pod**: se o pod não estiver em execução, verifique se o Docker está instalado e configurado corretamente e se o pipeline de DevOps está configurado corretamente.
-* **Acesso não autorizado**: se o acesso à aplicação for negado, verifique se as permissões de acesso estão configuradas corretamente e se o usuário tem permissão para acessar a aplicação.
-
-## Segurança
-### 1. Autenticação e Autorização
-* Verifique se as permissões de acesso estão configuradas corretamente e se o usuário tem permissão para acessar a aplicação.
-* Verifique se a autenticação está configurada corretamente e se o usuário está autenticado antes de acessar a aplicação.
-
-### 2. Criptografia
-* Verifique se as comunicações entre os componentes estão criptografadas.
-* Verifique se os dados armazenados estão criptografados.
-
-### 3. Monitoramento e Logging
-* Verifique se o monitoramento e logging estão configurados corretamente.
-* Verifique se os logs estão sendo armazenados em um local seguro e se os logs estão sendo monitorados regularmente.
+### Erros Comuns
+- **Erro de Conexão**: Verifique se o cluster Kubernetes está acessível e se as credenciais estão corretas.
+- **Erro de Deploy**: Verifique se o código está correto e se o repositório Git está configurado corretamente.
+- **Erro de Escalabilidade**: Verifique se o HPA está configurado corretamente e se o aplicativo está utilizando os recursos corretos.
+### Edge Cases
+- **Múltiplos Ambientes**: Configure o Argo CD para lidar com múltiplos ambientes, como desenvolvimento, homologação e produção.
+- **Múltiplos Aplicativos**: Configure o HPA para lidar com múltiplos aplicativos, cada um com suas próprias configurações de escalabilidade.
+- **Segurança**: Configure o Kubernetes para utilizar recursos de segurança, como autenticação e autorização, para proteger o cluster e os aplicativos.
+### Melhores Práticas
+- **Utilize Ferramentas de Gerenciamento de Estado**: Utilize ferramentas como o Terraform ou o Ansible para gerenciar o estado do cluster Kubernetes e dos aplicativos.
+- **Utilize Ferramentas de Monitoramento**: Utilize ferramentas como o Prometheus e o Grafana para monitorar os aplicativos e o cluster Kubernetes.
+- **Utilize Ferramentas de Segurança**: Utilize ferramentas como o Kubernetes Security Audit para identificar vulnerabilidades de segurança no cluster e nos aplicativos.
