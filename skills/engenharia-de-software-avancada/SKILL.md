@@ -1,83 +1,54 @@
 ---
-name: Desenvolvimento de Software com Arquitetura de Microsserviços
-description: Esta habilidade ensina a criar aplicações escaláveis e flexíveis utilizando arquitetura de microsserviços
+name: Desenvolvimento de Software Avançado com Arquitetura de Microsserviços
+description: Esta skill ensina a desenvolver software utilizando arquitetura de microsserviços, incluindo design de APIs, comunicação entre serviços e escalabilidade
 ---
 
 ## Objetivo
-O objetivo desta habilidade é capacitar os desenvolvedores a projetar e implementar aplicações de software utilizando arquitetura de microsserviços, permitindo a criação de sistemas escaláveis, flexíveis e fáceis de manter.
+O objetivo desta skill é capacitar os desenvolvedores a projetar e implementar soluções de software avançadas utilizando arquitetura de microsserviços. Isso inclui entender como projetar APIs eficazes, estabelecer comunicação entre serviços e garantir a escalabilidade dos sistemas.
 
 ## Pré-requisitos
-Para aproveitar ao máximo esta habilidade, é recomendado que os desenvolvedores tenham conhecimento prévio em:
-- Desenvolvimento de software
-- Arquitetura de software
-- Programação orientada a objetos
-- Conhecimento básico de contêineres e orquestração de contêineres (Docker, Kubernetes)
+Para aproveitar ao máximo esta skill, os participantes devem ter:
+- Conhecimento sólido em desenvolvimento de software
+- Experiência com linguagens de programação como Java, Python ou C#
+- Familiaridade com conceitos de arquitetura de software e design de sistemas
 
 ## Passo a Passo Técnico / Exemplos de Código
-### 1. Definição da Arquitetura de Microsserviços
-A arquitetura de microsserviços é baseada em pequenos serviços independentes que se comunicam entre si. Cada microsserviço é responsável por uma funcionalidade específica do sistema.
+### Projetando APIs com Microsserviços
+1. **Definir os Serviços**: Identifique os serviços que compõem o sistema, considerando a lógica de negócios e a independência de cada serviço.
+2. **Design de API**: Utilize padrões de API RESTful para definir as interfaces de cada serviço. Por exemplo:
+   ```python
+   from fastapi import FastAPI
 
-### 2. Escolha da Tecnologia
-Para implementar a arquitetura de microsserviços, é necessário escolher as tecnologias a serem utilizadas, como linguagens de programação, frameworks, bancos de dados, etc.
+   app = FastAPI()
 
-### 3. Implementação dos Microsserviços
-A implementação dos microsserviços envolve a criação de cada serviço como um aplicativo independente, com sua própria lógica de negócios e comunicação com os outros serviços.
+   @app.get("/users/")
+   async def read_users():
+       return [{"username": "Rick"}]
+   ```
+3. **Comunicação entre Serviços**: Implemente a comunicação entre os serviços utilizando mecanismos como APIs REST, mensageria (RabbitMQ, Apache Kafka) ou gatilhos de eventos.
 
-```python
-# Exemplo de um microsserviço em Python
-from flask import Flask, jsonify
-
-app = Flask(__name__)
-
-@app.route('/users', methods=['GET'])
-def get_users():
-    try:
-        users = [{'id': 1, 'name': 'João'}, {'id': 2, 'name': 'Maria'}]
-        return jsonify(users)
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-if __name__ == '__main__':
-    app.run()
-```
-
-### 4. Comunicação entre os Microsserviços
-A comunicação entre os microsserviços pode ser feita utilizando APIs RESTful, mensagens assíncronas ou outros mecanismos de comunicação.
-
-```java
-// Exemplo de comunicação entre microsserviços em Java
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-
-public class Main {
-    public static void main(String[] args) {
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8080/users"))
-                .GET()
-                .build();
-
-        client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
-                .thenApply(HttpResponse::body)
-                .thenAccept(System.out::println)
-                .exceptionally(ex -> {
-                    System.out.println("Erro ao comunicar com o microsserviço: " + ex.getMessage());
-                    return null;
-                })
-                .join();
-    }
-}
-```
+### Implementando Escalabilidade
+1. **Containerização**: Utilize tecnologias de containerização como Docker para padronizar os ambientes de desenvolvimento e produção.
+2. **Orquestração**: Implemente orquestração de contêineres com Kubernetes para automatizar a escalabilidade e a gestão dos serviços.
 
 ## Validação
-A validação da arquitetura de microsserviços pode ser feita através de testes unitários, testes de integração e testes de desempenho. Além disso, é importante monitorar o desempenho do sistema e realizar ajustes necessários para garantir a escalabilidade e flexibilidade do sistema.
+Para validar o conhecimento adquirido, os participantes devem:
+- Desenvolver um projeto pessoal que aplique os conceitos de arquitetura de microsserviços
+- Realizar testes de desempenho e escalabilidade no projeto
+- Apresentar o projeto e discutir os desafios enfrentados e as soluções implementadas
 
-## Tratamento de Exceções e Edge Cases
-É fundamental tratar exceções e edge cases para garantir a robustez e confiabilidade do sistema. Alguns exemplos incluem:
-- **Tratamento de erros de comunicação**: Implementar mecanismos de retry e timeout para lidar com falhas de comunicação entre microsserviços.
-- **Tratamento de erros de negócios**: Implementar lógica para lidar com erros de negócios, como validação de dados e tratamento de exceções.
-- **Tratamento de edge cases**: Considerar cenários de borda, como lidar com grandes volumes de dados ou requisições concorrentes.
-- **Monitoramento e logging**: Implementar monitoramento e logging para detectar e diagnosticar problemas no sistema.
-- **Segurança**: Implementar medidas de segurança, como autenticação e autorização, para proteger o sistema contra acessos não autorizados.
+## ⚠️ Tratamento de Exceções e Edge Cases
+Para garantir a robustez e a confiabilidade dos sistemas, é crucial considerar os seguintes aspectos:
+- **Tratamento de Erros**: Implemente mecanismos de tratamento de erros para lidar com exceções inesperadas, como falhas de rede ou erros de banco de dados. Por exemplo:
+  ```python
+  try:
+      # Código que pode gerar exceção
+  except Exception as e:
+      # Tratamento da exceção
+      print(f"Erro: {e}")
+  ```
+- **Edge Cases**: Considere cenários de bordo, como:
+  - **Sobrecarga de Tráfego**: Implemente mecanismos de escalabilidade para lidar com aumentos repentinos de tráfego.
+  - **Falhas de Serviços**: Desenvolva estratégias para lidar com falhas de serviços, como retry ou fallback.
+  - **Segurança**: Implemente medidas de segurança para proteger os sistemas contra ataques e vulnerabilidades, como autenticação, autorização e criptografia.
+- **Testes de Estresse e Penetração**: Realize testes de estresse e penetração para identificar e corrigir vulnerabilidades antes que elas se tornem problemas.
