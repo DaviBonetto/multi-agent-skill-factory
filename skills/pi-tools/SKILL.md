@@ -17,18 +17,24 @@ Pi core does not ship a standard task-list tool. If a todo/task extension is ins
 
 ## Segurança
 
-Para garantir a segurança, é importante verificar se as dependências necessárias estão instaladas e configuradas corretamente. Além disso, é fundamental ter cuidado ao executar comandos que possam afetar o sistema ou os dados.
+Para garantir a segurança, é importante verificar se as dependências necessárias estão instaladas e configuradas corretamente. Além disso, é fundamental garantir que as permissões de acesso sejam adequadas para evitar acessos não autorizados.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
 
-### Exceções
+### Casos de Erro
 
-*   Se o pacote `pi-subagents` não estiver instalado, uma exceção será lançada. Nesse caso, o sistema deve executar as ações sequencialmente na sessão atual ou explicar que a funcionalidade de subagente opcional não está instalada.
-*   Se a extensão todo/task não estiver instalada, o sistema deve usar os arquivos de plano do Superpowers, listas de tarefas em Markdown ou um arquivo `TODO.md` local para rastrear as tarefas.
+*   Se o pacote `pi-subagents` não estiver instalado, o sistema deve retornar uma mensagem de erro indicando que a funcionalidade de subagentes não está disponível.
+*   Se a extensão todo/task não estiver instalada, o sistema deve usar o plano ou o arquivo `TODO.md` para rastrear tarefas.
+*   Se ocorrer um erro ao executar uma ação, o sistema deve registrar o erro e retornar uma mensagem de erro para o usuário.
 
 ### Edge Cases
 
-*   **Subagente não instalado**: Se o subagente não estiver instalado, o sistema deve executar as ações sequencialmente na sessão atual ou explicar que a funcionalidade de subagente opcional não está instalada.
-*   **Extensão todo/task não instalada**: Se a extensão todo/task não estiver instalada, o sistema deve usar os arquivos de plano do Superpowers, listas de tarefas em Markdown ou um arquivo `TODO.md` local para rastrear as tarefas.
-*   **Comandos inválidos**: Se um comando inválido for executado, o sistema deve lançar uma exceção ou exibir uma mensagem de erro para o usuário.
-*   **Permissões insuficientes**: Se o usuário não tiver permissões suficientes para executar uma ação, o sistema deve lançar uma exceção ou exibir uma mensagem de erro para o usuário.
+*   Se o usuário tentar criar uma tarefa com um nome vazio, o sistema deve retornar uma mensagem de erro indicando que o nome da tarefa é obrigatório.
+*   Se o usuário tentar marcar uma tarefa como concluída que não existe, o sistema deve retornar uma mensagem de erro indicando que a tarefa não existe.
+*   Se o sistema estiver configurado para usar um arquivo `TODO.md` para rastrear tarefas e o arquivo não existir, o sistema deve criar o arquivo automaticamente.
+
+### Tratamento de Exceções
+
+*   O sistema deve ter um mecanismo de tratamento de exceções para lidar com erros inesperados.
+*   O sistema deve registrar todos os erros e exceções para que possam ser analisados e corrigidos posteriormente.
+*   O sistema deve retornar mensagens de erro claras e concisas para o usuário, indicando o que deu errado e como corrigir o problema.
