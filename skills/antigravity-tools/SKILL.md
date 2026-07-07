@@ -15,22 +15,24 @@ At the start of any multi-step task, create the task artifact listing every step
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
 
-### Erros de Arquivo
-
-*   Se o arquivo de task artifact não puder ser criado, verifique se o diretório de destino existe e se o usuário tem permissão para criar arquivos.
-*   Se o arquivo de task artifact não puder ser editado, verifique se o arquivo existe e se o usuário tem permissão para editá-lo.
+### Erros de Permissão
+- Ao criar ou editar um task artifact, verifique se o usuário tem permissão para escrever no arquivo. Caso contrário, lance um erro de permissão.
+- Se o arquivo de task artifact não puder ser lido, lance um erro de permissão ou de arquivo não encontrado.
 
 ### Erros de Formatação
-
-*   Se a formatação do task artifact estiver incorreta, verifique se o arquivo está no formato markdown e se as tags `IsArtifact` e `ArtifactType` estão corretas.
-*   Se as tags `IsArtifact` e `ArtifactType` estiverem ausentes ou incorretas, o arquivo não será reconhecido como um task artifact.
-
-### Erros de Conexão
-
-*   Se a conexão com o servidor Antigravity falhar, verifique se o servidor está online e se a conexão está configurada corretamente.
-*   Se a conexão for interrompida durante a edição do task artifact, o arquivo pode ficar corrompido. Nesse caso, é recomendável criar um novo task artifact e copiar as informações do arquivo corrompido.
+- Verifique se o task artifact está no formato de markdown correto. Se não estiver, lance um erro de formatação.
+- Se o task artifact contiver caracteres inválidos, lance um erro de formatação.
 
 ### Edge Cases
+- Se o task artifact for muito grande, considere paginar ou limitar o tamanho do arquivo.
+- Se houver muitos task artifacts, considere implementar um sistema de gerenciamento de arquivos para evitar sobrecarga.
+- Se o usuário tentar criar um task artifact com um nome de arquivo inválido, lance um erro de nome de arquivo inválido.
 
-*   Se o task artifact for muito grande, pode haver problemas de desempenho ao editá-lo. Nesse caso, é recomendável dividir o task artifact em arquivos menores.
-*   Se o task artifact for compartilhado entre várias pessoas, é importante garantir que as permissões sejam configuradas corretamente para evitar conflitos de edição.
+### Tratamento de Exceções
+- Implemente um mecanismo de tratamento de exceções para lidar com erros inesperados, como erros de sistema ou erros de rede.
+- Registre os erros e forneça feedback ao usuário sobre o que deu errado.
+
+### Segurança
+- Verifique se o task artifact não contém informações sensíveis, como senhas ou dados de cartão de crédito.
+- Implemente um mecanismo de criptografia para proteger os dados do task artifact, se necessário.
+- Verifique se o acesso ao task artifact é restrito apenas ao usuário autorizado.
