@@ -9,30 +9,39 @@ Skills speak in actions ("dispatch a subagent", "create a todo", "read a file").
 
 ## Task tracking
 
-Antigravity has **no todo tool** (`manage_task` manages background processes — `list`/`kill`/`status`/`send_input` — it is *not* a checklist). When a skill says to create a todo list or track tasks, maintain a **task artifact**: a markdown checklist saved with `write_to_file` (`IsArtifact: true`, `ArtifactMetadata.ArtifactType: "task"`), edited with `replace_file_content` / `multi_replace_file_content` as you go.
+Antigravity has **no todo tool** (`manage_task` manages background
+processes — `list`/`kill`/`status`/`send_input` — it is *not* a checklist). When a
+skill says to create a todo list or track tasks, maintain a **task artifact**: a
+markdown checklist saved with `write_to_file` (`IsArtifact: true`,
+`ArtifactMetadata.ArtifactType: "task"`), edited with `replace_file_content` /
+`multi_replace_file_content` as you go.
 
-At the start of any multi-step task, create the task artifact listing every step of your plan. As you complete each step, edit the artifact to mark it done (`- [x]`). If the plan changes, update the checklist. Keep it current — it is your source of truth for what remains; once the conversation gets long, re-read it before starting each step.
+At the start of any multi-step task, create the task artifact listing every step of
+your plan. As you complete each step, edit the artifact to mark it done (`- [x]`).
+If the plan changes, update the checklist. Keep it current — it is your source of
+truth for what remains; once the conversation gets long, re-read it before starting
+each step.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
 
+### Erros de Arquivo
+
+*   Se o arquivo de task artifact não existir, crie-o com `write_to_file` antes de tentar editá-lo.
+*   Se o arquivo de task artifact existir, mas não for um arquivo markdown, lance um erro com `raise_error` e uma mensagem de erro apropriada.
+*   Se o arquivo de task artifact for corrompido ou não puder ser lido, lance um erro com `raise_error` e uma mensagem de erro apropriada.
+
 ### Erros de Permissão
-- Ao criar ou editar um task artifact, verifique se o usuário tem permissão para escrever no arquivo. Caso contrário, lance um erro de permissão.
-- Se o arquivo de task artifact não puder ser lido, lance um erro de permissão ou de arquivo não encontrado.
 
-### Erros de Formatação
-- Verifique se o task artifact está no formato de markdown correto. Se não estiver, lance um erro de formatação.
-- Se o task artifact contiver caracteres inválidos, lance um erro de formatação.
+*   Se o agente não tiver permissão para criar ou editar o arquivo de task artifact, lance um erro com `raise_error` e uma mensagem de erro apropriada.
+*   Se o agente não tiver permissão para ler o arquivo de task artifact, lance um erro com `raise_error` e uma mensagem de erro apropriada.
 
-### Edge Cases
-- Se o task artifact for muito grande, considere paginar ou limitar o tamanho do arquivo.
-- Se houver muitos task artifacts, considere implementar um sistema de gerenciamento de arquivos para evitar sobrecarga.
-- Se o usuário tentar criar um task artifact com um nome de arquivo inválido, lance um erro de nome de arquivo inválido.
+### Outros Erros
 
-### Tratamento de Exceções
-- Implemente um mecanismo de tratamento de exceções para lidar com erros inesperados, como erros de sistema ou erros de rede.
-- Registre os erros e forneça feedback ao usuário sobre o que deu errado.
+*   Se ocorrer um erro desconhecido ao criar ou editar o arquivo de task artifact, lance um erro com `raise_error` e uma mensagem de erro apropriada.
+*   Se o plano de tarefas for muito grande, considere dividir em tarefas menores e mais gerenciáveis.
 
-### Segurança
-- Verifique se o task artifact não contém informações sensíveis, como senhas ou dados de cartão de crédito.
-- Implemente um mecanismo de criptografia para proteger os dados do task artifact, se necessário.
-- Verifique se o acesso ao task artifact é restrito apenas ao usuário autorizado.
+### Exemplos de Edge Cases
+
+*   Se o plano de tarefas for vazio, não crie o arquivo de task artifact.
+*   Se o plano de tarefas tiver apenas uma tarefa, considere não criar o arquivo de task artifact e executar a tarefa diretamente.
+*   Se o plano de tarefas for muito complexo, considere criar um arquivo de task artifact para cada tarefa ou grupo de tarefas relacionadas.
