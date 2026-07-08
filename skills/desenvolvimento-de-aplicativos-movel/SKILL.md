@@ -1,108 +1,111 @@
 ---
 name: Desenvolvimento de Aplicativos Móvel
-description: Ensina técnicas avançadas de desenvolvimento de aplicativos móvel utilizando linguagens como Java, Swift e Kotlin
+description: Ensina como desenvolver aplicativos móveis com tecnologias modernas como React Native e Flutter
 ---
 
 ## Objetivo
-O objetivo deste guia é fornecer uma visão geral abrangente sobre o desenvolvimento de aplicativos móveis, abordando técnicas avançadas e melhores práticas para desenvolvedores experientes. Com foco em linguagens como Java, Swift e Kotlin, este guia visa equipar os desenvolvedores com as habilidades necessárias para criar aplicativos móveis robustos, escaláveis e de alta qualidade.
+O objetivo deste guia é fornecer uma visão geral abrangente do desenvolvimento de aplicativos móveis utilizando tecnologias modernas como React Native e Flutter. Ao final, os desenvolvedores devem ser capazes de criar aplicativos móveis robustos e escaláveis para diversas plataformas.
 
 ## Pré-requisitos
-Para aproveitar ao máximo este guia, é recomendado que os desenvolvedores tenham:
-- Experiência sólida em programação com linguagens como Java, Swift ou Kotlin.
-- Conhecimento básico de desenvolvimento de aplicativos móveis, incluindo conceitos de UI/UX, armazenamento de dados e integração de APIs.
-- Familiaridade com ambientes de desenvolvimento integrado (IDEs) como Android Studio, Xcode ou equivalentes.
+Antes de iniciar o desenvolvimento de aplicativos móveis, é essencial ter conhecimento em:
+- Programação em linguagens como JavaScript (para React Native) ou Dart (para Flutter)
+- Conhecimento básico de HTML e CSS
+- Familiaridade com o uso de terminais ou prompts de comando
+- Instalação do Node.js (para React Native) ou do SDK do Flutter
+- Um editor de código ou IDE (como Visual Studio Code)
 
 ## Passo a Passo Técnico / Exemplos de Código
-### Configuração do Ambiente de Desenvolvimento
-1. **Instalação do Android Studio**: Para desenvolver aplicativos Android, é necessário instalar o Android Studio. Baixe a versão mais recente do [site oficial](https://developer.android.com/studio) e siga as instruções de instalação.
-2. **Configuração do Xcode**: Para desenvolver aplicativos iOS, é necessário ter o Xcode instalado. Baixe a versão mais recente do [Mac App Store](https://apps.apple.com/br/app/xcode/) e siga as instruções de instalação.
-3. **Escolha da Linguagem**: Escolha a linguagem de programação de acordo com a plataforma-alvo (Java ou Kotlin para Android, Swift para iOS).
+### Configurando o Ambiente
+1. **Instalar o React Native**:
+   Primeiro, você precisa instalar o React Native CLI globalmente. Execute o seguinte comando no seu terminal:
+   ```bash
+   npm install -g react-native-cli
+   ```
+   **Tratamento de Erro:** Se ocorrer um erro de permissão, execute o comando com sudo (para Linux/Mac) ou como administrador (no Windows).
+2. **Iniciar um Novo Projeto**:
+   Para criar um novo projeto React Native, execute:
+   ```bash
+   npx react-native init NomeDoSeuApp
+   ```
+   **Edge Case:** Certifique-se de que o nome do projeto não contenha caracteres especiais ou espaços, pois isso pode causar problemas durante a compilação.
+3. **Instalar o Flutter**:
+   Baixe e instale o SDK do Flutter a partir do [site oficial do Flutter](https://docs.flutter.dev/get-started/install). Em seguida, adicione o caminho do Flutter ao seu sistema.
+4. **Iniciar um Novo Projeto Flutter**:
+   Execute o seguinte comando para criar um novo projeto Flutter:
+   ```bash
+   flutter create nome_do_seu_app
+   ```
+   **Tratamento de Erro:** Se o comando não for reconhecido, verifique se o caminho do Flutter foi adicionado corretamente ao sistema.
 
-### Exemplo de Código em Kotlin para Android
-```kotlin
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import android.widget.Button
-import android.widget.Toast
+### Desenvolvendo o Aplicativo
+1. **Estrutura do Projeto**:
+   - React Native: A pasta `android` e `ios` contêm os códigos específicos para cada plataforma. O código compartilhado fica na pasta `App.js`.
+   - Flutter: O código do aplicativo fica na pasta `lib`.
+2. **Criação de Telas**:
+   - React Native: Utilize componentes como `View`, `Text`, `Image`, etc., para construir suas telas.
+   - Flutter: Utilize widgets como `Container`, `Text`, `Image`, etc.
+3. **Navegação**:
+   - React Native: Utilize o `React Navigation` para gerenciar a navegação entre telas.
+   - Flutter: Utilize o `Navigator` para navegar entre telas.
 
-class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+### Exemplo de Código React Native
+```jsx
+import React from 'react';
+import { View, Text } from 'react-native';
 
-        val button: Button = findViewById(R.id.button)
-        button.setOnClickListener {
-            try {
-                // Código que pode lançar exceção
-                Toast.makeText(this, "Botão pressionado", Toast.LENGTH_SHORT).show()
-            } catch (e: Exception) {
-                // Tratamento de exceção
-                Toast.makeText(this, "Ocorreu um erro: ${e.message}", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-}
+const App = () => {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Olá, Mundo!</Text>
+    </View>
+  );
+};
+
+export default App;
 ```
 
-### Exemplo de Código em Swift para iOS
-```swift
-import UIKit
+### Exemplo de Código Flutter
+```dart
+import 'package:flutter/material.dart';
 
-class ViewController: UIViewController {
+void main() {
+  runApp(const MyApp());
+}
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view.
-        
-        let button = UIButton(type: .system)
-        button.setTitle("Pressione", for: .normal)
-        button.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
-        view.addSubview(button)
-    }
-    
-    @objc func buttonPressed() {
-        do {
-            // Código que pode lançar exceção
-            print("Botão pressionado")
-        } catch {
-            // Tratamento de exceção
-            print("Ocorreu um erro: (error)")
-        }
-    }
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Olá, Mundo!',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: const MyHomePage(),
+    );
+  }
+}
+
+class MyHomePage extends StatelessWidget {
+  const MyHomePage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Text('Olá, Mundo!'),
+      ),
+    );
+  }
 }
 ```
 
 ## Validação
-Para validar o conhecimento adquirido, é recomendado que os desenvolvedores:
-- Desenvolvam um aplicativo móvel completo, aplicando as técnicas e conceitos aprendidos.
-- Realizem testes unitários e de integração para garantir a robustez e escalabilidade do aplicativo.
-- Publiquem o aplicativo nas lojas de aplicativos (Google Play Store para Android, Apple App Store para iOS) e monitorem o feedback dos usuários para melhorar continuamente o aplicativo.
+Para validar o funcionamento do seu aplicativo, execute-o em emuladores ou dispositivos físicos. Verifique se todas as funcionalidades estão operando corretamente e se o aplicativo se comporta como esperado em diferentes dispositivos e plataformas. Utilize ferramentas de depuração para identificar e corrigir bugs. Além disso, realize testes de unidade e de interface do usuário para garantir a qualidade e a robustez do aplicativo.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-Ao desenvolver aplicativos móveis, é fundamental considerar os seguintes casos de bordo e exceções:
-- **Conexão de rede**: Verifique se o dispositivo tem conexão de rede estável antes de realizar requisições à API.
-- **Erros de parsing**: Trate erros de parsing de dados JSON ou XML para evitar crashes do aplicativo.
-- **Erros de banco de dados**: Trate erros de acesso ao banco de dados para evitar perda de dados ou crashes do aplicativo.
-- **Erros de permissão**: Trate erros de permissão para evitar que o aplicativo seja interrompido ou fechado inesperadamente.
-- **Testes de usabilidade**: Realize testes de usabilidade para garantir que o aplicativo seja fácil de usar e entender.
-
-Exemplos de código para tratamento de exceções:
-```kotlin
-try {
-    // Código que pode lançar exceção
-} catch (e: IOException) {
-    // Tratamento de exceção de IO
-} catch (e: JSONException) {
-    // Tratamento de exceção de JSON
-} catch (e: Exception) {
-    // Tratamento de exceção genérica
-}
-```
-
-```swift
-do {
-    // Código que pode lançar exceção
-} catch let error as NSError {
-    // Tratamento de exceção
-    print("Ocorreu um erro: (error)")
-}
+- **Erros de Compilação:** Verifique se todos os pacotes e dependências estão instalados e atualizados. Se ocorrer um erro de compilação, verifique o log de erro para identificar a causa raiz do problema.
+- **Erros de Execução:** Utilize ferramentas de depuração para identificar e corrigir erros de execução. Verifique se o aplicativo está tratando corretamente erros de rede, banco de dados, etc.
+- **Edge Cases:** Considere cenários de uso não comuns, como dispositivos com recursos limitados, conexões de rede instáveis, etc. Verifique se o aplicativo se comporta corretamente em diferentes condições de uso.
+- **Segurança:** Verifique se o aplicativo está seguindo as melhores práticas de segurança, como criptografia de dados, autenticação de usuários, etc. Utilize ferramentas de análise de segurança para identificar vulnerabilidades potenciais.
