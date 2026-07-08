@@ -1,72 +1,62 @@
 ---
 name: Gerenciamento de Projetos Ágil
-description: Aborda as metodologias ágeis para gerenciamento de projetos, incluindo Scrum, Kanban e Lean
+description: Ensina técnicas de gerenciamento de projetos ágil, incluindo Scrum e Kanban
 ---
 
 ## Objetivo
-O objetivo deste guia é fornecer uma visão geral das metodologias ágeis para gerenciamento de projetos, incluindo Scrum, Kanban e Lean, e como elas podem ser aplicadas em projetos de desenvolvimento de software.
+O objetivo deste guia é fornecer uma visão geral completa sobre as técnicas de gerenciamento de projetos ágil, com foco em Scrum e Kanban, permitindo que os profissionais seniores apliquem esses conhecimentos em seus projetos.
 
 ## Pré-requisitos
-Para aproveitar ao máximo este guia, é recomendado que o leitor tenha conhecimento básico em:
-* Desenvolvimento de software
-* Gerenciamento de projetos
-* Metodologias ágeis
+Para aproveitar ao máximo este guia, é recomendável ter:
+- Conhecimento básico sobre gerenciamento de projetos
+- Experiência em trabalhar em equipes de desenvolvimento de software
+- Familiaridade com as metodologias ágeis
 
 ## Passo a Passo Técnico / Exemplos de Código
 ### Introdução ao Scrum
-O Scrum é uma metodologia ágil que se concentra em entregas incrementais e iterativas. Ele é baseado em três papéis principais:
-* Product Owner: responsável por priorizar e refinar os requisitos do produto
-* Scrum Master: responsável por garantir que o time siga as práticas do Scrum
-* Development Team: responsável por desenvolver o produto
+1. **Definição do Scrum**: O Scrum é uma framework para gerenciar e realizar trabalho em equipes.
+2. **Papéis no Scrum**:
+   - **Product Owner**: Responsável pelo backlog do produto.
+   - **Scrum Master**: Facilita o Scrum para a equipe.
+   - **Development Team**: Desenvolve o produto.
+3. **Cerimônias do Scrum**:
+   - **Sprint Planning**: Planejamento do sprint.
+   - **Daily Scrum**: Reunião diária para alinhar a equipe.
+   - **Sprint Review**: Revisão do que foi feito no sprint.
+   - **Sprint Retrospective**: Melhoria contínua do processo.
 
 ### Introdução ao Kanban
-O Kanban é uma metodologia ágil que se concentra em visualizar o fluxo de trabalho e limitar o trabalho em andamento. Ele é baseado em quatro princípios principais:
-* Visualizar o fluxo de trabalho
-* Limitar o trabalho em andamento
-* Focar na entrega contínua
-* Melhorar continuamente
-
-### Introdução ao Lean
-O Lean é uma metodologia ágil que se concentra em eliminar desperdício e maximizar o valor para o cliente. Ele é baseado em cinco princípios principais:
-* Definir o valor
-* Mapear o fluxo de valor
-* Criar um fluxo contínuo
-* Estabelecer um ritmo de produção
-* Melhorar continuamente
+1. **Definição do Kanban**: O Kanban é um sistema visual para gerenciar o trabalho.
+2. **Princípios do Kanban**:
+   - **Visualizar o trabalho**: Mostrar o fluxo de trabalho.
+   - **Limitar o WIP (Work In Progress)**: Limitar a quantidade de trabalho em andamento.
+   - **Focar na entrega contínua**: Entregar valor de forma contínua.
+3. **Exemplo de Implementação do Kanban**:
+```markdown
+# Exemplo de Quadro Kanban
+- **To-Do**: Tarefas a serem feitas
+- **In Progress**: Tarefas em andamento
+- **Done**: Tarefas concluídas
+```
 
 ## Validação
-Para validar a implementação das metodologias ágeis, é importante monitorar os seguintes indicadores:
-* Velocidade de entrega
-* Qualidade do produto
-* Satisfação do cliente
-* Morale da equipe
-
-Exemplo de código para monitorar a velocidade de entrega:
-```python
-import pandas as pd
-
-# Carregar os dados de entrega
-try:
-    data = pd.read_csv('entregas.csv')
-except FileNotFoundError:
-    print("Arquivo de entregas não encontrado.")
-    data = None
-
-# Calcular a velocidade de entrega
-if data is not None:
-    try:
-        velocidade = data['entregas'].mean()
-        print(f'Velocidade de entrega: {velocidade:.2f}')
-    except KeyError:
-        print("Coluna de entregas não encontrada no arquivo.")
-else:
-    print("Não é possível calcular a velocidade de entrega.")
+Para validar o conhecimento adquirido, é recomendável:
+- Aplicar as técnicas de Scrum e Kanban em projetos reais.
+- Monitorar e ajustar o processo com base nos resultados.
+- Buscar feedback da equipe e dos stakeholders para melhorar continuamente o processo de gerenciamento de projetos ágil.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-Além do exemplo acima, é importante considerar os seguintes casos de exceção e edge cases:
-* **Dados inconsistentes**: Verificar se os dados de entrega estão consistentes e não contêm erros de digitação ou formatação.
-* **Dados faltantes**: Verificar se há dados faltantes ou inconsistentes que possam afetar a precisão da velocidade de entrega.
-* **Erros de cálculo**: Verificar se os cálculos estão corretos e não contêm erros de arredondamento ou truncamento.
-* **Limitações de escalabilidade**: Verificar se a solução é escalável e pode lidar com grandes volumes de dados.
-* **Segurança**: Verificar se a solução é segura e não expõe dados sensíveis ou confidenciais.
-* **Manutenção**: Verificar se a solução é fácil de manter e atualizar, e se os logs de erro são claros e úteis para depuração.
+### Tratamento de Falhas no Scrum
+- **Falha na Definição do Produto**: Verificar se o Product Owner está alinhado com as necessidades do negócio e se o backlog está atualizado.
+- **Problemas na Comunicação**: Estabelecer canais de comunicação claros e transparentes entre os membros da equipe e stakeholders.
+- **Dificuldades na Priorização**: Utilizar técnicas de priorização, como MoSCoW ou Kano, para garantir que as tarefas mais importantes sejam realizadas primeiro.
+
+### Tratamento de Falhas no Kanban
+- **Sobrecarga de Trabalho**: Implementar limites de WIP para evitar a sobrecarga e garantir que a equipe possa lidar com o trabalho de forma eficiente.
+- **Falta de Visibilidade**: Utilizar ferramentas visuais, como quadros Kanban, para garantir que todos os membros da equipe tenham uma visão clara do fluxo de trabalho.
+- **Dificuldades na Entrega Contínua**: Implementar práticas de entrega contínua, como integração contínua e entrega contínua, para garantir que o valor seja entregue de forma regular e previsível.
+
+### Segurança
+- **Autenticação e Autorização**: Garantir que apenas os membros autorizados da equipe tenham acesso ao sistema de gerenciamento de projetos.
+- **Criptografia**: Utilizar criptografia para proteger as comunicações e os dados armazenados.
+- **Backup e Recuperação**: Realizar backups regulares dos dados e ter um plano de recuperação em caso de falha.
