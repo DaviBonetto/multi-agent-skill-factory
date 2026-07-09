@@ -1,87 +1,84 @@
 # Arquitetura de Microsserviços com Kubernetes
 ## Objetivo
-O objetivo desta skill é capacitar os desenvolvedores a projetar e implementar arquiteturas de microsserviços escaláveis e resilientes utilizando Kubernetes, abordando desde o deploy até o gerenciamento de clusters.
-
+O objetivo deste guia é fornecer uma visão geral de como projetar e implementar sistemas baseados em microsserviços utilizando Kubernetes para orquestração e gerenciamento de contêineres. Com isso, os desenvolvedores poderão criar sistemas escaláveis, flexíveis e confiáveis.
 ## Pré-requisitos
-- Conhecimento básico em contêineres (Docker)
-- Experiência com desenvolvimento de aplicações em microsserviços
-- Familiaridade com linha de comando e scripts de automação
-- Conhecimento em redes e segurança de aplicações
-
+Antes de começar, é necessário ter conhecimento básico em:
+* Desenvolvimento de software
+* Contêineres (Docker)
+* Orquestração de contêineres (Kubernetes)
+* Microsserviços
+Além disso, é recomendado ter experiência prática com:
+* Linguagens de programação (Java, Python, etc.)
+* Frameworks de desenvolvimento web (Spring, Django, etc.)
+* Ferramentas de gerenciamento de contêineres (Docker Compose, etc.)
 ## Passo a Passo Técnico / Exemplos de Código
 ### 1. Configuração do Ambiente
-Para começar, é necessário ter o Docker e o Kubernetes instalados. Você pode instalar o Minikube para testar o Kubernetes localmente.
+Para começar, é necessário configurar o ambiente de desenvolvimento. Isso inclui:
+* Instalar o Docker e o Kubernetes
+* Configurar o cluster de Kubernetes
+* Instalar as ferramentas necessárias (kubectl, etc.)
 ```bash
-# Instalar o Minikube
-curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
-sudo install minikube-linux-amd64 /usr/local/bin/minikube
+# Instalar o Docker
+sudo apt-get install docker.io
+# Instalar o Kubernetes
+sudo apt-get install kubernetes-master
+# Configurar o cluster de Kubernetes
+sudo kubeadm init
 ```
-
-### 2. Criando um Cluster
-Inicie o Minikube para criar um cluster local.
-```bash
-# Iniciar o Minikube
-minikube start
+### 2. Criação dos Microsserviços
+Em seguida, é necessário criar os microsserviços. Isso inclui:
+* Definir as APIs e os serviços
+* Desenvolver os microsserviços
+* Criar as imagens dos contêineres
+```dockerfile
+# Dockerfile para o microsserviço de usuário
+FROM python:3.9-slim
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+COPY . .
+CMD ["python", "app.py"]
 ```
-
-### 3. Deploy de um Microsserviço
-Crie um arquivo `deployment.yaml` para definir o deploy do seu microsserviço.
+### 3. Orquestração dos Microsserviços
+Depois de criar os microsserviços, é necessário orquestrá-los utilizando o Kubernetes. Isso inclui:
+* Criar os deployments e os serviços
+* Configurar as rotas e os ingressos
 ```yml
+# Deployment para o microsserviço de usuário
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: meu-microsservico
+  name: user-deployment
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: meu-microsservico
+      app: user
   template:
     metadata:
       labels:
-        app: meu-microsservico
+        app: user
     spec:
       containers:
-      - name: meu-microsservico
-        image: meu-docker-registry/meu-microsservico:latest
+      - name: user
+        image: user:latest
         ports:
-        - containerPort: 8080
-```
-Aplique a configuração para deployar o microsserviço.
-```bash
-# Aplicar a configuração
-kubectl apply -f deployment.yaml
-```
-
-### 4. Gerenciamento do Cluster
-Use o `kubectl` para gerenciar o cluster, incluindo a escala do deploy.
-```bash
-# Escalar o deploy
-kubectl scale deployment meu-microsservico --replicas=5
-```
-
+        - containerPort: 80
 ## Validação
-Para validar a implementação, verifique se o microsserviço está funcionando corretamente e se o cluster está escalando conforme esperado. Use comandos como `kubectl get pods` e `kubectl logs` para monitorar o estado dos pods e logs da aplicação.
-```bash
-# Verificar os pods
-kubectl get pods
-```
-
+Para validar a implementação, é necessário testar os microsserviços e o sistema como um todo. Isso inclui:
+* Testar as APIs e os serviços
+* Verificar a escalabilidade e a flexibilidade do sistema
+* Verificar a confiabilidade e a segurança do sistema
 ## ⚠️ Tratamento de Exceções e Edge Cases
-### Erros de Instalação do Minikube
-- **Erro de permissão**: Certifique-se de que você tem permissão de superusuário para instalar o Minikube.
-- **Erro de conexão**: Verifique se a sua conexão de internet está estável e se o servidor de downloads do Minikube está acessível.
-
-### Erros de Inicialização do Cluster
-- **Erro de inicialização do Minikube**: Verifique se o Minikube está corretamente instalado e se há recursos suficientes (memória RAM, CPU) disponíveis para executar o cluster.
-- **Erro de rede**: Certifique-se de que a configuração de rede do seu sistema permite a comunicação entre os pods do cluster.
-
-### Erros de Deploy do Microsserviço
-- **Erro de imagem**: Verifique se a imagem Docker do microsserviço está corretamente construída e disponível no registry.
-- **Erro de configuração**: Certifique-se de que o arquivo `deployment.yaml` está corretamente formatado e que as configurações de deploy estão de acordo com as necessidades do seu microsserviço.
-
-### Erros de Gerenciamento do Cluster
-- **Erro de escala**: Verifique se o cluster tem recursos suficientes para escalar o deploy para o número desejado de réplicas.
-- **Erro de comunicação**: Certifique-se de que a comunicação entre os pods e os serviços do cluster está funcionando corretamente.
-
-Com esses passos e considerando os tratamentos de exceções e edge cases, você terá uma arquitetura de microsserviços escalável e resiliente utilizando Kubernetes.
+Além dos passos básicos, é importante considerar os seguintes casos de bordo e exceções:
+* **Falha de contêiner**: Se um contêiner falhar, o Kubernetes deve ser capaz de reiniciá-lo automaticamente.
+* **Sobrecarga de tráfego**: Se o tráfego aumentar repentinamente, o sistema deve ser capaz de escalar automaticamente para atender à demanda.
+* **Problemas de rede**: Se houver problemas de rede, o sistema deve ser capaz de detectar e corrigir automaticamente.
+* **Ataques de segurança**: O sistema deve ser capaz de detectar e prevenir ataques de segurança, como ataques de força bruta ou injeção de SQL.
+* **Erros de configuração**: Se houver erros de configuração, o sistema deve ser capaz de detectar e corrigir automaticamente.
+Para lidar com esses casos, é recomendado:
+* **Implementar monitoramento e logging**: Implementar ferramentas de monitoramento e logging para detectar problemas e exceções.
+* **Implementar escalabilidade automática**: Implementar escalabilidade automática para atender à demanda variável.
+* **Implementar segurança**: Implementar medidas de segurança, como autenticação e autorização, para prevenir ataques de segurança.
+* **Testar e validar**: Testar e validar o sistema regularmente para garantir que ele esteja funcionando corretamente e que os casos de bordo sejam tratados adequadamente.
+Com esses passos e considerando os casos de bordo e exceções, é possível criar um sistema baseado em microsserviços utilizando Kubernetes para orquestração e gerenciamento de contêineres. Além disso, é importante lembrar que a implementação de um sistema desses requer conhecimento e experiência em desenvolvimento de software, contêineres e orquestração de contêineres.
