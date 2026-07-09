@@ -38,11 +38,22 @@ When enabled: 100% sampling, both input and output captured. URI defaults to `s3
 ## Teardown
 `python3 scripts/teardown.py <endpoint-name>` deletes endpoint → endpoint config → model in safe order. Autoscaling targets and alarms cleaned up separately. Data capture S3 objects are NOT deleted — that's the user's call.
 ## ⚠️ Tratamento de Exceções e Edge Cases
-- **Exceção de permissão**: O script de implantação pode falhar se o usuário não tiver permissões suficientes para criar recursos. Nesse caso, o usuário deve verificar as permissões do IAM e garantir que elas sejam adequadas.
-- **Exceção de limite de recursos**: O script de implantação pode falhar se o usuário atingir o limite de recursos (por exemplo, número máximo de endpoints). Nesse caso, o usuário deve verificar os limites de recursos e solicitar um aumento, se necessário.
-- **Exceção de rede**: O script de implantação pode falhar se houver problemas de rede (por exemplo, conexão lenta ou instável). Nesse caso, o usuário deve verificar a conexão de rede e tentar novamente.
-- **Exceção de modelo**: O script de implantação pode falhar se o modelo não estiver correto ou se houver problemas com o modelo. Nesse caso, o usuário deve verificar o modelo e garantir que ele esteja correto e funcional.
-- **Exceção de dependência**: O script de implantação pode falhar se houver problemas com as dependências (por exemplo, bibliotecas ou frameworks). Nesse caso, o usuário deve verificar as dependências e garantir que elas estejam atualizadas e funcionais.
-- **Caso de borda de nome de endpoint**: O nome do endpoint pode ser muito longo ou conter caracteres inválidos. Nesse caso, o usuário deve verificar o nome do endpoint e garantir que ele seja válido e atenda aos requisitos.
-- **Caso de borda de configuração de VPC**: A configuração de VPC pode ser inválida ou incompleta. Nesse caso, o usuário deve verificar a configuração de VPC e garantir que ela seja válida e completa.
-- **Caso de borda de criptografia KMS**: A criptografia KMS pode ser inválida ou incompleta. Nesse caso, o usuário deve verificar a criptografia KMS e garantir que ela seja válida e completa.
+### Erros de Configuração
+- Verifique se o arquivo de configuração está correto e completo.
+- Certifique-se de que as credenciais de acesso estão válidas e configuradas corretamente.
+### Erros de Rede
+- Verifique a conectividade de rede e certifique-se de que o endpoint está acessível.
+- Use ferramentas de diagnóstico de rede para identificar problemas de conectividade.
+### Erros de Modelo
+- Verifique se o modelo está treinado e pronto para uso.
+- Certifique-se de que o modelo está configurado corretamente e que as dependências estão instaladas.
+### Erros de Autoscaling
+- Verifique se o autoscaling está configurado corretamente e se os limites estão definidos.
+- Certifique-se de que o autoscaling está funcionando corretamente e que os recursos estão sendo escalados conforme necessário.
+### Erros de Data Capture
+- Verifique se o data capture está configurado corretamente e se os dados estão sendo coletados.
+- Certifique-se de que os dados estão sendo armazenados corretamente e que os acessos estão controlados.
+### Edge Cases
+- **Modelo com alta latência**: ajuste o target de invocações por instância para evitar sobrecarga.
+- **Requisições com grande volume de dados**: ajuste o tamanho do buffer de entrada para evitar erros de processamento.
+- **Erros de autenticação**: verifique as credenciais de acesso e certifique-se de que as políticas de segurança estão configuradas corretamente.
