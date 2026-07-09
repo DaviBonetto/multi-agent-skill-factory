@@ -17,24 +17,17 @@ Pi core does not ship a standard task-list tool. If a todo/task extension is ins
 
 ## Segurança
 
-Para garantir a segurança, é importante verificar se as dependências necessárias estão instaladas e configuradas corretamente. Além disso, é fundamental garantir que as permissões de acesso sejam adequadas para evitar acessos não autorizados.
+Para garantir a segurança, é importante verificar se o pacote `pi-subagents` está instalado e configurado corretamente antes de executar subagentes. Além disso, é recomendável validar as entradas e saídas dos subagentes para evitar possíveis vulnerabilidades.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
 
-### Casos de Erro
+### Exceções
 
-*   Se o pacote `pi-subagents` não estiver instalado, o sistema deve retornar uma mensagem de erro indicando que a funcionalidade de subagentes não está disponível.
-*   Se a extensão todo/task não estiver instalada, o sistema deve usar o plano ou o arquivo `TODO.md` para rastrear tarefas.
-*   Se ocorrer um erro ao executar uma ação, o sistema deve registrar o erro e retornar uma mensagem de erro para o usuário.
+*   Se o pacote `pi-subagents` não estiver instalado, uma exceção deve ser lançada com uma mensagem clara indicando que o recurso de subagente é opcional e não está disponível.
+*   Se um subagente não puder ser executado devido a uma falha de configuração ou dependência, uma exceção deve ser lançada com uma mensagem detalhada sobre o erro.
 
 ### Edge Cases
 
-*   Se o usuário tentar criar uma tarefa com um nome vazio, o sistema deve retornar uma mensagem de erro indicando que o nome da tarefa é obrigatório.
-*   Se o usuário tentar marcar uma tarefa como concluída que não existe, o sistema deve retornar uma mensagem de erro indicando que a tarefa não existe.
-*   Se o sistema estiver configurado para usar um arquivo `TODO.md` para rastrear tarefas e o arquivo não existir, o sistema deve criar o arquivo automaticamente.
-
-### Tratamento de Exceções
-
-*   O sistema deve ter um mecanismo de tratamento de exceções para lidar com erros inesperados.
-*   O sistema deve registrar todos os erros e exceções para que possam ser analisados e corrigidos posteriormente.
-*   O sistema deve retornar mensagens de erro claras e concisas para o usuário, indicando o que deu errado e como corrigir o problema.
+*   **Subagente não disponível**: Se o subagente não estiver disponível, o sistema deve executar as ações sequencialmente na sessão atual ou explicar que o recurso de subagente não está instalado.
+*   **Tarefa não pode ser criada**: Se uma tarefa não puder ser criada devido à falta de um tool de tarefa instalado, o sistema deve usar o plano de ações ou um arquivo `TODO.md` local para rastrear as tarefas.
+*   **Erros de sintaxe**: Se houver erros de sintaxe nos arquivos de configuração ou nas ações, o sistema deve lançar uma exceção com uma mensagem clara sobre o erro e a localização do problema.
