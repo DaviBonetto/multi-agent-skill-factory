@@ -1,1 +1,2 @@
-# Pi Extension and Evals Implementation Plan ... (conteúdo completo do arquivo SKILL.md)
+# Pi Extension and Evals Implementation Plan
+... (conteúdo original)
