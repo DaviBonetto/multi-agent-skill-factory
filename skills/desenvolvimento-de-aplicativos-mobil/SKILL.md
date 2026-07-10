@@ -1,105 +1,208 @@
 ---
-name: Desenvolvimento de Aplicativos Móveis com React Native
-description: Esta skill ensina como desenvolver aplicativos móveis para Android e iOS utilizando React Native
+name: Desenvolvimento de Aplicativos Móveis com Flutter
+description: Estruturação de aplicativos móveis utilizando o framework Flutter
 ---
 
 ## Objetivo
-O objetivo desta skill é fornecer conhecimento prático sobre como desenvolver aplicativos móveis para Android e iOS utilizando React Native, abordando desde a configuração do ambiente até a publicação nas lojas de aplicativos. Com isso, os desenvolvedores poderão criar aplicativos móveis de alta qualidade, escaláveis e eficientes.
+O objetivo deste guia é fornecer uma visão geral detalhada sobre como desenvolver aplicativos móveis utilizando o framework Flutter, abordando desde a estruturação básica até a implementação de interfaces de usuário, gerenciamento de estado e integração com APIs.
 
 ## Pré-requisitos
-Antes de iniciar este curso, é recomendado que os participantes tenham conhecimento básico em:
-* Programação em JavaScript
-* Desenvolvimento de aplicações web
-* Conceitos de orientação a objetos
-* Familiaridade com o ecossistema de desenvolvimento de aplicativos móveis
+Antes de iniciar o desenvolvimento de aplicativos móveis com Flutter, é necessário ter:
+- Conhecimento básico em programação com Dart
+- Instalação do SDK do Flutter e do Android Studio ou Visual Studio Code
+- Conhecimento sobre os princípios básicos de desenvolvimento de aplicativos móveis
 
 ## Passo a Passo Técnico / Exemplos de Código
-### Configuração do Ambiente
-Para iniciar o desenvolvimento de aplicativos móveis com React Native, é necessário configurar o ambiente de desenvolvimento. Isso inclui:
-* Instalar o Node.js e o npm (Node Package Manager)
-* Instalar o React Native CLI
-* Configurar o ambiente de desenvolvimento para Android e iOS
+### 1. Configuração do Ambiente
+Para começar, você precisa ter o Flutter instalado em sua máquina. Você pode baixar o SDK do Flutter e seguir as instruções de instalação para seu sistema operacional.
 
+### 2. Criação de um Novo Projeto
+Abra o terminal e execute o comando:
 ```bash
-npm install -g react-native-cli
+flutter create meu_app
+```
+Isso criará um novo projeto Flutter chamado `meu_app`.
+
+### 3. Estruturação do Aplicativo
+A estrutura básica de um aplicativo Flutter inclui:
+- `lib/main.dart`: O arquivo principal do aplicativo.
+- `pubspec.yaml`: O arquivo de configuração do projeto.
+
+### 4. Implementação de Interfaces de Usuário
+Para criar interfaces de usuário, você pode usar widgets como `Scaffold`, `AppBar`, `Text`, etc.
+```dart
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Meu App',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: MyHomePage(),
+    );
+  }
+}
+
+class MyHomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Meu App'),
+      ),
+      body: Center(
+        child: Text('Bem-vindo ao meu app!'),
+      ),
+    );
+  }
+}
 ```
 
-### Criação do Projeto
-Após configurar o ambiente, é possível criar um novo projeto React Native:
-```bash
-npx react-native init MeuApp
+### 5. Gerenciamento de Estado
+Para gerenciar o estado do aplicativo, você pode usar o `StatefulWidget` ou bibliotecas como o Provider.
+```dart
+import 'package:flutter/material.dart';
+
+class MyHomePage extends StatefulWidget {
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  int _counter = 0;
+
+  void _incrementCounter() {
+    setState(() {
+      _counter++;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Meu App'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              'Você pressionou o botão $_counter vezes.',
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            ElevatedButton(
+              onPressed: _incrementCounter,
+              child: Text('Incrementar'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
 ```
 
-### Desenvolvimento do Aplicativo
-Com o projeto criado, é possível iniciar o desenvolvimento do aplicativo. Isso inclui:
-* Criar componentes e telas
-* Implementar funcionalidades e lógica de negócios
-* Utilizar bibliotecas e módulos do React Native
+### 6. Integração com APIs
+Para integrar com APIs, você pode usar o `http` package.
+```dart
+import 'package:http/http.dart' as http;
 
-```jsx
-import React, { useState } from 'react';
-import { View, Text, Button } from 'react-native';
+class MyHomePage extends StatefulWidget {
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
 
-const MeuApp = () => {
-  const [contador, setContador] = useState(0);
+class _MyHomePageState extends State<MyHomePage> {
+  String _data = '';
 
-  return (
-    <View>
-      <Text>Contador: {contador}</Text>
-      <Button title="Incrementar" onPress={() => setContador(contador + 1)} />
-    </View>
-  );
-};
+  Future<void> _fetchData() async {
+    try {
+      final response = await http.get(Uri.parse('https://api.example.com/data'));
 
-export default MeuApp;
+      if (response.statusCode == 200) {
+        setState(() {
+          _data = response.body;
+        });
+      } else {
+        throw Exception('Falha ao carregar dados');
+      }
+    } catch (e) {
+      print('Erro: $e');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Meu App'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(_data),
+            SizedBox(
+              height: 20,
+            ),
+            ElevatedButton(
+              onPressed: _fetchData,
+              child: Text('Carregar Dados'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
 ```
 
 ## Validação
-Para validar o conhecimento adquirido, é recomendado que os participantes desenvolvam um aplicativo móvel completo, utilizando as habilidades e conceitos aprendidos durante o curso. Além disso, é importante testar e depurar o aplicativo para garantir que ele esteja funcionando corretamente em diferentes dispositivos e plataformas.
-
-## Tratamento de Exceções e Edge Cases
-Durante o desenvolvimento do aplicativo, é importante considerar os seguintes casos:
-* **Erros de rede**: O aplicativo deve ser capaz de lidar com erros de rede, como perda de conexão ou respostas inválidas do servidor.
-* **Erros de parsing**: O aplicativo deve ser capaz de lidar com erros de parsing, como dados inválidos ou formatados incorretamente.
-* **Erros de permissão**: O aplicativo deve ser capaz de lidar com erros de permissão, como acesso negado a recursos do dispositivo.
-* **Dispositivos com recursos limitados**: O aplicativo deve ser capaz de funcionar corretamente em dispositivos com recursos limitados, como memória ou processamento.
-* **Diferentes versões do sistema operacional**: O aplicativo deve ser capaz de funcionar corretamente em diferentes versões do sistema operacional, como Android e iOS.
-
-Exemplos de como lidar com esses casos:
-```jsx
-// Erros de rede
-fetch('https://api.example.com/data')
-  .then(response => response.json())
-  .catch(error => {
-    console.error('Erro de rede:', error);
-    // Mostrar mensagem de erro ao usuário
-  });
-
-// Erros de parsing
-try {
-  const data = JSON.parse(responseData);
-  // Processar os dados
-} catch (error) {
-  console.error('Erro de parsing:', error);
-  // Mostrar mensagem de erro ao usuário
-}
-
-// Erros de permissão
-if (Platform.OS === 'android') {
-  PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.CAMERA, {
-    title: 'Permissão de câmera',
-    message: 'O aplicativo precisa de permissão para acessar a câmera',
-  })
-    .then(granted => {
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        // Acessar a câmera
-      } else {
-        console.error('Permissão negada');
-        // Mostrar mensagem de erro ao usuário
-      }
-    })
-    .catch(error => {
-      console.error('Erro de permissão:', error);
-      // Mostrar mensagem de erro ao usuário
-    });
+Para validar o funcionamento do aplicativo, você pode executar os testes unitários e de interface do usuário.
+```bash
+flutter test
 ```
+Além disso, é importante testar o aplicativo em diferentes dispositivos e plataformas para garantir a compatibilidade e o desempenho.
+
+## ⚠️ Tratamento de Exceções e Edge Cases
+É importante tratar as exceções e edge cases para garantir a estabilidade e a segurança do aplicativo. Aqui estão alguns exemplos:
+- **Tratamento de erros de rede**: Ao fazer requisições de rede, é importante tratar os erros de rede, como falhas de conexão ou timeouts.
+```dart
+try {
+  final response = await http.get(Uri.parse('https://api.example.com/data'));
+  // ...
+} catch (e) {
+  print('Erro: $e');
+}
+```
+- **Tratamento de erros de parsing**: Ao parsear dados JSON, é importante tratar os erros de parsing, como dados inválidos ou malformados.
+```dart
+try {
+  final jsonData = jsonDecode(response.body);
+  // ...
+} catch (e) {
+  print('Erro: $e');
+}
+```
+- **Tratamento de edge cases**: É importante tratar os edge cases, como dados nulos ou vazios, para garantir que o aplicativo não crash ou se comporte de forma inesperada.
+```dart
+if (_data != null && _data.isNotEmpty) {
+  // ...
+} else {
+  print('Dados nulos ou vazios');
+}
+```
+Além disso, é importante seguir as melhores práticas de segurança, como:
+- **Validar os dados de entrada**: É importante validar os dados de entrada para garantir que eles sejam válidos e seguros.
+- **Usar criptografia**: É importante usar criptografia para proteger os dados sensíveis, como senhas e informações de pagamento.
+- **Manter o aplicativo atualizado**: É importante manter o aplicativo atualizado com as últimas versões do Flutter e das bibliotecas utilizadas para garantir a segurança e a estabilidade.
