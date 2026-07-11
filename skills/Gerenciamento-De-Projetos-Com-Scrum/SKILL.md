@@ -1,59 +1,44 @@
 ---
 name: Gerenciamento de Projetos com Scrum
-description: Esta skill ensina como gerenciar projetos utilizando a metodologia Scrum, incluindo papéis, eventos e artefatos.
+description: Aborda as práticas e metodologias de gerenciamento de projetos utilizando o framework Scrum
 ---
 
 ## Objetivo
-O objetivo desta skill é fornecer conhecimentos práticos sobre como aplicar a metodologia Scrum no gerenciamento de projetos, abordando os principais papéis, eventos e artefatos envolvidos. Com isso, os participantes poderão entender como implementar Scrum de forma eficaz em seus projetos.
+O objetivo deste guia é fornecer uma visão geral das práticas e metodologias de gerenciamento de projetos utilizando o framework Scrum, incluindo papéis, cerimônias e artefatos, para que os profissionais possam aplicar esses conceitos em seus projetos de forma eficaz.
 
 ## Pré-requisitos
-Para aproveitar ao máximo esta skill, é recomendado que os participantes tenham conhecimento básico sobre gerenciamento de projetos e conceitos de Agile. No entanto, não é necessário ter experiência prévia com Scrum.
+Para aproveitar ao máximo este guia, é recomendado que os leitores tenham conhecimento básico sobre gerenciamento de projetos e desenvolvimento de software. Além disso, é importante ter uma compreensão geral dos conceitos de Agile e Scrum.
 
 ## Passo a Passo Técnico / Exemplos de Código
-A implementação da metodologia Scrum envolve várias etapas e práticas. Aqui estão os principais passos e conceitos:
-- **Papéis em Scrum**: Existem três papéis principais no Scrum - Product Owner, Scrum Master e Development Team. Cada papel tem responsabilidades específicas:
-  - **Product Owner**: Responsável por definir e priorizar os itens do Product Backlog.
-  - **Scrum Master**: Atua como facilitador do processo Scrum, garantindo que a equipe siga as práticas e princípios do Scrum.
-  - **Development Team**: Responsável por desenvolver os itens do Sprint Backlog.
-- **Eventos em Scrum**: Os principais eventos no Scrum incluem:
-  - **Sprint Planning**: Reunião para planejar o que será feito durante o sprint.
-  - **Daily Scrum**: Reunião diária para discutir o progresso e os planos para o dia.
-  - **Sprint Review**: Revisão do que foi concluído durante o sprint.
-  - **Sprint Retrospective**: Reunião para discutir o que deu certo e o que pode ser melhorado.
-- **Artefatos em Scrum**: Os principais artefatos incluem:
-  - **Product Backlog**: Lista de todos os itens que precisam ser feitos no produto.
-  - **Sprint Backlog**: Lista de itens a serem concluídos durante o sprint.
-  - **Incremento**: O resultado concreto do trabalho realizado durante o sprint.
+### Introdução ao Scrum
+O Scrum é um framework de gerenciamento de projetos que se baseia em princípios Agile. Ele é composto por três papéis principais: 
+- **Product Owner**: responsável por definir e priorizar os requisitos do projeto.
+- **Scrum Master**: responsável por garantir que o time esteja seguindo as práticas Scrum.
+- **Development Team**: responsável por desenvolver o produto.
 
-Exemplo de como um Product Backlog pode ser estruturado:
-```markdown
-# Product Backlog
-## Itens
-- Desenvolver funcionalidade de login
-- Implementar sistema de pagamento
-- Criar interface de usuário para dashboard
-```
+### Cerimônias Scrum
+As cerimônias Scrum são reuniões que ocorrem regularmente durante o ciclo de vida do projeto. Elas incluem:
+- **Sprint Planning**: reunião para planejar o trabalho a ser realizado durante o sprint.
+- **Daily Scrum**: reunião diária para discutir o progresso do trabalho.
+- **Sprint Review**: reunião para revisar o trabalho realizado durante o sprint.
+- **Sprint Retrospective**: reunião para discutir o que deu certo e o que não deu certo durante o sprint.
+
+### Artefatos Scrum
+Os artefatos Scrum são documentos ou produtos que são criados durante o ciclo de vida do projeto. Eles incluem:
+- **Product Backlog**: lista de requisitos do projeto.
+- **Sprint Backlog**: lista de tarefas a serem realizadas durante o sprint.
+- **Increment**: versão do produto que é criada durante o sprint.
 
 ## Validação
-Para validar o conhecimento adquirido, é recomendado que os participantes apliquem os conceitos de Scrum em um projeto real ou simulado. Isso pode incluir:
-- Criar um Product Backlog para um projeto fictício
-- Planejar e executar um sprint, incluindo as reuniões de Sprint Planning, Daily Scrum, Sprint Review e Sprint Retrospective
-- Refletir sobre as lições aprendidas e como melhorar a implementação do Scrum em projetos futuros.
+Para validar o conhecimento adquirido, é recomendado que os leitores apliquem os conceitos Scrum em um projeto real ou em um ambiente de simulação. Além disso, é importante buscar feedback de outros profissionais e realizar ajustes necessários para garantir que as práticas Scrum estejam sendo seguidas de forma eficaz.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-Durante a implementação do Scrum, podem surgir várias exceções e edge cases que precisam ser tratados. Aqui estão alguns exemplos:
-- **Mudanças no Product Backlog**: Se houver mudanças significativas no Product Backlog durante o sprint, o Product Owner deve reavaliar as prioridades e ajustar o Sprint Backlog conforme necessário.
-- **Falta de recursos**: Se a equipe não tiver os recursos necessários para completar as tarefas do Sprint Backlog, o Scrum Master deve trabalhar com o Product Owner para identificar soluções alternativas ou ajustar as expectativas.
-- **Conflitos dentro da equipe**: Se houver conflitos dentro da equipe, o Scrum Master deve facilitar a resolução do conflito e garantir que a equipe esteja trabalhando de forma colaborativa.
-- **Riscos e dependências**: O Scrum Master e o Product Owner devem identificar e gerenciar riscos e dependências que possam afetar o projeto, e desenvolver planos de mitigação conforme necessário.
-- **Comunicação ineficaz**: Se a comunicação dentro da equipe ou com os stakeholders for ineficaz, o Scrum Master deve trabalhar para melhorar a comunicação e garantir que todos estejam alinhados com os objetivos do projeto.
-
-Exemplo de como lidar com mudanças no Product Backlog:
-```markdown
-# Product Backlog Atualizado
-## Itens
-- Desenvolver funcionalidade de login (prioridade alta)
-- Implementar sistema de pagamento (prioridade média)
-- Criar interface de usuário para dashboard (prioridade baixa)
-```
-Neste exemplo, o Product Owner reavaliou as prioridades do Product Backlog e ajustou o Sprint Backlog conforme necessário para refletir as mudanças.
+Durante a implementação do Scrum, é importante considerar os seguintes casos excepcionais:
+- **Mudanças nos requisitos do projeto**: se os requisitos do projeto mudarem durante o sprint, é importante reavaliar o Sprint Backlog e realizar ajustes necessários.
+- **Falta de recursos**: se o time não tiver os recursos necessários para realizar as tarefas, é importante priorizar as tarefas e realizar ajustes no Sprint Backlog.
+- **Conflitos dentro do time**: se houver conflitos dentro do time, é importante que o Scrum Master intervenha para resolver o conflito e garantir que o time esteja trabalhando de forma eficaz.
+- **Problemas de comunicação**: se houver problemas de comunicação entre os membros do time ou com os stakeholders, é importante identificar a causa do problema e realizar ajustes para melhorar a comunicação.
+- **Riscos e dependências**: é importante identificar os riscos e dependências do projeto e realizar ajustes no Sprint Backlog para mitigar esses riscos.
+- **Integração contínua e entrega contínua**: é importante implementar integração contínua e entrega contínua para garantir que o produto esteja sempre pronto para ser liberado.
+- **Segurança e privacidade**: é importante considerar a segurança e privacidade do produto e realizar ajustes necessários para garantir que o produto esteja seguro e privado.
+- **Documentação e registro**: é importante manter uma documentação e registro adequados do projeto, incluindo os artefatos Scrum, para garantir que o conhecimento seja preservado e possa ser compartilhado com outros membros do time.
