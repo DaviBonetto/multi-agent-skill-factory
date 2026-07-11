@@ -1,32 +1,31 @@
 ---
 name: Desenvolvimento Web com React
-description: Esta skill ensina como desenvolver aplicações web utilizando o framework React, incluindo conceitos de componentes, estado e props.
+description: Ensina os fundamentos e avançados de desenvolvimento web utilizando o framework React
 ---
 
 ## Objetivo
-O objetivo desta skill é capacitar os desenvolvedores a criar aplicações web robustas e escaláveis utilizando o framework React, abordando conceitos fundamentais como componentes, estado e props.
+O objetivo deste guia é fornecer uma visão abrangente sobre o desenvolvimento web com React, cobrindo desde os fundamentos até conceitos avançados. Isso inclui a compreensão de componentes, estado, props e hooks, permitindo que os desenvolvedores criem aplicações web robustas e escaláveis.
 
 ## Pré-requisitos
-Para aproveitar ao máximo esta skill, é recomendado que os desenvolvedores tenham conhecimento básico em:
+Para seguir este guia, é recomendado que os desenvolvedores tenham conhecimento básico em:
 - JavaScript (ES6+)
-- HTML5
-- CSS3
+- HTML
+- CSS
 - Conceitos básicos de programação orientada a objetos
+- Experiência prévia com frameworks de front-end é um plus, mas não é necessária
 
 ## Passo a Passo Técnico / Exemplos de Código
 ### Instalação do React
-Para começar a desenvolver com React, é necessário instalar o framework. Isso pode ser feito utilizando o npm ou o yarn:
+Para começar a desenvolver com React, você precisará instalar o `create-react-app` usando npm ou yarn:
 ```bash
-npm install react react-dom
+npx create-react-app meu-projeto
 ```
 ou
 ```bash
-yarn add react react-dom
+yarn create react-app meu-projeto
 ```
-**Tratamento de Erros na Instalação**: Em caso de erros durante a instalação, verifique se o npm ou yarn está atualizado e se o projeto está sendo executado em um ambiente de desenvolvimento compatível.
-
-### Criando Componentes
-Os componentes são a base das aplicações React. Eles podem ser funcionais ou de classe. Aqui está um exemplo de um componente funcional:
+### Componentes
+Os componentes são a base do React. Eles podem ser funcionais ou de classe. Aqui está um exemplo de um componente funcional simples:
 ```jsx
 import React from 'react';
 
@@ -36,10 +35,8 @@ function Saudacao() {
 
 export default Saudacao;
 ```
-**Edge Case: Componentes Aninhados**: Ao criar componentes aninhados, é importante garantir que cada componente tenha um único elemento raiz para evitar erros de renderização.
-
-### Gerenciamento de Estado
-O estado é crucial para atualizar a interface do usuário dinamicamente. Aqui está um exemplo de como usar o `useState` para gerenciar o estado:
+### Estado e Props
+O estado (`state`) é usado para armazenar dados que podem mudar, enquanto as props (`props`) são imutáveis e usadas para passar dados de um componente para outro.
 ```jsx
 import React, { useState } from 'react';
 
@@ -56,36 +53,82 @@ function Contador() {
 
 export default Contador;
 ```
-**Tratamento de Exceções no Estado**: Em caso de atualizações de estado assíncronas, é importante usar o `useEffect` para garantir que o componente seja re-renderizado corretamente após a atualização do estado.
-
-### Passagem de Props
-As props são usadas para passar dados de um componente pai para um componente filho. Aqui está um exemplo:
+### Hooks
+Os hooks permitem que você use estado e outros recursos do React em componentes funcionais. Além do `useState`, outro hook importante é o `useEffect`, que é usado para lidar com efeitos colaterais.
 ```jsx
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
-function Mensagem({ nome }) {
-  return <p>Olá, {nome}!</p>;
+function Relogio() {
+  const [data, setData] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setData(new Date());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <div>
+      <p>Horário Atual: {data.toLocaleTimeString()}</p>
+    </div>
+  );
 }
 
-function App() {
-  return <Mensagem nome="João" />;
-}
-
-export default App;
+export default Relogio;
 ```
-**Validação de Props**: É importante validar as props recebidas por um componente para garantir que sejam do tipo correto e contenham os dados esperados.
 
 ## Validação
-Para validar o conhecimento adquirido, é recomendado desenvolver pequenos projetos que apliquem os conceitos aprendidos, como:
-- Criar um contador que incremente e decremente um valor.
-- Desenvolver um formulário que capture e exiba informações do usuário.
-- Construir uma lista de itens que possa ser filtrada e ordenada.
+Para validar o conhecimento adquirido, é recomendado que os desenvolvedores criem pequenos projetos que apliquem os conceitos aprendidos. Isso pode incluir:
+- Criar um todo list com funcionalidades de adicionar, remover e marcar itens como concluídos
+- Desenvolver um pequeno jogo, como um jogo da velha
+- Construir um aplicativo de clima que busque e exiba as condições climáticas atuais de uma cidade específica
+
+Esses projetos ajudarão a solidificar a compreensão dos conceitos do React e preparar os desenvolvedores para projetos mais complexos.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-Além dos exemplos específicos acima, é crucial considerar os seguintes pontos para um desenvolvimento robusto:
-- **Tratamento de Erros**: Use `try-catch` para capturar e tratar erros em código assíncrono.
-- **Validação de Dados**: Valide todos os dados recebidos de fontes externas, como APIs ou inputs de usuário.
-- **Segurança**: Implemente práticas de segurança, como a validação de entradas para prevenir ataques de injeção de código.
-- **Acessibilidade**: Desenvolva componentes que sejam acessíveis para todos os usuários, independentemente de suas capacidades.
+No desenvolvimento com React, é importante considerar os possíveis erros e exceções que podem ocorrer. Aqui estão algumas dicas para lidar com esses casos:
+- **Tratamento de Erros em Componentes**: Use o método `componentDidCatch` para capturar e tratar erros em componentes de classe. Para componentes funcionais, use o hook `useErrorBoundary` para criar um limite de erro.
+- **Validação de Props**: Certifique-se de validar as props passadas para os componentes para evitar erros de tipo ou valores inválidos.
+- **Uso de Try-Catch**: Use blocos try-catch para capturar e tratar erros em código assíncrono, como em chamadas à API.
+- **Tratamento de Erros de Rede**: Implemente mecanismos para lidar com erros de rede, como timeouts ou respostas inválidas de APIs.
+- **Edge Cases**: Considere os casos de bordo, como quando o usuário não tem permissão para acessar um recurso ou quando os dados estão inconsistentes.
 
-Esses projetos e considerações ajudarão a solidificar a compreensão dos conceitos de componentes, estado e props, preparando o desenvolvedor para criar aplicações web mais complexas com React.
+Exemplo de tratamento de erro em um componente funcional:
+```jsx
+import React, { useState, useEffect } from 'react';
+
+function DadosAPI() {
+  const [dados, setDados] = useState(null);
+  const [erro, setErro] = useState(null);
+
+  useEffect(() => {
+    fetch('https://api.exemplo.com/dados')
+      .then(response => response.json())
+      .then(data => setDados(data))
+      .catch(error => setErro(error));
+  }, []);
+
+  if (erro) {
+    return <div>Erro ao carregar dados: {erro.message}</div>;
+  }
+
+  if (!dados) {
+    return <div>Carregando...</div>;
+  }
+
+  return (
+    <div>
+      <h1>Dados</h1>
+      <ul>
+        {dados.map(item => (
+          <li key={item.id}>{item.nome}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export default DadosAPI;
+```
+Essas dicas e exemplos ajudarão a tornar suas aplicações React mais robustas e seguras.
