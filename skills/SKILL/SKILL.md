@@ -1,151 +1,88 @@
 ---
-name: verification-before-completion
-description: Use when about to claim work is complete, fixed, or passing, before committing or creating PRs - requires running verification commands and confirming output before making any success claims; evidence before assertions always
+name: executing-plans
+description: Use when you have a written implementation plan to execute in a separate session with review checkpoints
 ---
 
-# Verification Before Completion
+# Executing Plans
 
 ## Overview
 
-Claiming work is complete without verification is dishonesty, not efficiency.
+Load plan, review critically, execute all tasks, report when complete.
 
-**Core principle:** Evidence before claims, always.
+**Announce at start:** "I'm using the executing-plans skill to implement this plan."
 
-**Violating the letter of this rule is violating the spirit of this rule.**
+**Note:** Tell your human partner that Superpowers works much better with access to subagents. The quality of its work will be significantly higher if run on a platform with subagent support (Claude Code, Codex CLI, Codex App, and Copilot CLI all qualify; see the per-platform tool refs in `../using-superpowers/references/`). If subagents are available, use superpowers:subagent-driven-development instead of this skill.
 
-## The Iron Law
+## The Process
 
-```
-NO COMPLETION CLAIMS WITHOUT FRESH VERIFICATION EVIDENCE
-```
+### Step 1: Load and Review Plan
+1. Read plan file
+2. Review critically - identify any questions or concerns about the plan
+3. If concerns: Raise them with your human partner before starting
+4. If no concerns: Create todos for the plan items and proceed
 
-If you haven't run the verification command in this message, you cannot claim it passes.
+### Step 2: Execute Tasks
 
-## The Gate Function
+For each task:
+1. Mark as in_progress
+2. Follow each step exactly (plan has bite-sized steps)
+3. Run verifications as specified
+4. Mark as completed
 
-```
-BEFORE claiming any status or expressing satisfaction:
+### Step 3: Complete Development
 
-1. IDENTIFY: What command proves this claim?
-2. RUN: Execute the FULL command (fresh, complete)
-3. READ: Full output, check exit code, count failures
-4. VERIFY: Does output confirm the claim?
-   - If NO: State actual status with evidence
-   - If YES: State claim WITH evidence
-5. ONLY THEN: Make the claim
+After all tasks complete and verified:
+- Announce: "I'm using the finishing-a-development-branch skill to complete this work."
+- **REQUIRED SUB-SKILL:** Use superpowers:finishing-a-development-branch
+- Follow that skill to verify tests, present options, execute choice
 
-Skip any step = lying, not verifying
-```
+## When to Stop and Ask for Help
 
-## Common Failures
+**STOP executing immediately when:**
+- Hit a blocker (missing dependency, test fails, instruction unclear)
+- Plan has critical gaps preventing starting
+- You don't understand an instruction
+- Verification fails repeatedly
 
-| Claim | Requires | Not Sufficient |
-|-------|----------|----------------|
-| Tests pass | Test command output: 0 failures | Previous run, "should pass" |
-| Linter clean | Linter output: 0 errors | Partial check, extrapolation |
-| Build succeeds | Build command: exit 0 | Linter passing, logs look good |
-| Bug fixed | Test original symptom: passes | Code changed, assumed fixed |
-| Regression test works | Red-green cycle verified | Test passes once |
-| Agent completed | VCS diff shows changes | Agent reports "success" |
-| Requirements met | Line-by-line checklist | Tests passing |
+**Ask for clarification rather than guessing.**
 
-## Red Flags - STOP
+## When to Revisit Earlier Steps
 
-- Using "should", "probably", "seems to"
-- Expressing satisfaction before verification ("Great!", "Perfect!", "Done!", etc.)
-- About to commit/push/PR without verification
-- Trusting agent success reports
-- Relying on partial verification
-- Thinking "just this once"
-- Tired and wanting work over
-- **ANY wording implying success without having run verification**
+**Return to Review (Step 1) when:**
+- Partner updates the plan based on your feedback
+- Fundamental approach needs rethinking
 
-## Rationalization Prevention
+**Don't force through blockers** - stop and ask.
 
-| Excuse | Reality |
-|--------|---------|
-| "Should work now" | RUN the verification |
-| "I'm confident" | Confidence ≠ evidence |
-| "Just this once" | No exceptions |
-| "Linter passed" | Linter ≠ compiler |
-| "Agent said success" | Verify independently |
-| "I'm tired" | Exhaustion ≠ excuse |
-| "Partial check is enough" | Partial proves nothing |
-| "Different words so rule doesn't apply" | Spirit over letter |
+## Remember
+- Review plan critically first
+- Follow plan steps exactly
+- Don't skip verifications
+- Reference skills when plan says to
+- Stop when blocked, don't guess
+- Never start implementation on main/master branch without explicit user consent
 
-## Key Patterns
+## Integration
 
-**Tests:**
-```
- [Run test command] [See: 34/34 pass] "All tests pass"
- "Should pass now" / "Looks correct"
-```
+**Required workflow skills:**
+- **superpowers:using-git-worktrees** - Ensures isolated workspace (creates one or verifies existing)
+- **superpowers:writing-plans** - Creates the plan this skill executes
+- **superpowers:finishing-a-development-branch** - Complete development after all tasks
 
-**Regression tests (TDD Red-Green):**
-```
- Write → Run (pass) → Revert fix → Run (MUST FAIL) → Restore → Run (pass)
- "I've written a regression test" (without red-green verification)
-```
+## ⚠️ Tratamento de Exceções e Edge Cases
 
-**Build:**
-```
- [Run build] [See: exit 0] "Build passes"
- "Linter passed" (linter doesn't check compilation)
-```
+### Erros de Leitura do Plano
+- **Plano não encontrado:** Verifique se o arquivo do plano está no local correto e se o caminho está correto.
+- **Plano corrompido:** Tente restaurar o plano de um backup ou solicite ao parceiro humano que forneça uma versão atualizada.
 
-**Requirements:**
-```
- Re-read plan → Create checklist → Verify each → Report gaps or completion
- "Tests pass, phase complete"
-```
+### Erros de Execução de Tarefas
+- **Dependências faltantes:** Verifique se todas as dependências necessárias estão instaladas e configuradas corretamente.
+- **Falha nos testes:** Analise os logs de teste para identificar a causa da falha e ajuste o plano conforme necessário.
 
-**Agent delegation:**
-```
- Agent reports success → Check VCS diff → Verify changes → Report actual state
- Trust agent report
-```
+### Erros de Comunicação
+- **Falha na comunicação com o parceiro humano:** Verifique se os canais de comunicação estão funcionando corretamente e se o parceiro humano está disponível.
 
-## Why This Matters
-
-From 24 failure memories:
-- your human partner said "I don't believe you" - trust broken
-- Undefined functions shipped - would crash
-- Missing requirements shipped - incomplete features
-- Time wasted on false completion → redirect → rework
-- Violates: "Honesty is a core value. If you lie, you'll be replaced."
-
-## When To Apply
-
-**ALWAYS before:**
-- ANY variation of success/completion claims
-- ANY expression of satisfaction
-- ANY positive statement about work state
-- Committing, PR creation, task completion
-- Moving to next task
-- Delegating to agents
-
-**Rule applies to:**
-- Exact phrases
-- Paraphrases and synonyms
-- Implications of success
-- ANY communication suggesting completion/correctness
-
-## The Bottom Line
-
-**No shortcuts for verification.**
-
-Run the command. Read the output. THEN claim the result.
-
-This is non-negotiable.
-
-## Tratamento de Exceções e Edge Cases
-
-Além dos casos comuns e padrões, é importante considerar exceções e edge cases que podem surgir durante o processo de verificação. Aqui estão algumas diretrizes adicionais:
-
-* **Erros inesperados:** Se ocorrer um erro inesperado durante a execução do comando de verificação, não ignore-o. Em vez disso, investigue a causa raiz do erro e verifique se o problema está relacionado à implementação ou ao comando de verificação.
-* **Saídas inconsistentes:** Se a saída do comando de verificação for inconsistente ou ambígua, não faça suposições. Em vez disso, verifique a documentação do comando ou consulte um especialista para garantir que a saída seja interpretada corretamente.
-* **Comandos de verificação complexos:** Se o comando de verificação for complexo ou tiver muitas opções, certifique-se de entender completamente como ele funciona e quais são as implicações de cada opção.
-* **Dependências:** Se o comando de verificação depender de outras ferramentas ou bibliotecas, certifique-se de que elas estejam atualizadas e configuradas corretamente.
-* **Limitações do comando de verificação:** Se o comando de verificação tiver limitações ou restrições, certifique-se de entender quais são elas e como elas afetam a verificação.
-
-Ao considerar esses exceções e edge cases, você pode garantir que o processo de verificação seja mais robusto e confiável, e que os resultados sejam precisos e confiáveis.
+### Edge Cases
+- **Plano com passos vagos:** Solicite esclarecimentos ao parceiro humano sobre os passos vagos antes de prosseguir.
+- **Plano com dependências circulares:** Identifique e resolva as dependências circulares antes de executar o plano.
+- **Plano com prazos inexequíveis:** Avalie os prazos e ajuste o plano para refletir prazos realistas, se necessário.
