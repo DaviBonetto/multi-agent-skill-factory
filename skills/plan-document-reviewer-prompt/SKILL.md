@@ -23,6 +23,8 @@ Subagent (general-purpose):
     | Spec Alignment | Plan covers spec requirements, no major scope creep |
     | Task Decomposition | Tasks have clear boundaries, steps are actionable |
     | Buildability | Could an engineer follow this plan without getting stuck? |
+    | Security | Potential security risks, data protection, and access control |
+    | Error Handling | Presence of error handling mechanisms and contingency plans |
 
     ## Calibration
 
@@ -47,11 +49,10 @@ Subagent (general-purpose):
 
     ⚠️ Tratamento de Exceções e Edge Cases
 
-    *   **Planos incompletos:** Se o plano estiver incompleto, verifique se os principais componentes estão presentes, como objetivos, escopo, cronograma e recursos. Se esses componentes estiverem faltando, indique como eles afetariam a implementação.
-    *   **Conflitos de especificação:** Se houver conflitos entre a especificação e o plano, documente as discrepâncias e sugira como elas poderiam ser resolvidas para garantir a conformidade.
-    *   **Tarefas mal definidas:** Se as tarefas estiverem mal definidas ou forem muito vagas, forneça exemplos de como elas poderiam ser reescritas para melhorar a clareza e a executabilidade.
-    *   **Dependências não declaradas:** Verifique se há dependências não declaradas entre tarefas ou componentes. Se encontrar, sugira como elas poderiam ser documentadas e gerenciadas para evitar problemas durante a implementação.
-    *   **Riscos e mitigação:** Identifique potenciais riscos associados ao plano e sugira estratégias de mitigação. Isso pode incluir a identificação de pontos críticos, planejamento de contingência e alocação de recursos para gestão de riscos.
-    *   **Segurança e conformidade:** Avalie se o plano atende aos requisitos de segurança e conformidade relevantes. Se houver lacunas, forneça recomendações para garantir que o plano esteja alinhado com as políticas e regulamentações aplicáveis.
-
-**Reviewer returns:** Status, Issues (if any), Recommendations
+    *   **Planos incompletos:** Se o plano estiver incompleto, verifique se os principais componentes estão presentes, como objetivos, escopo, cronograma e recursos.
+    *   **Conflitos de especificação:** Se houver conflitos entre a especificação e o plano, verifique se o plano está alinhado com a especificação e se as diferenças são justificadas.
+    *   **Tarefas mal definidas:** Se as tarefas estiverem mal definidas, verifique se elas têm objetivos claros, prazos e recursos atribuídos.
+    *   **Riscos de segurança:** Se houver riscos de segurança identificados, verifique se o plano inclui medidas para mitigá-los, como autenticação, autorização e criptografia.
+    *   **Tratamento de erros:** Se houver erros ou exceções identificados, verifique se o plano inclui mecanismos para lidar com eles, como logs, notificações e planos de contingência.
+    *   **Dependências externas:** Se o plano depende de recursos externos, verifique se essas dependências estão documentadas e se há planos para lidar com falhas ou atrasos.
+    *   **Cenários de bordo:** Se houver cenários de bordo identificados, verifique se o plano inclui estratégias para lidar com eles, como escalonamento, cache ou otimização de recursos.
