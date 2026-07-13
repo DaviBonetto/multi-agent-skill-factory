@@ -15,27 +15,19 @@ At the start of any multi-step task, create the task artifact listing every step
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
 
-### Erros de Invocação de Subagentes
+Ao criar um task artifact, considere os seguintes casos:
+* **Erro de permissão**: se o usuário não tiver permissão para criar ou editar o arquivo, o sistema deve retornar um erro claro e conciso.
+* **Arquivo existente**: se o arquivo já existir, o sistema deve verificar se o arquivo é um task artifact válido e, se não for, retornar um erro.
+* **Formato inválido**: se o formato do task artifact for inválido, o sistema deve retornar um erro e fornecer orientações sobre o formato correto.
+* **Tamanho do arquivo**: se o tamanho do arquivo for muito grande, o sistema deve retornar um erro e fornecer orientações sobre o tamanho máximo permitido.
+* **Conflito de nomes**: se dois ou mais task artifacts tiverem o mesmo nome, o sistema deve retornar um erro e fornecer orientações sobre como resolver o conflito.
 
-*   Caso o subagente não seja encontrado, o sistema deve retornar um erro com uma mensagem clara indicando que o subagente não existe.
-*   Se o subagente for invocado com permissões insuficientes, o sistema deve retornar um erro com uma mensagem indicando as permissões necessárias.
+Além disso, é importante considerar os seguintes edge cases:
+* **Criar um task artifact vazio**: o sistema deve permitir que o usuário crie um task artifact vazio e forneça orientações sobre como preencher o arquivo.
+* **Editar um task artifact vazio**: o sistema deve permitir que o usuário edite um task artifact vazio e forneça orientações sobre como preencher o arquivo.
+* **Excluir um task artifact**: o sistema deve permitir que o usuário exclua um task artifact e forneça orientações sobre como confirmar a exclusão.
 
-### Erros de Criação de Tarefas
-
-*   Se a tarefa não puder ser criada devido a falta de espaço em disco, o sistema deve retornar um erro com uma mensagem indicando a necessidade de liberar espaço em disco.
-*   Se a tarefa for criada com um nome duplicado, o sistema deve retornar um erro com uma mensagem indicando que a tarefa já existe.
-
-### Erros de Edição de Tarefas
-
-*   Se a tarefa não puder ser editada devido a permissões insuficientes, o sistema deve retornar um erro com uma mensagem indicando as permissões necessárias.
-*   Se a tarefa for editada com um formato inválido, o sistema deve retornar um erro com uma mensagem indicando o formato correto.
-
-### Segurança
-
-*   Todas as operações de criação, edição e exclusão de tarefas devem ser registradas em um log de auditoria para fins de segurança e conformidade.
-*   O sistema deve implementar autenticação e autorização para garantir que apenas usuários autorizados possam criar, editar e excluir tarefas.
-
-### Edge Cases
-
-*   Se a tarefa for criada com um nome vazio, o sistema deve retornar um erro com uma mensagem indicando que o nome da tarefa é obrigatório.
-*   Se a tarefa for editada com um estado inválido (por exemplo, "concluída" quando a tarefa não foi iniciada), o sistema deve retornar um erro com uma mensagem indicando o estado válido.
+Para lidar com esses casos, o sistema deve implementar os seguintes tratamentos de erros:
+* **Try-catch**: o sistema deve usar try-catch para capturar erros e fornecer mensagens de erro claras e concisas.
+* **Validação de entrada**: o sistema deve validar a entrada do usuário para garantir que o formato do task artifact seja válido e que o arquivo não exista.
+* **Mensagens de erro**: o sistema deve fornecer mensagens de erro claras e concisas para ajudar o usuário a entender o que deu errado e como corrigir o problema.
