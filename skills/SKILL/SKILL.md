@@ -1,88 +1,136 @@
 ---
-name: executing-plans
-description: Use when you have a written implementation plan to execute in a separate session with review checkpoints
+name: huggingface-datasets
+description: Use this skill for Hugging Face Dataset Viewer API workflows that fetch subset/split metadata, paginate rows, search text, apply filters, download parquet URLs, and read size or statistics.
 ---
 
-# Executing Plans
+# Hugging Face Dataset Viewer
 
-## Overview
+Use this skill to execute read-only Dataset Viewer API calls for dataset exploration and extraction.
 
-Load plan, review critically, execute all tasks, report when complete.
+## Core workflow
 
-**Announce at start:** "I'm using the executing-plans skill to implement this plan."
+1. Optionally validate dataset availability with `/is-valid`.
+2. Resolve `config` + `split` with `/splits`.
+3. Preview with `/first-rows`.
+4. Paginate content with `/rows` using `offset` and `length` (max 100).
+5. Use `/search` for text matching and `/filter` for row predicates.
+6. Retrieve parquet links via `/parquet` and totals/metadata via `/size` and `/statistics`.
 
-**Note:** Tell your human partner that Superpowers works much better with access to subagents. The quality of its work will be significantly higher if run on a platform with subagent support (Claude Code, Codex CLI, Codex App, and Copilot CLI all qualify; see the per-platform tool refs in `../using-superpowers/references/`). If subagents are available, use superpowers:subagent-driven-development instead of this skill.
+## Defaults
 
-## The Process
+- Base URL: `https://datasets-server.huggingface.co`
+- Default API method: `GET`
+- Query params should be URL-encoded.
+- `offset` is 0-based.
+- `length` max is usually `100` for row-like endpoints.
+- Gated/private datasets require `Authorization: Bearer <HF_TOKEN>`.
 
-### Step 1: Load and Review Plan
-1. Read plan file
-2. Review critically - identify any questions or concerns about the plan
-3. If concerns: Raise them with your human partner before starting
-4. If no concerns: Create todos for the plan items and proceed
+## Dataset Viewer
 
-### Step 2: Execute Tasks
+- `Validate dataset`: `/is-valid?dataset=<namespace/repo>`
+- `List subsets and splits`: `/splits?dataset=<namespace/repo>`
+- `Preview first rows`: `/first-rows?dataset=<namespace/repo>&config=<config>&split=<split>`
+- `Paginate rows`: `/rows?dataset=<namespace/repo>&config=<config>&split=<split>&offset=<int>&length=<int>`
+- `Search text`: `/search?dataset=<namespace/repo>&config=<config>&split=<split>&query=<text>&offset=<int>&length=<int>`
+- `Filter with predicates`: `/filter?dataset=<namespace/repo>&config=<config>&split=<split>&where=<predicate>&orderby=<sort>&offset=<int>&length=<int>`
+- `List parquet shards`: `/parquet?dataset=<namespace/repo>`
+- `Get size totals`: `/size?dataset=<namespace/repo>`
+- `Get column statistics`: `/statistics?dataset=<namespace/repo>&config=<config>&split=<split>`
+- `Get Croissant metadata (if available)`: `/croissant?dataset=<namespace/repo>`
 
-For each task:
-1. Mark as in_progress
-2. Follow each step exactly (plan has bite-sized steps)
-3. Run verifications as specified
-4. Mark as completed
+Pagination pattern:
 
-### Step 3: Complete Development
+```bash
+curl "https://datasets-server.huggingface.co/rows?dataset=stanfordnlp/imdb&config=plain_text&split=train&offset=0&length=100"
+curl "https://datasets-server.huggingface.co/rows?dataset=stanfordnlp/imdb&config=plain_text&split=train&offset=100&length=100"
+```
 
-After all tasks complete and verified:
-- Announce: "I'm using the finishing-a-development-branch skill to complete this work."
-- **REQUIRED SUB-SKILL:** Use superpowers:finishing-a-development-branch
-- Follow that skill to verify tests, present options, execute choice
+When pagination is partial, use response fields such as `num_rows_total`, `num_rows_per_page`, and `partial` to drive continuation logic.
 
-## When to Stop and Ask for Help
+Search/filter notes:
 
-**STOP executing immediately when:**
-- Hit a blocker (missing dependency, test fails, instruction unclear)
-- Plan has critical gaps preventing starting
-- You don't understand an instruction
-- Verification fails repeatedly
+- `/search` matches string columns (full-text style behavior is internal to the API).
+- `/filter` requires predicate syntax in `where` and optional sort in `orderby`.
+- Keep filtering and searches read-only and side-effect free.
 
-**Ask for clarification rather than guessing.**
+For CLI-based parquet URL discovery or SQL, use the `hf-cli` skill with `hf datasets parquet` and `hf datasets sql`.
 
-## When to Revisit Earlier Steps
+## Creating and Uploading Datasets
 
-**Return to Review (Step 1) when:**
-- Partner updates the plan based on your feedback
-- Fundamental approach needs rethinking
+Use one of these flows depending on dependency constraints.
 
-**Don't force through blockers** - stop and ask.
+Zero local dependencies (Hub UI):
 
-## Remember
-- Review plan critically first
-- Follow plan steps exactly
-- Don't skip verifications
-- Reference skills when plan says to
-- Stop when blocked, don't guess
-- Never start implementation on main/master branch without explicit user consent
+- Create dataset repo in browser: `https://huggingface.co/new-dataset`
+- Upload parquet files in the repo "Files and versions" page.
+- Verify shards appear in Dataset Viewer:
 
-## Integration
+```bash
+curl -s "https://datasets-server.huggingface.co/parquet?dataset=<namespace>/<repo>"
+```
 
-**Required workflow skills:**
-- **superpowers:using-git-worktrees** - Ensures isolated workspace (creates one or verifies existing)
-- **superpowers:writing-plans** - Creates the plan this skill executes
-- **superpowers:finishing-a-development-branch** - Complete development after all tasks
+Low dependency CLI flow (`npx @huggingface/hub` / `hfjs`):
+
+- Set auth token:
+
+```bash
+export HF_TOKEN=<your_hf_token>
+```
+
+- Upload parquet folder to a dataset repo (auto-creates repo if missing):
+
+```bash
+npx -y @huggingface/hub upload datasets/<namespace>/<repo> ./local/parquet-folder data
+```
+
+- Upload as private repo on creation:
+
+```bash
+npx -y @huggingface/hub upload datasets/<namespace>/<repo> ./local/parquet-folder data --private
+```
+
+After upload, call `/parquet` to discover `<config>/<split>/<shard>` values for querying with `@~parquet`.
+
+## Agent Traces
+
+The Hub supports raw agent session traces from Claude Code, Codex, and Pi Agent. Upload them to Hugging Face Datasets as original JSONL files and the Hub can auto-detect the trace format, tag the dataset as `Traces`, and enable the trace viewer for browsing sessions, turns, tool calls, and model responses. Common local session directories:
+
+- Claude Code: `~/.claude/projects`
+- Codex: `~/.codex/sessions`
+- Pi: `~/.pi/agent/sessions`
+
+Default to private dataset repos because traces can contain prompts, file paths, tool outputs, secrets, or PII. Preserve the raw `.jsonl` files and nest them by project/cwd instead of uploading every session at the dataset root.
+
+```bash
+hf repos create <namespace>/<repo> --type dataset --private --exist-ok
+hf upload <namespace>/<repo> ~/.codex/sessions codex/<project-or-cwd> --type dataset
+```
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
 
-### Erros de Leitura do Plano
-- **Plano não encontrado:** Verifique se o arquivo do plano está no local correto e se o caminho está correto.
-- **Plano corrompido:** Tente restaurar o plano de um backup ou solicite ao parceiro humano que forneça uma versão atualizada.
+### Erros de Autenticação
 
-### Erros de Execução de Tarefas
-- **Dependências faltantes:** Verifique se todas as dependências necessárias estão instaladas e configuradas corretamente.
-- **Falha nos testes:** Analise os logs de teste para identificar a causa da falha e ajuste o plano conforme necessário.
+- **Token de Autenticação Inválido**: Verifique se o token de autenticação está correto e não expirou.
+- **Erro de Permissão**: Verifique se o usuário tem permissão para acessar o recurso solicitado.
 
-### Erros de Comunicação
-- **Falha na comunicação com o parceiro humano:** Verifique se os canais de comunicação estão funcionando corretamente e se o parceiro humano está disponível.
+### Erros de Rede
+
+- **Conexão de Rede Instável**: Verifique a estabilidade da conexão de rede e tente novamente.
+- **Erro de Tempo de Esgotamento**: Aumente o tempo de esgotamento da conexão de rede.
+
+### Erros de Dados
+
+- **Dados Inválidos**: Verifique se os dados estão no formato correto e não contêm erros de sintaxe.
+- **Dados Faltantes**: Verifique se todos os campos obrigatórios estão preenchidos.
 
 ### Edge Cases
-- **Plano com passos vagos:** Solicite esclarecimentos ao parceiro humano sobre os passos vagos antes de prosseguir.
-- **Plano com dependências circulares:** Identifique e resolva as dependências circulares antes de executar o plano.
-- **Plano com prazos inexequíveis:** Avalie os prazos e ajuste o plano para refletir prazos realistas, se necessário.
+
+- **Dataset Vazio**: Verifique se o dataset está vazio e não contém registros.
+- **Dataset com Registros Duplicados**: Verifique se o dataset contém registros duplicados e remova-os se necessário.
+- **Dataset com Campos Faltantes**: Verifique se o dataset contém campos faltantes e preencha-os se necessário.
+
+### Tratamento de Exceções
+
+- **Try-Except**: Use blocos try-except para capturar e tratar exceções.
+- **Logging**: Registre os erros e exceções para facilitar a depuração.
+- **Retorno de Erros**: Retorne erros e exceções para o usuário de forma clara e concisa.
