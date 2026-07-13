@@ -1,71 +1,128 @@
-# Desenvolvimento de Microsserviços
-## Descrição
-Ensina a arquitetura de microsserviços, padrões de design e implementação com tecnologias como Docker e Kubernetes.
+---
+name: Desenvolvimento de Microserviços com Spring Boot
+description: Esta habilidade ensina como criar microserviços escaláveis e resilientes utilizando Spring Boot
+---
+
 ## Objetivo
-O objetivo deste guia é fornecer uma visão geral completa sobre o desenvolvimento de microsserviços, abordando desde a arquitetura até a implementação, utilizando tecnologias como Docker e Kubernetes. Este guia é destinado a profissionais seniores que buscam aprimorar suas habilidades em desenvolvimento de microsserviços.
+O objetivo desta habilidade é capacitar os desenvolvedores a criar microserviços escaláveis e resilientes utilizando Spring Boot, abordando definição de APIs, gerenciamento de dependências e deploy em contêineres.
+
 ## Pré-requisitos
-Para seguir este guia, é necessário ter conhecimentos prévios em:
-- Desenvolvimento de software
-- Arquitetura de sistemas
-- Conceitos básicos de Docker e Kubernetes
-- Programação em linguagens como Java, Python ou similar
+Para iniciar este curso, é necessário ter conhecimentos básicos em:
+- Java 8 ou superior
+- Spring Framework
+- Conceitos de microserviços e arquitetura de software
+
 ## Passo a Passo Técnico / Exemplos de Código
-### 1. Introdução à Arquitetura de Microsserviços
-A arquitetura de microsserviços é um estilo de desenvolvimento de software que estrutura uma aplicação como uma coleção de serviços pequenos, independentes e flexíveis. Cada serviço é responsável por uma funcionalidade específica e pode ser desenvolvido, testado e implantado de forma independente.
-### 2. Implementação com Docker
-Docker é uma plataforma que permite empacotar, enviar e executar aplicativos em contêineres. Para implementar um microsserviço com Docker, você precisará:
+### Definição de APIs
+Para começar, vamos criar uma API simples utilizando Spring Boot. Primeiro, criaremos um novo projeto Spring Boot e adicionaremos as dependências necessárias ao arquivo `pom.xml` (se estiver usando Maven) ou `build.gradle` (se estiver usando Gradle).
+
+```xml
+<!-- Maven -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+```
+
+```groovy
+// Gradle
+implementation 'org.springframework.boot:spring-boot-starter-web'
+```
+
+Em seguida, criaremos um controlador que irá lidar com as requisições HTTP:
+
+```java
+@RestController
+@RequestMapping("/api")
+public class MeuControlador {
+    
+    @GetMapping("/ola")
+    public String ola() {
+        return "Olá, mundo!";
+    }
+}
+```
+
+### Gerenciamento de Dependências
+O Spring Boot facilita o gerenciamento de dependências, pois já vem com muitas delas configuradas por padrão. No entanto, é importante entender como elas são gerenciadas. Por exemplo, se você precisar adicionar uma dependência para trabalhar com banco de dados, poderá adicioná-la da seguinte maneira:
+
+```xml
+<!-- Maven -->
+<dependency>
+    <groupId>com.h2database</groupId>
+    <artifactId>h2</artifactId>
+    <scope>runtime</scope>
+</dependency>
+```
+
+```groovy
+// Gradle
+runtimeOnly 'com.h2database:h2'
+```
+
+### Deploy em Contêineres
+Para deployar sua aplicação em contêineres, você precisará criar uma imagem Docker. Isso pode ser feito utilizando o Dockerfile:
+
 ```dockerfile
-# Exemplo de Dockerfile para um microsserviço em Python
-FROM python:3.9-slim
-# Defina o diretório de trabalho
-WORKDIR /app
-# Copie o requirements.txt
-COPY requirements.txt .
-# Instale as dependências
-RUN pip install --no-cache-dir -r requirements.txt
-# Copie o aplicativo
-COPY . .
-# Exponha a porta
-EXPOSE 8000
-# Execute o comando para iniciar o aplicativo
-CMD ["python", "app.py"]
+FROM openjdk:8-jdk-alpine
+ARG JAR_FILE=target/meu-app-0.0.1-SNAPSHOT.jar
+COPY ${JAR_FILE} app.jar
+ENTRYPOINT ["java","-jar","/app.jar"]
 ```
-É importante tratar possíveis erros durante a execução do Dockerfile, como falhas na instalação de dependências ou problemas de permissão.
-### 3. Orquestração com Kubernetes
-Kubernetes é uma plataforma de orquestração de contêineres que automata a implantação, o dimensionamento e a gestão de aplicativos em contêineres. Para orquestrar seus microsserviços com Kubernetes, você precisará criar um arquivo de configuração (por exemplo, `deployment.yaml`):
-```yml
-# Exemplo de arquivo deployment.yaml para um microsserviço
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: microsservico
-spec:
-  replicas: 3
-  selector:
-    matchLabels:
-      app: microsservico
-  template:
-    metadata:
-      labels:
-        app: microsservico
-    spec:
-      containers:
-      - name: microsservico
-        image: <seu-repositorio>/microsservico:latest
-        ports:
-        - containerPort: 8000
+
+E, em seguida, construir e executar a imagem:
+
+```bash
+docker build -t meu-app .
+docker run -p 8080:8080 meu-app
 ```
-Certifique-se de que o arquivo de configuração esteja correto e que as imagens dos contêineres estejam disponíveis no repositório.
+
 ## Validação
-Para validar a implementação dos microsserviços, você deve:
-- Verificar se os serviços estão executando corretamente e se as dependências estão sendo respeitadas.
-- Realizar testes de unidade e integração para garantir que os serviços estão funcionando como esperado.
-- Monitorar o desempenho e a escalabilidade dos serviços em um ambiente de produção.
-## ⚠️ Tratamento de Exceções e Edge Cases
-Além dos passos técnicos, é fundamental considerar os seguintes casos de borda e exceções:
-- **Falha na inicialização do contêiner**: Verifique se o contêiner está sendo iniciado corretamente e se há erros de inicialização.
-- **Problemas de conectividade**: Certifique-se de que os serviços possam se comunicar entre si e com o exterior, se necessário.
-- **Erros de desempenho**: Monitorize o desempenho dos serviços e ajuste as configurações de acordo com as necessidades.
-- **Segurança**: Implemente medidas de segurança adequadas, como autenticação e autorização, para proteger os serviços e os dados.
-- **Escalabilidade**: Planeje a escalabilidade dos serviços para atender às necessidades crescentes, seja horizontalmente (adicionando mais réplicas) ou verticalmente (aumentando os recursos dos contêineres).
-- **Recuperação de falhas**: Desenvolva estratégias para recuperar de falhas, como a perda de um nó ou a falha de um serviço, para garantir a disponibilidade e a confiabilidade do sistema.
+Para validar o funcionamento da sua aplicação, você pode utilizar ferramentas como o Postman para fazer requisições HTTP para a API que você criou. Além disso, é importante realizar testes unitários e de integração para garantir que a aplicação esteja funcionando corretamente.
+
+## Tratamento de Exceções e Edge Cases
+É fundamental considerar os possíveis erros e exceções que podem ocorrer durante a execução da aplicação. Aqui estão alguns exemplos de como lidar com esses casos:
+
+*   **Tratamento de Exceções**: Utilize blocos try-catch para capturar e tratar exceções que possam ocorrer durante a execução da aplicação. Por exemplo:
+
+    ```java
+@RestControllerAdvice
+public class MeuExceptionHandler {
+    
+    @ExceptionHandler(value = Exception.class)
+    public ResponseEntity<String> handleException(Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ocorreu um erro interno");
+    }
+}
+```
+
+*   **Validação de Dados**: Valide os dados de entrada para garantir que eles estejam corretos e consistentes. Por exemplo:
+
+    ```java
+public class MeuControlador {
+    
+    @GetMapping("/ola")
+    public String ola(@RequestParam("nome") @NotEmpty String nome) {
+        return "Olá, " + nome + "!";
+    }
+}
+```
+
+*   **Segurança**: Implemente medidas de segurança para proteger a aplicação contra ataques e vulnerabilidades. Por exemplo, utilize autenticação e autorização para controlar o acesso à aplicação:
+
+    ```java
+@Configuration
+@EnableWebSecurity
+public class MeuSecurityConfig extends WebSecurityConfigurerAdapter {
+    
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+            .antMatchers("/api/**").authenticated()
+            .and()
+            .httpBasic();
+    }
+}
+```
+
+Lembre-se de que a prática e a experimentação são fundamentais para dominar o desenvolvimento de microserviços com Spring Boot. Este guia forneceu uma visão geral dos passos necessários, mas é importante aprofundar-se em cada um desses tópicos para se tornar um desenvolvedor mais eficaz.
