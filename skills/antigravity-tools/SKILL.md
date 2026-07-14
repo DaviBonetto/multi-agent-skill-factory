@@ -15,19 +15,22 @@ At the start of any multi-step task, create the task artifact listing every step
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
 
-Ao criar um task artifact, considere os seguintes casos:
-* **Erro de permissão**: se o usuário não tiver permissão para criar ou editar o arquivo, o sistema deve retornar um erro claro e conciso.
-* **Arquivo existente**: se o arquivo já existir, o sistema deve verificar se o arquivo é um task artifact válido e, se não for, retornar um erro.
-* **Formato inválido**: se o formato do task artifact for inválido, o sistema deve retornar um erro e fornecer orientações sobre o formato correto.
-* **Tamanho do arquivo**: se o tamanho do arquivo for muito grande, o sistema deve retornar um erro e fornecer orientações sobre o tamanho máximo permitido.
-* **Conflito de nomes**: se dois ou mais task artifacts tiverem o mesmo nome, o sistema deve retornar um erro e fornecer orientações sobre como resolver o conflito.
+### Erros de Invocação de Subagentes
 
-Além disso, é importante considerar os seguintes edge cases:
-* **Criar um task artifact vazio**: o sistema deve permitir que o usuário crie um task artifact vazio e forneça orientações sobre como preencher o arquivo.
-* **Editar um task artifact vazio**: o sistema deve permitir que o usuário edite um task artifact vazio e forneça orientações sobre como preencher o arquivo.
-* **Excluir um task artifact**: o sistema deve permitir que o usuário exclua um task artifact e forneça orientações sobre como confirmar a exclusão.
+- **Erro de Permissão**: Se o subagente não tiver permissão para executar uma ação, o `invoke_subagent` retornará um erro de permissão. Nesse caso, o skill deve verificar as permissões do subagente e solicitar as permissões necessárias antes de tentar novamente.
+- **Erro de Tipo de Subagente**: Se o tipo de subagente especificado for inválido, o `invoke_subagent` retornará um erro de tipo de subagente. Nesse caso, o skill deve verificar a documentação do subagente para garantir que o tipo de subagente esteja correto.
 
-Para lidar com esses casos, o sistema deve implementar os seguintes tratamentos de erros:
-* **Try-catch**: o sistema deve usar try-catch para capturar erros e fornecer mensagens de erro claras e concisas.
-* **Validação de entrada**: o sistema deve validar a entrada do usuário para garantir que o formato do task artifact seja válido e que o arquivo não exista.
-* **Mensagens de erro**: o sistema deve fornecer mensagens de erro claras e concisas para ajudar o usuário a entender o que deu errado e como corrigir o problema.
+### Erros de Trabalho com Arquivos
+
+- **Erro de Leitura de Arquivo**: Se o arquivo não existir ou não puder ser lido, o `read_file` retornará um erro de leitura de arquivo. Nesse caso, o skill deve verificar se o arquivo existe e se as permissões de leitura estão corretas antes de tentar novamente.
+- **Erro de Escrita de Arquivo**: Se o arquivo não puder ser escrito, o `write_to_file` retornará um erro de escrita de arquivo. Nesse caso, o skill deve verificar se as permissões de escrita estão corretas e se o arquivo não está sendo usado por outro processo antes de tentar novamente.
+
+### Edge Cases de Trabalho com Tarefas
+
+- **Tarefa com Múltiplos Passos**: Se uma tarefa tiver múltiplos passos, o skill deve criar um artifact de tarefa para cada passo e atualizar o artifact à medida que cada passo for concluído.
+- **Tarefa com Dependências**: Se uma tarefa tiver dependências, o skill deve verificar se as dependências estão satisfeitas antes de iniciar a tarefa. Se as dependências não estiverem satisfeitas, o skill deve aguardar até que as dependências sejam satisfeitas antes de iniciar a tarefa.
+
+### Segurança
+
+- **Validação de Entradas**: O skill deve validar todas as entradas para garantir que sejam válidas e seguras antes de processá-las.
+- **Proteção contra Injeção de Comandos**: O skill deve proteger contra injeção de comandos garantindo que todas as entradas sejam validadas e sanitizadas antes de serem usadas em comandos.
