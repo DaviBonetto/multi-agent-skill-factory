@@ -1,123 +1,87 @@
 ---
-name: Desenvolvimento de Aplicativos Móvel com React Native
-description: Esta habilidade ensina como criar aplicativos móveis cross-plataforma utilizando React Native, incluindo design de interface de usuário, integração de APIs e publicação nas lojas de aplicativos.
+name: Desenvolvimento de Aplicativos Móvel
+description: Ensina a criar aplicativos móveis para Android e iOS utilizando linguagens como Java, Swift e Kotlin
 ---
 
 ## Objetivo
-O objetivo desta habilidade é capacitar os desenvolvedores a criar aplicativos móveis cross-plataforma utilizando React Native, abordando desde o design de interface de usuário até a publicação nas lojas de aplicativos. Com isso, os desenvolvedores poderão criar aplicativos móveis de alta qualidade, escaláveis e eficientes para ambos os sistemas operacionais Android e iOS.
+O objetivo deste guia é fornecer uma visão geral completa sobre o desenvolvimento de aplicativos móveis para Android e iOS, utilizando linguagens de programação como Java, Swift e Kotlin. Ao final deste guia, os desenvolvedores senior estarão capacitados a criar aplicativos móveis robustos e escaláveis para ambas as plataformas.
 
 ## Pré-requisitos
-Para começar a desenvolver aplicativos móveis com React Native, é necessário ter:
-- Conhecimento básico em JavaScript e ECMAScript 6+
-- Experiência com React
-- Node.js instalado no computador
-- Um editor de código ou IDE (como Visual Studio Code)
-- Um emulador de dispositivos móveis ou dispositivos físicos para testes
+Antes de iniciar o desenvolvimento de aplicativos móveis, é necessário ter conhecimento em:
+- Linguagens de programação Java, Swift ou Kotlin
+- Desenvolvimento de aplicativos móveis para Android e iOS
+- Ferramentas de desenvolvimento como Android Studio e Xcode
+- Conhecimento em banco de dados e APIs
 
 ## Passo a Passo Técnico / Exemplos de Código
-### 1. Configuração do Ambiente
-Primeiramente, é necessário configurar o ambiente de desenvolvimento. Isso inclui a instalação do React Native CLI e a configuração do emulador ou dispositivo físico para testes.
+### Desenvolvimento para Android
+Para desenvolver um aplicativo Android, siga os passos abaixo:
+1. Instale o Android Studio e configure o ambiente de desenvolvimento.
+2. Crie um novo projeto Android e selecione a linguagem de programação desejada (Java ou Kotlin).
+3. Desenvolva a interface do usuário utilizando layouts e componentes Android.
+4. Implemente a lógica de negócios utilizando Java ou Kotlin.
 
-```bash
-npm install -g react-native-cli
+Exemplo de código em Java para um aplicativo Android:
+```java
+public class MainActivity extends AppCompatActivity {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+    }
+}
 ```
 
-### 2. Criação de um Novo Projeto
-Para criar um novo projeto React Native, utilize o comando:
-```bash
-npx react-native init NomeDoProjeto
+### Desenvolvimento para iOS
+Para desenvolver um aplicativo iOS, siga os passos abaixo:
+1. Instale o Xcode e configure o ambiente de desenvolvimento.
+2. Crie um novo projeto iOS e selecione a linguagem de programação desejada (Swift ou Objective-C).
+3. Desenvolva a interface do usuário utilizando storyboards e componentes iOS.
+4. Implemente a lógica de negócios utilizando Swift ou Objective-C.
+
+Exemplo de código em Swift para um aplicativo iOS:
+```swift
+import UIKit
+
+class ViewController: UIViewController {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // Implemente a lógica de negócios aqui
+    }
+}
 ```
-
-### 3. Design de Interface de Usuário
-O design de interface de usuário é crucial para a experiência do usuário. React Native fornece componentes padrão para criar interfaces de usuário, como `View`, `Text`, `Image`, etc.
-
-```jsx
-import React from 'react';
-import { View, Text } from 'react-native';
-
-const App = () => {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Olá, Mundo!</Text>
-    </View>
-  );
-};
-
-export default App;
-```
-
-### 4. Integração de APIs
-Para integrar APIs, você pode usar a biblioteca `fetch` ou uma biblioteca de terceiros como `axios`.
-
-```jsx
-import React, { useState, useEffect } from 'react';
-import { View, Text } from 'react-native';
-
-const App = () => {
-  const [dados, setDados] = useState([]);
-
-  useEffect(() => {
-    fetch('https://api.example.com/dados')
-      .then(response => response.json())
-      .then(data => setDados(data))
-      .catch(error => console.error('Erro ao carregar dados:', error));
-  }, []);
-
-  return (
-    <View>
-      {dados.map(item => (
-        <Text key={item.id}>{item.nome}</Text>
-      ))}
-    </View>
-  );
-};
-
-export default App;
-```
-
-### 5. Publicação nas Lojas de Aplicativos
-Para publicar o aplicativo nas lojas de aplicativos, é necessário criar um arquivo `.apk` para Android e um arquivo `.ipa` para iOS, e então seguir as instruções de publicação de cada loja.
 
 ## Validação
-Após seguir os passos acima, é importante validar o aplicativo em diferentes dispositivos e plataformas para garantir que ele funcione corretamente e atenda aos requisitos de design e funcionalidade. Além disso, é recomendável realizar testes unitários e de integração para garantir a qualidade do código.
+Para validar o aplicativo móvel, siga os passos abaixo:
+1. Execute o aplicativo em um dispositivo físico ou emulador.
+2. Verifique se o aplicativo está funcionando corretamente e se não há erros.
+3. Teste o aplicativo com diferentes cenários e casos de uso.
+4. Verifique se o aplicativo está de acordo com as diretrizes de design e segurança da plataforma.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-É fundamental tratar exceções e edge cases para garantir a estabilidade e segurança do aplicativo. Aqui estão alguns exemplos:
-- **Tratamento de erros de rede**: ao fazer requisições à API, é importante tratar erros de rede, como falta de conexão ou timeouts.
-- **Tratamento de erros de parsing**: ao parsear dados JSON, é importante tratar erros de parsing, como dados inválidos ou malformatados.
-- **Tratamento de erros de permissão**: ao acessar recursos do dispositivo, como câmera ou localização, é importante tratar erros de permissão, como permissão negada ou não concedida.
-- **Tratamento de edge cases de plataforma**: é importante tratar edge cases específicos de cada plataforma, como diferenças de comportamento entre Android e iOS.
+Ao desenvolver um aplicativo móvel, é importante considerar os seguintes casos de exceção e edge cases:
+- **Erros de rede**: Implemente mecanismos de retry e timeout para lidar com erros de rede.
+- **Erros de banco de dados**: Implemente mecanismos de retry e logging para lidar com erros de banco de dados.
+- **Erros de segurança**: Implemente mecanismos de autenticação e autorização para lidar com erros de segurança.
+- **Casos de uso inesperados**: Implemente mecanismos de logging e monitoramento para lidar com casos de uso inesperados.
+- **Dispositivos com recursos limitados**: Otimize o aplicativo para funcionar em dispositivos com recursos limitados, como memória e processamento.
+- **Diferentes versões de sistema operacional**: Teste o aplicativo em diferentes versões de sistema operacional para garantir a compatibilidade.
 
-Exemplo de tratamento de exceções:
-```jsx
-import React, { useState, useEffect } from 'react';
-import { View, Text } from 'react-native';
+Exemplo de código em Java para tratamento de exceções:
+```java
+try {
+    // Código que pode lançar uma exceção
+} catch (Exception e) {
+    // Trate a exceção aqui
+    Log.e("Erro", e.getMessage());
+}
+```
 
-const App = () => {
-  const [dados, setDados] = useState([]);
-  const [erro, setErro] = useState(null);
-
-  useEffect(() => {
-    fetch('https://api.example.com/dados')
-      .then(response => response.json())
-      .then(data => setDados(data))
-      .catch(error => {
-        setErro(error.message);
-        console.error('Erro ao carregar dados:', error);
-      });
-  }, []);
-
-  return (
-    <View>
-      {erro ? (
-        <Text>Erro: {erro}</Text>
-      ) : (
-        dados.map(item => (
-          <Text key={item.id}>{item.nome}</Text>
-        ))
-      )}
-    </View>
-  );
-};
-
-export default App;
+Exemplo de código em Swift para tratamento de exceções:
+```swift
+do {
+    // Código que pode lançar uma exceção
+} catch {
+    // Trate a exceção aqui
+    print("Erro: (error)")
+}
