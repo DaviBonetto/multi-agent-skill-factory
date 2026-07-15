@@ -1,71 +1,65 @@
 ---
 name: Desenvolvimento de Software Ágil
-description: Ensina metodologias ágeis para desenvolvimento de software, como Scrum e Kanban
+description: Ensina como criar software utilizando metodologias ágeis como Scrum e Kanban
 ---
-### Objetivo
-O objetivo deste guia é fornecer uma visão geral das metodologias ágeis para desenvolvimento de software, com foco em Scrum e Kanban, permitindo que os desenvolvedores seniores apliquem esses conceitos em seus projetos.
 
-### Pré-requisitos
+## Objetivo
+O objetivo deste guia é fornecer uma visão geral do desenvolvimento de software ágil, abordando as principais metodologias, como Scrum e Kanban, e como aplicá-las em projetos de software. Ao final, você estará capacitado a criar software de forma eficiente e flexível, utilizando as melhores práticas ágeis.
+
+## Pré-requisitos
+Para aproveitar ao máximo este guia, é recomendado que você tenha:
 - Conhecimento básico em desenvolvimento de software
-- Experiência em trabalhar em equipes de desenvolvimento
 - Familiaridade com conceitos de gerenciamento de projetos
+- Experiência em trabalhar em equipes de desenvolvimento
 
-### Passo a Passo Técnico / Exemplos de Código
-#### Introdução ao Scrum
-1. **Definição do Produto**: O Product Owner define o backlog do produto, priorizando as funcionalidades.
-2. **Sprint Planning**: A equipe se reúne para planejar o sprint, definindo os objetivos e as tarefas.
-3. **Desenvolvimento**: A equipe trabalha nas tarefas definidas durante o sprint.
-4. **Daily Scrum**: Reunião diária para discutir o progresso e os obstáculos.
-
-#### Introdução ao Kanban
-1. **Visualização do Fluxo de Trabalho**: A equipe visualiza o fluxo de trabalho, desde a concepção até a entrega.
-2. **Limitação do WIP (Work In Progress)**: A equipe define limites para o número de tarefas em andamento.
-3. **Foco na Entrega Contínua**: A equipe se concentra em entregar valor contínua e regularmente.
-
-### Validação
-A validação do conhecimento adquirido pode ser realizada por meio da aplicação prática das metodologias ágeis em projetos reais. Isso inclui:
-- Acompanhamento do progresso do projeto
-- Análise dos resultados e ajustes necessários
-- Retrospectiva regular para identificar oportunidades de melhoria
-
-Exemplo de código para acompanhamento do progresso do projeto em Scrum:
-```python
-class Sprint:
-    def __init__(self, nome, objetivo):
-        self.nome = nome
-        self.objetivo = objetivo
-        self.tarefas = []
-
-    def adicionar_tarefa(self, tarefa):
-        self.tarefas.append(tarefa)
-
-    def acompanhar_progresso(self):
-        try:
-            print(f"Sprint {self.nome}: {len([t for t in self.tarefas if t.concluida])}/{len(self.tarefas)} tarefas concluídas")
-        except ZeroDivisionError:
-            print(f"Sprint {self.nome}: Não há tarefas para acompanhar")
-        except Exception as e:
-            print(f"Erro ao acompanhar progresso: {str(e)}")
-
-class Tarefa:
-    def __init__(self, nome, concluida=False):
-        self.nome = nome
-        self.concluida = concluida
-
-# Exemplo de uso
-sprint = Sprint("Sprint 1", "Desenvolver funcionalidade X")
-tarefa1 = Tarefa("Tarefa 1", True)
-tarefa2 = Tarefa("Tarefa 2", False)
-sprint.adicionar_tarefa(tarefa1)
-sprint.adicionar_tarefa(tarefa2)
-sprint.acompanhar_progresso()
+## Passo a Passo Técnico / Exemplos de Código
+### Introdução ao Scrum
+O Scrum é uma das metodologias ágeis mais populares. Ele se baseia em sprint, que são períodos de tempo definidos para o desenvolvimento de um conjunto de funcionalidades. Aqui está um exemplo simplificado de como o Scrum pode ser aplicado:
+```markdown
+# Exemplo de Sprint no Scrum
+1. Planejamento da Sprint: Definição do que será feito durante a sprint.
+2. Desenvolvimento: Equipe de desenvolvimento trabalha nas tarefas planejadas.
+3. Revisão da Sprint: Equipe apresenta o que foi desenvolvido.
+4. Retrospectiva da Sprint: Equipe discute o que deu certo e o que pode ser melhorado.
 ```
-Este exemplo ilustra como um sistema de acompanhamento de sprints pode ser implementado, permitindo que as equipes monitorem o progresso de seus projetos de forma eficaz.
 
-### ⚠️ Tratamento de Exceções e Edge Cases
-Alguns casos especiais que devem ser considerados:
-- **Sprint sem tarefas**: Caso um sprint não tenha tarefas associadas, o sistema deve lidar com essa situação de forma apropriada, como exibir uma mensagem informando que não há tarefas para acompanhar.
-- **Tarefas com estado inválido**: Se uma tarefa tiver um estado inválido (por exemplo, `concluida` como `None`), o sistema deve tratar esse caso de forma apropriada, como ignorando a tarefa ou lançando uma exceção.
-- **Erros de banco de dados**: Se o sistema utilizar um banco de dados para armazenar informações sobre os sprints e tarefas, deve haver tratamento para erros de banco de dados, como conexão perdida ou queries inválidas.
-- **Segurança**: O sistema deve garantir que apenas usuários autorizados possam acessar e modificar informações sobre os sprints e tarefas. Isso pode ser alcançado por meio de autenticação e autorização adequadas.
-- **Limitação de recursos**: O sistema deve ser capaz de lidar com uma grande quantidade de sprints e tarefas sem consumir recursos excessivos, como memória ou processamento. Isso pode ser alcançado por meio de otimizações de desempenho e uso eficiente de recursos.
+### Introdução ao Kanban
+O Kanban é outra metodologia ágil que se concentra na visualização do trabalho, no limite do trabalho em progresso e na melhoria contínua. Ele não utiliza sprints, mas sim um fluxo contínuo de trabalho.
+```markdown
+# Exemplo de Fluxo de Trabalho no Kanban
+1. To-Do: Tarefas a serem realizadas.
+2. In Progress: Tarefas em andamento.
+3. Done: Tarefas concluídas.
+```
+
+## Validação
+Para validar o conhecimento adquirido, é importante aplicar as metodologias ágeis em projetos reais. Isso pode ser feito de várias maneiras:
+- Participar de equipes de desenvolvimento que utilizam Scrum ou Kanban.
+- Criar um projeto pessoal e aplicar as metodologias ágeis.
+- Realizar simulações de sprint ou fluxo de trabalho para entender melhor como as metodologias funcionam na prática.
+
+## ⚠️ Tratamento de Exceções e Edge Cases
+Ao aplicar as metodologias ágeis, é importante considerar os seguintes casos excepcionais:
+- **Mudanças nos requisitos do projeto**: Se os requisitos do projeto mudarem durante a sprint, é importante reavaliar as prioridades e ajustar o planejamento da sprint.
+- **Falta de recursos**: Se a equipe de desenvolvimento não tiver os recursos necessários para completar as tarefas, é importante identificar as dependências e priorizar as tarefas.
+- **Riscos e dependências**: É importante identificar os riscos e dependências do projeto e desenvolver planos de mitigação.
+- **Comunicação inadequada**: A comunicação inadequada entre a equipe de desenvolvimento e os stakeholders pode levar a mal-entendidos e atrasos. É importante estabelecer canais de comunicação claros e frequentes.
+- **Integração contínua e entrega contínua**: É importante implementar integração contínua e entrega contínua para garantir que as alterações sejam testadas e deployadas rapidamente.
+- **Segurança**: É importante considerar a segurança do projeto e implementar medidas de segurança adequadas, como autenticação e autorização.
+- **Escalabilidade**: É importante considerar a escalabilidade do projeto e desenvolver soluções que possam ser escaladas para atender às necessidades futuras.
+
+Exemplos de código para tratamento de exceções:
+```python
+try:
+    # Código que pode gerar uma exceção
+except Exception as e:
+    # Tratamento da exceção
+    print(f"Erro: {e}")
+```
+```java
+try {
+    // Código que pode gerar uma exceção
+} catch (Exception e) {
+    // Tratamento da exceção
+    System.out.println("Erro: " + e.getMessage());
+}
