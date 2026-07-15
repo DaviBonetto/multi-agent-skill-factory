@@ -1,78 +1,135 @@
 ---
-name: using-superpowers
-description: Use when starting any conversation - establishes how to find and use skills, requiring skill invocation before ANY response including clarifying questions
+name: huggingface-datasets
+description: Use this skill for Hugging Face Dataset Viewer API workflows that fetch subset/split metadata, paginate rows, search text, apply filters, download parquet URLs, and read size or statistics.
 ---
 
-<SUBAGENT-STOP>
-If you were dispatched as a subagent to execute a specific task, ignore this skill.
-</SUBAGENT-STOP>
+# Hugging Face Dataset Viewer
 
-<EXTREMELY-IMPORTANT>
-If you think there is even a 1% chance a skill might apply to what you are doing, you ABSOLUTELY MUST invoke the skill.
+Use this skill to execute read-only Dataset Viewer API calls for dataset exploration and extraction.
 
-IF A SKILL APPLIES TO YOUR TASK, YOU DO NOT HAVE A CHOICE. YOU MUST USE IT.
+## Core workflow
 
-This is not negotiable. You cannot rationalize your way out of this.
-</EXTREMELY-IMPORTANT>
+1. Optionally validate dataset availability with `/is-valid`.
+2. Resolve `config` + `split` with `/splits`.
+3. Preview with `/first-rows`.
+4. Paginate content with `/rows` using `offset` and `length` (max 100).
+5. Use `/search` for text matching and `/filter` for row predicates.
+6. Retrieve parquet links via `/parquet` and totals/metadata via `/size` and `/statistics`.
 
-## The Rule
+## Defaults
 
-**Invoke relevant or requested skills BEFORE any response or action** — including clarifying questions, exploring the codebase, or checking files. If it turns out wrong for the situation, you don't have to use it.
+- Base URL: `https://datasets-server.huggingface.co`
+- Default API method: `GET`
+- Query params should be URL-encoded.
+- `offset` is 0-based.
+- `length` max is usually `100` for row-like endpoints.
+- Gated/private datasets require `Authorization: Bearer <HF_TOKEN>`.
 
-**Before entering plan mode:** if you haven't already brainstormed, invoke the brainstorming skill first.
+## Dataset Viewer
 
-Then announce "Using [skill] to [purpose]" and follow the skill exactly. If it has a checklist, create a todo per item.
+- `Validate dataset`: `/is-valid?dataset=<namespace/repo>`
+- `List subsets and splits`: `/splits?dataset=<namespace/repo>`
+- `Preview first rows`: `/first-rows?dataset=<namespace/repo>&config=<config>&split=<split>`
+- `Paginate rows`: `/rows?dataset=<namespace/repo>&config=<config>&split=<split>&offset=<int>&length=<int>`
+- `Search text`: `/search?dataset=<namespace/repo>&config=<config>&split=<split>&query=<text>&offset=<int>&length=<int>`
+- `Filter with predicates`: `/filter?dataset=<namespace/repo>&config=<config>&split=<split>&where=<predicate>&orderby=<sort>&offset=<int>&length=<int>`
+- `List parquet shards`: `/parquet?dataset=<namespace/repo>`
+- `Get size totals`: `/size?dataset=<namespace/repo>`
+- `Get column statistics`: `/statistics?dataset=<namespace/repo>&config=<config>&split=<split>`
+- `Get Croissant metadata (if available)`: `/croissant?dataset=<namespace/repo>`
 
-## Skill Priority
+Pagination pattern:
 
-When multiple skills apply, process skills come first — they set the approach, then implementation skills (frontend-design, etc.) carry it out. Brainstorming and systematic-debugging are Superpowers' most common process skills, but the rule holds for any of them.
+```bash
+curl "https://datasets-server.huggingface.co/rows?dataset=stanfordnlp/imdb&config=plain_text&split=train&offset=0&length=100"
+curl "https://datasets-server.huggingface.co/rows?dataset=stanfordnlp/imdb&config=plain_text&split=train&offset=100&length=100"
+```
 
-- "Let's build X" → superpowers:brainstorming first, then implementation skills.
-- "Fix this bug" → superpowers:systematic-debugging first, then domain skills.
+When pagination is partial, use response fields such as `num_rows_total`, `num_rows_per_page`, and `partial` to drive continuation logic.
 
-## Red Flags
+Search/filter notes:
 
-These thoughts mean STOP—you're rationalizing:
+- `/search` matches string columns (full-text style behavior is internal to the API).
+- `/filter` requires predicate syntax in `where` and optional sort in `orderby`.
+- Keep filtering and searches read-only and side-effect free.
 
-| Thought | Reality |
-|---------|---------|
-| "This is just a simple question" | Questions are tasks. Check for skills. |
-| "I need more context first" | Skill check comes BEFORE clarifying questions. |
-| "Let me explore the codebase first" | Skills tell you HOW to explore. Check first. |
-| "I can check git/files quickly" | Files lack conversation context. Check for skills. |
-| "Let me gather information first" | Skills tell you HOW to gather information. |
-| "This doesn't need a formal skill" | If a skill exists, use it. |
-| "I remember this skill" | Skills evolve. Read current version. |
-| "This doesn't count as a task" | Action = task. Check for skills. |
-| "The skill is overkill" | Simple things become complex. Use it. |
-| "I'll just do this one thing first" | Check BEFORE doing anything. |
-| "This feels productive" | Undisciplined action wastes time. Skills prevent this. |
-| "I know what that means" | Knowing the concept ≠ using the skill. Invoke it. |
+For CLI-based parquet URL discovery or SQL, use the `hf-cli` skill with `hf datasets parquet` and `hf datasets sql`.
 
-## Platform Adaptation
+## Creating and Uploading Datasets
 
-If your harness appears here, read its reference file for special instructions:
+Use one of these flows depending on dependency constraints.
 
-- Codex: `references/codex-tools.md`
-- Pi: `references/pi-tools.md`
-- Antigravity: `references/antigravity-tools.md`
+Zero local dependencies (Hub UI):
 
-## User Instructions
+- Create dataset repo in browser: `https://huggingface.co/new-dataset`
+- Upload parquet files in the repo "Files and versions" page.
+- Verify shards appear in Dataset Viewer:
 
-User instructions (CLAUDE.md, AGENTS.md, GEMINI.md, etc, direct requests) take precedence over skills, which in turn override default behavior. Only skip skill workflows or instructions when your human partner has explicitly told you to.
+```bash
+curl -s "https://datasets-server.huggingface.co/parquet?dataset=<namespace>/<repo>"
+```
+
+Low dependency CLI flow (`npx @huggingface/hub` / `hfjs`):
+
+- Set auth token:
+
+```bash
+export HF_TOKEN=<your_hf_token>
+```
+
+- Upload parquet folder to a dataset repo (auto-creates repo if missing):
+
+```bash
+npx -y @huggingface/hub upload datasets/<namespace>/<repo> ./local/parquet-folder data
+```
+
+- Upload as private repo on creation:
+
+```bash
+npx -y @huggingface/hub upload datasets/<namespace>/<repo> ./local/parquet-folder data --private
+```
+
+After upload, call `/parquet` to discover `<config>/<split>/<shard>` values for querying with `@~parquet`.
+
+## Agent Traces
+
+The Hub supports raw agent session traces from Claude Code, Codex, and Pi Agent. Upload them to Hugging Face Datasets as original JSONL files and the Hub can auto-detect the trace format, tag the dataset as `Traces`, and enable the trace viewer for browsing sessions, turns, tool calls, and model responses. Common local session directories:
+
+- Claude Code: `~/.claude/projects`
+- Codex: `~/.codex/sessions`
+- Pi: `~/.pi/agent/sessions`
+
+Default to private dataset repos because traces can contain prompts, file paths, tool outputs, secrets, or PII. Preserve the raw `.jsonl` files and nest them by project/cwd instead of uploading every session at the dataset root.
+
+```bash
+hf repos create <namespace>/<repo> --type dataset --private --exist-ok
+hf upload <namespace>/<repo> ~/.codex/sessions codex/<project-or-cwd> --type dataset
+```
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
 
-Em casos de exceção ou edge cases, siga os seguintes passos:
+### Erros de Autenticação
 
-1. **Verifique a documentação**: Certifique-se de que você está usando a versão mais recente da skill e que você entendeu corretamente as instruções.
-2. **Comunique-se com o parceiro humano**: Se você estiver em dúvida sobre como proceder, comunique-se com o parceiro humano para obter orientação adicional.
-3. **Registre o incidente**: Se você encontrar um edge case ou exceção, registre o incidente e forneça detalhes sobre o que aconteceu, para que possamos melhorar a skill e evitar que o problema aconteça novamente no futuro.
-4. **Priorize a segurança**: Em caso de dúvida, priorize a segurança e evite tomar ações que possam causar danos ou perdas.
+- **Token de Autenticação Inválido**: Verifique se o token de autenticação está correto e não expirou.
+- **Erro de Permissão**: Verifique se o usuário tem permissão para acessar o recurso solicitado.
 
-Além disso, considere os seguintes edge cases:
+### Erros de Rede
 
-* **Conflito de skills**: Se duas ou mais skills se aplicam a uma tarefa, priorize a skill que seja mais relevante para a tarefa em questão.
-* **Falta de informações**: Se você não tiver informações suficientes para completar uma tarefa, comunique-se com o parceiro humano para obter mais informações.
-* **Erros de syntax**: Se você encontrar erros de syntax em uma skill, comunique-se com o parceiro humano para obter ajuda e corrigir o erro.
-* **Dependências**: Se uma skill depende de outra skill ou recurso, certifique-se de que você tem acesso a esses recursos e que eles estão funcionando corretamente.
+- **Conexão de Rede Instável**: Verifique a estabilidade da conexão de rede e tente novamente.
+- **Erro de Tempo de Esgotamento**: Aumente o tempo de espera para a requisição ou verifique a carga do servidor.
+
+### Erros de Dados
+
+- **Dados Inválidos**: Verifique se os dados enviados estão corretos e no formato esperado.
+- **Dados Faltantes**: Verifique se todos os campos obrigatórios estão preenchidos.
+
+### Edge Cases
+
+- **Dataset Vazio**: Verifique se o dataset está vazio e trate-o como um caso especial.
+- **Dataset com Dados Inválidos**: Verifique se o dataset contém dados inválidos e trate-os como um caso especial.
+
+### Tratamento de Exceções
+
+- **Try-Except**: Use blocos try-except para capturar e tratar exceções.
+- **Logging**: Registre as exceções para análise posterior.
+- **Retorno de Erro**: Retorne um erro ao usuário com uma mensagem clara e concisa.
