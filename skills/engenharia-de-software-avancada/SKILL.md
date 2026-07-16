@@ -1,54 +1,109 @@
 ---
-name: Desenvolvimento de Software Avançado com Arquitetura de Microsserviços
-description: Esta skill ensina a desenvolver software utilizando arquitetura de microsserviços, incluindo design de APIs, comunicação entre serviços e escalabilidade
+name: Desenvolvimento de Software com Padrões de Arquitetura de Microsserviços
+description: Ensina a projetar e desenvolver sistemas de software escaláveis e flexíveis com microsserviços
 ---
 
 ## Objetivo
-O objetivo desta skill é capacitar os desenvolvedores a projetar e implementar soluções de software avançadas utilizando arquitetura de microsserviços. Isso inclui entender como projetar APIs eficazes, estabelecer comunicação entre serviços e garantir a escalabilidade dos sistemas.
+O objetivo deste guia é fornecer uma abordagem prática para o desenvolvimento de software utilizando padrões de arquitetura de microsserviços, permitindo que os desenvolvedores criem sistemas escaláveis e flexíveis.
 
 ## Pré-requisitos
-Para aproveitar ao máximo esta skill, os participantes devem ter:
-- Conhecimento sólido em desenvolvimento de software
-- Experiência com linguagens de programação como Java, Python ou C#
-- Familiaridade com conceitos de arquitetura de software e design de sistemas
+Para seguir este guia, é necessário ter conhecimento em:
+* Desenvolvimento de software
+* Padrões de arquitetura de software
+* Linguagens de programação como Java, Python ou C#
+* Ferramentas de gerenciamento de containers como Docker
+* Ferramentas de orquestração de containers como Kubernetes
 
 ## Passo a Passo Técnico / Exemplos de Código
-### Projetando APIs com Microsserviços
-1. **Definir os Serviços**: Identifique os serviços que compõem o sistema, considerando a lógica de negócios e a independência de cada serviço.
-2. **Design de API**: Utilize padrões de API RESTful para definir as interfaces de cada serviço. Por exemplo:
-   ```python
-   from fastapi import FastAPI
+### 1. Definição da Arquitetura de Microsserviços
+A arquitetura de microsserviços é baseada em serviços independentes que se comunicam entre si. Cada serviço deve ter uma responsabilidade única e ser capaz de ser escalado independentemente.
 
-   app = FastAPI()
+### 2. Implementação dos Microsserviços
+Um exemplo de implementação de um microsserviço em Python utilizando a biblioteca Flask:
+```python
+from flask import Flask, jsonify
 
-   @app.get("/users/")
-   async def read_users():
-       return [{"username": "Rick"}]
-   ```
-3. **Comunicação entre Serviços**: Implemente a comunicação entre os serviços utilizando mecanismos como APIs REST, mensageria (RabbitMQ, Apache Kafka) ou gatilhos de eventos.
+app = Flask(__name__)
 
-### Implementando Escalabilidade
-1. **Containerização**: Utilize tecnologias de containerização como Docker para padronizar os ambientes de desenvolvimento e produção.
-2. **Orquestração**: Implemente orquestração de contêineres com Kubernetes para automatizar a escalabilidade e a gestão dos serviços.
+@app.route('/usuarios', methods=['GET'])
+def get_usuarios():
+    try:
+        usuarios = [{'id': 1, 'nome': 'João'}, {'id': 2, 'nome': 'Maria'}]
+        return jsonify(usuarios)
+    except Exception as e:
+        return jsonify({'erro': str(e)}), 500
+
+if __name__ == '__main__':
+    app.run(debug=True)
+```
+
+### 3. Containerização dos Microsserviços
+Utilizando o Docker, é possível criar imagens de containers para cada microsserviço. Exemplo de arquivo `Dockerfile`:
+```dockerfile
+FROM python:3.9-slim
+
+WORKDIR /app
+
+COPY requirements.txt .
+
+RUN pip install -r requirements.txt
+
+COPY . .
+
+CMD ["flask", "run", "--host=0.0.0.0"]
+```
+
+### 4. Orquestração dos Containers
+Utilizando o Kubernetes, é possível orquestrar os containers dos microsserviços. Exemplo de arquivo `deployment.yaml`:
+```yml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: usuarios-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: usuarios
+  template:
+    metadata:
+      labels:
+        app: usuarios
+    spec:
+      containers:
+      - name: usuarios
+        image: usuarios:latest
+        ports:
+        - containerPort: 5000
+      restartPolicy: Always
+```
 
 ## Validação
-Para validar o conhecimento adquirido, os participantes devem:
-- Desenvolver um projeto pessoal que aplique os conceitos de arquitetura de microsserviços
-- Realizar testes de desempenho e escalabilidade no projeto
-- Apresentar o projeto e discutir os desafios enfrentados e as soluções implementadas
+Para validar a implementação da arquitetura de microsserviços, é necessário realizar testes de integração e testes de carga. Além disso, é importante monitorar o desempenho dos serviços e realizar ajustes necessários para garantir a escalabilidade e flexibilidade do sistema.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-Para garantir a robustez e a confiabilidade dos sistemas, é crucial considerar os seguintes aspectos:
-- **Tratamento de Erros**: Implemente mecanismos de tratamento de erros para lidar com exceções inesperadas, como falhas de rede ou erros de banco de dados. Por exemplo:
-  ```python
-  try:
-      # Código que pode gerar exceção
-  except Exception as e:
-      # Tratamento da exceção
-      print(f"Erro: {e}")
-  ```
-- **Edge Cases**: Considere cenários de bordo, como:
-  - **Sobrecarga de Tráfego**: Implemente mecanismos de escalabilidade para lidar com aumentos repentinos de tráfego.
-  - **Falhas de Serviços**: Desenvolva estratégias para lidar com falhas de serviços, como retry ou fallback.
-  - **Segurança**: Implemente medidas de segurança para proteger os sistemas contra ataques e vulnerabilidades, como autenticação, autorização e criptografia.
-- **Testes de Estresse e Penetração**: Realize testes de estresse e penetração para identificar e corrigir vulnerabilidades antes que elas se tornem problemas.
+Alguns exemplos de tratamento de exceções e edge cases que devem ser considerados:
+* **Tratamento de erros de rede**: Implementar retry e timeout para lidar com erros de rede.
+* **Tratamento de erros de banco de dados**: Implementar retry e timeout para lidar com erros de banco de dados.
+* **Tratamento de erros de segurança**: Implementar autenticação e autorização para lidar com erros de segurança.
+* **Tratamento de edge cases de escalabilidade**: Implementar load balancing e autoscaling para lidar com picos de demanda.
+* **Tratamento de edge cases de flexibilidade**: Implementar circuit breakers e bulkheads para lidar com falhas de serviços dependentes.
+
+Exemplo de implementação de tratamento de exceções em Python:
+```python
+from flask import Flask, jsonify
+import logging
+
+app = Flask(__name__)
+
+@app.route('/usuarios', methods=['GET'])
+def get_usuarios():
+    try:
+        usuarios = [{'id': 1, 'nome': 'João'}, {'id': 2, 'nome': 'Maria'}]
+        return jsonify(usuarios)
+    except Exception as e:
+        logging.error(f'Erro ao obter usuários: {str(e)}')
+        return jsonify({'erro': str(e)}), 500
+
+if __name__ == '__main__':
+    app.run(debug=True)
