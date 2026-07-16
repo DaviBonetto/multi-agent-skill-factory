@@ -1,6 +1,5 @@
-# UV Rules
-=====================================
-
+# UV rules
+## Introdução
 Use estas regras para scripts Python neste repositório:
 
 1. **Use PEP 723 inline dependencies** em cada script executável:
@@ -18,24 +17,26 @@ Use estas regras para scripts Python neste repositório:
    ```
    Isso garante que as dependências sejam carregadas corretamente e que o script seja executado no ambiente adequado.
 
-3. **Não documente `pip install -r requirements.txt` para scripts do repositório** a menos que haja um motivo específico de fallback. O uso normal não deve exigir instalação manual.
-   Em caso de necessidade de instalação manual, certifique-se de que o processo esteja bem documentado e que os usuários sejam alertados sobre possíveis riscos.
+3. **Não documente `pip install -r requirements.txt` para scripts do repositório** a menos que haja um motivo específico para isso. O uso normal não deve exigir instalação manual.
+   Em casos onde a instalação manual for necessária, certifique-se de fornecer instruções claras e seguras.
 
 4. **Não instrua os usuários a `source .venv/bin/activate` para scripts de habilidade.** `uv run` deve ser suficiente.
-   Se um ambiente virtual for necessário, certifique-se de que ele seja ativado automaticamente pelo `uv run`.
+   Isso ajuda a manter a consistência e a segurança no ambiente de execução.
 
 5. **Se um exemplo de instalação manual for realmente necessário, use `uv pip install ...`**, não `uv add`, a menos que você esteja editando intencionalmente um ambiente gerenciado pelo projeto.
-   Isso ajuda a manter a consistência e a segurança do ambiente de desenvolvimento.
+   Isso ajuda a evitar conflitos de dependências e a manter o ambiente limpo.
 
 6. **Para Hugging Face Jobs UV workloads, use `hf jobs uv run ...`**.
-   Certifique-se de que as configurações e dependências sejam compatíveis com o Hugging Face Jobs.
+   Certifique-se de seguir as diretrizes específicas para o Hugging Face Jobs para garantir a compatibilidade e a segurança.
 
-⚠️ Tratamento de Exceções e Edge Cases
-----------------------------------------
+## ⚠️ Tratamento de Exceções e Edge Cases
+### Tratamento de Erros
+- **Verifique as dependências**: Antes de executar um script, certifique-se de que todas as dependências necessárias estejam instaladas e atualizadas.
+- **Trate exceções**: Use blocos try-except para capturar e tratar exceções que possam ocorrer durante a execução do script, fornecendo mensagens de erro claras e úteis.
+- **Log de erros**: Implemente um sistema de log de erros para registrar problemas que ocorram durante a execução, ajudando na depuração e resolução de problemas.
 
-* **Tratamento de erros**: Certifique-se de que todos os scripts tenham mecanismos de tratamento de erros adequados para lidar com exceções inesperadas. Isso pode incluir try-except blocks e logging de erros.
-* **Dependências não encontradas**: Em caso de dependências não encontradas, o script deve fornecer uma mensagem de erro clara e instruções sobre como resolver o problema.
-* **Versões incompatíveis do Python**: Se um script exigir uma versão específica do Python, certifique-se de que o usuário seja notificado se a versão instalada for incompatível.
-* **Ambientes virtuais**: Se um script exigir um ambiente virtual específico, certifique-se de que o usuário seja instruído sobre como ativá-lo e usá-lo corretamente.
-* **Segurança**: Certifique-se de que todos os scripts sigam as melhores práticas de segurança, incluindo a validação de entradas e a proteção contra injeção de código malicioso.
-* **Testes**: Certifique-se de que todos os scripts sejam testados adequadamente antes de serem commitados, incluindo testes de unidade, integração e edge cases.
+### Edge Cases
+- **Versões do Python**: Certifique-se de que o script seja compatível com diferentes versões do Python, especialmente se o script for executado em ambientes com versões variadas.
+- **Conflitos de dependências**: Antecipe e trate possíveis conflitos de dependências, especialmente quando usar `uv pip install` ou `uv add`.
+- **Ambientes virtuais**: Se o script exigir um ambiente virtual específico, forneça instruções claras sobre como configurá-lo e usá-lo com `uv run`.
+- **Segurança**: Sempre considere a segurança ao executar scripts, especialmente quando lidar com dados sensíveis ou executar comandos que possam afetar o sistema. Use práticas de segurança recomendadas, como validação de entrada e saída, e evite o uso de comandos perigosos.
