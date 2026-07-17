@@ -15,22 +15,16 @@ At the start of any multi-step task, create the task artifact listing every step
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
 
-### Erros de Invocação de Subagentes
+### Erros de Permissão
+- **Erro de permissão ao criar arquivo**: Se o sistema não tiver permissão para criar um arquivo, o comando `write_to_file` falhará. Nesse caso, é necessário verificar as permissões do diretório e garantir que o sistema tenha permissão de escrita.
+- **Erro de permissão ao editar arquivo**: Se o sistema não tiver permissão para editar um arquivo existente, o comando `replace_file_content` ou `multi_replace_file_content` falhará. Verifique as permissões do arquivo e do diretório para garantir que o sistema tenha permissão de escrita.
 
-- **Erro de Permissão**: Se o subagente não tiver permissão para executar uma ação, o `invoke_subagent` retornará um erro de permissão. Nesse caso, o skill deve verificar as permissões do subagente e solicitar as permissões necessárias antes de tentar novamente.
-- **Erro de Tipo de Subagente**: Se o tipo de subagente especificado for inválido, o `invoke_subagent` retornará um erro de tipo de subagente. Nesse caso, o skill deve verificar a documentação do subagente para garantir que o tipo de subagente esteja correto.
+### Erros de Arquivo
+- **Arquivo não encontrado**: Se o arquivo especificado para `replace_file_content` ou `multi_replace_file_content` não existir, o comando falhará. Nesse caso, é necessário criar o arquivo antes de tentar editá-lo ou tratar o erro como um caso de exceção.
+- **Arquivo corrompido**: Se o arquivo estiver corrompido ou não for um arquivo markdown válido, o comando `replace_file_content` ou `multi_replace_file_content` pode falhar ou produzir resultados inesperados. É importante validar a integridade do arquivo antes de tentar editá-lo.
 
-### Erros de Trabalho com Arquivos
+### Outros Edge Cases
+- **Conflitos de nomes de arquivos**: Se dois ou mais comandos tentarem criar arquivos com o mesmo nome, pode haver conflitos. É importante garantir que os nomes de arquivos sejam únicos ou implementar um mecanismo de resolução de conflitos.
+- **Tamanho do arquivo**: Se o arquivo for muito grande, os comandos `replace_file_content` ou `multi_replace_file_content` podem falhar devido a limitações de tamanho. É importante implementar um mecanismo para lidar com arquivos de grande tamanho.
 
-- **Erro de Leitura de Arquivo**: Se o arquivo não existir ou não puder ser lido, o `read_file` retornará um erro de leitura de arquivo. Nesse caso, o skill deve verificar se o arquivo existe e se as permissões de leitura estão corretas antes de tentar novamente.
-- **Erro de Escrita de Arquivo**: Se o arquivo não puder ser escrito, o `write_to_file` retornará um erro de escrita de arquivo. Nesse caso, o skill deve verificar se as permissões de escrita estão corretas e se o arquivo não está sendo usado por outro processo antes de tentar novamente.
-
-### Edge Cases de Trabalho com Tarefas
-
-- **Tarefa com Múltiplos Passos**: Se uma tarefa tiver múltiplos passos, o skill deve criar um artifact de tarefa para cada passo e atualizar o artifact à medida que cada passo for concluído.
-- **Tarefa com Dependências**: Se uma tarefa tiver dependências, o skill deve verificar se as dependências estão satisfeitas antes de iniciar a tarefa. Se as dependências não estiverem satisfeitas, o skill deve aguardar até que as dependências sejam satisfeitas antes de iniciar a tarefa.
-
-### Segurança
-
-- **Validação de Entradas**: O skill deve validar todas as entradas para garantir que sejam válidas e seguras antes de processá-las.
-- **Proteção contra Injeção de Comandos**: O skill deve proteger contra injeção de comandos garantindo que todas as entradas sejam validadas e sanitizadas antes de serem usadas em comandos.
+Ao lidar com esses edge cases e erros, é crucial implementar tratamento de exceções adequado para garantir a robustez e a confiabilidade do sistema. Isso pode incluir a implementação de retries, logs de erro, e notificações para o usuário ou administrador do sistema.
