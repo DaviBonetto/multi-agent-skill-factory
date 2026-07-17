@@ -1,86 +1,128 @@
 ---
-name: Arquitetura de Sistemas Distribuídos
-description: Aborda o design e a implementação de sistemas distribuídos, incluindo escalabilidade e tolerância a falhas
+name: Arquitetura de Sistemas Distribuídos com Apache Kafka
+description: Ensina como projetar e implantar sistemas distribuídos utilizando Apache Kafka e Zookeeper
 ---
 
 ## Objetivo
-O objetivo desta seção é fornecer uma visão geral da arquitetura de sistemas distribuídos, abordando os principais conceitos e desafios relacionados ao design e implementação de sistemas escaláveis e tolerantes a falhas.
+O objetivo deste guia é fornecer uma visão geral de como projetar e implantar sistemas distribuídos utilizando Apache Kafka e Zookeeper. Ao final deste guia, você será capaz de entender como criar um sistema distribuído escalável e confiável utilizando essas tecnologias.
 
 ## Pré-requisitos
-Para acompanhar este conteúdo, é recomendado ter conhecimento em:
-* Programação em linguagens como Java, Python ou C++
-* Conceitos básicos de redes de computadores e protocolos de comunicação
-* Noções de sistemas operacionais e gerenciamento de processos
+Para seguir este guia, você deve ter conhecimento básico em:
+* Sistemas distribuídos
+* Apache Kafka
+* Zookeeper
+* Linguagens de programação como Java ou Python
+
+Além disso, é recomendado ter experiência com:
+* Desenvolvimento de software
+* Arquitetura de sistemas
 
 ## Passo a Passo Técnico / Exemplos de Código
-### 1. Introdução à Arquitetura de Sistemas Distribuídos
-A arquitetura de sistemas distribuídos envolve o design de sistemas que consistem em múltiplos componentes ou nodos que se comunicam entre si para alcançar um objetivo comum. Isso pode incluir a distribuição de carga, escalabilidade e tolerância a falhas.
+### Instalação do Apache Kafka e Zookeeper
+Para começar, você precisará instalar o Apache Kafka e o Zookeeper em sua máquina. Você pode fazer isso seguindo os passos abaixo:
 
-### 2. Modelos de Arquitetura
-Existem vários modelos de arquitetura para sistemas distribuídos, incluindo:
-* Arquitetura Cliente-Servidor
-* Arquitetura Peer-to-Peer
-* Arquitetura de Microsserviços
-
-Exemplo de código em Python para um sistema de comunicação distribuída usando sockets:
-```python
-import socket
-
-# Criação do socket
-sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-# Conexão ao servidor
-try:
-    sock.connect(("localhost", 8080))
-except ConnectionRefusedError:
-    print("Conexão recusada. Verifique se o servidor está em execução.")
-    exit(1)
-
-# Envio de mensagem
-try:
-    sock.sendall(b"Olá, servidor!")
-except BrokenPipeError:
-    print("Conexão interrompida. Tente novamente.")
-    exit(1)
-
-# Recebimento de resposta
-try:
-    resposta = sock.recv(1024)
-except TimeoutError:
-    print("Tempo de espera excedido. Verifique a conexão com o servidor.")
-    exit(1)
-
-# Impressão da resposta
-print(resposta.decode())
-
-# Fechamento do socket
-try:
-    sock.close()
-except OSError:
-    print("Erro ao fechar o socket. Ignorando...")
+1. Instale o Java 8 ou superior em sua máquina.
+2. Baixe o Apache Kafka e o Zookeeper a partir do site oficial.
+3. Extraia os arquivos baixados em uma pasta de sua escolha.
+4. Configure o Zookeeper editando o arquivo `zoo.cfg` e adicionando as seguintes linhas:
+```bash
+tickTime=2000
+initLimit=10
+syncLimit=5
+dataDir=/var/lib/zookeeper
+clientPort=2181
 ```
+5. Inicie o Zookeeper executando o comando `./zkServer.sh start` no terminal.
 
-### 3. Escalabilidade e Tolerância a Falhas
-A escalabilidade e a tolerância a falhas são fundamentais em sistemas distribuídos. Isso pode ser alcançado por meio de técnicas como replicação de dados, balanceamento de carga e detecção de falhas.
+### Configuração do Apache Kafka
+Agora que o Zookeeper está configurado, você pode configurar o Apache Kafka. Edite o arquivo `server.properties` e adicione as seguintes linhas:
+```properties
+broker.id=0
+num.partitions=1
+zookeeper.connect=localhost:2181
+```
+Inicie o Apache Kafka executando o comando `./kafka-server-start.sh` no terminal.
 
+### Produzindo e Consumindo Mensagens
+Agora que o Apache Kafka está configurado, você pode produzir e consumir mensagens. Crie um produtor de mensagens utilizando a seguinte classe Java:
+```java
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.clients.producer.ProducerRecord;
+
+import java.util.Properties;
+
+public class Producer {
+    public static void main(String[] args) {
+        Properties props = new Properties();
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");
+        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");
+
+        KafkaProducer<String, String> producer = new KafkaProducer<>(props);
+        ProducerRecord<String, String> record = new ProducerRecord<>("meu-topico", "Minha mensagem");
+        try {
+            producer.send(record);
+        } catch (Exception e) {
+            System.out.println("Erro ao enviar mensagem: " + e.getMessage());
+        }
+    }
+}
+```
+E crie um consumidor de mensagens utilizando a seguinte classe Java:
+```java
+import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
+
+import java.util.Collections;
+import java.util.Properties;
+
+public class Consumer {
+    public static void main(String[] args) {
+        Properties props = new Properties();
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, "meu-grupo");
+        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
+        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
+
+        KafkaConsumer<String, String> consumer = new KafkaConsumer<>(props);
+        consumer.subscribe(Collections.singleton("meu-topico"));
+        while (true) {
+            try {
+                for (ConsumerRecord<String, String> record : consumer.poll(100)) {
+                    System.out.println(record.value());
+                }
+            } catch (Exception e) {
+                System.out.println("Erro ao consumir mensagem: " + e.getMessage());
+            }
+        }
+    }
+}
+```
 ## Validação
-A validação de um sistema distribuído é crucial para garantir que ele atenda aos requisitos de desempenho, escalabilidade e confiabilidade. Isso pode ser feito por meio de testes de carga, testes de estresse e monitoramento do sistema em produção. Além disso, é importante ter um plano de recuperação de desastres e realizar backups regulares dos dados.
+Para validar a configuração do Apache Kafka e do Zookeeper, você pode utilizar as ferramentas de linha de comando fornecidas com o Apache Kafka. Por exemplo, você pode utilizar o comando `./kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic meu-topico` para consumir mensagens do tópico "meu-topico".
+
+Além disso, você pode utilizar as APIs do Apache Kafka para produzir e consumir mensagens programaticamente. Isso permite que você integre o Apache Kafka com seus sistemas existentes e aproveite os benefícios de um sistema distribuído escalável e confiável.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-Além dos exemplos de código apresentados, é fundamental considerar os seguintes casos de bordo e exceções:
-* **Conexão recusada**: O servidor pode estar offline ou a porta especificada pode estar em uso.
-* **Conexão interrompida**: A conexão pode ser interrompida devido a problemas de rede ou ao servidor.
-* **Tempo de espera excedido**: O servidor pode demorar muito para responder, causando um tempo de espera.
-* **Erro ao fechar o socket**: O socket pode não ser fechado corretamente, causando problemas de recursos.
-* **Replicação de dados**: A replicação de dados pode ser necessária para garantir a tolerância a falhas.
-* **Balanceamento de carga**: O balanceamento de carga pode ser necessário para garantir a escalabilidade.
-* **Detecção de falhas**: A detecção de falhas pode ser necessária para garantir a tolerância a falhas.
+Ao trabalhar com o Apache Kafka, é importante considerar os seguintes casos de exceção e edge cases:
 
-Exemplo de código em Python para tratamento de exceções:
-```python
-try:
-    # Código que pode gerar exceções
-except Exception as e:
-    # Tratamento da exceção
-    print(f"Erro: {e}")
+* **Conexão perdida com o Zookeeper**: Se a conexão com o Zookeeper for perdida, o Apache Kafka pode não funcionar corretamente. Para lidar com isso, você pode implementar um mecanismo de reconexão automática.
+* **Tópico não existe**: Se o tópico não existir, o Apache Kafka retornará um erro. Para lidar com isso, você pode criar o tópico antes de tentar produzir ou consumir mensagens.
+* **Mensagem inválida**: Se a mensagem for inválida, o Apache Kafka pode não processá-la corretamente. Para lidar com isso, você pode implementar uma validação de mensagens antes de produzi-las.
+* **Desconexão do consumidor**: Se o consumidor se desconectar, as mensagens podem ser perdidas. Para lidar com isso, você pode implementar um mecanismo de reconexão automática e utilizar o offset para garantir que as mensagens sejam processadas corretamente.
+* **Produção de mensagens em paralelo**: Se múltiplos produtores estiverem produzindo mensagens em paralelo, pode haver problemas de concorrência. Para lidar com isso, você pode utilizar um mecanismo de sincronização para garantir que as mensagens sejam processadas corretamente.
+
+Exemplo de como lidar com exceções em Java:
+```java
+try {
+    // Código que pode lançar exceção
+} catch (KafkaException e) {
+    // Lidar com a exceção
+    System.out.println("Erro ao produzir mensagem: " + e.getMessage());
+} catch (Exception e) {
+    // Lidar com a exceção
+    System.out.println("Erro inesperado: " + e.getMessage());
+}
 ```
