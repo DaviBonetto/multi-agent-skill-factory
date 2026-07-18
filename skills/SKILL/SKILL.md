@@ -1,117 +1,96 @@
 ---
-name: huggingface-datasets
-description: Use this skill for Hugging Face Dataset Viewer API workflows that fetch subset/split metadata, paginate rows, search text, apply filters, download parquet URLs, and read size or statistics.
+name: hf-cloud-aws-context-discovery
+description: Discover the user's local AWS context (active profile, region, account ID, caller identity) at the start of any AWS task. Use this skill before any other AWS work — deploying to SageMaker, creating resources, calling AWS APIs, or anything that touches an AWS account. Use it especially when the user has not specified a region or profile explicitly, when they say things like "use my AWS account", "deploy to AWS", "use my profile", or when about to make any AWS CLI or SDK call. Never guess the region or account ID — always use this skill to read it from the local configuration first.
 ---
 
-# Hugging Face Dataset Viewer
+# AWS Context Discovery
 
-Use this skill to execute read-only Dataset Viewer API calls for dataset exploration and extraction.
+Before doing any AWS work, read the user's local AWS config. Don't guess the region, and don't ask the user for things their config already answers.
 
-## Core workflow
+## What to Discover
 
-1. Optionally validate dataset availability with `/is-valid`.
-2. Resolve `config` + `split` with `/splits`.
-3. Preview with `/first-rows`.
-4. Paginate content with `/rows` using `offset` and `length` (max 100).
-5. Use `/search` for text matching and `/filter` for row predicates.
-6. Retrieve parquet links via `/parquet` and totals/metadata via `/size` and `/statistics`.
+Run these at the start of the AWS work and remember the results for the rest of the session.
 
-## Defaults
+### 1. Active Profile
 
-- Base URL: `https://datasets-server.huggingface.co`
-- Default API method: `GET`
-- Query params should be URL-encoded.
-- `offset` is 0-based.
-- `length` max is usually `100` for row-like endpoints.
-- Gated/private datasets require `Authorization: Bearer <HF_TOKEN>`.
+`AWS_PROFILE` env var, else `default`. If the user mentioned a profile in their prompt, that overrides. If the named profile doesn't exist in `~/.aws/config`, surface that clearly.
 
-## Dataset Viewer
+### 2. Region
 
-- `Validate dataset`: `/is-valid?dataset=<namespace/repo>`
-- `List subsets and splits`: `/splits?dataset=<namespace/repo>`
-- `Preview first rows`: `/first-rows?dataset=<namespace/repo>&config=<config>&split=<split>`
-- `Paginate rows`: `/rows?dataset=<namespace/repo>&config=<config>&split=<split>&offset=<int>&length=<int>`
-- `Search text`: `/search?dataset=<namespace/repo>&config=<config>&split=<split>&query=<text>&offset=<int>&length=<int>`
-- `Filter with predicates`: `/filter?dataset=<namespace/repo>&config=<config>&split=<split>&where=<predicate>&orderby=<sort>&offset=<int>&length=<int>`
-- `List parquet shards`: `/parquet?dataset=<namespace/repo>`
-- `Get size totals`: `/size?dataset=<namespace/repo>`
-- `Get column statistics`: `/statistics?dataset=<namespace/repo>&config=<config>&split=<split>`
-- `Get Croissant metadata (if available)`: `/croissant?dataset=<namespace/repo>`
+Resolution order — stop at the first one that produces a value:
+1. Region the user explicitly named in this conversation
+2. `AWS_REGION` env var
+3. `AWS_DEFAULT_REGION` env var
+4. `region` field on the active profile in `~/.aws/config`
+5. Ask the user — but only after the first four have failed
 
-Pagination pattern:
+Do not fall back to `us-east-1` or any other hardcoded default.
+
+### 3. Credentials, Account ID, Caller ARN
 
 ```bash
-curl "https://datasets-server.huggingface.co/rows?dataset=stanfordnlp/imdb&config=plain_text&split=train&offset=0&length=100"
-curl "https://datasets-server.huggingface.co/rows?dataset=stanfordnlp/imdb&config=plain_text&split=train&offset=100&length=100"
+aws sts get-caller-identity --profile <profile> --region <region>
 ```
 
-When pagination is partial, use response fields such as `num_rows_total`, `num_rows_per_page`, and `partial` to drive continuation logic.
+Three purposes in one call: confirms credentials are valid (stop if not), returns the `Account` ID (needed for ARN construction), returns the `Arn` of the caller.
 
-Search/filter notes:
+### 4. Identify SSO / Assumed-Role Principals
 
-- `/search` matches string columns (full-text style behavior is internal to the API).
-- `/filter` requires predicate syntax in `where` and optional sort in `orderby`.
-- Keep filtering and searches read-only and side-effect free.
+The `Arn` field tells you what kind of principal this is. The pattern matters because it determines what IAM operations the caller can do.
 
-For CLI-based parquet URL discovery or SQL, use the `hf-cli` skill with `hf datasets parquet` and `hf datasets sql`.
+| ARN Pattern | Type | IAM Write Capability |
+|---|---|---|
+| `arn:aws:iam::<acct>:user/<name>` | IAM user | Depends on attached policies |
+| `arn:aws:sts::<acct>:assumed-role/AWSReservedSSO_<...>/<email>` | **SSO assumed-role** | Typically **none** — can't create/modify IAM roles |
+| `arn:aws:sts::<acct>:assumed-role/<role>/<session>` | Regular assumed-role | Depends on the role |
 
-## Creating and Uploading Datasets
+**If the caller is SSO**, surface this immediately before later skills hit `iam:CreateRole` and fail:
 
-Use one of these flows depending on dependency constraints.
+> Heads up: you're authenticated via SSO (`AWSReservedSSO_<PermissionSet>_...`). SSO principals usually can't create IAM roles directly. If we need a SageMaker execution role, I'll look for an existing one first — if none exists, you'll need to ask whoever manages your AWS access to create one.
 
-Zero local dependencies (Hub UI):
+This is the highest-leverage thing this skill does. Surfacing it now turns a confusing mid-deployment error into a five-second conversation.
 
-- Create dataset repo in browser: `https://huggingface.co/new-dataset`
-- Upload parquet files in the repo "Files and versions" page.
-- Verify shards appear in Dataset Viewer:
+## Commands to Run
 
 ```bash
-curl -s "https://datasets-server.huggingface.co/parquet?dataset=<namespace>/<repo>"
+# Effective profile and region (faster than parsing config files)
+aws configure list
+
+# Validate credentials and get identity
+aws sts get-caller-identity
+aws sts get-caller-identity --profile <profile-name>  # if a profile was named
 ```
 
-Low dependency CLI flow (`npx @huggingface/hub` / `hfjs`):
+`aws configure list` handles env-var overrides and shows the resolved effective values. Prefer it over parsing `~/.aws/config` yourself. If you need to read raw config (e.g. to list profiles), `~/.aws/config` and `~/.aws/credentials` are plain INI files — read-only.
 
-- Set auth token:
+## What to Report Back
 
-```bash
-export HF_TOKEN=<your_hf_token>
-```
+One or two lines, not a wall of text:
 
-- Upload parquet folder to a dataset repo (auto-creates repo if missing):
+> Working with profile `my-profile` in `eu-west-1`, account `123456789012`. You're authenticated via SSO, so we'll need to use an existing IAM role rather than create one.
 
-```bash
-npx -y @huggingface/hub upload datasets/<namespace>/<repo> ./local/parquet-folder data
-```
+Don't ask the user to confirm the region you just read from their config — they configured it; that is the confirmation.
 
-- Upload as private repo on creation:
-
-```bash
-npx -y @huggingface/hub upload datasets/<namespace>/<repo> ./local/parquet-folder data --private
-```
-
-After upload, call `/parquet` to discover `<config>/<split>/<shard>` values for querying with `@~parquet`.
-
-## Agent Traces
-
-The Hub supports raw agent session traces from Claude Code, Codex, and Pi Agent. Upload them to Hugging Face Datasets as original JSONL files and the Hub can auto-detect the trace format, tag the dataset as `Traces`, and enable the trace viewer for browsing sessions, turns, tool calls, and model responses. Common local session directories:
-
-- Claude Code: `~/.claude/projects`
-- Codex: `~/.codex/sessions`
-- Pi: `~/.pi/agent/sessions`
-
-Default to private dataset repos because traces can contain prompts, file paths, tool outputs, secrets, or PII. Preserve the raw `.jsonl` files and nest them by project/cwd instead of uploading every session at the dataset root.
-
-```bash
-hf repos create <namespace>/<repo> --type dataset --private --exist-ok
-hf upload <namespace>/<repo> ~/.codex/sessions codex/<project-or-cwd> --type dataset
-```
+If something is wrong (credentials expired, profile doesn't exist, no region anywhere), stop and surface the specific error before continuing.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
 
-- **Tratamento de Erros de Autenticação**: Verifique se o token de autenticação está válido e se o usuário tem permissão para acessar o recurso solicitado. Em caso de erro, retorne um erro 401 (Não Autorizado) com uma mensagem de erro clara.
-- **Tratamento de Erros de Paginação**: Verifique se o offset e o length são válidos e se o usuário tem permissão para acessar a página solicitada. Em caso de erro, retorne um erro 400 (Requisição Inválida) com uma mensagem de erro clara.
-- **Tratamento de Erros de Busca e Filtro**: Verifique se a consulta de busca ou filtro é válida e se o usuário tem permissão para acessar os recursos solicitados. Em caso de erro, retorne um erro 400 (Requisição Inválida) com uma mensagem de erro clara.
-- **Tratamento de Erros de Upload de Dados**: Verifique se o arquivo de upload é válido e se o usuário tem permissão para uploadar dados. Em caso de erro, retorne um erro 400 (Requisição Inválida) com uma mensagem de erro clara.
-- **Tratamento de Exceções de Rede**: Verifique se a conexão de rede está estável e se o servidor está respondendo corretamente. Em caso de erro, retorne um erro 500 (Erro Interno do Servidor) com uma mensagem de erro clara.
-- **Tratamento de Exceções de Banco de Dados**: Verifique se o banco de dados está acessível e se as consultas estão sendo executadas corretamente. Em caso de erro, retorne um erro 500 (Erro Interno do Servidor) com uma mensagem de erro clara.
-- **Tratamento de Exceções de Segurança**: Verifique se as permissões de segurança estão sendo respeitadas e se os dados estão sendo protegidos corretamente. Em caso de erro, retorne um erro 401 (Não Autorizado) com uma mensagem de erro clara.
+### Exceções de Credenciais
+
+- **Credenciais Expiradas**: Se as credenciais do usuário estiverem expiradas, o comando `aws sts get-caller-identity` falhará. Nesse caso, é necessário solicitar que o usuário atualize suas credenciais antes de continuar.
+- **Credenciais Inválidas**: Se as credenciais forem inválidas (por exemplo, se a chave de acesso ou a chave secreta estiverem incorretas), o comando `aws sts get-caller-identity` também falhará. É necessário solicitar que o usuário verifique e corrija suas credenciais.
+
+### Exceções de Perfil
+
+- **Perfil Não Existe**: Se o perfil especificado pelo usuário não existir em `~/.aws/config`, é necessário informar ao usuário que o perfil não existe e solicitar que ele forneça um perfil válido.
+- **Perfil Vazio**: Se o perfil estiver vazio ou não contiver as informações necessárias, é necessário solicitar que o usuário verifique e complete as informações do perfil.
+
+### Exceções de Região
+
+- **Região Não Especificada**: Se o usuário não especificar uma região e nenhuma região for encontrada nas variáveis de ambiente ou no arquivo de configuração, é necessário solicitar que o usuário forneça uma região válida.
+- **Região Inválida**: Se a região especificada for inválida, é necessário informar ao usuário que a região é inválida e solicitar que ele forneça uma região válida.
+
+### Outros Edge Cases
+
+- **SSO com Permissões Insuficientes**: Se o usuário estiver autenticado via SSO e não tiver permissões suficientes para realizar a ação desejada, é necessário informar ao usuário sobre as limitações de permissão e orientá-lo sobre como obter as permissões necessárias.
+- **Problemas de Conexão**: Se houver problemas de conexão com o AWS (por exemplo, problemas de rede ou servidores AWS indisponíveis), é necessário informar ao usuário sobre o problema e sugerir soluções alternativas ou espera até que o problema seja resolvido.
