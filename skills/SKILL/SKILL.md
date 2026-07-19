@@ -1,96 +1,155 @@
 ---
-name: hf-cloud-aws-context-discovery
-description: Discover the user's local AWS context (active profile, region, account ID, caller identity) at the start of any AWS task. Use this skill before any other AWS work — deploying to SageMaker, creating resources, calling AWS APIs, or anything that touches an AWS account. Use it especially when the user has not specified a region or profile explicitly, when they say things like "use my AWS account", "deploy to AWS", "use my profile", or when about to make any AWS CLI or SDK call. Never guess the region or account ID — always use this skill to read it from the local configuration first.
+name: huggingface-tool-builder
+description: Use this skill when the user wants to build tool/scripts or achieve a task where using data from the Hugging Face API would help. This is especially useful when chaining or combining API calls or the task will be repeated/automated. This Skill creates a reusable script to fetch, enrich or process data.
 ---
 
-# AWS Context Discovery
+# Hugging Face API Tool Builder
 
-Before doing any AWS work, read the user's local AWS config. Don't guess the region, and don't ask the user for things their config already answers.
+Your purpose is now is to create reusable command line scripts and utilities for using the Hugging Face API, allowing chaining, piping and intermediate processing where helpful. You can access the API directly, as well as use the `hf` command line tool. Model and Dataset cards can be accessed from repositories directly.
 
-## What to Discover
+## Script Rules
 
-Run these at the start of the AWS work and remember the results for the rest of the session.
+Make sure to follow these rules:
+ - Scripts must take a `--help` command line argument to describe their inputs and outputs
+ - Non-destructive scripts should be tested before handing over to the User
+ - Shell scripts are preferred, but use Python or TSX if complexity or user need requires it.
+ - IMPORTANT: Use the `HF_TOKEN` environment variable as an Authorization header. For example: `curl -H "Authorization: Bearer ${HF_TOKEN}" https://huggingface.co/api/`. This provides higher rate limits and appropriate authorization for data access.
+ - Investigate the shape of the API results before commiting to a final design; make use of piping and chaining where composability would be an advantage - prefer simple solutions where possible.
+ - Share usage examples once complete.
+ - Handle errors and exceptions properly, including API rate limits, network errors, and invalid user input.
 
-### 1. Active Profile
+Be sure to confirm User preferences where there are questions or clarifications needed.
 
-`AWS_PROFILE` env var, else `default`. If the user mentioned a profile in their prompt, that overrides. If the named profile doesn't exist in `~/.aws/config`, surface that clearly.
+## Sample Scripts
 
-### 2. Region
+Paths below are relative to this skill directory.
 
-Resolution order — stop at the first one that produces a value:
-1. Region the user explicitly named in this conversation
-2. `AWS_REGION` env var
-3. `AWS_DEFAULT_REGION` env var
-4. `region` field on the active profile in `~/.aws/config`
-5. Ask the user — but only after the first four have failed
+Reference examples:
+- `references/hf_model_papers_auth.sh` — uses `HF_TOKEN` automatically and chains trending → model metadata → model card parsing with fallbacks; it demonstrates multi-step API usage plus auth hygiene for gated/private content.
+- `references/find_models_by_paper.sh` — optional `HF_TOKEN` usage via `--token`, consistent authenticated search, and a retry path when arXiv-prefixed searches are too narrow; it shows resilient query strategy and clear user-facing help.
+- `references/hf_model_card_frontmatter.sh` — uses the `hf` CLI to download model cards, extracts YAML frontmatter, and emits NDJSON summaries (license, pipeline tag, tags, gated prompt flag) for easy filtering.
 
-Do not fall back to `us-east-1` or any other hardcoded default.
+Baseline examples (ultra-simple, minimal logic, raw JSON output with `HF_TOKEN` header):
+- `references/baseline_hf_api.sh` — bash
+- `references/baseline_hf_api.py` — python
+- `references/baseline_hf_api.tsx` — typescript executable
 
-### 3. Credentials, Account ID, Caller ARN
+Composable utility (stdin → NDJSON):
+- `references/hf_enrich_models.sh` — reads model IDs from stdin, fetches metadata per ID, emits one JSON object per line for streaming pipelines.
 
-```bash
-aws sts get-caller-identity --profile <profile> --region <region>
+Composability through piping (shell-friendly JSON output):
+- `references/baseline_hf_api.sh 25 | jq -r '.[].id' | references/hf_enrich_models.sh | jq -s 'sort_by(.downloads) | reverse | .[:10]'`
+- `references/baseline_hf_api.sh 50 | jq '[.[] | {id, downloads}] | sort_by(.downloads) | reverse | .[:10]'`
+- `printf '%s
+' openai/gpt-oss-120b meta-llama/Meta-Llama-3.1-8B | references/hf_model_card_frontmatter.sh | jq -s 'map({id, license, has_extra_gated_prompt})'`
+
+## High Level Endpoints
+
+The following are the main API endpoints available at `https://huggingface.co`
+
+```
+/api/datasets
+/api/models
+/api/spaces
+/api/collections
+/api/daily_papers
+/api/notifications
+/api/settings
+/api/whoami-v2
+/api/trending
+/oauth/userinfo
 ```
 
-Three purposes in one call: confirms credentials are valid (stop if not), returns the `Account` ID (needed for ARN construction), returns the `Arn` of the caller.
+## Accessing the API
 
-### 4. Identify SSO / Assumed-Role Principals
+The API is documented with the OpenAPI standard at `https://huggingface.co/.well-known/openapi.json`.
 
-The `Arn` field tells you what kind of principal this is. The pattern matters because it determines what IAM operations the caller can do.
+**IMPORTANT:** DO NOT ATTEMPT to read `https://huggingface.co/.well-known/openapi.json` directly as it is too large to process. 
 
-| ARN Pattern | Type | IAM Write Capability |
-|---|---|---|
-| `arn:aws:iam::<acct>:user/<name>` | IAM user | Depends on attached policies |
-| `arn:aws:sts::<acct>:assumed-role/AWSReservedSSO_<...>/<email>` | **SSO assumed-role** | Typically **none** — can't create/modify IAM roles |
-| `arn:aws:sts::<acct>:assumed-role/<role>/<session>` | Regular assumed-role | Depends on the role |
+**IMPORTANT** Use `jq` to query and extract relevant parts. For example, 
 
-**If the caller is SSO**, surface this immediately before later skills hit `iam:CreateRole` and fail:
-
-> Heads up: you're authenticated via SSO (`AWSReservedSSO_<PermissionSet>_...`). SSO principals usually can't create IAM roles directly. If we need a SageMaker execution role, I'll look for an existing one first — if none exists, you'll need to ask whoever manages your AWS access to create one.
-
-This is the highest-leverage thing this skill does. Surfacing it now turns a confusing mid-deployment error into a five-second conversation.
-
-## Commands to Run
+ Command to Get All 160 Endpoints
 
 ```bash
-# Effective profile and region (faster than parsing config files)
-aws configure list
-
-# Validate credentials and get identity
-aws sts get-caller-identity
-aws sts get-caller-identity --profile <profile-name>  # if a profile was named
+curl -s "https://huggingface.co/.well-known/openapi.json" | jq '.paths | keys | sort'
 ```
 
-`aws configure list` handles env-var overrides and shows the resolved effective values. Prefer it over parsing `~/.aws/config` yourself. If you need to read raw config (e.g. to list profiles), `~/.aws/config` and `~/.aws/credentials` are plain INI files — read-only.
+Model Search Endpoint Details
 
-## What to Report Back
+```bash
+curl -s "https://huggingface.co/.well-known/openapi.json" | jq '.paths["/api/models"]'
+```
 
-One or two lines, not a wall of text:
+You can also query endpoints to see the shape of the data. When doing so constrain results to low numbers to make them easy to process, yet representative.
 
-> Working with profile `my-profile` in `eu-west-1`, account `123456789012`. You're authenticated via SSO, so we'll need to use an existing IAM role rather than create one.
+## Using the HF command line tool
 
-Don't ask the user to confirm the region you just read from their config — they configured it; that is the confirmation.
+The `hf` command line tool gives you further access to Hugging Face repository content and infrastructure. 
 
-If something is wrong (credentials expired, profile doesn't exist, no region anywhere), stop and surface the specific error before continuing.
+```bash
+❯ hf --help
+Usage: hf [OPTIONS] COMMAND [ARGS]...
+
+  Hugging Face Hub CLI
+
+Options:
+  --help                Show this message and exit.
+
+Commands:
+  auth                 Manage authentication (login, logout, etc.).
+  buckets              Commands to interact with buckets.
+  cache                Manage local cache directory.
+  collections          Interact with collections on the Hub.
+  datasets             Interact with datasets on the Hub.
+  discussions          Manage discussions and pull requests on the Hub.
+  download             Download files from the Hub.
+  endpoints            Manage Hugging Face Inference Endpoints.
+  env                  Print information about the environment.
+  extensions           Manage hf CLI extensions.
+  jobs                 Run and manage Jobs on the Hub.
+  models               Interact with models on the Hub.
+  papers               Interact with papers on the Hub.
+  repos                Manage repos on the Hub.
+  skills               Manage skills for AI assistants.
+  spaces               Interact with spaces on the Hub.
+  sync                 Sync files between local directory and a bucket.
+  upload               Upload a file or a folder to the Hub.
+  upload-large-folder  Upload a large folder to the Hub.
+  version              Print information about the hf version.
+  webhooks             Manage webhooks on the Hub.
+```
+
+The `hf` CLI command has replaced the now deprecated `huggingface-cli` command.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
 
-### Exceções de Credenciais
+Ao criar scripts para interagir com a API do Hugging Face, é importante considerar os seguintes casos de exceção e edge cases:
 
-- **Credenciais Expiradas**: Se as credenciais do usuário estiverem expiradas, o comando `aws sts get-caller-identity` falhará. Nesse caso, é necessário solicitar que o usuário atualize suas credenciais antes de continuar.
-- **Credenciais Inválidas**: Se as credenciais forem inválidas (por exemplo, se a chave de acesso ou a chave secreta estiverem incorretas), o comando `aws sts get-caller-identity` também falhará. É necessário solicitar que o usuário verifique e corrija suas credenciais.
+* **Rate limits**: A API do Hugging Face tem limites de taxa para evitar abusos. Se o script exceder esses limites, ele deve ser capaz de lidar com o erro e aguardar o tempo necessário antes de tentar novamente.
+* **Erros de rede**: O script deve ser capaz de lidar com erros de rede, como conexões perdidas ou timeouts.
+* **Entrada inválida**: O script deve ser capaz de lidar com entrada inválida do usuário, como parâmetros incorretos ou dados malformados.
+* **Respostas vazias**: O script deve ser capaz de lidar com respostas vazias da API, como quando não há resultados para uma consulta.
+* **Erros de autenticação**: O script deve ser capaz de lidar com erros de autenticação, como quando o token de acesso é inválido ou expirou.
 
-### Exceções de Perfil
+Para lidar com esses casos, o script pode usar técnicas como:
 
-- **Perfil Não Existe**: Se o perfil especificado pelo usuário não existir em `~/.aws/config`, é necessário informar ao usuário que o perfil não existe e solicitar que ele forneça um perfil válido.
-- **Perfil Vazio**: Se o perfil estiver vazio ou não contiver as informações necessárias, é necessário solicitar que o usuário verifique e complete as informações do perfil.
+* **Retries**: O script pode tentar novamente após um erro, com um tempo de espera entre as tentativas.
+* **Validação de entrada**: O script pode validar a entrada do usuário antes de enviá-la para a API.
+* **Tratamento de erros**: O script pode usar blocos try-catch para lidar com erros e exceções.
+* **Logs**: O script pode registrar erros e exceções para facilitar a depuração.
 
-### Exceções de Região
-
-- **Região Não Especificada**: Se o usuário não especificar uma região e nenhuma região for encontrada nas variáveis de ambiente ou no arquivo de configuração, é necessário solicitar que o usuário forneça uma região válida.
-- **Região Inválida**: Se a região especificada for inválida, é necessário informar ao usuário que a região é inválida e solicitar que ele forneça uma região válida.
-
-### Outros Edge Cases
-
-- **SSO com Permissões Insuficientes**: Se o usuário estiver autenticado via SSO e não tiver permissões suficientes para realizar a ação desejada, é necessário informar ao usuário sobre as limitações de permissão e orientá-lo sobre como obter as permissões necessárias.
-- **Problemas de Conexão**: Se houver problemas de conexão com o AWS (por exemplo, problemas de rede ou servidores AWS indisponíveis), é necessário informar ao usuário sobre o problema e sugerir soluções alternativas ou espera até que o problema seja resolvido.
+Exemplo de como lidar com rate limits:
+```bash
+while true; do
+  response=$(curl -s -H "Authorization: Bearer ${HF_TOKEN}" https://huggingface.co/api/models)
+  if [ $? -eq 0 ]; then
+    break
+  elif [ $? -eq 429 ]; then
+    sleep 60
+  else
+    echo "Erro ao consultar a API: $?"
+    exit 1
+  fi
+done
+```
+Esse exemplo tenta consultar a API e, se receber um erro 429 (rate limit excedido), aguarda 60 segundos antes de tentar novamente. Se receber outro erro, imprime a mensagem de erro e sai com código 1.
