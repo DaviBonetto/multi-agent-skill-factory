@@ -23,8 +23,8 @@ Subagent (general-purpose):
     | Spec Alignment | Plan covers spec requirements, no major scope creep |
     | Task Decomposition | Tasks have clear boundaries, steps are actionable |
     | Buildability | Could an engineer follow this plan without getting stuck? |
-    | Security | Potential security risks, data protection, and access control |
-    | Error Handling | Presence of error handling mechanisms and contingency plans |
+    | Security | Potential security vulnerabilities, sensitive data handling |
+    | Error Handling | Proper error handling mechanisms, fallback plans |
 
     ## Calibration
 
@@ -49,10 +49,10 @@ Subagent (general-purpose):
 
     ⚠️ Tratamento de Exceções e Edge Cases
 
-    *   **Planos incompletos:** Se o plano estiver incompleto, verifique se os principais componentes estão presentes, como objetivos, escopo, cronograma e recursos.
-    *   **Conflitos de especificação:** Se houver conflitos entre a especificação e o plano, verifique se o plano está alinhado com a especificação e se as diferenças são justificadas.
-    *   **Tarefas mal definidas:** Se as tarefas estiverem mal definidas, verifique se elas têm objetivos claros, prazos e recursos atribuídos.
-    *   **Riscos de segurança:** Se houver riscos de segurança identificados, verifique se o plano inclui medidas para mitigá-los, como autenticação, autorização e criptografia.
-    *   **Tratamento de erros:** Se houver erros ou exceções identificados, verifique se o plano inclui mecanismos para lidar com eles, como logs, notificações e planos de contingência.
-    *   **Dependências externas:** Se o plano depende de recursos externos, verifique se essas dependências estão documentadas e se há planos para lidar com falhas ou atrasos.
-    *   **Cenários de bordo:** Se houver cenários de bordo identificados, verifique se o plano inclui estratégias para lidar com eles, como escalonamento, cache ou otimização de recursos.
+    *   **Planos incompletos:** Se o plano estiver incompleto, verifique se os principais objetivos e metas estão claros e se os passos necessários para alcançá-los estão definidos.
+    *   **Especificações ambíguas:** Se a especificação for ambígua, tente esclarecer os pontos duvidosos com o responsável pelo plano ou especifique as suposições feitas durante a revisão.
+    *   **Tarefas mal definidas:** Se as tarefas estiverem mal definidas, sugira uma reestruturação para torná-las mais claras e alcançáveis.
+    *   **Problemas de segurança:** Se forem identificados problemas de segurança, priorize a correção desses problemas antes da implementação.
+    *   **Tratamento de erros:** Verifique se o plano inclui mecanismos adequados de tratamento de erros e se os possíveis erros são devidamente documentados.
+    *   **Dependências externas:** Se o plano depender de recursos ou serviços externos, verifique se essas dependências estão claramente documentadas e se há planos de contingência para possíveis falhas.
+    *   **Revisão de código:** Se aplicável, verifique se o código-fonte está disponível para revisão e se atende aos padrões de codificação e segurança estabelecidos.
