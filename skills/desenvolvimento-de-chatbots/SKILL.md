@@ -1,104 +1,75 @@
 ---
-name: Desenvolvimento de Chatbots
-description: Aborda a criação de chatbots utilizando frameworks como Rasa e Dialogflow, com foco em NLP e respostas personalizadas
+name: Desenvolvimento de Chatbots com Inteligência Artificial
+description: Ensina como desenvolver chatbots utilizando técnicas de inteligência artificial e aprendizado de máquina
 ---
 
 ## Objetivo
-O objetivo deste guia é fornecer uma visão geral abrangente sobre o desenvolvimento de chatbots, utilizando frameworks como Rasa e Dialogflow, com foco em Processamento de Linguagem Natural (NLP) e respostas personalizadas. O guia visa capacitar desenvolvedores a criar chatbots inteligentes e interativos que possam entender e responder às necessidades dos usuários de forma eficaz.
+O objetivo deste guia é ensinar como desenvolver chatbots utilizando técnicas de inteligência artificial e aprendizado de máquina, visando a criação de soluções eficazes e personalizadas para interações humanas.
 
 ## Pré-requisitos
-Antes de iniciar o desenvolvimento de um chatbot, é importante ter conhecimento básico em:
-- Programação em Python
-- Conceitos de NLP
-- Familiaridade com frameworks de desenvolvimento de chatbots como Rasa ou Dialogflow
-- Noções de inteligência artificial e machine learning
+Para seguir este guia, é necessário ter conhecimento básico em:
+- Programação em linguagens como Python ou JavaScript
+- Conceitos básicos de inteligência artificial e aprendizado de máquina
+- Familiaridade com bibliotecas e frameworks de desenvolvimento de chatbots
 
 ## Passo a Passo Técnico / Exemplos de Código
-### Instalação do Rasa
-Para começar a desenvolver um chatbot com Rasa, você precisa instalar o framework. Isso pode ser feito via pip:
-```bash
-pip install rasa
-```
-### Criação do Chatbot
-Após a instalação, você pode criar um novo projeto Rasa com:
-```bash
-rasa init mychatbot
-```
-Isso criará uma estrutura básica para o seu chatbot.
+### 1. Escolha da Linguagem e Biblioteca
+Para o desenvolvimento do chatbot, escolha uma linguagem de programação e uma biblioteca adequada. Por exemplo, em Python, podemos usar a biblioteca `NLTK` para processamento de linguagem natural e `scikit-learn` para aprendizado de máquina.
 
-### Definição de Intenções e Entidades
-No arquivo `domain.yml`, você define as intenções e entidades do seu chatbot. Por exemplo:
-```yml
-intents:
-  - saudar
-  - despedir
-
-entities:
-  - nome
-```
-### Implementação de Ações
-No arquivo `actions/actions.py`, você implementa as ações que o chatbot pode realizar. Por exemplo:
 ```python
-from typing import Any, Text, Dict, List
-
-from rasa_sdk import Action, Tracker
-from rasa_sdk.executor import CollectingDispatcher
-
-class ActionSaudar(Action):
-    def name(self) -> Text:
-        return "action_saudar"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        try:
-            dispatcher.utter_message(text="Olá! Como posso ajudar?")
-            return []
-        except Exception as e:
-            dispatcher.utter_message(text="Desculpe, ocorreu um erro.")
-            return []
+import nltk
+from nltk.stem import WordNetLemmatizer
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.model_selection import train_test_split
 ```
-### Treinamento do Modelo
-Para treinar o modelo, você precisa criar um arquivo `data/nlu.yml` com exemplos de frases que o usuário pode dizer, e então treinar o modelo com:
-```bash
-rasa train
+
+### 2. Coleta e Preparação dos Dados
+Coletar e preparar os dados para o treinamento do modelo. Isso inclui a limpeza dos dados, a remoção de stopwords e a lematização das palavras.
+
+```python
+lemmatizer = WordNetLemmatizer()
+
+def preprocess_text(text):
+    try:
+        tokens = nltk.word_tokenize(text)
+        tokens = [lemmatizer.lemmatize(token) for token in tokens]
+        return ' '.join(tokens)
+    except Exception as e:
+        print(f"Erro ao preprocessar o texto: {e}")
+        return None
+```
+
+### 3. Treinamento do Modelo
+Treinar o modelo usando os dados preparados. Por exemplo, podemos usar um modelo de classificação para classificar as intenções do usuário.
+
+```python
+from sklearn.naive_bayes import MultinomialNB
+
+# Treinamento do modelo
+try:
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    modelo = MultinomialNB()
+    modelo.fit(X_train, y_train)
+except Exception as e:
+    print(f"Erro ao treinar o modelo: {e}")
 ```
 
 ## Validação
-Após o treinamento, você pode testar o seu chatbot com:
-```bash
-rasa test
+Validar o modelo treinado usando os dados de teste. Isso inclui a avaliação da precisão do modelo e a identificação de áreas para melhoria.
+
+```python
+# Avaliação do modelo
+try:
+    y_pred = modelo.predict(X_test)
+    print("Precisão:", modelo.score(X_test, y_test))
+except Exception as e:
+    print(f"Erro ao avaliar o modelo: {e}")
 ```
-ou interagir com ele diretamente com:
-```bash
-rasa shell
-```
-Isso permite validar se o chatbot está funcionando como esperado, entendendo e respondendo corretamente às entradas do usuário.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-### Tratamento de Erros de Instalação
-Se ocorrer um erro durante a instalação do Rasa, verifique se o pip está atualizado e se o ambiente virtual está configurado corretamente.
-### Tratamento de Erros de Treinamento
-Se ocorrer um erro durante o treinamento do modelo, verifique se os dados de treinamento estão corretos e se o modelo está configurado corretamente.
-### Tratamento de Entradas Inválidas
-Se o usuário inserir uma entrada inválida, o chatbot deve ser capaz de lidar com isso e responder de forma apropriada. Por exemplo:
-```python
-from typing import Any, Text, Dict, List
-
-from rasa_sdk import Action, Tracker
-from rasa_sdk.executor import CollectingDispatcher
-
-class ActionDesconhecido(Action):
-    def name(self) -> Text:
-        return "action_desconhecido"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        dispatcher.utter_message(text="Desculpe, não entendi. Pode repetir?")
-        return []
-```
-### Tratamento de Saída de Dados Sensíveis
-Se o chatbot precisar lidar com dados sensíveis, como informações de pagamento ou dados pessoais, é importante implementar medidas de segurança para proteger esses dados. Por exemplo, utilizando criptografia e autenticação para garantir que apenas usuários autorizados possam acessar esses dados.
-### Tratamento de Ataques de Força Bruta
-Se o chatbot for alvo de ataques de força bruta, é importante implementar medidas de segurança para prevenir esses ataques. Por exemplo, utilizando técnicas de rate limiting e IP blocking para limitar o número de requisições que podem ser feitas em um determinado período de tempo.
+Além do tratamento de exceções nos exemplos de código acima, é importante considerar os seguintes edge cases:
+- **Dados vazios ou nulos**: Verificar se os dados estão vazios ou nulos antes de processá-los.
+- **Dados inconsistentes**: Verificar se os dados estão consistentes e coerentes antes de treinar o modelo.
+- **Modelo não converge**: Verificar se o modelo está convergindo durante o treinamento e ajustar os hiperparâmetros se necessário.
+- **Overfitting ou underfitting**: Verificar se o modelo está sobreajustado ou subajustado e ajustar os hiperparâmetros ou a arquitetura do modelo se necessário.
+- **Segurança**: Verificar se o modelo está seguro e não está vulnerável a ataques de segurança, como ataques de força bruta ou injeção de código malicioso.
