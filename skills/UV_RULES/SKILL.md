@@ -1,4 +1,6 @@
 # UV Rules
+=====================================
+
 Use estas regras para scripts Python neste repositório:
 
 1. **Use PEP 723 inline dependencies** em cada script executável:
@@ -8,22 +10,32 @@ Use estas regras para scripts Python neste repositório:
    # dependencies = ["requests"]
    # ///
    ```
+   Certifique-se de que as dependências sejam especificadas corretamente e que o Python tenha a versão mínima necessária.
+
 2. **Execute scripts com `uv run`**, não `python ...`:
    ```bash
    uv run scripts/my_script.py --help
    ```
-3. **Não documente `pip install -r requirements.txt` para scripts do repositório** a menos que haja um motivo de fallback específico. O uso normal não deve exigir instalação manual.
+   Isso garante que as dependências sejam carregadas corretamente e que o ambiente seja configurado de acordo com as regras do repositório.
+
+3. **Não documente `pip install -r requirements.txt` para scripts do repositório** a menos que haja um motivo específico para isso. O uso normal não deve exigir instalação manual.
+   Em caso de necessidade de instalação manual, considere adicionar uma explicação clara sobre por que isso é necessário.
+
 4. **Não instrua os usuários a `source .venv/bin/activate` para scripts de habilidade.** `uv run` deve ser suficiente.
+   Se houver necessidade de ativar um ambiente virtual, considere usar `uv` para gerenciar o ambiente.
+
 5. **Se um exemplo de instalação manual for realmente necessário, use `uv pip install ...`**, não `uv add`, a menos que você esteja editando intencionalmente um ambiente gerenciado pelo projeto.
-6. **Para cargas de trabalho UV do Hugging Face Jobs, use `hf jobs uv run ...`**.
+   Isso ajuda a manter a consistência e a segurança do ambiente de desenvolvimento.
 
-## ⚠️ Tratamento de Exceções e Edge Cases
-### Tratamento de Erros
-- **Verifique a versão do Python**: Antes de executar scripts, certifique-se de que a versão do Python instalada atende aos requisitos especificados em `requires-python`.
-- **Dependências não instaladas**: Se uma dependência especificada em `dependencies` não estiver instalada, `uv run` deve falhar com uma mensagem de erro clara, indicando a dependência faltante.
-- **Comandos inválidos**: Se um comando `uv` for inválido ou não encontrado, o sistema deve retornar uma mensagem de erro útil, sugerindo comandos válidos ou ações corretivas.
+6. **Para Hugging Face Jobs UV workloads, use `hf jobs uv run ...`**.
+   Certifique-se de seguir as diretrizes específicas para trabalhos do Hugging Face para garantir a compatibilidade e a segurança.
 
-### Edge Cases
-- **Multiplos ambientes**: Em casos onde múltiplos ambientes virtuais estão configurados, certifique-se de que `uv run` use o ambiente correto com base nas dependências especificadas.
-- **Conflitos de versão**: Se houver conflitos de versão entre dependências, o sistema deve detectar e relatar esses conflitos, sugerindo versões compatíveis ou ações para resolução.
-- **Execução em ambientes restritos**: Em ambientes com restrições de segurança, como falta de acesso a internet, `uv run` deve ser capaz de funcionar com dependências pré-instaladas, sem tentar acessar repositórios remotos.
+⚠️ Tratamento de Exceções e Edge Cases
+----------------------------------------
+
+- **Tratamento de Erros**: Certifique-se de que todos os scripts Python incluem tratamento de erros adequado para lidar com exceções inesperadas. Isso pode incluir try-except blocks para capturar e lidar com erros de forma elegante.
+- **Dependências Desatualizadas**: Verifique regularmente as dependências para garantir que elas estejam atualizadas e seguras. Dependências desatualizadas podem introduzir vulnerabilidades de segurança.
+- **Ambientes Virtuais**: Ao trabalhar com ambientes virtuais, certifique-se de que eles sejam devidamente configurados e ativados quando necessário. Isso ajuda a prevenir conflitos de dependências e garantir a consistência do ambiente.
+- **Comandos de Instalação**: Ao fornecer exemplos de instalação, considere incluir opções para lidar com situações de erro, como a instalação falhando devido a permissões inadequadas.
+- **Segurança**: Sempre priorize a segurança ao trabalhar com scripts e dependências. Isso inclui verificar a autenticidade das dependências e evitar o uso de dependências não seguras ou desatualizadas.
+- **Testes**: Implemente testes para seus scripts para garantir que eles funcionem como esperado em diferentes ambientes e cenários. Isso ajuda a identificar e corrigir problemas antes que eles afetem os usuários.
