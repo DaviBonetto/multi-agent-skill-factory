@@ -1,155 +1,158 @@
 ---
-name: huggingface-tool-builder
-description: Use this skill when the user wants to build tool/scripts or achieve a task where using data from the Hugging Face API would help. This is especially useful when chaining or combining API calls or the task will be repeated/automated. This Skill creates a reusable script to fetch, enrich or process data.
+name: verification-before-completion
+description: Use when about to claim work is complete, fixed, or passing, before committing or creating PRs - requires running verification commands and confirming output before making any success claims; evidence before assertions always
 ---
 
-# Hugging Face API Tool Builder
+# Verification Before Completion
 
-Your purpose is now is to create reusable command line scripts and utilities for using the Hugging Face API, allowing chaining, piping and intermediate processing where helpful. You can access the API directly, as well as use the `hf` command line tool. Model and Dataset cards can be accessed from repositories directly.
+## Overview
 
-## Script Rules
+Claiming work is complete without verification is dishonesty, not efficiency.
 
-Make sure to follow these rules:
- - Scripts must take a `--help` command line argument to describe their inputs and outputs
- - Non-destructive scripts should be tested before handing over to the User
- - Shell scripts are preferred, but use Python or TSX if complexity or user need requires it.
- - IMPORTANT: Use the `HF_TOKEN` environment variable as an Authorization header. For example: `curl -H "Authorization: Bearer ${HF_TOKEN}" https://huggingface.co/api/`. This provides higher rate limits and appropriate authorization for data access.
- - Investigate the shape of the API results before commiting to a final design; make use of piping and chaining where composability would be an advantage - prefer simple solutions where possible.
- - Share usage examples once complete.
- - Handle errors and exceptions properly, including API rate limits, network errors, and invalid user input.
+**Core principle:** Evidence before claims, always.
 
-Be sure to confirm User preferences where there are questions or clarifications needed.
+**Violating the letter of this rule is violating the spirit of this rule.**
 
-## Sample Scripts
-
-Paths below are relative to this skill directory.
-
-Reference examples:
-- `references/hf_model_papers_auth.sh` — uses `HF_TOKEN` automatically and chains trending → model metadata → model card parsing with fallbacks; it demonstrates multi-step API usage plus auth hygiene for gated/private content.
-- `references/find_models_by_paper.sh` — optional `HF_TOKEN` usage via `--token`, consistent authenticated search, and a retry path when arXiv-prefixed searches are too narrow; it shows resilient query strategy and clear user-facing help.
-- `references/hf_model_card_frontmatter.sh` — uses the `hf` CLI to download model cards, extracts YAML frontmatter, and emits NDJSON summaries (license, pipeline tag, tags, gated prompt flag) for easy filtering.
-
-Baseline examples (ultra-simple, minimal logic, raw JSON output with `HF_TOKEN` header):
-- `references/baseline_hf_api.sh` — bash
-- `references/baseline_hf_api.py` — python
-- `references/baseline_hf_api.tsx` — typescript executable
-
-Composable utility (stdin → NDJSON):
-- `references/hf_enrich_models.sh` — reads model IDs from stdin, fetches metadata per ID, emits one JSON object per line for streaming pipelines.
-
-Composability through piping (shell-friendly JSON output):
-- `references/baseline_hf_api.sh 25 | jq -r '.[].id' | references/hf_enrich_models.sh | jq -s 'sort_by(.downloads) | reverse | .[:10]'`
-- `references/baseline_hf_api.sh 50 | jq '[.[] | {id, downloads}] | sort_by(.downloads) | reverse | .[:10]'`
-- `printf '%s
-' openai/gpt-oss-120b meta-llama/Meta-Llama-3.1-8B | references/hf_model_card_frontmatter.sh | jq -s 'map({id, license, has_extra_gated_prompt})'`
-
-## High Level Endpoints
-
-The following are the main API endpoints available at `https://huggingface.co`
+## The Iron Law
 
 ```
-/api/datasets
-/api/models
-/api/spaces
-/api/collections
-/api/daily_papers
-/api/notifications
-/api/settings
-/api/whoami-v2
-/api/trending
-/oauth/userinfo
+NO COMPLETION CLAIMS WITHOUT FRESH VERIFICATION EVIDENCE
 ```
 
-## Accessing the API
+If you haven't run the verification command in this message, you cannot claim it passes.
 
-The API is documented with the OpenAPI standard at `https://huggingface.co/.well-known/openapi.json`.
+## The Gate Function
 
-**IMPORTANT:** DO NOT ATTEMPT to read `https://huggingface.co/.well-known/openapi.json` directly as it is too large to process. 
+```
+BEFORE claiming any status or expressing satisfaction:
 
-**IMPORTANT** Use `jq` to query and extract relevant parts. For example, 
+1. IDENTIFY: What command proves this claim?
+2. RUN: Execute the FULL command (fresh, complete)
+3. READ: Full output, check exit code, count failures
+4. VERIFY: Does output confirm the claim?
+   - If NO: State actual status with evidence
+   - If YES: State claim WITH evidence
+5. ONLY THEN: Make the claim
 
- Command to Get All 160 Endpoints
-
-```bash
-curl -s "https://huggingface.co/.well-known/openapi.json" | jq '.paths | keys | sort'
+Skip any step = lying, not verifying
 ```
 
-Model Search Endpoint Details
+## Common Failures
 
-```bash
-curl -s "https://huggingface.co/.well-known/openapi.json" | jq '.paths["/api/models"]'
+| Claim | Requires | Not Sufficient |
+|-------|----------|----------------|
+| Tests pass | Test command output: 0 failures | Previous run, "should pass" |
+| Linter clean | Linter output: 0 errors | Partial check, extrapolation |
+| Build succeeds | Build command: exit 0 | Linter passing, logs look good |
+| Bug fixed | Test original symptom: passes | Code changed, assumed fixed |
+| Regression test works | Red-green cycle verified | Test passes once |
+| Agent completed | VCS diff shows changes | Agent reports "success" |
+| Requirements met | Line-by-line checklist | Tests passing |
+
+## Red Flags - STOP
+
+- Using "should", "probably", "seems to"
+- Expressing satisfaction before verification ("Great!", "Perfect!", "Done!", etc.)
+- About to commit/push/PR without verification
+- Trusting agent success reports
+- Relying on partial verification
+- Thinking "just this once"
+- Tired and wanting work over
+- **ANY wording implying success without having run verification**
+
+## Rationalization Prevention
+
+| Excuse | Reality |
+|--------|---------|
+| "Should work now" | RUN the verification |
+| "I'm confident" | Confidence ≠ evidence |
+| "Just this once" | No exceptions |
+| "Linter passed" | Linter ≠ compiler |
+| "Agent said success" | Verify independently |
+| "I'm tired" | Exhaustion ≠ excuse |
+| "Partial check is enough" | Partial proves nothing |
+| "Different words so rule doesn't apply" | Spirit over letter |
+
+## Key Patterns
+
+**Tests:**
+```
+ [Run test command] [See: 34/34 pass] "All tests pass"
+ "Should pass now" / "Looks correct"
 ```
 
-You can also query endpoints to see the shape of the data. When doing so constrain results to low numbers to make them easy to process, yet representative.
-
-## Using the HF command line tool
-
-The `hf` command line tool gives you further access to Hugging Face repository content and infrastructure. 
-
-```bash
-❯ hf --help
-Usage: hf [OPTIONS] COMMAND [ARGS]...
-
-  Hugging Face Hub CLI
-
-Options:
-  --help                Show this message and exit.
-
-Commands:
-  auth                 Manage authentication (login, logout, etc.).
-  buckets              Commands to interact with buckets.
-  cache                Manage local cache directory.
-  collections          Interact with collections on the Hub.
-  datasets             Interact with datasets on the Hub.
-  discussions          Manage discussions and pull requests on the Hub.
-  download             Download files from the Hub.
-  endpoints            Manage Hugging Face Inference Endpoints.
-  env                  Print information about the environment.
-  extensions           Manage hf CLI extensions.
-  jobs                 Run and manage Jobs on the Hub.
-  models               Interact with models on the Hub.
-  papers               Interact with papers on the Hub.
-  repos                Manage repos on the Hub.
-  skills               Manage skills for AI assistants.
-  spaces               Interact with spaces on the Hub.
-  sync                 Sync files between local directory and a bucket.
-  upload               Upload a file or a folder to the Hub.
-  upload-large-folder  Upload a large folder to the Hub.
-  version              Print information about the hf version.
-  webhooks             Manage webhooks on the Hub.
+**Regression tests (TDD Red-Green):**
+```
+ Write → Run (pass) → Revert fix → Run (MUST FAIL) → Restore → Run (pass)
+ "I've written a regression test" (without red-green verification)
 ```
 
-The `hf` CLI command has replaced the now deprecated `huggingface-cli` command.
-
-## ⚠️ Tratamento de Exceções e Edge Cases
-
-Ao criar scripts para interagir com a API do Hugging Face, é importante considerar os seguintes casos de exceção e edge cases:
-
-* **Rate limits**: A API do Hugging Face tem limites de taxa para evitar abusos. Se o script exceder esses limites, ele deve ser capaz de lidar com o erro e aguardar o tempo necessário antes de tentar novamente.
-* **Erros de rede**: O script deve ser capaz de lidar com erros de rede, como conexões perdidas ou timeouts.
-* **Entrada inválida**: O script deve ser capaz de lidar com entrada inválida do usuário, como parâmetros incorretos ou dados malformados.
-* **Respostas vazias**: O script deve ser capaz de lidar com respostas vazias da API, como quando não há resultados para uma consulta.
-* **Erros de autenticação**: O script deve ser capaz de lidar com erros de autenticação, como quando o token de acesso é inválido ou expirou.
-
-Para lidar com esses casos, o script pode usar técnicas como:
-
-* **Retries**: O script pode tentar novamente após um erro, com um tempo de espera entre as tentativas.
-* **Validação de entrada**: O script pode validar a entrada do usuário antes de enviá-la para a API.
-* **Tratamento de erros**: O script pode usar blocos try-catch para lidar com erros e exceções.
-* **Logs**: O script pode registrar erros e exceções para facilitar a depuração.
-
-Exemplo de como lidar com rate limits:
-```bash
-while true; do
-  response=$(curl -s -H "Authorization: Bearer ${HF_TOKEN}" https://huggingface.co/api/models)
-  if [ $? -eq 0 ]; then
-    break
-  elif [ $? -eq 429 ]; then
-    sleep 60
-  else
-    echo "Erro ao consultar a API: $?"
-    exit 1
-  fi
-done
+**Build:**
 ```
-Esse exemplo tenta consultar a API e, se receber um erro 429 (rate limit excedido), aguarda 60 segundos antes de tentar novamente. Se receber outro erro, imprime a mensagem de erro e sai com código 1.
+ [Run build] [See: exit 0] "Build passes"
+ "Linter passed" (linter doesn't check compilation)
+```
+
+**Requirements:**
+```
+ Re-read plan → Create checklist → Verify each → Report gaps or completion
+ "Tests pass, phase complete"
+```
+
+**Agent delegation:**
+```
+ Agent reports success → Check VCS diff → Verify changes → Report actual state
+ Trust agent report
+```
+
+## Why This Matters
+
+From 24 failure memories:
+- your human partner said "I don't believe you" - trust broken
+- Undefined functions shipped - would crash
+- Missing requirements shipped - incomplete features
+- Time wasted on false completion → redirect → rework
+- Violates: "Honesty is a core value. If you lie, you'll be replaced."
+
+## When To Apply
+
+**ALWAYS before:**
+- ANY variation of success/completion claims
+- ANY expression of satisfaction
+- ANY positive statement about work state
+- Committing, PR creation, task completion
+- Moving to next task
+- Delegating to agents
+
+**Rule applies to:**
+- Exact phrases
+- Paraphrases and synonyms
+- Implications of success
+- ANY communication suggesting completion/correctness
+
+## The Bottom Line
+
+**No shortcuts for verification.**
+
+Run the command. Read the output. THEN claim the result.
+
+This is non-negotiable.
+
+## Tratamento de Exceções e Edge Cases
+
+### Exceções Técnicas
+
+- **Falha na execução do comando de verificação:** Se o comando de verificação falhar devido a problemas técnicos (como falta de permissão, dependências não instaladas, etc.), é necessário identificar e resolver o problema técnico antes de proceder.
+- **Saída de verificação ambígua:** Se a saída do comando de verificação for ambígua ou difícil de interpretar, é necessário revisar a configuração do comando ou buscar orientação adicional para garantir a precisão da interpretação.
+
+### Edge Cases
+
+- **Projetos com múltiplos componentes:** Em projetos com múltiplos componentes, é crucial garantir que cada componente seja verificado individualmente e que a integração entre eles também seja verificada.
+- **Integração contínua e entrega contínua (CI/CD):** Em pipelines de CI/CD, a verificação deve ser integrada em cada estágio para garantir a qualidade e a integridade do código e da build.
+- **Equipes distribuídas:** Em equipes distribuídas, a comunicação clara e a documentação detalhada são essenciais para garantir que todos os membros da equipe estejam alinhados com os processos de verificação e os resultados.
+
+### Tratamento de Erros
+
+- **Registro de erros:** Todos os erros encontrados durante a verificação devem ser registrados e documentados para futura referência e melhoria.
+- **Análise de erros:** Uma análise detalhada dos erros deve ser realizada para identificar a raiz do problema e implementar soluções eficazes.
+- **Melhoria contínua:** O processo de verificação deve ser revisado regularmente para incorporar lições aprendidas e melhorar a eficácia da verificação.
