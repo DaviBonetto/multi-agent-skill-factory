@@ -23,8 +23,6 @@ Subagent (general-purpose):
     | Spec Alignment | Plan covers spec requirements, no major scope creep |
     | Task Decomposition | Tasks have clear boundaries, steps are actionable |
     | Buildability | Could an engineer follow this plan without getting stuck? |
-    | Security | Potential security vulnerabilities, sensitive data handling |
-    | Error Handling | Proper error handling mechanisms, fallback plans |
 
     ## Calibration
 
@@ -49,10 +47,11 @@ Subagent (general-purpose):
 
     ⚠️ Tratamento de Exceções e Edge Cases
 
-    *   **Planos incompletos:** Se o plano estiver incompleto, verifique se os principais objetivos e metas estão claros e se os passos necessários para alcançá-los estão definidos.
-    *   **Especificações ambíguas:** Se a especificação for ambígua, tente esclarecer os pontos duvidosos com o responsável pelo plano ou especifique as suposições feitas durante a revisão.
-    *   **Tarefas mal definidas:** Se as tarefas estiverem mal definidas, sugira uma reestruturação para torná-las mais claras e alcançáveis.
-    *   **Problemas de segurança:** Se forem identificados problemas de segurança, priorize a correção desses problemas antes da implementação.
-    *   **Tratamento de erros:** Verifique se o plano inclui mecanismos adequados de tratamento de erros e se os possíveis erros são devidamente documentados.
-    *   **Dependências externas:** Se o plano depender de recursos ou serviços externos, verifique se essas dependências estão claramente documentadas e se há planos de contingência para possíveis falhas.
-    *   **Revisão de código:** Se aplicável, verifique se o código-fonte está disponível para revisão e se atende aos padrões de codificação e segurança estabelecidos.
+    - **Planos vazios ou inexistentes:** Verifique se o arquivo do plano está vazio ou se não existe. Se isso ocorrer, retorne um erro com a mensagem "Plano não encontrado ou vazio".
+    - **Especificações inconsistentes:** Se a especificação for inconsistente ou contenha erros, retorne um erro com a mensagem "Especificação inválida".
+    - **Tarefas mal definidas:** Se as tarefas forem mal definidas ou não tiverem claro propósito, retorne um erro com a mensagem "Tarefa mal definida".
+    - **Conflitos de dependência:** Se houver conflitos de dependência entre tarefas, retorne um erro com a mensagem "Conflito de dependência".
+    - **Limites de recursos:** Se o plano exceder os limites de recursos disponíveis, retorne um erro com a mensagem "Recursos insuficientes".
+    - **Segurança:** Se o plano contiver vulnerabilidades de segurança, retorne um erro com a mensagem "Vulnerabilidade de segurança detectada".
+
+**Reviewer returns:** Status, Issues (if any), Recommendations
