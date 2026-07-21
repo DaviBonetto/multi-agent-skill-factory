@@ -1,58 +1,68 @@
 ---
-name: Desenvolvimento de Microsserviços com Kubernetes
-description: Ensina como desenvolver e implantar aplicações em microsserviços utilizando Kubernetes e Docker
+name: Desenvolvimento de Microsserviços
+description: Esta habilidade ensina como projetar, desenvolver e implantar microsserviços escaláveis e seguros
 ---
 
 ## Objetivo
-O objetivo deste guia é fornecer uma visão geral completa sobre como desenvolver e implantar aplicações em microsserviços utilizando Kubernetes e Docker. Ao final, você estará capacitado a projetar, implementar e gerenciar microsserviços de forma eficiente.
+O objetivo desta habilidade é capacitar os desenvolvedores a projetar, desenvolver e implantar microsserviços escaláveis e seguros, utilizando as melhores práticas e tecnologias atuais.
 
 ## Pré-requisitos
-Para seguir este guia, você deve ter conhecimentos básicos em:
-- Desenvolvimento de software
-- Containers Docker
-- Conceitos básicos de redes e sistemas operacionais
-- Experiência com linhas de comando (terminal ou prompt de comando)
+Para aproveitar ao máximo esta habilidade, é recomendado que os desenvolvedores tenham conhecimento em:
+* Programação em linguagens como Java, Python ou C#
+* Desenvolvimento de aplicações web
+* Conhecimento básico de arquitetura de microsserviços
+* Experiência com ferramentas de containerização, como Docker
+* Conhecimento de orquestração de contêineres, como Kubernetes
 
 ## Passo a Passo Técnico / Exemplos de Código
-### 1. Configurando o Ambiente
-Primeiro, você precisa ter o Docker e o Kubernetes instalados em sua máquina. Você pode instalar o Docker seguindo as instruções no site oficial do Docker. Para o Kubernetes, a instalação pode variar dependendo do seu sistema operacional, mas uma opção popular é usar o Minikube.
+### Projetando Microsserviços
+1. **Definir os requisitos**: Identifique os requisitos do sistema e defina os limites dos microsserviços.
+2. **Escolher a linguagem**: Escolha a linguagem de programação mais adequada para o microsserviço.
+3. **Implementar a lógica de negócios**: Implemente a lógica de negócios do microsserviço, utilizando padrões de design como MVC ou DDD.
 
-```bash
-# Instalar o Docker no Ubuntu
-sudo apt update
-sudo apt install apt-transport-https ca-certificates curl software-properties-common
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-sudo apt update
-sudo apt install docker-ce
-
-# Instalar o Minikube no Ubuntu
-curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
-chmod +x minikube
-sudo mv minikube /usr/local/bin/
-```
-
-### 2. Criando um Microsserviço
-Um microsserviço é basicamente uma aplicação que executa uma tarefa específica. Vamos criar um exemplo simples de um microsserviço em Python que retorna uma mensagem.
-
+Exemplo de código em Python:
 ```python
-from flask import Flask
+from flask import Flask, jsonify
+
 app = Flask(__name__)
 
-@app.route('/')
-def hello_world():
+@app.route('/usuarios', methods=['GET'])
+def get_usuarios():
     try:
-        return 'Olá, Mundo!'
+        # Lógica de negócios para recuperar os usuários
+        usuarios = []
+        return jsonify(usuarios)
     except Exception as e:
-        return str(e), 500
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
 ```
 
-### 3. Containerizando o Microsserviço
-Agora, vamos criar um Dockerfile para containerizar nosso microsserviço.
+### Desenvolvendo Microsserviços
+1. **Configurar o ambiente**: Configure o ambiente de desenvolvimento, incluindo a instalação de dependências e a configuração do banco de dados.
+2. **Implementar a API**: Implemente a API do microsserviço, utilizando frameworks como Flask ou Django.
+3. **Testar o microsserviço**: Teste o microsserviço, utilizando ferramentas como Pytest ou Unittest.
 
+Exemplo de código em Java:
+```java
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class UsuarioServiceApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(UsuarioServiceApplication.class, args);
+    }
+}
+```
+
+### Implantando Microsserviços
+1. **Configurar o container**: Configure o container do microsserviço, utilizando ferramentas como Docker.
+2. **Implantar o microsserviço**: Implantar o microsserviço, utilizando ferramentas como Kubernetes.
+3. **Monitorar o microsserviço**: Monitorar o microsserviço, utilizando ferramentas como Prometheus ou Grafana.
+
+Exemplo de arquivo Dockerfile:
 ```dockerfile
 FROM python:3.9-slim
 
@@ -67,69 +77,36 @@ COPY . .
 CMD ["python", "app.py"]
 ```
 
-### 4. Implantando no Kubernetes
-Para implantar nosso microsserviço no Kubernetes, precisamos criar um deployment.
-
-```yml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: microsservico
-spec:
-  replicas: 3
-  selector:
-    matchLabels:
-      app: microsservico
-  template:
-    metadata:
-      labels:
-        app: microsservico
-    spec:
-      containers:
-      - name: microsservico
-        image: seu-usuario-docker/microsservico:latest
-        ports:
-        - containerPort: 5000
-        resources:
-          requests:
-            cpu: 100m
-            memory: 128Mi
-          limits:
-            cpu: 200m
-            memory: 256Mi
-```
-
 ## Validação
-Para validar se tudo está funcionando corretamente, você pode usar o comando `kubectl` para verificar o status do seu deployment e dos pods.
-
-```bash
-kubectl get deployments
-kubectl get pods
-```
-
-Além disso, você pode acessar seu microsserviço através do serviço exposto pelo Kubernetes.
-
-```bash
-kubectl expose deployment microsservico --type=NodePort --port=5000
-kubectl get svc
-```
-
-Agora, você pode acessar seu microsserviço através do endereço IP do seu nó do Kubernetes e da porta exposta. Por exemplo: `http://<IP-do-nó>:<porta>`.
-
-Lembre-se de que este é um exemplo básico e que, em um ambiente de produção, você precisará considerar questões de segurança, escalabilidade, monitoramento, entre outros.
+Para validar o conhecimento adquirido, é recomendado que os desenvolvedores:
+* Desenvolvam um projeto de microsserviço, utilizando as habilidades aprendidas.
+* Testem e implantem o microsserviço, utilizando as ferramentas e tecnologias aprendidas.
+* Monitorem e otimizem o microsserviço, utilizando as ferramentas e tecnologias aprendidas.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-### Tratamento de Erros no Microsserviço
-No exemplo acima, adicionamos um tratamento básico de erros no microsserviço Python. No entanto, em um ambiente de produção, você precisará implementar um tratamento de erros mais robusto, incluindo logging, monitoramento e alertas.
+### Tratamento de Exceções
+* **Try-Except**: Utilize blocos try-except para capturar e tratar exceções.
+* **Logging**: Registre as exceções para análise posterior.
+* **Resposta**: Retorne uma resposta adequada para o cliente, informando o erro ocorrido.
 
-### Edge Cases no Kubernetes
-Ao implantar seu microsserviço no Kubernetes, você precisará considerar os seguintes edge cases:
-- **Falha de inicialização do contêiner**: Se o contêiner não iniciar corretamente, o Kubernetes irá reiniciá-lo. No entanto, se o problema persistir, você precisará investigar e resolver a causa raiz.
-- **Falha de rede**: Se houver uma falha de rede, o tráfego para o seu microsserviço pode ser afetado. Você precisará implementar um mecanismo de retry e timeout para lidar com essas situações.
-- **Esgotamento de recursos**: Se o seu microsserviço consumir muitos recursos (CPU, memória, etc.), o Kubernetes pode não ser capaz de alocar recursos suficientes. Você precisará monitorar o uso de recursos e ajustar as configurações do deployment para evitar esgotamento de recursos.
+Exemplo de tratamento de exceções em Python:
+```python
+try:
+    # Código que pode gerar exceção
+    usuarios = []
+    return jsonify(usuarios)
+except Exception as e:
+    # Tratamento da exceção
+    return jsonify({"error": str(e)}), 500
+```
 
-### Segurança
-Ao implantar seu microsserviço no Kubernetes, você precisará considerar as seguintes questões de segurança:
-- **Autenticação e autorização**: Você precisará implementar autenticação e autorização para controlar o acesso ao seu microsserviço.
-- **Criptografia**: Você precisará criptografar os dados em trânsito e em repouso para proteger contra interceptação e acesso não autorizado.
-- **Atualizações de segurança**: Você precisará manter o seu microsserviço e os componentes do Kubernetes atualizados com as últimas patches de segurança.
+### Edge Cases
+* **Validação de entrada**: Valide as entradas para evitar erros.
+* **Tratamento de casos especiais**: Trate casos especiais, como falta de dados ou dados inválidos.
+* **Testes**: Realize testes para garantir que o microsserviço funcione corretamente em diferentes cenários.
+
+Exemplo de tratamento de edge cases em Python:
+```python
+if not usuarios:
+    return jsonify({"error": "Nenhum usuário encontrado"}), 404
+```
