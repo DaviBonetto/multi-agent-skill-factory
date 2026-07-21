@@ -1,77 +1,63 @@
 ---
 name: DevOps Avançado
-description: Ensina técnicas avançadas de DevOps, incluindo automação de deploy, monitoramento e otimização de desempenho
+description: Aprofundamento em DevOps, incluindo automação de deploy e monitoramento de desempenho
 ---
 
 ## Objetivo
-O objetivo deste guia é fornecer uma visão aprofundada das técnicas avançadas de DevOps, abordando tópicos como automação de deploy, monitoramento e otimização de desempenho. Com isso, os participantes poderão aprimorar suas habilidades em DevOps e melhorar a eficiência dos processos de desenvolvimento e entrega de software.
+O objetivo desta habilidade é aprofundar os conhecimentos em DevOps, abordando tópicos avançados como automação de deploy e monitoramento de desempenho, visando melhorar a eficiência e a qualidade dos processos de desenvolvimento e entrega de software.
 
 ## Pré-requisitos
-Para aproveitar ao máximo este guia, é recomendado que os participantes tenham conhecimento básico em:
+Para aproveitar ao máximo esta habilidade, é recomendado que os participantes tenham conhecimentos básicos em:
 - Desenvolvimento de software
 - Infraestrutura como código (IaC)
-- Ferramentas de automação de deploy (como Jenkins ou GitLab CI/CD)
-- Conceitos de monitoramento e logging
+- Ferramentas de automação de deploy (como Jenkins, GitLab CI/CD, etc.)
+- Conceitos de monitoramento de desempenho e logging
 
 ## Passo a Passo Técnico / Exemplos de Código
-### Automação de Deploy
-A automação de deploy é um componente crucial em DevOps. Utilizando ferramentas como o Ansible, podemos automatizar a implantação de aplicações. Por exemplo:
-```yml
----
-- name: Deploy da Aplicação
-  hosts: servidores
-  become: yes
+### Automatização de Deploy com Jenkins
+1. **Instalação do Jenkins**: Primeiramente, é necessário instalar o Jenkins em um servidor. Isso pode ser feito utilizando Docker:
+   ```bash
+   docker run -p 8080:8080 -v jenkins_home:/var/jenkins_home jenkins/jenkins:lts
+   ```
+2. **Configuração do Job**: Após a instalação, configure um novo job no Jenkins para automatizar o deploy do seu projeto. Isso envolve a criação de um pipeline que execute os comandos necessários para build e deploy do seu software.
 
-  tasks:
-  - name: Atualizar e Instalar Dependências
-    apt:
-      update_cache: yes
-      cache_valid_time: 3600
-```
-No entanto, é importante considerar os seguintes pontos de segurança:
-- Utilizar autenticação segura para acessar os servidores de deploy.
-- Utilizar criptografia para proteger os dados transmitidos durante o deploy.
-- Implementar um sistema de rollback em caso de falha no deploy.
-
-### Monitoramento
-O monitoramento é essencial para garantir o desempenho e a disponibilidade da aplicação. Ferramentas como o Prometheus e o Grafana podem ser utilizadas para coletar métricas e visualizar os dados. Exemplo de configuração do Prometheus:
-```yml
-global:
-  scrape_interval: 10s
-
-scrape_configs:
-  - job_name: 'node'
-    scrape_interval: 10s
-    static_configs:
-      - targets: ['localhost:9090']
-```
-Além disso, é importante considerar a segurança do monitoramento:
-- Utilizar autenticação e autorização para acessar as ferramentas de monitoramento.
-- Utilizar criptografia para proteger os dados coletados.
-- Implementar um sistema de alerta para notificar os administradores em caso de problemas.
-
-### Otimização de Desempenho
-A otimização de desempenho envolve identificar e solucionar problemas de performance. Isso pode ser feito analisando logs e métricas de desempenho. Por exemplo, utilizando o comando `top` para monitorar o uso de CPU e memória:
-```bash
-top -b -n 1 -d 10
-```
-No entanto, é importante considerar os seguintes pontos de segurança:
-- Utilizar ferramentas de análise de logs seguras para evitar a exposição de dados sensíveis.
-- Utilizar criptografia para proteger os dados transmitidos durante a análise de logs.
-- Implementar um sistema de controle de acesso para restringir o acesso às ferramentas de otimização de desempenho.
+### Monitoramento de Desempenho com Prometheus e Grafana
+1. **Instalação do Prometheus e Grafana**: Utilize Docker Compose para instalar o Prometheus e o Grafana:
+   ```yaml
+   version: '3'
+   services:
+     prometheus:
+       image: prometheus/prometheus:v2.34.0
+       volumes:
+         - ./prometheus.yml:/etc/prometheus/prometheus.yml
+       ports:
+         - "9090:9090"
+     grafana:
+       image: grafana/grafana:8.5.0
+       ports:
+         - "3000:3000"
+   ```
+2. **Configuração do Prometheus**: Edite o arquivo `prometheus.yml` para configurar as métricas que você deseja coletar.
+3. **Visualização com Grafana**: Acesse o Grafana e configure dashboards para visualizar as métricas coletadas pelo Prometheus.
 
 ## Validação
-Para validar os conhecimentos adquiridos, é recomendado que os participantes apliquem as técnicas aprendidas em projetos práticos. Isso pode incluir:
-- Implementar automação de deploy para uma aplicação existente
-- Configurar monitoramento e logging para uma aplicação
-- Realizar otimização de desempenho em uma aplicação com problemas de performance
+Para validar o conhecimento adquirido, é recomendado:
+- Implementar um pipeline de CI/CD completo para um projeto de exemplo.
+- Configurar o monitoramento de desempenho para um serviço em produção.
+- Realizar ajustes e otimizações baseados nos dados coletados pelo sistema de monitoramento.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-Além dos tópicos abordados anteriormente, é importante considerar os seguintes casos de exceção e edge cases:
-- **Falha no deploy**: Implementar um sistema de rollback em caso de falha no deploy.
-- **Problemas de desempenho**: Identificar e solucionar problemas de performance utilizando ferramentas de análise de logs e métricas de desempenho.
-- **Segurança**: Utilizar autenticação e autorização para acessar as ferramentas de DevOps, e criptografia para proteger os dados transmitidos.
-- **Escalabilidade**: Implementar soluções escaláveis para atender ao aumento da demanda.
-- **Disponibilidade**: Implementar soluções para garantir a disponibilidade da aplicação, como load balancing e failover.
+### Tratamento de Erros no Jenkins
+- **Erros de Instalação**: Verifique se o Docker está instalado e funcionando corretamente antes de tentar instalar o Jenkins.
+- **Erros de Configuração**: Certifique-se de que o arquivo de configuração do Jenkins esteja correto e que as credenciais de acesso estejam válidas.
+- **Erros de Execução**: Monitore os logs do Jenkins para identificar erros durante a execução do pipeline e ajuste o pipeline conforme necessário.
 
-Ao seguir este guia e aplicar as técnicas aprendidas, os participantes estarão bem equipados para lidar com desafios avançados em DevOps e melhorar a eficiência dos processos de desenvolvimento e entrega de software.
+### Tratamento de Exceções no Prometheus e Grafana
+- **Erros de Instalação**: Verifique se o Docker Compose está instalado e funcionando corretamente antes de tentar instalar o Prometheus e o Grafana.
+- **Erros de Configuração**: Certifique-se de que os arquivos de configuração do Prometheus e do Grafana estejam corretos e que as credenciais de acesso estejam válidas.
+- **Erros de Coleta de Métricas**: Verifique se o Prometheus está coletando métricas corretamente e se o Grafana está visualizando as métricas corretamente.
+
+### Segurança
+- **Autenticação e Autorização**: Certifique-se de que o Jenkins, o Prometheus e o Grafana estejam configurados com autenticação e autorização adequadas para evitar acessos não autorizados.
+- **Criptografia**: Certifique-se de que as comunicações entre os serviços estejam criptografadas para evitar interceptação de dados.
+- **Atualizações e Patchs**: Mantenha os serviços atualizados com os últimos patchs de segurança para evitar vulnerabilidades conhecidas.
