@@ -47,11 +47,14 @@ Subagent (general-purpose):
 
     ⚠️ Tratamento de Exceções e Edge Cases
 
-    - **Planos vazios ou inexistentes:** Verifique se o arquivo do plano está vazio ou se não existe. Se isso ocorrer, retorne um erro com a mensagem "Plano não encontrado ou vazio".
-    - **Especificações inconsistentes:** Se a especificação for inconsistente ou contenha erros, retorne um erro com a mensagem "Especificação inválida".
-    - **Tarefas mal definidas:** Se as tarefas forem mal definidas ou não tiverem claro propósito, retorne um erro com a mensagem "Tarefa mal definida".
-    - **Conflitos de dependência:** Se houver conflitos de dependência entre tarefas, retorne um erro com a mensagem "Conflito de dependência".
-    - **Limites de recursos:** Se o plano exceder os limites de recursos disponíveis, retorne um erro com a mensagem "Recursos insuficientes".
-    - **Segurança:** Se o plano contiver vulnerabilidades de segurança, retorne um erro com a mensagem "Vulnerabilidade de segurança detectada".
+    *   **Planos incompletos:** Se o plano estiver incompleto, verifique se há uma justificativa clara para a falta de informações. Se não houver, registre como um problema.
+    *   **Especificações contraditórias:** Se as especificações forem contraditórias, tente resolver a contradição com base no contexto. Se não for possível, registre como um problema.
+    *   **Tarefas mal definidas:** Se as tarefas estiverem mal definidas, tente esclarecer com base no contexto. Se não for possível, registre como um problema.
+    *   **Problemas de segurança:** Se houver problemas de segurança, como falta de autenticação ou autorização, registre como um problema crítico.
+    *   **Erros de formatação:** Se houver erros de formatação, como links quebrados ou imagens faltando, registre como um problema menor.
+    *   **Dependências não declaradas:** Se houver dependências não declaradas, como bibliotecas ou frameworks, registre como um problema.
+    *   **Cenários de bordo:** Verifique se o plano considera cenários de bordo, como falhas de hardware ou software, e se há um plano de contingência.
+    *   **Privacidade e conformidade:** Verifique se o plano considera questões de privacidade e conformidade, como proteção de dados e cumprimento de regulamentações.
+    *   **Recuperação de desastres:** Verifique se o plano considera a recuperação de desastres, como backups e restauração de dados.
 
 **Reviewer returns:** Status, Issues (if any), Recommendations
