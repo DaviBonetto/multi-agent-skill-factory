@@ -1,81 +1,73 @@
 ---
 name: Análise de Dados com Python e Pandas
-description: Ensina como analisar e manipular dados utilizando Python, Pandas e NumPy
+description: Esta skill aborda a análise de dados utilizando Python e a biblioteca Pandas, ensinando como manipular, visualizar e extrair insights de conjuntos de dados.
 ---
 
 ## Objetivo
-O objetivo deste guia é fornecer uma introdução prática à análise de dados utilizando Python, Pandas e NumPy. Ao final, você estará capacitado a manipular e analisar dados de forma eficiente, utilizando as bibliotecas mais populares da linguagem Python para essa finalidade.
+O objetivo desta skill é capacitar os participantes a realizar análise de dados utilizando Python e a biblioteca Pandas, permitindo que eles possam manipular, visualizar e extrair insights de conjuntos de dados de forma eficaz.
 
 ## Pré-requisitos
-Para seguir este guia, é necessário ter:
-- Conhecimento básico em programação Python
-- Python instalado em seu computador (recomenda-se a versão mais recente)
-- Bibliotecas Pandas e NumPy instaladas (`pip install pandas numpy`)
-- Um editor de texto ou IDE (como PyCharm, VSCode) para escrever e executar código Python
+Para participar desta skill, é necessário ter conhecimento básico em programação Python e experiência com manipulação de dados. Além disso, é recomendado ter instalado o Python e a biblioteca Pandas em seu ambiente de desenvolvimento.
 
 ## Passo a Passo Técnico / Exemplos de Código
-### Instalação das Bibliotecas Necessárias
-Antes de começar, certifique-se de que as bibliotecas Pandas e NumPy estão instaladas. Você pode instalar usando pip:
+### Instalação da Biblioteca Pandas
+Para começar a utilizar a biblioteca Pandas, é necessário instalá-la em seu ambiente de desenvolvimento. Isso pode ser feito utilizando o pip:
 ```bash
-pip install pandas numpy
+pip install pandas
 ```
-Caso encontre erros durante a instalação, verifique se o pip está atualizado e se você tem permissões de administrador.
-
-### Importação das Bibliotecas
-Para usar as bibliotecas, você precisa importá-las no início do seu script Python:
+### Importação da Biblioteca Pandas
+Após a instalação, é possível importar a biblioteca Pandas em seu script Python:
 ```python
 import pandas as pd
-import numpy as np
 ```
-Certifique-se de que não há conflitos de nomes com outras bibliotecas ou variáveis.
-
 ### Carregamento de Dados
-Vamos carregar um conjunto de dados exemplo usando Pandas. Aqui, usaremos um DataFrame simples:
+A biblioteca Pandas permite carregar dados de diversas fontes, incluindo arquivos CSV e Excel. Por exemplo, para carregar um arquivo CSV:
 ```python
-# Criando um DataFrame exemplo
-dados = {
-    'Nome': ['João', 'Maria', 'Pedro'],
-    'Idade': [25, 31, 42]
-}
-df = pd.DataFrame(dados)
-print(df)
+df = pd.read_csv('dados.csv')
 ```
-Se o conjunto de dados for muito grande, considere usar métodos de carregamento mais eficientes, como `pd.read_csv` para arquivos CSV.
-
 ### Manipulação de Dados
-Agora, vamos realizar algumas operações básicas de manipulação de dados, como filtrar e ordenar:
+A biblioteca Pandas fornece diversas funções para manipular dados, incluindo filtragem, agrupamento e ordenação. Por exemplo, para filtrar os dados com base em uma condição:
 ```python
-# Filtrando dados
-filtrados = df[df['Idade'] > 30]
-print(filtrados)
-
-# Ordenando dados
-ordenados = df.sort_values(by='Idade')
-print(ordenados)
+df_filtrado = df[df['idade'] > 18]
 ```
-Lembre-se de sempre verificar os tipos de dados das colunas para evitar erros durante a manipulação.
-
+### Visualização de Dados
+A biblioteca Pandas pode ser utilizada em conjunto com bibliotecas de visualização, como Matplotlib e Seaborn, para criar gráficos e visualizações. Por exemplo, para criar um gráfico de barras:
+```python
+import matplotlib.pyplot as plt
+df['categoria'].value_counts().plot(kind='bar')
+plt.show()
+```
 ## Validação
-Para validar o conhecimento adquirido, tente realizar as seguintes tarefas:
-- Carregar um conjunto de dados real (como um arquivo CSV) e realizar operações de manipulação e análise.
-- Utilizar funções de agregação (como `groupby`, `mean`, `sum`) para obter insights dos dados.
-- Visualizar os dados utilizando bibliotecas como Matplotlib ou Seaborn para entender melhor a distribuição e relacionamentos entre as variáveis.
+Para validar os conhecimentos adquiridos, é recomendado realizar exercícios práticos com conjuntos de dados reais, aplicando as técnicas de manipulação, visualização e extração de insights aprendidas durante a skill. Além disso, é importante realizar a documentação e apresentação dos resultados, utilizando ferramentas como Jupyter Notebook e Markdown.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-Durante a manipulação de dados, é comum encontrar situações excepcionais que precisam ser tratadas. Aqui estão alguns exemplos:
-- **Dados faltantes**: Use `df.isnull().sum()` para identificar colunas com dados faltantes e `df.dropna()` ou `df.fillna()` para lidar com eles.
-- **Tipos de dados inconsistentes**: Verifique os tipos de dados das colunas com `df.dtypes` e use `pd.to_numeric()` ou `pd.to_datetime()` para converter tipos de dados quando necessário.
-- **Erros de sintaxe**: Use try-except para capturar erros de sintaxe e fornecer mensagens de erro mais amigáveis.
-- **Dados muito grandes**: Considere usar bibliotecas como Dask para lidar com conjuntos de dados muito grandes.
+Durante a análise de dados, é importante considerar os seguintes casos:
+* **Arquivos CSV vazios ou corrompidos**: Verificar se o arquivo CSV está vazio ou corrompido antes de tentar carregá-lo.
 ```python
 try:
-    # Código que pode gerar exceção
-    df = pd.read_csv('arquivo.csv')
-except FileNotFoundError:
-    print("Arquivo não encontrado.")
+    df = pd.read_csv('dados.csv')
 except pd.errors.EmptyDataError:
-    print("Arquivo está vazio.")
+    print("Arquivo CSV vazio")
 except pd.errors.ParserError:
-    print("Erro ao parsear o arquivo.")
+    print("Arquivo CSV corrompido")
 ```
-Lembre-se de sempre testar seu código com diferentes conjuntos de dados e situações para garantir que ele seja robusto e funcione corretamente.
+* **Colunas com dados faltantes**: Verificar se as colunas contêm dados faltantes e tratar esses dados de acordo com a necessidade.
+```python
+df.isnull().sum()
+df.dropna(inplace=True)
+```
+* **Tipos de dados inconsistentes**: Verificar se os tipos de dados nas colunas são consistentes e converter os tipos de dados se necessário.
+```python
+df['idade'] = pd.to_numeric(df['idade'], errors='coerce')
+```
+* **Dados fora do intervalo esperado**: Verificar se os dados estão dentro do intervalo esperado e tratar os dados fora do intervalo de acordo com a necessidade.
+```python
+df = df[(df['idade'] >= 18) & (df['idade'] <= 100)]
+```
+* **Erros de visualização**: Verificar se os gráficos e visualizações estão sendo criados corretamente e tratar os erros de visualização de acordo com a necessidade.
+```python
+try:
+    df['categoria'].value_counts().plot(kind='bar')
+    plt.show()
+except Exception as e:
+    print(f"Erro de visualização: {e}")
