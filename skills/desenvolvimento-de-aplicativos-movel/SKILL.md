@@ -1,68 +1,108 @@
 ---
-name: Desenvolvimento de Aplicativos Móvel com React Native
-description: Esta skill ensina como desenvolver aplicativos móveis para Android e iOS utilizando React Native
+name: Desenvolvimento de Aplicativos Móvel Avançado
+description: Ensina técnicas avançadas de desenvolvimento de aplicativos móvel, incluindo integração com serviços de nuvem e segurança de dados
 ---
 
 ## Objetivo
-O objetivo desta skill é capacitar os desenvolvedores a criar aplicativos móveis para Android e iOS utilizando a tecnologia React Native, abordando desde a configuração do ambiente até a publicação das aplicações nas lojas.
+O objetivo deste guia é fornecer uma visão abrangente sobre como desenvolver aplicativos móveis avançados, cobrindo tópicos como integração com serviços de nuvem e segurança de dados. Este conteúdo é direcionado a desenvolvedores seniores que buscam aprimorar suas habilidades em desenvolvimento de aplicativos móveis.
 
 ## Pré-requisitos
-Para iniciar este curso, é necessário ter conhecimento básico em:
-- Programação em JavaScript
-- Desenvolvimento de aplicações web
-- Ferramentas de linha de comando (Terminal ou Prompt de Comando)
-- Conhecimento básico em React
+Antes de iniciar, é importante ter conhecimento sólido em:
+- Desenvolvimento de aplicativos móveis (iOS e/ou Android)
+- Linguagens de programação como Java, Swift, Kotlin, etc.
+- Conhecimento básico de serviços de nuvem (AWS, Google Cloud, Azure, etc.)
+- Noções de segurança de dados e criptografia
 
 ## Passo a Passo Técnico / Exemplos de Código
-### Configuração do Ambiente
-1. Instalar o Node.js e o npm (Node Package Manager) em sua máquina.
-2. Instalar o React Native CLI utilizando o comando:
-```bash
-npm install -g react-native-cli
-```
-3. Configurar o ambiente de desenvolvimento para Android e iOS.
+### Integração com Serviços de Nuvem
+1. **Escolha do Serviço de Nuvem**: Selecione um provedor de serviços de nuvem (como AWS ou Google Cloud) e crie uma conta.
+2. **Configuração do Projeto**: Configure seu projeto de aplicativo móvel para utilizar os serviços de nuvem. Isso pode incluir a configuração de APIs, armazenamento de dados e autenticação.
+3. **Implementação de Funcionalidades**: Implemente funcionalidades que utilizam os serviços de nuvem, como upload de arquivos, processamento de dados e notificações push.
 
-### Criação do Projeto
-1. Criar um novo projeto React Native utilizando o comando:
-```bash
-npx react-native init NomeDoProjeto
-```
-2. Navegar até o diretório do projeto e instalar as dependências necessárias.
+Exemplo de código em Kotlin para upload de arquivo para o Firebase Storage:
+```kotlin
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 
-### Desenvolvimento da Aplicação
-1. Desenvolver a aplicação móvel utilizando componentes React Native.
-2. Utilizar a linguagem JavaScript para criar a lógica da aplicação.
+// Obtém uma referência ao arquivo
+val storage = FirebaseStorage.getInstance()
+val storageRef = storage.reference
 
-### Publicação da Aplicação
-1. Preparar a aplicação para publicação nas lojas de aplicativos.
-2. Utilizar o comando:
-```bash
-npx react-native run-android
+// Faz o upload do arquivo
+val file = Uri.fromFile(File("path/to/file"))
+val riversRef = storageRef.child("images/${file.lastPathSegment}")
+val uploadTask = riversRef.putFile(file)
+
+// Verifica o status do upload
+uploadTask.addOnFailureListener {
+    // Trata o erro
+}.addOnSuccessListener {
+    // Upload bem-sucedido
+}
 ```
-ou
-```bash
-npx react-native run-ios
+
+### Segurança de Dados
+1. **Criptografia**: Implemente criptografia para proteger os dados sensíveis, tanto em repouso quanto em trânsito.
+2. **Autenticação e Autorização**: Implemente mecanismos de autenticação e autorização para controlar o acesso aos dados e funcionalidades do aplicativo.
+3. **Atualizações e Patches**: Mantenha o aplicativo e suas dependências atualizados com os últimos patches de segurança.
+
+Exemplo de código em Java para criptografia de dados usando AES:
+```java
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.nio.charset.StandardCharsets;
+
+// Gera a chave de criptografia
+String password = "minha_senha";
+MessageDigest md = MessageDigest.getInstance("SHA-256");
+byte[] digest = md.digest(password.getBytes(StandardCharsets.UTF_8));
+SecretKeySpec key = new SecretKeySpec(digest, "AES");
+
+// Criptografa os dados
+Cipher cipher = Cipher.getInstance("AES");
+cipher.init(Cipher.ENCRYPT_MODE, key);
+byte[] encrypted = cipher.doFinal("meus_dados".getBytes(StandardCharsets.UTF_8));
 ```
-para testar a aplicação em dispositivos Android ou iOS, respectivamente.
 
 ## Validação
-Para validar o conhecimento adquirido, é necessário:
-- Desenvolver um aplicativo móvel completo utilizando React Native.
-- Publicar o aplicativo nas lojas de aplicativos (Google Play Store e Apple App Store).
-- Testar a aplicação em diferentes dispositivos e plataformas.
+Para validar a implementação, execute os seguintes passos:
+1. **Testes Unitários**: Escreva e execute testes unitários para garantir que as funcionalidades individuais estejam funcionando corretamente.
+2. **Testes de Integração**: Execute testes de integração para garantir que as diferentes partes do aplicativo estejam funcionando juntas como esperado.
+3. **Testes de Segurança**: Realize testes de segurança para identificar e corrigir vulnerabilidades no aplicativo.
+4. **Testes de Desempenho**: Execute testes de desempenho para garantir que o aplicativo atenda aos requisitos de desempenho esperados.
 
-## Tratamento de Exceções e Edge Cases
-### Tratamento de Erros
-- **Erro de Instalação**: Caso ocorra um erro durante a instalação do Node.js, npm ou React Native CLI, verificar se a versão do sistema operacional é compatível e se há espaço suficiente em disco.
-- **Erro de Configuração**: Caso ocorra um erro durante a configuração do ambiente de desenvolvimento, verificar se as variáveis de ambiente estão corretamente configuradas e se há conflitos com outras ferramentas de desenvolvimento.
-- **Erro de Execução**: Caso ocorra um erro durante a execução da aplicação, verificar se o código está correto, se as dependências estão instaladas e se há problemas de compatibilidade com o dispositivo ou plataforma.
+## ⚠️ Tratamento de Exceções e Edge Cases
+### Exceções de Rede
+- **Conexão Lenta**: Implemente timeouts e retries para lidar com conexões de rede lentas.
+- **Perda de Conexão**: Implemente mecanismos para detectar e lidar com perda de conexão, como reconexão automática.
 
-### Edge Cases
-- **Dispositivos com Recursos Limitados**: A aplicação deve ser otimizada para funcionar em dispositivos com recursos limitados, como memória RAM ou processador.
-- **Conexão de Rede Instável**: A aplicação deve ser capaz de lidar com conexões de rede instáveis, como perda de conexão ou velocidade de rede baixa.
-- **Diferenças de Plataforma**: A aplicação deve ser capaz de lidar com as diferenças entre as plataformas Android e iOS, como diferenças de layout ou comportamento de componentes.
+### Exceções de Serviços de Nuvem
+- **Erro de Autenticação**: Trate erros de autenticação com os serviços de nuvem, como credenciais inválidas ou expiradas.
+- **Erro de Autorização**: Trate erros de autorização, como acesso negado a recursos ou ações.
 
-## Segurança
-- **Autenticação e Autorização**: A aplicação deve implementar autenticação e autorização para proteger os dados dos usuários e garantir que apenas usuários autorizados tenham acesso às funcionalidades da aplicação.
-- **Criptografia**: A aplicação deve utilizar criptografia para proteger os dados dos usuários, como senhas e informações pessoais.
-- **Atualizações de Segurança**: A aplicação deve ser atualizada regularmente para garantir que as últimas vulnerabilidades de segurança sejam corrigidas.
+### Exceções de Segurança
+- **Ataques de Injeção de Código**: Implemente medidas para prevenir ataques de injeção de código, como validação e sanitização de entrada de usuário.
+- **Ataques de Cross-Site Scripting (XSS)**: Implemente medidas para prevenir ataques de XSS, como escapamento de saída de dados.
+
+Exemplo de código em Kotlin para tratamento de exceções de rede:
+```kotlin
+try {
+    // Código que pode lançar exceção de rede
+} catch (e: IOException) {
+    // Trata a exceção de rede
+} catch (e: Exception) {
+    // Trata exceções gerais
+}
+```
+
+Exemplo de código em Java para tratamento de exceções de segurança:
+```java
+try {
+    // Código que pode lançar exceção de segurança
+} catch (SQLException e) {
+    // Trata a exceção de segurança
+} catch (Exception e) {
+    // Trata exceções gerais
+}
