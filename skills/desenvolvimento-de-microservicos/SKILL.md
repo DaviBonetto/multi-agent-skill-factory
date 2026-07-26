@@ -1,68 +1,43 @@
 ---
-name: Desenvolvimento de Microsserviços
-description: Esta habilidade ensina como projetar, desenvolver e implantar microsserviços escaláveis e seguros
+name: Desenvolvimento de Microserviços
+description: Ensina como projetar e implementar sistemas baseados em microserviços, utilizando padrões de arquitetura de software e tecnologias como Docker e Kubernetes
 ---
 
 ## Objetivo
-O objetivo desta habilidade é capacitar os desenvolvedores a projetar, desenvolver e implantar microsserviços escaláveis e seguros, utilizando as melhores práticas e tecnologias atuais.
+O objetivo deste guia é fornecer uma visão geral sobre como desenvolver microserviços, abordando desde a concepção até a implementação, utilizando tecnologias como Docker e Kubernetes. Ao final, você estará capacitado a projetar e implementar sistemas baseados em microserviços de forma eficaz.
 
 ## Pré-requisitos
-Para aproveitar ao máximo esta habilidade, é recomendado que os desenvolvedores tenham conhecimento em:
-* Programação em linguagens como Java, Python ou C#
-* Desenvolvimento de aplicações web
-* Conhecimento básico de arquitetura de microsserviços
-* Experiência com ferramentas de containerização, como Docker
-* Conhecimento de orquestração de contêineres, como Kubernetes
+Para seguir este guia, é recomendado que você tenha conhecimento básico em:
+- Desenvolvimento de software
+- Arquitetura de software
+- Contêineres (Docker)
+- Orquestração de contêineres (Kubernetes)
+- Linguagens de programação (como Java, Python, etc.)
 
 ## Passo a Passo Técnico / Exemplos de Código
-### Projetando Microsserviços
-1. **Definir os requisitos**: Identifique os requisitos do sistema e defina os limites dos microsserviços.
-2. **Escolher a linguagem**: Escolha a linguagem de programação mais adequada para o microsserviço.
-3. **Implementar a lógica de negócios**: Implemente a lógica de negócios do microsserviço, utilizando padrões de design como MVC ou DDD.
+### 1. Planejamento do Microserviço
+Antes de iniciar o desenvolvimento, é crucial planejar o microserviço, definindo sua responsabilidade, interfaces e dependências. Isso pode ser feito utilizando ferramentas de modelagem como o Swagger ou OpenAPI.
 
-Exemplo de código em Python:
+### 2. Implementação do Microserviço
+A implementação do microserviço pode variar dependendo da linguagem de programação escolhida. Por exemplo, em Python, você pode usar o Flask para criar um microserviço simples:
 ```python
 from flask import Flask, jsonify
 
 app = Flask(__name__)
 
-@app.route('/usuarios', methods=['GET'])
-def get_usuarios():
+@app.route('/hello', methods=['GET'])
+def hello():
     try:
-        # Lógica de negócios para recuperar os usuários
-        usuarios = []
-        return jsonify(usuarios)
+        return jsonify({'message': 'Hello, World!'})
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)
 ```
 
-### Desenvolvendo Microsserviços
-1. **Configurar o ambiente**: Configure o ambiente de desenvolvimento, incluindo a instalação de dependências e a configuração do banco de dados.
-2. **Implementar a API**: Implemente a API do microsserviço, utilizando frameworks como Flask ou Django.
-3. **Testar o microsserviço**: Teste o microsserviço, utilizando ferramentas como Pytest ou Unittest.
-
-Exemplo de código em Java:
-```java
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-@SpringBootApplication
-public class UsuarioServiceApplication {
-    public static void main(String[] args) {
-        SpringApplication.run(UsuarioServiceApplication.class, args);
-    }
-}
-```
-
-### Implantando Microsserviços
-1. **Configurar o container**: Configure o container do microsserviço, utilizando ferramentas como Docker.
-2. **Implantar o microsserviço**: Implantar o microsserviço, utilizando ferramentas como Kubernetes.
-3. **Monitorar o microsserviço**: Monitorar o microsserviço, utilizando ferramentas como Prometheus ou Grafana.
-
-Exemplo de arquivo Dockerfile:
+### 3. Contêinerização com Docker
+Para contêinerizar o microserviço, você precisará criar um arquivo `Dockerfile` que descreva como o contêiner deve ser construído. Por exemplo:
 ```dockerfile
 FROM python:3.9-slim
 
@@ -76,37 +51,69 @@ COPY . .
 
 CMD ["python", "app.py"]
 ```
+Certifique-se de que o arquivo `requirements.txt` contenha todas as dependências necessárias para o seu microserviço.
+
+### 4. Orquestração com Kubernetes
+Após a contêinerização, você pode orquestrar o microserviço utilizando Kubernetes. Isso envolve a criação de um arquivo de definição de deployment, como `deployment.yaml`:
+```yml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: microservico
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: microservico
+  template:
+    metadata:
+      labels:
+        app: microservico
+    spec:
+      containers:
+      - name: microservico
+        image: microservico:latest
+        ports:
+        - containerPort: 5000
+      restartPolicy: Always
+```
+O `restartPolicy` é configurado para `Always` para garantir que o contêiner seja reiniciado em caso de falha.
 
 ## Validação
-Para validar o conhecimento adquirido, é recomendado que os desenvolvedores:
-* Desenvolvam um projeto de microsserviço, utilizando as habilidades aprendidas.
-* Testem e implantem o microsserviço, utilizando as ferramentas e tecnologias aprendidas.
-* Monitorem e otimizem o microsserviço, utilizando as ferramentas e tecnologias aprendidas.
+Para validar o microserviço, você pode utilizar ferramentas de teste como o Postman ou escrever testes unitários e de integração. Além disso, é importante monitorar o desempenho do microserviço em produção, utilizando ferramentas como o Prometheus e o Grafana.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-### Tratamento de Exceções
-* **Try-Except**: Utilize blocos try-except para capturar e tratar exceções.
-* **Logging**: Registre as exceções para análise posterior.
-* **Resposta**: Retorne uma resposta adequada para o cliente, informando o erro ocorrido.
-
-Exemplo de tratamento de exceções em Python:
-```python
-try:
-    # Código que pode gerar exceção
-    usuarios = []
-    return jsonify(usuarios)
-except Exception as e:
-    # Tratamento da exceção
-    return jsonify({"error": str(e)}), 500
-```
+### Tratamento de Erros
+É fundamental tratar os erros de forma adequada para evitar que o microserviço fique indisponível. Isso pode ser feito utilizando blocos `try-except` para capturar exceções e retornar respostas de erro significativas.
 
 ### Edge Cases
-* **Validação de entrada**: Valide as entradas para evitar erros.
-* **Tratamento de casos especiais**: Trate casos especiais, como falta de dados ou dados inválidos.
-* **Testes**: Realize testes para garantir que o microsserviço funcione corretamente em diferentes cenários.
+Alguns exemplos de edge cases que devem ser considerados:
+- **Sobrecarga de requisições**: O microserviço deve ser capaz de lidar com um grande volume de requisições sem ficar indisponível.
+- **Falha de dependências**: O microserviço deve ser capaz de lidar com falhas de dependências, como a indisponibilidade de um banco de dados.
+- **Requisições inválidas**: O microserviço deve ser capaz de lidar com requisições inválidas, como requisições com parâmetros malformados.
 
-Exemplo de tratamento de edge cases em Python:
+Exemplo de como tratar esses edge cases:
 ```python
-if not usuarios:
-    return jsonify({"error": "Nenhum usuário encontrado"}), 404
+from flask import Flask, jsonify, request
+
+app = Flask(__name__)
+
+@app.route('/hello', methods=['GET'])
+def hello():
+    try:
+        # Verificar se a requisição é válida
+        if not request.args.get('nome'):
+            return jsonify({'error': 'Parâmetro nome é obrigatório'}), 400
+        
+        # Simular uma falha de dependência
+        if random.random() < 0.1:
+            raise Exception('Falha de dependência')
+        
+        return jsonify({'message': 'Hello, World!'})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+if __name__ == '__main__':
+    app.run(debug=True)
 ```
+Nesse exemplo, o microserviço verifica se a requisição é válida e simula uma falha de dependência com uma probabilidade de 10%. Se ocorrer uma falha, o microserviço retorna uma resposta de erro significativa.
