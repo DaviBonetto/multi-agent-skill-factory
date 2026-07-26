@@ -1,63 +1,77 @@
 ---
 name: DevOps Avançado
-description: Aprofundamento em DevOps, incluindo automação de deploy e monitoramento de desempenho
+description: Aprofunda em tópicos como entrega contínua, monitoramento e logging, utilizando ferramentas como Jenkins, GitLab CI/CD e Prometheus
 ---
 
 ## Objetivo
-O objetivo desta habilidade é aprofundar os conhecimentos em DevOps, abordando tópicos avançados como automação de deploy e monitoramento de desempenho, visando melhorar a eficiência e a qualidade dos processos de desenvolvimento e entrega de software.
+O objetivo deste guia é fornecer uma visão aprofundada sobre DevOps Avançado, abordando tópicos como entrega contínua, monitoramento e logging. Isso será alcançado através do uso de ferramentas como Jenkins, GitLab CI/CD e Prometheus, permitindo que os desenvolvedores e equipes de operações melhorem a eficiência e a qualidade dos seus projetos.
 
 ## Pré-requisitos
-Para aproveitar ao máximo esta habilidade, é recomendado que os participantes tenham conhecimentos básicos em:
+Antes de iniciar este guia, é recomendável que os participantes tenham conhecimento básico em:
 - Desenvolvimento de software
 - Infraestrutura como código (IaC)
-- Ferramentas de automação de deploy (como Jenkins, GitLab CI/CD, etc.)
-- Conceitos de monitoramento de desempenho e logging
+- Ferramentas de versionamento como Git
+- Conceitos básicos de DevOps
 
 ## Passo a Passo Técnico / Exemplos de Código
-### Automatização de Deploy com Jenkins
-1. **Instalação do Jenkins**: Primeiramente, é necessário instalar o Jenkins em um servidor. Isso pode ser feito utilizando Docker:
-   ```bash
-   docker run -p 8080:8080 -v jenkins_home:/var/jenkins_home jenkins/jenkins:lts
-   ```
-2. **Configuração do Job**: Após a instalação, configure um novo job no Jenkins para automatizar o deploy do seu projeto. Isso envolve a criação de um pipeline que execute os comandos necessários para build e deploy do seu software.
+### Entrega Contínua com Jenkins
+1. **Instalação do Jenkins**: Primeiramente, é necessário instalar o Jenkins em um servidor. Isso pode ser feito utilizando um container Docker ou instalando diretamente no sistema operacional.
+2. **Configuração do Projeto**: Após a instalação, configure um novo projeto no Jenkins, especificando o repositório Git onde o código-fonte está armazenado.
+3. **Criação do Pipeline**: Crie um pipeline que automatize a compilação, teste e deploy do projeto. Um exemplo simples de pipeline em Groovy para o Jenkins pode ser:
+```groovy
+pipeline {
+    agent any
+    stages {
+        stage('Build') {
+            steps {
+                sh 'make build'
+            }
+        }
+        stage('Test') {
+            steps {
+                sh 'make test'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                sh 'make deploy'
+            }
+        }
+    }
+}
+```
 
-### Monitoramento de Desempenho com Prometheus e Grafana
-1. **Instalação do Prometheus e Grafana**: Utilize Docker Compose para instalar o Prometheus e o Grafana:
-   ```yaml
-   version: '3'
-   services:
-     prometheus:
-       image: prometheus/prometheus:v2.34.0
-       volumes:
-         - ./prometheus.yml:/etc/prometheus/prometheus.yml
-       ports:
-         - "9090:9090"
-     grafana:
-       image: grafana/grafana:8.5.0
-       ports:
-         - "3000:3000"
-   ```
-2. **Configuração do Prometheus**: Edite o arquivo `prometheus.yml` para configurar as métricas que você deseja coletar.
-3. **Visualização com Grafana**: Acesse o Grafana e configure dashboards para visualizar as métricas coletadas pelo Prometheus.
+### Monitoramento com Prometheus
+1. **Instalação do Prometheus**: Instale o Prometheus em um servidor. Isso pode ser feito baixando os binários oficiais ou utilizando um container Docker.
+2. **Configuração do Prometheus**: Configure o Prometheus para coletar métricas dos serviços que deseja monitorar. Isso é feito editando o arquivo de configuração `prometheus.yml`.
+3. **Visualização com Grafana**: Instale o Grafana e configure dashboards para visualizar as métricas coletadas pelo Prometheus.
+
+### Logging com ELK Stack
+1. **Instalação do ELK Stack**: Instale o ELK Stack (Elasticsearch, Logstash, Kibana) em um servidor. Isso pode ser feito utilizando containers Docker ou instalando diretamente no sistema operacional.
+2. **Configuração do Logstash**: Configure o Logstash para coletar logs dos serviços que deseja monitorar. Isso é feito editando o arquivo de configuração `logstash.conf`.
+3. **Visualização com Kibana**: Acesse o Kibana e configure dashboards para visualizar os logs coletados.
 
 ## Validação
-Para validar o conhecimento adquirido, é recomendado:
-- Implementar um pipeline de CI/CD completo para um projeto de exemplo.
-- Configurar o monitoramento de desempenho para um serviço em produção.
-- Realizar ajustes e otimizações baseados nos dados coletados pelo sistema de monitoramento.
+Para validar o funcionamento correto da entrega contínua, monitoramento e logging, execute os seguintes passos:
+- Verifique se o pipeline no Jenkins está sendo executado corretamente após cada push no repositório Git.
+- Acesse o Prometheus e verifique se as métricas estão sendo coletadas corretamente.
+- Acesse o Kibana e verifique se os logs estão sendo coletados e visualizados corretamente.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-### Tratamento de Erros no Jenkins
-- **Erros de Instalação**: Verifique se o Docker está instalado e funcionando corretamente antes de tentar instalar o Jenkins.
-- **Erros de Configuração**: Certifique-se de que o arquivo de configuração do Jenkins esteja correto e que as credenciais de acesso estejam válidas.
-- **Erros de Execução**: Monitore os logs do Jenkins para identificar erros durante a execução do pipeline e ajuste o pipeline conforme necessário.
+### Erros Comuns no Jenkins
+- **Erro de Autenticação**: Verifique se as credenciais de acesso ao repositório Git estão corretas.
+- **Erro de Compilação**: Verifique se o código-fonte está correto e se as dependências necessárias estão instaladas.
 
-### Tratamento de Exceções no Prometheus e Grafana
-- **Erros de Instalação**: Verifique se o Docker Compose está instalado e funcionando corretamente antes de tentar instalar o Prometheus e o Grafana.
-- **Erros de Configuração**: Certifique-se de que os arquivos de configuração do Prometheus e do Grafana estejam corretos e que as credenciais de acesso estejam válidas.
-- **Erros de Coleta de Métricas**: Verifique se o Prometheus está coletando métricas corretamente e se o Grafana está visualizando as métricas corretamente.
+### Erros Comuns no Prometheus
+- **Erro de Conexão**: Verifique se o Prometheus está configurado corretamente para coletar métricas dos serviços.
+- **Erro de Armazenamento**: Verifique se o armazenamento do Prometheus está configurado corretamente e se há espaço suficiente para armazenar as métricas.
 
-### Segurança
-- **Autenticação e Autorização**: Certifique-se de que o Jenkins, o Prometheus e o Grafana estejam configurados com autenticação e autorização adequadas para evitar acessos não autorizados.
-- **Criptografia**: Certifique-se de que as comunicações entre os serviços estejam criptografadas para evitar interceptação de dados.
-- **Atualizações e Patchs**: Mantenha os serviços atualizados com os últimos patchs de segurança para evitar vulnerabilidades conhecidas.
+### Erros Comuns no ELK Stack
+- **Erro de Coleta de Logs**: Verifique se o Logstash está configurado corretamente para coletar logs dos serviços.
+- **Erro de Indexação**: Verifique se o Elasticsearch está configurado corretamente para indexar os logs coletados.
+
+### Edge Cases
+- **Desempenho do Sistema**: Verifique se o sistema está funcionando dentro dos limites de desempenho esperados.
+- **Segurança**: Verifique se o sistema está configurado corretamente para garantir a segurança dos dados e dos serviços.
+
+Com esses passos, você terá implementado um fluxo de DevOps Avançado, incluindo entrega contínua, monitoramento e logging, utilizando ferramentas como Jenkins, GitLab CI/CD, Prometheus e ELK Stack. Além disso, você terá tratado exceções e edge cases comuns, garantindo a estabilidade e a segurança do sistema.
