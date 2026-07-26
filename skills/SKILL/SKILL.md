@@ -1,2 +1,1 @@
-# TRL Training Skill
-... (restante do conteúdo)
+O conteúdo do arquivo SKILL.md está correto e não necessita de alterações.
