@@ -1,1 +1,2 @@
-O conteúdo do arquivo SKILL.md está correto e não necessita de alterações.
+# Train a sentence-transformers Model
+... (conteúdo do arquivo SKILL.md)
