@@ -1,10 +1,9 @@
 # Antigravity CLI (`agy`) Tool Mapping
-
 Skills speak in actions ("dispatch a subagent", "create a todo", "read a file"). On the Antigravity CLI (`agy`) these resolve to the tools below.
 
 | Action skills request | Antigravity CLI equivalent |
 |----------------------|----------------------|
-| Dispatch a subagent (`Subagent (general-purpose):` template) | `invoke_subagent` with a built-in `TypeName` — `self` for full-capability work, `research` for read-only (see [Subagent support](#subagent-support)) |
+| Dispatch a subagent (`Subagent (general-purpose):` template) | `invoke_subagent` with a built-in `TypeName` — `self` for full-capability work, `research` for read-only |
 | Task tracking ("create a todo", "mark complete") | a **task artifact** — `write_to_file` with `IsArtifact: true` and `ArtifactType: "task"` (see [Task tracking](#task-tracking)). **Not** `manage_task`, which manages background processes. |
 
 ## Task tracking
@@ -15,16 +14,17 @@ At the start of any multi-step task, create the task artifact listing every step
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
 
-### Erros de Permissão
-- **Erro de permissão ao criar arquivo**: Se o sistema não tiver permissão para criar um arquivo, o comando `write_to_file` falhará. Nesse caso, é necessário verificar as permissões do diretório e garantir que o sistema tenha permissão de escrita.
-- **Erro de permissão ao editar arquivo**: Se o sistema não tiver permissão para editar um arquivo existente, o comando `replace_file_content` ou `multi_replace_file_content` falhará. Verifique as permissões do arquivo e do diretório para garantir que o sistema tenha permissão de escrita.
-
 ### Erros de Arquivo
-- **Arquivo não encontrado**: Se o arquivo especificado para `replace_file_content` ou `multi_replace_file_content` não existir, o comando falhará. Nesse caso, é necessário criar o arquivo antes de tentar editá-lo ou tratar o erro como um caso de exceção.
-- **Arquivo corrompido**: Se o arquivo estiver corrompido ou não for um arquivo markdown válido, o comando `replace_file_content` ou `multi_replace_file_content` pode falhar ou produzir resultados inesperados. É importante validar a integridade do arquivo antes de tentar editá-lo.
+- **Arquivo não encontrado**: Se o arquivo de task artifact não for encontrado, uma exceção será lançada. Nesse caso, o sistema deve criar um novo arquivo com o nome especificado e inicializá-lo com uma lista vazia.
+- **Permissão de escrita**: Se o sistema não tiver permissão para escrever no arquivo de task artifact, uma exceção de permissão será lançada. Nesse caso, o sistema deve solicitar permissão ao usuário ou utilizar um local de armazenamento alternativo.
 
-### Outros Edge Cases
-- **Conflitos de nomes de arquivos**: Se dois ou mais comandos tentarem criar arquivos com o mesmo nome, pode haver conflitos. É importante garantir que os nomes de arquivos sejam únicos ou implementar um mecanismo de resolução de conflitos.
-- **Tamanho do arquivo**: Se o arquivo for muito grande, os comandos `replace_file_content` ou `multi_replace_file_content` podem falhar devido a limitações de tamanho. É importante implementar um mecanismo para lidar com arquivos de grande tamanho.
+### Erros de Formatação
+- **Formatação inválida**: Se o arquivo de task artifact tiver uma formatação inválida (por exemplo, não for um arquivo markdown), o sistema deve lançar uma exceção e solicitar ao usuário que corrija o arquivo.
 
-Ao lidar com esses edge cases e erros, é crucial implementar tratamento de exceções adequado para garantir a robustez e a confiabilidade do sistema. Isso pode incluir a implementação de retries, logs de erro, e notificações para o usuário ou administrador do sistema.
+### Edge Cases
+- **Tarefa com descrição vazia**: Se uma tarefa for criada com uma descrição vazia, o sistema deve permitir que o usuário edite a tarefa e adicione uma descrição.
+- **Tarefa com mais de uma marcação de conclusão**: Se uma tarefa for marcada como concluída mais de uma vez, o sistema deve apenas manter a marcação de conclusão mais recente.
+
+### Segurança
+- **Validação de entrada**: O sistema deve validar todas as entradas de usuário para evitar ataques de injeção de código ou outros tipos de ataques maliciosos.
+- **Criptografia**: O sistema deve utilizar criptografia para proteger os arquivos de task artifact e evitar acessos não autorizados.
