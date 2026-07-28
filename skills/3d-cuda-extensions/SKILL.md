@@ -1,6 +1,3 @@
-# CUDA Extensions for 3D Spaces on ZeroGPU
-=====================================================
+# CUDA extensions for 3D Spaces on ZeroGPU
 ...
 ## ⚠️ Tratamento de Exceções e Edge Cases
-------------------------------------------
-...
