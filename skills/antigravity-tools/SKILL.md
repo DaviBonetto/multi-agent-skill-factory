@@ -1,4 +1,5 @@
 # Antigravity CLI (`agy`) Tool Mapping
+
 Skills speak in actions ("dispatch a subagent", "create a todo", "read a file"). On the Antigravity CLI (`agy`) these resolve to the tools below.
 
 | Action skills request | Antigravity CLI equivalent |
@@ -14,17 +15,22 @@ At the start of any multi-step task, create the task artifact listing every step
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
 
-### Erros de Arquivo
-- **Arquivo não encontrado**: Se o arquivo de task artifact não for encontrado, uma exceção será lançada. Nesse caso, o sistema deve criar um novo arquivo com o nome especificado e inicializá-lo com uma lista vazia.
-- **Permissão de escrita**: Se o sistema não tiver permissão para escrever no arquivo de task artifact, uma exceção de permissão será lançada. Nesse caso, o sistema deve solicitar permissão ao usuário ou utilizar um local de armazenamento alternativo.
+### Erros de Permissão
 
-### Erros de Formatação
-- **Formatação inválida**: Se o arquivo de task artifact tiver uma formatação inválida (por exemplo, não for um arquivo markdown), o sistema deve lançar uma exceção e solicitar ao usuário que corrija o arquivo.
+* Ao criar um task artifact, verifique se o usuário tem permissão para escrever no arquivo. Caso contrário, lance um erro com a mensagem "Permissão negada para criar task artifact".
+* Ao editar um task artifact, verifique se o usuário tem permissão para editar o arquivo. Caso contrário, lance um erro com a mensagem "Permissão negada para editar task artifact".
+
+### Erros de Arquivo
+
+* Ao criar um task artifact, verifique se o arquivo já existe. Caso exista, lance um erro com a mensagem "Task artifact já existe".
+* Ao editar um task artifact, verifique se o arquivo existe. Caso não exista, lance um erro com a mensagem "Task artifact não encontrado".
 
 ### Edge Cases
-- **Tarefa com descrição vazia**: Se uma tarefa for criada com uma descrição vazia, o sistema deve permitir que o usuário edite a tarefa e adicione uma descrição.
-- **Tarefa com mais de uma marcação de conclusão**: Se uma tarefa for marcada como concluída mais de uma vez, o sistema deve apenas manter a marcação de conclusão mais recente.
+
+* Se o task artifact for muito grande, considere implementar uma solução de paginação para evitar problemas de desempenho.
+* Se o task artifact for compartilhado entre múltiplos usuários, considere implementar uma solução de controle de versão para evitar conflitos.
 
 ### Segurança
-- **Validação de entrada**: O sistema deve validar todas as entradas de usuário para evitar ataques de injeção de código ou outros tipos de ataques maliciosos.
-- **Criptografia**: O sistema deve utilizar criptografia para proteger os arquivos de task artifact e evitar acessos não autorizados.
+
+* Certifique-se de que os task artifacts sejam armazenados de forma segura, utilizando criptografia e autenticação adequadas.
+* Certifique-se de que os usuários apenas possam acessar e editar os task artifacts para os quais têm permissão.
