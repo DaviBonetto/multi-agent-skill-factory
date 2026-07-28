@@ -1,77 +1,82 @@
----
-name: DevOps Avançado
-description: Aprofunda em tópicos como entrega contínua, monitoramento e logging, utilizando ferramentas como Jenkins, GitLab CI/CD e Prometheus
----
-
+# DevOps Avançado
+## Descrição
+Ensina a implementar práticas de DevOps utilizando ferramentas como Jenkins e GitLab CI/CD
 ## Objetivo
-O objetivo deste guia é fornecer uma visão aprofundada sobre DevOps Avançado, abordando tópicos como entrega contínua, monitoramento e logging. Isso será alcançado através do uso de ferramentas como Jenkins, GitLab CI/CD e Prometheus, permitindo que os desenvolvedores e equipes de operações melhorem a eficiência e a qualidade dos seus projetos.
-
+O objetivo deste guia é fornecer uma visão geral da implementação de práticas de DevOps avançadas utilizando ferramentas como Jenkins e GitLab CI/CD. Com isso, os desenvolvedores e equipes de operações poderão automatizar e otimizar seus processos de entrega de software, melhorando a eficiência e a qualidade dos produtos.
 ## Pré-requisitos
-Antes de iniciar este guia, é recomendável que os participantes tenham conhecimento básico em:
+Antes de iniciar, é necessário ter conhecimento básico em:
 - Desenvolvimento de software
-- Infraestrutura como código (IaC)
+- Conceitos de DevOps
 - Ferramentas de versionamento como Git
-- Conceitos básicos de DevOps
-
+- Conhecimento em linha de comando (CLI)
+- Familiaridade com ambientes de desenvolvimento como Linux ou macOS
 ## Passo a Passo Técnico / Exemplos de Código
-### Entrega Contínua com Jenkins
-1. **Instalação do Jenkins**: Primeiramente, é necessário instalar o Jenkins em um servidor. Isso pode ser feito utilizando um container Docker ou instalando diretamente no sistema operacional.
-2. **Configuração do Projeto**: Após a instalação, configure um novo projeto no Jenkins, especificando o repositório Git onde o código-fonte está armazenado.
-3. **Criação do Pipeline**: Crie um pipeline que automatize a compilação, teste e deploy do projeto. Um exemplo simples de pipeline em Groovy para o Jenkins pode ser:
-```groovy
-pipeline {
-    agent any
-    stages {
-        stage('Build') {
-            steps {
-                sh 'make build'
-            }
-        }
-        stage('Test') {
-            steps {
-                sh 'make test'
-            }
-        }
-        stage('Deploy') {
-            steps {
-                sh 'make deploy'
-            }
-        }
-    }
-}
-```
-
-### Monitoramento com Prometheus
-1. **Instalação do Prometheus**: Instale o Prometheus em um servidor. Isso pode ser feito baixando os binários oficiais ou utilizando um container Docker.
-2. **Configuração do Prometheus**: Configure o Prometheus para coletar métricas dos serviços que deseja monitorar. Isso é feito editando o arquivo de configuração `prometheus.yml`.
-3. **Visualização com Grafana**: Instale o Grafana e configure dashboards para visualizar as métricas coletadas pelo Prometheus.
-
-### Logging com ELK Stack
-1. **Instalação do ELK Stack**: Instale o ELK Stack (Elasticsearch, Logstash, Kibana) em um servidor. Isso pode ser feito utilizando containers Docker ou instalando diretamente no sistema operacional.
-2. **Configuração do Logstash**: Configure o Logstash para coletar logs dos serviços que deseja monitorar. Isso é feito editando o arquivo de configuração `logstash.conf`.
-3. **Visualização com Kibana**: Acesse o Kibana e configure dashboards para visualizar os logs coletados.
-
+### Configurando o Ambiente
+1. **Instalar o Jenkins**:
+   - Baixe e instale o Jenkins a partir do site oficial.
+   - Execute o Jenkins e acesse a interface web para configurar.
+2. **Configurar o GitLab CI/CD**:
+   - Crie um projeto no GitLab.
+   - Acesse as configurações do CI/CD e crie um arquivo `.gitlab-ci.yml` com o seguinte conteúdo:
+   ```yml
+   stages:
+     - build
+     - test
+     - deploy
+   build:
+     stage: build
+     script:
+       - echo "Compilando o código..."
+     artifacts:
+       paths:
+         - build
+   test:
+     stage: test
+     script:
+       - echo "Executando testes..."
+   ```
+3. **Integrar o Jenkins com o GitLab**:
+   - Configure o Jenkins para usar o GitLab como repositório.
+   - Use o plugin GitLab para integrar o Jenkins com o GitLab CI/CD.
+### Implementando o Pipeline
+1. **Criar um Pipeline no Jenkins**:
+   - Acesse a interface do Jenkins e crie um novo job do tipo "Pipeline".
+   - Configure o pipeline para usar o repositório GitLab.
+2. **Definir as Etapas do Pipeline**:
+   - Defina as etapas do pipeline (build, test, deploy) utilizando a linguagem de programação Groovy.
+   ```groovy
+   pipeline {
+     agent any
+     stages {
+       stage('Build') {
+         steps {
+           sh 'echo "Compilando o código..."'
+         }
+       }
+       stage('Test') {
+         steps {
+           sh 'echo "Executando testes..."'
+         }
+       }
+       stage('Deploy') {
+         steps {
+           sh 'echo "Deployando o aplicativo..."'
+         }
+       }
+     }
+   }
 ## Validação
-Para validar o funcionamento correto da entrega contínua, monitoramento e logging, execute os seguintes passos:
-- Verifique se o pipeline no Jenkins está sendo executado corretamente após cada push no repositório Git.
-- Acesse o Prometheus e verifique se as métricas estão sendo coletadas corretamente.
-- Acesse o Kibana e verifique se os logs estão sendo coletados e visualizados corretamente.
-
+Para validar a implementação, execute o pipeline e verifique se as etapas estão sendo executadas corretamente. Além disso, verifique se os artefatos estão sendo gerados e se o deploy está sendo realizado com sucesso. Utilize os logs do Jenkins e do GitLab para identificar e solucionar problemas.
 ## ⚠️ Tratamento de Exceções e Edge Cases
-### Erros Comuns no Jenkins
-- **Erro de Autenticação**: Verifique se as credenciais de acesso ao repositório Git estão corretas.
-- **Erro de Compilação**: Verifique se o código-fonte está correto e se as dependências necessárias estão instaladas.
-
-### Erros Comuns no Prometheus
-- **Erro de Conexão**: Verifique se o Prometheus está configurado corretamente para coletar métricas dos serviços.
-- **Erro de Armazenamento**: Verifique se o armazenamento do Prometheus está configurado corretamente e se há espaço suficiente para armazenar as métricas.
-
-### Erros Comuns no ELK Stack
-- **Erro de Coleta de Logs**: Verifique se o Logstash está configurado corretamente para coletar logs dos serviços.
-- **Erro de Indexação**: Verifique se o Elasticsearch está configurado corretamente para indexar os logs coletados.
-
+### Erros Comuns
+- **Erro de Autenticação**: Verifique se as credenciais de acesso ao GitLab e ao Jenkins estão corretas.
+- **Erro de Conexão**: Verifique se a conexão com o GitLab e o Jenkins está estabelecida corretamente.
+- **Erro de Compilação**: Verifique se o código está correto e se as dependências estão sendo resolvidas corretamente.
 ### Edge Cases
-- **Desempenho do Sistema**: Verifique se o sistema está funcionando dentro dos limites de desempenho esperados.
-- **Segurança**: Verifique se o sistema está configurado corretamente para garantir a segurança dos dados e dos serviços.
-
-Com esses passos, você terá implementado um fluxo de DevOps Avançado, incluindo entrega contínua, monitoramento e logging, utilizando ferramentas como Jenkins, GitLab CI/CD, Prometheus e ELK Stack. Além disso, você terá tratado exceções e edge cases comuns, garantindo a estabilidade e a segurança do sistema.
+- **Pipeline com Múltiplos Stages**: Verifique se os stages estão sendo executados corretamente e se os artefatos estão sendo gerados corretamente.
+- **Pipeline com Dependências**: Verifique se as dependências estão sendo resolvidas corretamente e se os artefatos estão sendo gerados corretamente.
+- **Pipeline com Erros**: Verifique se os erros estão sendo tratados corretamente e se os logs estão sendo gerados corretamente.
+### Melhores Práticas
+- **Utilize Logs**: Utilize logs para identificar e solucionar problemas.
+- **Utilize Testes**: Utilize testes para garantir que o pipeline está funcionando corretamente.
+- **Utilize Code Review**: Utilize code review para garantir que o código está correto e segue as melhores práticas.
