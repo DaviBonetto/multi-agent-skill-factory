@@ -1,68 +1,80 @@
 ---
 name: Arquitetura de Sistemas Distribuídos
-description: Esta habilidade ensina como projetar e implementar sistemas distribuídos escaláveis e tolerantes a falhas
+description: Esta skill aborda os princípios e desafios de projetar sistemas distribuídos escaláveis e confiáveis
 ---
 
 ## Objetivo
-O objetivo desta habilidade é capacitar os desenvolvedores a projetar e implementar sistemas distribuídos que sejam escaláveis, tolerantes a falhas e eficientes. Isso envolve entender os conceitos fundamentais de sistemas distribuídos, incluindo comunicação entre processos, gerenciamento de dados, escalabilidade e confiabilidade.
+O objetivo desta skill é fornecer uma visão geral dos princípios e desafios de projetar sistemas distribuídos escaláveis e confiáveis. Isso inclui entender como projetar sistemas que possam lidar com uma grande quantidade de dados e tráfego, garantindo a escalabilidade e a confiabilidade.
 
 ## Pré-requisitos
-Para aproveitar ao máximo esta habilidade, os desenvolvedores devem ter conhecimento prévio em:
-- Programação em linguagens como Java, Python ou C++
-- Conceitos básicos de redes de computadores e protocolos de comunicação
-- Experiência com desenvolvimento de software em ambientes distribuídos
+Para aproveitar ao máximo esta skill, é recomendado ter conhecimento prévio em:
+* Programação em linguagens como Java, Python ou C++
+* Conceitos básicos de redes de computadores e protocolos de comunicação
+* Experiência com sistemas operacionais e gerenciamento de processos
 
 ## Passo a Passo Técnico / Exemplos de Código
-### 1. Definição da Arquitetura
-A primeira etapa é definir a arquitetura do sistema distribuído. Isso envolve decidir sobre o modelo de comunicação (cliente-servidor, peer-to-peer, etc.), o tipo de dados a serem processados e como os componentes do sistema se comunicarão entre si.
+### 1. Introdução aos Sistemas Distribuídos
+Um sistema distribuído é um conjunto de computadores conectados que trabalham juntos para alcançar um objetivo comum. Isso pode incluir sistemas de gerenciamento de banco de dados, sistemas de arquivos distribuídos, entre outros.
 
-### 2. Escolha da Tecnologia
-Em seguida, escolha as tecnologias apropriadas para implementar a arquitetura definida. Isso pode incluir frameworks de desenvolvimento de aplicativos distribuídos, bibliotecas de comunicação entre processos e sistemas de gerenciamento de dados.
+### 2. Princípios de Projeto de Sistemas Distribuídos
+Os principais princípios de projeto de sistemas distribuídos incluem:
+* **Escalabilidade**: a capacidade do sistema de lidar com um aumento no tráfego ou nos dados
+* **Confiabilidade**: a capacidade do sistema de manter a funcionalidade mesmo em caso de falhas
+* **Tolerância a Falhas**: a capacidade do sistema de continuar funcionando mesmo se um ou mais componentes falharem
 
-### 3. Implementação
-A implementação envolve escrever o código para cada componente do sistema, garantindo que eles se comuniquem corretamente e processem os dados de acordo com os requisitos do sistema. Por exemplo, em Python, você pode usar a biblioteca `socket` para estabelecer comunicação entre processos:
+### 3. Exemplo de Código em Python
 ```python
 import socket
 
-# Criar um socket
+# Cria um socket
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-# Conectar ao servidor
+# Conecta ao servidor
 try:
-    sock.connect(('localhost', 12345))
+    sock.connect(("localhost", 8080))
 except ConnectionRefusedError:
-    print("Conexão recusada. Verifique se o servidor está em execução.")
-except socket.gaierror:
-    print("Erro de resolução de nome de host.")
+    print("Erro: Conexão recusada. Verifique se o servidor está em execução.")
+    exit(1)
 
-# Enviar mensagem
+# Envia uma mensagem para o servidor
 try:
-    sock.sendall(b'Olá, servidor!')
+    sock.sendall(b"Olá, servidor!")
 except BrokenPipeError:
-    print("Conexão fechada inesperadamente.")
+    print("Erro: Conexão interrompida. O servidor pode ter fechado a conexão.")
+    exit(1)
 
-# Receber resposta
+# Recebe a resposta do servidor
 try:
-    data = sock.recv(1024)
-    print(data.decode())
+    resposta = sock.recv(1024)
 except ConnectionResetError:
-    print("Conexão resetada pelo servidor.")
-```
+    print("Erro: Conexão reiniciada. O servidor pode ter reiniciado a conexão.")
+    exit(1)
 
-### 4. Testes e Validação
-Após a implementação, é crucial testar o sistema para garantir que ele atende aos requisitos de escalabilidade, tolerância a falhas e desempenho. Isso pode envolver testes de carga, testes de estresse e simulações de falhas.
+# Imprime a resposta
+print(resposta.decode())
+
+# Fecha o socket
+sock.close()
+```
+Este exemplo ilustra como criar um socket em Python e se conectar a um servidor para enviar e receber mensagens, tratando exceções comuns.
 
 ## Validação
-A validação do sistema distribuído envolve verificar se ele atende aos requisitos funcionais e não funcionais definidos. Isso inclui:
-- **Escalabilidade**: O sistema pode lidar com um aumento no número de usuários ou dados sem degradação de desempenho?
-- **Tolerância a Falhas**: O sistema pode continuar operando mesmo se um ou mais componentes falharem?
-- **Desempenho**: O sistema responde prontamente às solicitações e processa os dados dentro do tempo esperado?
+Para validar o conhecimento adquirido, é recomendado realizar projetos práticos que envolvam o desenvolvimento de sistemas distribuídos. Isso pode incluir:
+* Desenvolver um sistema de gerenciamento de banco de dados distribuído
+* Criar um sistema de arquivos distribuído
+* Implementar um sistema de comunicação peer-to-peer
+
+Ao completar esses projetos, você estará melhor preparado para lidar com os desafios de projetar sistemas distribuídos escaláveis e confiáveis.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-Além dos passos técnicos, é fundamental considerar o tratamento de exceções e edge cases para garantir a robustez do sistema distribuído. Isso inclui:
-- **Tratamento de Conexões Perdidas**: Implementar mecanismos para detectar e reconectar conexões perdidas devido a falhas de rede ou problemas de servidor.
-- **Gerenciamento de Erros de Rede**: Lidar com erros de rede, como timeouts, conexões recusadas, e erros de DNS, de forma a minimizar o impacto no sistema.
-- **Proteção contra Ataques**: Implementar medidas de segurança para proteger o sistema contra ataques mal-intencionados, como ataques de negação de serviço (DoS) ou injeção de SQL.
-- **Manuseio de Dados Inválidos**: Desenvolver estratégias para lidar com dados inválidos ou corrompidos que possam ser recebidos ou processados pelo sistema.
+Além do exemplo acima, é importante considerar outros casos de exceção e edge cases, como:
+* **Timeouts**: lidar com situações em que a conexão demora muito para ser estabelecida ou em que as respostas demoram muito para serem recebidas.
+* **Erros de rede**: lidar com situações em que a conexão é interrompida devido a problemas de rede.
+* **Sobrecarga de tráfego**: lidar com situações em que o sistema recebe uma grande quantidade de tráfego e precisa ser capaz de lidar com isso de forma eficiente.
+* **Falhas de componentes**: lidar com situações em que um ou mais componentes do sistema falham e precisam ser substituídos ou reparados.
 
-Ao concluir essas etapas, considerar o tratamento de exceções e edge cases, e validar o sistema, os desenvolvedores terão adquirido a habilidade de projetar e implementar sistemas distribuídos eficazes, escaláveis e seguros.
+Para lidar com esses casos, é importante implementar mecanismos de tratamento de exceções e edge cases, como:
+* **Retry**: tentar novamente uma operação que falhou devido a um erro temporário.
+* **Fallback**: ter um plano de contingência para lidar com situações em que o sistema principal não está funcionando.
+* **Load balancing**: distribuir o tráfego entre múltiplos componentes para evitar sobrecarga.
+* **Monitoramento**: monitorar o sistema para detectar problemas e tomar ações corretivas antes que eles causem danos.
