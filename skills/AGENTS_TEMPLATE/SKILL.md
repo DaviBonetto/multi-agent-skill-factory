@@ -1,4 +1,4 @@
-# Skills
+# SKILLs Documentados
 Você tem habilidades adicionais documentadas em diretórios que contêm um arquivo "SKILL.md".
 
 Essas habilidades são:
@@ -6,19 +6,28 @@ Essas habilidades são:
  - {{name}} -> "{{path}}/SKILL.md"
 {{/skills}}
 
-IMPORTANTE: Você DEVE ler o arquivo SKILL.md sempre que a descrição da habilidade corresponder à intenção do usuário ou possa ajudar a realizar sua tarefa.
+**Importante**: Você DEVE ler o arquivo SKILL.md sempre que a descrição da habilidade corresponder à intenção do usuário ou possa ajudar a realizar sua tarefa.
+
 ## Habilidades Disponíveis
 {{#skills}}
 {{name}}: `{{description}}`
 
 {{/skills}}
+
 Os caminhos referenciados dentro das pastas de habilidades são relativos àquela habilidade. Por exemplo, o script `scripts/example.py` do hf-datasets seria referenciado como `hf-datasets/scripts/example.py`.
+
 ## ⚠️ Tratamento de Exceções e Edge Cases
-### Tratamento de Erros
-- **Erro de Arquivo Não Encontrado**: Se o arquivo "SKILL.md" não for encontrado no diretório especificado, uma mensagem de erro será exibida informando que o arquivo não foi encontrado.
-- **Erro de Permissão**: Se o usuário não tiver permissão para ler o arquivo "SKILL.md", uma mensagem de erro será exibida informando que não há permissão para acessar o arquivo.
-- **Erro de Formatação**: Se o arquivo "SKILL.md" estiver com formatação inválida, uma mensagem de erro será exibida informando que o arquivo está com formatação inválida.
+### Erros de Arquivo
+- **Arquivo não encontrado**: Se o arquivo "SKILL.md" não for encontrado no diretório especificado, uma mensagem de erro será exibida indicando o caminho incorreto.
+- **Permissão de leitura**: Se o arquivo "SKILL.md" não tiver permissão de leitura, uma mensagem de erro será exibida solicitando permissão de leitura.
+
+### Erros de Formatação
+- **Formatação inválida**: Se a formatação do arquivo "SKILL.md" for inválida, uma mensagem de erro será exibida indicando a linha e a coluna onde o erro ocorreu.
+
 ### Edge Cases
-- **Habilidades com Nomes Idênticos**: Se houver habilidades com nomes idênticos, o sistema deve ser capaz de distinguir entre elas com base no caminho do arquivo "SKILL.md".
-- **Habilidades com Descrições Vazias**: Se uma habilidade tiver uma descrição vazia, o sistema deve exibir uma mensagem informando que a descrição está vazia.
-- **Caminhos Relativos**: Se um caminho relativo for especificado, o sistema deve ser capaz de resolver o caminho correto com base no diretório atual.
+- **Nenhum arquivo "SKILL.md" encontrado**: Se nenhum arquivo "SKILL.md" for encontrado nos diretórios, uma mensagem será exibida indicando que não há habilidades disponíveis.
+- **Múltiplos arquivos "SKILL.md"**: Se múltiplos arquivos "SKILL.md" forem encontrados no mesmo diretório, uma mensagem de aviso será exibida indicando que apenas um arquivo por diretório é permitido.
+
+### Segurança
+- **Injeção de código**: Para evitar injeção de código, todos os inputs de usuário serão sanitizados e validados antes de serem processados.
+- **Validação de dados**: Todos os dados serão validados antes de serem processados para evitar erros de execução.
