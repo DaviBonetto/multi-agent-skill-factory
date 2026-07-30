@@ -1,98 +1,94 @@
 ---
 name: Segurança de Dados em Nuvem
-description: Esta skill aborda as melhores práticas para garantir a segurança dos dados armazenados em ambientes de nuvem
+description: Ensina técnicas e estratégias para proteger dados em ambientes de nuvem, incluindo criptografia e autenticação
 ---
 
 ## Objetivo
-O objetivo desta skill é fornecer conhecimentos e habilidades necessárias para garantir a segurança dos dados armazenados em ambientes de nuvem, utilizando as melhores práticas e tecnologias atuais.
+O objetivo deste guia é fornecer técnicas e estratégias para proteger dados em ambientes de nuvem, garantindo a segurança e a integridade dos dados. Isso inclui a implementação de criptografia e autenticação eficazes, bem como a gestão de acessos e a monitoração de atividades suspeitas.
 
 ## Pré-requisitos
-Para aproveitar ao máximo esta skill, é recomendado que os participantes tenham conhecimento em:
-* Conceitos básicos de segurança de dados
-* Arquitetura de nuvem (IaaS, PaaS, SaaS)
-* Ferramentas de segurança de nuvem (firewalls, criptografia, etc.)
+Para seguir este guia, é necessário ter conhecimentos básicos em:
+- Segurança de dados
+- Ambientes de nuvem (IaaS, PaaS, SaaS)
+- Criptografia básica (criptografia simétrica e assimétrica)
+- Autenticação e autorização
+
+Além disso, é recomendável ter experiência prática com ferramentas de segurança de nuvem e linguagens de programação como Python ou Java.
 
 ## Passo a Passo Técnico / Exemplos de Código
-### Configuração de Firewall de Nuvem
-1. Acesse o painel de controle da sua nuvem e navegue até a seção de segurança.
-2. Crie um novo grupo de segurança e defina as regras de entrada e saída.
-3. Utilize o seguinte script para configurar o firewall:
-```bash
-# Configuração de firewall de nuvem
-aws ec2 authorize-security-group-ingress 
-  --group-id sg-12345678 
-  --protocol tcp 
-  --port 22 
-  --cidr 0.0.0.0/0
-```
-### Criptografia de Dados
-1. Escolha um algoritmo de criptografia adequado para os seus dados (por exemplo, AES-256).
-2. Utilize uma ferramenta de criptografia para proteger os seus dados.
-3. Exemplo de criptografia utilizando Python:
+### 1. Configuração de Criptografia
+A criptografia é fundamental para proteger os dados em repouso e em trânsito. Para configurar a criptografia em um ambiente de nuvem, siga os passos abaixo:
+- **Criptografia em Repouso**: Utilize algoritmos de criptografia simétrica, como o AES, para proteger os dados armazenados.
+- **Criptografia em Trânsito**: Utilize protocolos de criptografia como o TLS (Transport Layer Security) para proteger os dados em trânsito.
+
+Exemplo de código em Python para criptografia simétrica usando AES:
 ```python
-# Importação da biblioteca de criptografia
-from cryptography.fernet import Fernet
+from cryptography.hazmat.primitives import padding
+from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+from cryptography.hazmat.backends import default_backend
 
-# Geração de uma chave de criptografia
-key = Fernet.generate_key()
+# Chave de criptografia
+key = b'\x9b\xa6\x04\x9f\x9d\x9e\x9f\x9d'
 
-# Criptografia de dados
-cipher_suite = Fernet(key)
-cipher_text = cipher_suite.encrypt(b"Meus dados secretos")
+# Dados a serem criptografados
+data = b'Este e um exemplo de dados'
+
+# Criptografia
+cipher = Cipher(algorithms.AES(key), modes.ECB(), backend=default_backend())
+encryptor = cipher.encryptor()
+padder = padding.PKCS7(128).padder()
+padded_data = padder.update(data) + padder.finalize()
+ct = encryptor.update(padded_data) + encryptor.finalize()
+
+print(ct)
+```
+
+### 2. Implementação de Autenticação
+A autenticação é crucial para garantir que apenas usuários autorizados acessem os dados. Para implementar a autenticação, siga os passos abaixo:
+- **Autenticação por Senha**: Utilize algoritmos de hash de senha, como o bcrypt, para armazenar senhas de forma segura.
+- **Autenticação por Token**: Utilize tokens de acesso, como o JWT (JSON Web Token), para autenticar usuários.
+
+Exemplo de código em Python para autenticação por senha usando bcrypt:
+```python
+import bcrypt
+
+# Senha do usuário
+password = "minha_senha"
+
+# Hash da senha
+salt = bcrypt.gensalt()
+hashed_password = bcrypt.hashpw(password.encode('utf-8'), salt)
+
+# Verificação da senha
+if bcrypt.checkpw(password.encode('utf-8'), hashed_password):
+    print("Senha correta")
+else:
+    print("Senha incorreta")
 ```
 
 ## Validação
-Para validar a segurança dos dados armazenados em nuvem, é importante realizar testes regulares e auditorias de segurança. Alguns passos para validar a segurança incluem:
-* Realizar testes de penetração para identificar vulnerabilidades.
-* Utilizar ferramentas de auditoria de segurança para monitorar e analisar os logs de segurança.
-* Realizar testes de recuperação de desastres para garantir a disponibilidade dos dados.
+Para validar a implementação da segurança de dados em nuvem, é necessário realizar testes e auditorias regulares. Isso inclui:
+- **Testes de Penetração**: Realize testes de penetração para identificar vulnerabilidades no sistema.
+- **Análise de Logs**: Analise os logs do sistema para detectar atividades suspeitas.
+- **Auditorias de Segurança**: Realize auditorias de segurança para garantir que as políticas de segurança estejam sendo seguidas.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-### Tratamento de Erros de Rede
-* Verifique se a conexão de rede está estável e se o tráfego de dados está sendo transmitido corretamente.
-* Utilize mecanismos de retry e timeout para lidar com erros de rede temporários.
-```python
-import requests
+É fundamental considerar os seguintes casos de bordo e exceções:
+- **Chave de Criptografia Perdida**: Implemente um processo de recuperação de chaves de criptografia para evitar a perda de dados.
+- **Ataques de Força Bruta**: Implemente limites de tentativas de login e utilize algoritmos de hash de senha resistentes a ataques de força bruta.
+- **Injeção de Código**: Utilize validação de entrada de dados e sanitização para prevenir injeção de código.
+- **Erros de Configuração**: Verifique regularmente a configuração de segurança do sistema para evitar erros de configuração.
+- **Atualizações de Segurança**: Mantenha o sistema atualizado com as últimas atualizações de segurança para evitar vulnerabilidades conhecidas.
 
-def enviar_dados(url, dados):
-    try:
-        resposta = requests.post(url, json=dados)
-        resposta.raise_for_status()
-    except requests.exceptions.RequestException as e:
-        print(f"Erro ao enviar dados: {e}")
-        # Tentar novamente após um tempo
-        time.sleep(5)
-        enviar_dados(url, dados)
-```
-### Tratamento de Erros de Criptografia
-* Verifique se a chave de criptografia está correta e se o algoritmo de criptografia está sendo utilizado corretamente.
-* Utilize mecanismos de tratamento de exceções para lidar com erros de criptografia.
+Exemplo de código em Python para tratamento de exceções:
 ```python
-from cryptography.fernet import InvalidToken
-
-def criptografar_dados(chave, dados):
-    try:
-        cipher_suite = Fernet(chave)
-        cipher_text = cipher_suite.encrypt(dados)
-    except InvalidToken:
-        print("Erro ao criptografar dados: chave inválida")
-        # Lidar com o erro
-    except Exception as e:
-        print(f"Erro ao criptografar dados: {e}")
-        # Lidar com o erro
-```
-### Edge Cases de Segurança
-* Verifique se os dados estão sendo armazenados em um local seguro e se as permissões de acesso estão sendo controladas corretamente.
-* Utilize mecanismos de auditoria e monitoramento para detectar e responder a incidentes de segurança.
-```python
-import logging
-
-def armazenar_dados(dados):
-    try:
-        # Armazenar os dados em um local seguro
-        with open("dados_seguros.txt", "w") as arquivo:
-            arquivo.write(dados)
-    except Exception as e:
-        logging.error(f"Erro ao armazenar dados: {e}")
-        # Lidar com o erro
-```
+try:
+    # Código que pode gerar exceção
+    cipher = Cipher(algorithms.AES(key), modes.ECB(), backend=default_backend())
+    encryptor = cipher.encryptor()
+    padder = padding.PKCS7(128).padder()
+    padded_data = padder.update(data) + padder.finalize()
+    ct = encryptor.update(padded_data) + encryptor.finalize()
+except Exception as e:
+    # Tratamento da exceção
+    print(f"Erro: {e}")
