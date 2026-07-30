@@ -1,83 +1,82 @@
 ---
 name: Inteligência Artificial Aplicada
-description: Explora como aplicar técnicas de inteligência artificial, como aprendizado de máquina e visão computacional, em problemas reais de negócios e engenharia
+description: Aborda aplicações práticas de Inteligência Artificial, incluindo aprendizado de máquina e processamento de linguagem natural
 ---
 
 ## Objetivo
-O objetivo deste guia é fornecer uma visão geral de como aplicar técnicas de inteligência artificial em problemas reais de negócios e engenharia. Isso inclui explorar como utilizar aprendizado de máquina e visão computacional para resolver desafios complexos.
+O objetivo deste guia é fornecer uma visão geral das aplicações práticas de Inteligência Artificial (IA), com foco em aprendizado de máquina e processamento de linguagem natural. Este conteúdo visa auxiliar profissionais na aplicação de técnicas de IA em projetos reais, explorando as possibilidades e os desafios dessa tecnologia.
 
 ## Pré-requisitos
-Para seguir este guia, é necessário ter conhecimento em:
-* Programação em Python
-* Conceitos básicos de inteligência artificial e aprendizado de máquina
-* Familiaridade com bibliotecas como TensorFlow ou PyTorch
+Para aproveitar ao máximo este guia, é recomendado que os leitores tenham conhecimento básico em:
+- Programação (preferencialmente em Python)
+- Conceitos fundamentais de matemática (álgebra linear, cálculo)
+- Noções básicas de estatística e probabilidade
+- Familiaridade com bibliotecas de aprendizado de máquina (como scikit-learn) e processamento de linguagem natural (como NLTK ou spaCy)
 
 ## Passo a Passo Técnico / Exemplos de Código
 ### Aprendizado de Máquina
-1. **Importação de Bibliotecas**: Importe as bibliotecas necessárias, como `numpy`, `pandas` e `scikit-learn`.
-2. **Preparação de Dados**: Carregue e prepare os dados para treinamento, utilizando técnicas como pré-processamento e normalização.
-3. **Treinamento do Modelo**: Treine um modelo de aprendizado de máquina, como uma rede neural ou uma árvore de decisão, utilizando a biblioteca escolhida.
+1. **Preparação dos Dados**: Coletar e pré-processar os dados para treinamento e teste.
+2. **Seleção do Modelo**: Escolher um algoritmo de aprendizado de máquina adequado para o problema (classificação, regressão, etc.).
+3. **Treinamento do Modelo**: Utilizar a biblioteca scikit-learn para treinar o modelo com os dados preparados.
 ```python
-import numpy as np
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
 
-# Carregue os dados
-try:
-    X = np.load('dados_X.npy')
-    y = np.load('dados_y.npy')
-except FileNotFoundError:
-    print("Arquivos de dados não encontrados. Verifique o caminho e tente novamente.")
-    exit()
-
-# Divida os dados em treinamento e teste
-try:
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-except ValueError:
-    print("Erro ao dividir os dados. Verifique se os dados estão corretos e tente novamente.")
-    exit()
-
-# Treine o modelo
-try:
-    modelo = RandomForestClassifier(n_estimators=100)
-    modelo.fit(X_train, y_train)
-except Exception as e:
-    print(f"Erro ao treinar o modelo: {e}")
-    exit()
+# Exemplo de treinamento de um modelo de classificação
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+modelo = RandomForestClassifier()
+modelo.fit(X_train, y_train)
+y_pred = modelo.predict(X_test)
+print("Acurácia:", accuracy_score(y_test, y_pred))
 ```
-### Visão Computacional
-1. **Importação de Bibliotecas**: Importe as bibliotecas necessárias, como `OpenCV` e `numpy`.
-2. **Carregamento de Imagens**: Carregue as imagens para processamento.
-3. **Aplicação de Técnicas de Visão Computacional**: Aplique técnicas de visão computacional, como detecção de bordos ou reconhecimento de objetos.
+
+### Processamento de Linguagem Natural
+1. **Tokenização**: Dividir o texto em palavras ou tokens.
+2. **Remoção de Stopwords**: Excluir palavras comuns que não adicionam valor ao significado do texto.
+3. **Análise de Sentimento**: Utilizar técnicas de NLP para determinar o sentimento (positivo, negativo, neutro) de um texto.
 ```python
-import cv2
-import numpy as np
+import nltk
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
-# Carregue a imagem
-try:
-    imagem = cv2.imread('imagem.jpg')
-except Exception as e:
-    print(f"Erro ao carregar a imagem: {e}")
-    exit()
-
-# Aplique a detecção de bordos
-try:
-    bordos = cv2.Canny(imagem, 100, 200)
-except Exception as e:
-    print(f"Erro ao aplicar a detecção de bordos: {e}")
-    exit()
+# Exemplo de análise de sentimento
+nltk.download('vader_lexicon')
+sia = SentimentIntensityAnalyzer()
+texto = "Eu amo este produto!"
+sentimento = sia.polarity_scores(texto)
+print("Sentimento:", sentimento)
 ```
 
 ## Validação
-Para validar os resultados, é necessário avaliar o desempenho do modelo ou da técnica de visão computacional utilizada. Isso pode ser feito utilizando métricas como precisão, recall e F1-score para aprendizado de máquina, ou avaliando a qualidade da detecção de bordos ou reconhecimento de objetos para visão computacional. Além disso, é importante realizar testes e ajustes para garantir que o modelo ou técnica esteja funcionando corretamente e atendendo aos requisitos do problema.
+Para validar a eficácia dos modelos de IA, é crucial realizar testes rigorosos com dados de teste independentes. Isso ajuda a garantir que o modelo generalize bem para novos, desconhecidos dados, evitando sobreajuste ou subajuste. Além disso, a avaliação contínua e a atualização dos modelos com novos dados são essenciais para manter a precisão e a relevância das aplicações de IA.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-### Aprendizado de Máquina
-* **Dados faltantes**: Verifique se os dados estão completos e não contêm valores nulos ou faltantes. Se necessário, utilize técnicas de imputação de dados.
-* **Dados desequilibrados**: Verifique se os dados estão desequilibrados e, se necessário, utilize técnicas de oversampling ou undersampling para equilibrar as classes.
-* **Modelo sobreajustado**: Verifique se o modelo está sobreajustado e, se necessário, utilize técnicas de regularização ou early stopping para evitar o sobreajuste.
+No desenvolvimento de aplicações de IA, é fundamental considerar os casos de exceção e os limites (edge cases) para garantir a robustez e a confiabilidade dos modelos. Alguns pontos a considerar:
+- **Dados faltantes ou inconsistentes**: Implementar métodos para lidar com dados faltantes ou inconsistentes, como imputação de valores ou remoção de registros inválidos.
+- **Sobreajuste e subajuste**: Monitorar o desempenho do modelo durante o treinamento e o teste para evitar sobreajuste ou subajuste, ajustando hiperparâmetros ou utilizando técnicas de regularização.
+- **Casos de bordo**: Considerar casos de bordo, como texto vazio, dados numéricos extremos, ou entradas inválidas, e implementar lógica para lidar com esses casos de forma apropriada.
+- **Segurança**: Implementar medidas de segurança para proteger os dados e os modelos de IA contra acessos não autorizados, violações de dados ou outros riscos de segurança.
+```python
+try:
+    # Código que pode gerar exceção
+    modelo.fit(X_train, y_train)
+except Exception as e:
+    # Tratamento da exceção
+    print("Erro ao treinar o modelo:", str(e))
+```
+Exemplo de tratamento de dados faltantes:
+```python
+import pandas as pd
+import numpy as np
 
-### Visão Computacional
-* **Imagens de baixa qualidade**: Verifique se as imagens têm qualidade suficiente para serem processadas. Se necessário, utilize técnicas de melhoria de imagem ou filtração de ruído.
-* **Iluminação variável**: Verifique se a iluminação das imagens é variável e, se necessário, utilize técnicas de normalização de iluminação ou equalização de histograma.
-* **Objetos ocultos**: Verifique se os objetos de interesse estão ocultos ou parcialmente ocultos e, se necessário, utilize técnicas de detecção de objetos ou segmentação de imagem para identificar os objetos.
+# Criar um DataFrame com dados faltantes
+df = pd.DataFrame({
+    'A': [1, 2, np.nan, 4],
+    'B': [5, np.nan, 7, 8]
+})
+
+# Imputar valores faltantes com a média da coluna
+df['A'].fillna(df['A'].mean(), inplace=True)
+df['B'].fillna(df['B'].mean(), inplace=True)
+
+print(df)
