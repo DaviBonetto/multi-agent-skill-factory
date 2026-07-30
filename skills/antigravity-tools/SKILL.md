@@ -9,28 +9,38 @@ Skills speak in actions ("dispatch a subagent", "create a todo", "read a file").
 
 ## Task tracking
 
-Antigravity has **no todo tool** (`manage_task` manages background processes — `list`/`kill`/`status`/`send_input` — it is *not* a checklist). When a skill says to create a todo list or track tasks, maintain a **task artifact**: a markdown checklist saved with `write_to_file` (`IsArtifact: true`, `ArtifactMetadata.ArtifactType: "task"`), edited with `replace_file_content` / `multi_replace_file_content` as you go.
+Antigravity has **no todo tool** (`manage_task` manages background
+processes — `list`/`kill`/`status`/`send_input` — it is *not* a checklist). When a
+skill says to create a todo list or track tasks, maintain a **task artifact**: a
+markdown checklist saved with `write_to_file` (`IsArtifact: true`,
+`ArtifactMetadata.ArtifactType: "task"`), edited with `replace_file_content` /
+`multi_replace_file_content` as you go.
 
-At the start of any multi-step task, create the task artifact listing every step of your plan. As you complete each step, edit the artifact to mark it done (`- [x]`). If the plan changes, update the checklist. Keep it current — it is your source of truth for what remains; once the conversation gets long, re-read it before starting each step.
+At the start of any multi-step task, create the task artifact listing every step of
+your plan. As you complete each step, edit the artifact to mark it done (`- [x]`).
+If the plan changes, update the checklist. Keep it current — it is your source of
+truth for what remains; once the conversation gets long, re-read it before starting
+each step.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
 
-### Erros de Permissão
+### Erros de Invocação de Subagentes
 
-* Ao criar um task artifact, verifique se o usuário tem permissão para escrever no arquivo. Caso contrário, lance um erro com a mensagem "Permissão negada para criar task artifact".
-* Ao editar um task artifact, verifique se o usuário tem permissão para editar o arquivo. Caso contrário, lance um erro com a mensagem "Permissão negada para editar task artifact".
+*   Caso o subagente não seja encontrado, o sistema deve retornar um erro com o código `SUBAGENT_NOT_FOUND`.
+*   Se o subagente for invocado com permissões insuficientes, o sistema deve retornar um erro com o código `INSUFFICIENT_PERMISSIONS`.
 
-### Erros de Arquivo
+### Erros de Criação de Tarefas
 
-* Ao criar um task artifact, verifique se o arquivo já existe. Caso exista, lance um erro com a mensagem "Task artifact já existe".
-* Ao editar um task artifact, verifique se o arquivo existe. Caso não exista, lance um erro com a mensagem "Task artifact não encontrado".
+*   Se a tarefa não puder ser criada devido a falta de espaço em disco, o sistema deve retornar um erro com o código `DISK_SPACE_EXCEEDED`.
+*   Se a tarefa for criada com um nome inválido, o sistema deve retornar um erro com o código `INVALID_TASK_NAME`.
 
-### Edge Cases
+### Erros de Edição de Tarefas
 
-* Se o task artifact for muito grande, considere implementar uma solução de paginação para evitar problemas de desempenho.
-* Se o task artifact for compartilhado entre múltiplos usuários, considere implementar uma solução de controle de versão para evitar conflitos.
+*   Se a tarefa não puder ser editada devido a permissões insuficientes, o sistema deve retornar um erro com o código `INSUFFICIENT_PERMISSIONS`.
+*   Se a tarefa for editada com um conteúdo inválido, o sistema deve retornar um erro com o código `INVALID_TASK_CONTENT`.
 
 ### Segurança
 
-* Certifique-se de que os task artifacts sejam armazenados de forma segura, utilizando criptografia e autenticação adequadas.
-* Certifique-se de que os usuários apenas possam acessar e editar os task artifacts para os quais têm permissão.
+*   Todas as operações de criação, edição e exclusão de tarefas devem ser registradas em um log de segurança.
+*   O acesso às tarefas deve ser controlado por meio de uma política de acesso baseada em papéis (RBAC).
+*   As tarefas devem ser criptografadas em repouso e em trânsito para garantir a confidencialidade e integridade dos dados.
