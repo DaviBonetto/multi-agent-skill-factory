@@ -24,23 +24,19 @@ each step.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
 
-### Erros de Invocação de Subagentes
+Ao criar um task artifact, é importante considerar os seguintes casos:
+* **Erro de permissão**: Se o usuário não tiver permissão para criar ou editar o arquivo, o sistema deve retornar um erro com uma mensagem clara e concisa.
+* **Arquivo não encontrado**: Se o arquivo não for encontrado, o sistema deve criar um novo arquivo com o nome especificado.
+* **Conflito de nomes**: Se dois ou mais task artifacts tiverem o mesmo nome, o sistema deve retornar um erro e solicitar que o usuário forneça um nome único.
+* **Formato inválido**: Se o formato do task artifact for inválido, o sistema deve retornar um erro e solicitar que o usuário forneça um formato válido.
+* **Tamanho do arquivo**: Se o tamanho do arquivo for muito grande, o sistema deve retornar um erro e solicitar que o usuário reduza o tamanho do arquivo.
 
-*   Caso o subagente não seja encontrado, o sistema deve retornar um erro com o código `SUBAGENT_NOT_FOUND`.
-*   Se o subagente for invocado com permissões insuficientes, o sistema deve retornar um erro com o código `INSUFFICIENT_PERMISSIONS`.
+Além disso, é importante considerar os seguintes edge cases:
+* **Criar um task artifact vazio**: Se o usuário criar um task artifact vazio, o sistema deve permitir que o usuário adicione itens à lista.
+* **Editar um task artifact vazio**: Se o usuário editar um task artifact vazio, o sistema deve permitir que o usuário adicione itens à lista.
+* **Excluir um task artifact**: Se o usuário excluir um task artifact, o sistema deve remover o arquivo e todas as referências a ele.
 
-### Erros de Criação de Tarefas
-
-*   Se a tarefa não puder ser criada devido a falta de espaço em disco, o sistema deve retornar um erro com o código `DISK_SPACE_EXCEEDED`.
-*   Se a tarefa for criada com um nome inválido, o sistema deve retornar um erro com o código `INVALID_TASK_NAME`.
-
-### Erros de Edição de Tarefas
-
-*   Se a tarefa não puder ser editada devido a permissões insuficientes, o sistema deve retornar um erro com o código `INSUFFICIENT_PERMISSIONS`.
-*   Se a tarefa for editada com um conteúdo inválido, o sistema deve retornar um erro com o código `INVALID_TASK_CONTENT`.
-
-### Segurança
-
-*   Todas as operações de criação, edição e exclusão de tarefas devem ser registradas em um log de segurança.
-*   O acesso às tarefas deve ser controlado por meio de uma política de acesso baseada em papéis (RBAC).
-*   As tarefas devem ser criptografadas em repouso e em trânsito para garantir a confidencialidade e integridade dos dados.
+Para lidar com esses casos, é recomendável implementar os seguintes tratamentos de erros:
+* **Try-catch**: Use blocos try-catch para capturar e tratar erros de forma eficaz.
+* **Validação de entrada**: Valide a entrada do usuário para garantir que ela esteja no formato correto e dentro dos limites permitidos.
+* **Mensagens de erro**: Forneça mensagens de erro claras e concisas para ajudar o usuário a entender o que deu errado e como corrigir o problema.
