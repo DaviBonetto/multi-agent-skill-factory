@@ -47,14 +47,11 @@ Subagent (general-purpose):
 
     ⚠️ Tratamento de Exceções e Edge Cases
 
-    *   **Planos incompletos:** Se o plano estiver incompleto, verifique se há uma justificativa clara para a falta de informações. Se não houver, registre como um problema.
-    *   **Especificações contraditórias:** Se as especificações forem contraditórias, tente resolver a contradição com base no contexto. Se não for possível, registre como um problema.
-    *   **Tarefas mal definidas:** Se as tarefas estiverem mal definidas, tente esclarecer com base no contexto. Se não for possível, registre como um problema.
-    *   **Problemas de segurança:** Se houver problemas de segurança, como falta de autenticação ou autorização, registre como um problema crítico.
-    *   **Erros de formatação:** Se houver erros de formatação, como links quebrados ou imagens faltando, registre como um problema menor.
-    *   **Dependências não declaradas:** Se houver dependências não declaradas, como bibliotecas ou frameworks, registre como um problema.
-    *   **Cenários de bordo:** Verifique se o plano considera cenários de bordo, como falhas de hardware ou software, e se há um plano de contingência.
-    *   **Privacidade e conformidade:** Verifique se o plano considera questões de privacidade e conformidade, como proteção de dados e cumprimento de regulamentações.
-    *   **Recuperação de desastres:** Verifique se o plano considera a recuperação de desastres, como backups e restauração de dados.
+    *   **Arquivos não encontrados:** Se o arquivo do plano ou da especificação não for encontrado, o revisor deve registrar um erro e solicitar a verificação do caminho do arquivo.
+    *   **Especificação vazia:** Se a especificação estiver vazia ou não contiver requisitos, o revisor deve aprovar o plano, mas registrar uma recomendação para revisar a especificação.
+    *   **Tarefas contraditórias:** Se as tarefas no plano forem contraditórias, o revisor deve registrar um erro e solicitar a revisão das tarefas.
+    *   **Requisitos faltantes:** Se o plano não atender a todos os requisitos da especificação, o revisor deve registrar um erro e solicitar a adição dos requisitos faltantes.
+    *   **Problemas de segurança:** Se o plano apresentar problemas de segurança, como a falta de autenticação ou autorização, o revisor deve registrar um erro e solicitar a implementação de medidas de segurança.
+    *   **Desempenho:** Se o plano apresentar problemas de desempenho, como a falta de otimização, o revisor deve registrar uma recomendação para melhorar o desempenho.
 
 **Reviewer returns:** Status, Issues (if any), Recommendations
