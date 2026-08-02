@@ -6,7 +6,7 @@ Essas habilidades são:
  - {{name}} -> "{{path}}/SKILL.md"
 {{/skills}}
 
-**Importante:** Você DEVE ler o arquivo SKILL.md sempre que a descrição da habilidade corresponder à intenção do usuário ou possa ajudar a realizar sua tarefa.
+**IMPORTANTE**: Você DEVE ler o arquivo SKILL.md sempre que a descrição da habilidade corresponder à intenção do usuário ou possa ajudar a realizar sua tarefa.
 
 ## Habilidades Disponíveis
 {{#skills}}
@@ -14,21 +14,43 @@ Essas habilidades são:
 
 {{/skills}}
 
-Os caminhos referenciados dentro das pastas de habilidades são relativos àquela habilidade. Por exemplo, o script `scripts/example.py` do conjunto de dados `hf-datasets` seria referenciado como `hf-datasets/scripts/example.py`.
+Os caminhos referenciados dentro das pastas de habilidades são relativos àquela habilidade. Por exemplo, o script `scripts/example.py` do hf-datasets seria referenciado como `hf-datasets/scripts/example.py`.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-### Erros de Arquivo
-- **Arquivo não encontrado:** Caso o arquivo "SKILL.md" não seja encontrado no diretório especificado, uma mensagem de erro deve ser exibida informando o caminho incorreto.
-- **Permissão de leitura:** Se o arquivo "SKILL.md" não tiver permissão de leitura, uma mensagem de erro deve ser exibida solicitando permissão de leitura.
+O tratamento de exceções e edge cases é crucial para garantir a robustez e a confiabilidade das habilidades. Aqui estão alguns pontos a considerar:
+* **Erros de arquivo**: Verifique se o arquivo "SKILL.md" existe e é legível antes de tentar acessá-lo.
+* **Erros de caminho**: Certifique-se de que os caminhos relativos sejam corretos e existam antes de tentar acessá-los.
+* **Erros de descrição**: Verifique se a descrição da habilidade está correta e não vazia antes de exibi-la.
+* **Edge cases de habilidades**: Considere casos de bordo, como habilidades com nomes idênticos ou descrições vazias, e defina como elas devem ser tratadas.
+* **Tratamento de exceções**: Implemente um tratamento de exceções adequado para lidar com erros inesperados, como erros de sistema de arquivos ou erros de parsing de YAML.
 
-### Tratamento de Dados
-- **Dados inválidos:** Se os dados fornecidos para a habilidade forem inválidos ou inconsistentes, a habilidade deve lidar com esses dados de forma a evitar erros e garantir a estabilidade do sistema.
-- **Dados sensíveis:** Se a habilidade lidar com dados sensíveis, como informações de login ou dados pessoais, medidas de segurança adequadas devem ser implementadas para proteger esses dados.
+Exemplos de como lidar com esses casos:
+```markdown
+{{#skills}}
+  {{#if description}}
+    {{name}}: `{{description}}`
+  {{else}}
+    {{name}}: `Descrição não disponível`
+  {{/if}}
+{{/skills}}
+```
+```markdown
+{{#skills}}
+  {{#if path}}
+    {{name}} -> "{{path}}/SKILL.md"
+  {{else}}
+    {{name}} -> `Caminho não disponível`
+  {{/if}}
+{{/skills}}
 
-### Segurança
-- **Injeção de código:** A habilidade deve ser protegida contra injeção de código malicioso, garantindo que todos os inputs sejam validados e sanitizados.
-- **Autenticação e autorização:** A habilidade deve implementar mecanismos de autenticação e autorização adequados para garantir que apenas usuários autorizados possam acessar e utilizar a habilidade.
+## Implementação de Tratamento de Exceções
+Para garantir a robustez, é fundamental implementar tratamento de exceções para cada habilidade. Isso pode ser feito utilizando blocos try-catch para capturar e lidar com erros de forma adequada.
 
-### Edge Cases
-- **Caminhos relativos:** A habilidade deve lidar corretamente com caminhos relativos, garantindo que os arquivos e recursos sejam acessados corretamente independentemente do diretório atual.
-- **Caracteres especiais:** A habilidade deve ser capaz de lidar com caracteres especiais em nomes de arquivos e caminhos, garantindo que esses caracteres sejam tratados corretamente e não causem erros.
+## Exemplo de Implementação
+```python
+try:
+    # Código da habilidade
+except Exception as e:
+    # Tratamento de exceção
+    print(f"Erro ao executar a habilidade: {e}")
+```
