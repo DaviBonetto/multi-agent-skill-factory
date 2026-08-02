@@ -1,84 +1,94 @@
 ---
 name: Inteligência Artificial Aplicada
-description: Ensina a aplicar técnicas de inteligência artificial em problemas reais utilizando Python e TensorFlow
+description: Esta skill ensina como aplicar técnicas de inteligência artificial em problemas reais, incluindo aprendizado de máquina e visão computacional
 ---
 
 ## Objetivo
-O objetivo deste guia é fornecer uma visão geral prática de como aplicar técnicas de inteligência artificial em problemas reais, utilizando Python e TensorFlow. Esta abordagem visa capacitar os desenvolvedores a resolver desafios complexos com soluções baseadas em IA, explorando os conceitos fundamentais e avançados da área.
+O objetivo desta skill é fornecer conhecimentos práticos sobre como aplicar técnicas de inteligência artificial em problemas reais, incluindo aprendizado de máquina e visão computacional. Com isso, os participantes serão capazes de desenvolver soluções inovadoras e eficazes para desafios complexos.
 
 ## Pré-requisitos
-Para aproveitar ao máximo este guia, é recomendável que os participantes tenham:
-- Conhecimento básico em programação Python
-- Familiaridade com conceitos de matemática linear e cálculo
-- Experiência prévia com bibliotecas de ciência de dados como NumPy, Pandas e Matplotlib
-- Conhecimento básico de TensorFlow ou outras bibliotecas de aprendizado de máquina
+Para participar desta skill, é recomendado que os participantes tenham conhecimentos básicos em:
+* Programação em linguagens como Python ou R
+* Conceitos de estatística e probabilidade
+* Familiaridade com bibliotecas de aprendizado de máquina como scikit-learn ou TensorFlow
 
 ## Passo a Passo Técnico / Exemplos de Código
-### Instalação do TensorFlow
-Antes de começar, certifique-se de que o TensorFlow está instalado. Você pode instalar usando pip:
-```bash
-pip install tensorflow
-```
-### Exemplo de Rede Neural Simples
-Aqui está um exemplo simples de como criar e treinar uma rede neural usando TensorFlow:
+### Aprendizado de Máquina
+1. **Importação de bibliotecas**: Importe as bibliotecas necessárias, como `scikit-learn` e `numpy`.
+2. **Carregamento de dados**: Carregue o conjunto de dados que será utilizado para treinar o modelo.
+3. **Pré-processamento de dados**: Pré-processe os dados, incluindo a normalização e a divisão em conjuntos de treinamento e teste.
+4. **Treinamento do modelo**: Treine o modelo utilizando o conjunto de dados de treinamento.
 ```python
-import tensorflow as tf
-from tensorflow import keras
+import numpy as np
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
-from sklearn.datasets import load_iris
-from sklearn.metrics import accuracy_score
 
-# Carregar o conjunto de dados Iris
-iris = load_iris()
-X = iris.data
-y = iris.target
-
-# Dividir o conjunto de dados em treino e teste
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
-# Criar o modelo
-modelo = keras.Sequential([
-    keras.layers.Dense(10, activation='relu', input_shape=(4,)),
-    keras.layers.Dense(3, activation='softmax')
-])
-
-# Compilar o modelo
-modelo.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
-
-# Treinar o modelo
+# Carregue o conjunto de dados
 try:
-    modelo.fit(X_train, y_train, epochs=50, batch_size=10)
+    X = np.load('X.npy')
+    y = np.load('y.npy')
+except FileNotFoundError:
+    print("Arquivos de dados não encontrados. Verifique o caminho e tente novamente.")
+    exit()
+
+# Divida o conjunto de dados em conjuntos de treinamento e teste
+try:
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+except ValueError:
+    print("Erro ao dividir o conjunto de dados. Verifique se os dados estão corretos.")
+    exit()
+
+# Treine o modelo
+try:
+    modelo = RandomForestClassifier(n_estimators=100)
+    modelo.fit(X_train, y_train)
 except Exception as e:
     print(f"Erro ao treinar o modelo: {e}")
-
-# Fazer previsões
-try:
-    previsoes = modelo.predict(X_test)
-    previsoes_classe = previsoes.argmax(axis=1)
-except Exception as e:
-    print(f"Erro ao fazer previsões: {e}")
-
-# Avaliar o modelo
-try:
-    acuracia = accuracy_score(y_test, previsoes_classe)
-    print(f'Acuracia: {acuracia:.2f}')
-except Exception as e:
-    print(f"Erro ao avaliar o modelo: {e}")
+    exit()
 ```
-Este exemplo ilustra como criar um modelo de rede neural simples para classificação, treinar o modelo e avaliar sua performance.
+
+### Visão Computacional
+1. **Importação de bibliotecas**: Importe as bibliotecas necessárias, como `OpenCV` e `numpy`.
+2. **Carregamento de imagens**: Carregue as imagens que serão utilizadas para treinar o modelo.
+3. **Pré-processamento de imagens**: Pré-processe as imagens, incluindo a conversão para escala de cinza e a aplicação de filtros.
+4. **Treinamento do modelo**: Treine o modelo utilizando o conjunto de imagens de treinamento.
+```python
+import cv2
+import numpy as np
+import os
+
+# Carregue as imagens
+imagens = []
+for arquivo in os.listdir('imagens'):
+    try:
+        imagem = cv2.imread(os.path.join('imagens', arquivo))
+        imagens.append(imagem)
+    except Exception as e:
+        print(f"Erro ao carregar a imagem {arquivo}: {e}")
+
+# Pré-processe as imagens
+imagens_pre_processadas = []
+for imagem in imagens:
+    try:
+        imagem_cinza = cv2.cvtColor(imagem, cv2.COLOR_BGR2GRAY)
+        imagem_filtrada = cv2.GaussianBlur(imagem_cinza, (5, 5), 0)
+        imagens_pre_processadas.append(imagem_filtrada)
+    except Exception as e:
+        print(f"Erro ao pré-processar a imagem: {e}")
+```
 
 ## Validação
-Para validar o conhecimento adquirido, é recomendável trabalhar em projetos práticos que apliquem as técnicas de inteligência artificial aprendidas. Isso pode incluir:
-- Desenvolver modelos de previsão para conjuntos de dados reais
-- Implementar algoritmos de aprendizado de máquina para resolver problemas específicos
-- Participar de competições de ciência de dados para testar habilidades em desafios práticos
+A validação dos modelos será realizada utilizando métricas de desempenho, como acurácia, precisão e recall. Além disso, será realizada uma análise de sensibilidade para avaliar a robustez do modelo em relação a variações nos parâmetros e nos dados de entrada.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-Ao trabalhar com inteligência artificial, é importante considerar os seguintes casos de bordo e exceções:
-- **Dados faltantes ou inconsistentes**: Verifique se os dados estão completos e consistentes antes de treinar o modelo.
-- **Conjuntos de dados desequilibrados**: Verifique se o conjunto de dados está desequilibrado e ajuste o modelo para lidar com isso.
-- **Overfitting ou underfitting**: Verifique se o modelo está sobreajustado ou subajustado e ajuste os hiperparâmetros para melhorar a performance.
-- **Erros de inicialização**: Verifique se o modelo está sendo inicializado corretamente e ajuste os parâmetros de inicialização se necessário.
-- **Erros de treinamento**: Verifique se o modelo está sendo treinado corretamente e ajuste os parâmetros de treinamento se necessário.
-
-Ao seguir este guia e praticar com projetos reais, você estará bem equipado para aplicar técnicas de inteligência artificial em uma variedade de contextos, desde problemas de negócios até desafios científicos.
+* **Tratamento de arquivos não encontrados**: Verifique se os arquivos de dados estão no caminho correto e se existem.
+* **Tratamento de dados inválidos**: Verifique se os dados estão corretos e se não há valores nulos ou inconsistentes.
+* **Tratamento de erros de treinamento**: Verifique se o modelo está sendo treinado corretamente e se não há erros de convergência.
+* **Tratamento de imagens corruptas**: Verifique se as imagens estão corrompidas ou se não podem ser carregadas.
+* **Tratamento de parâmetros inválidos**: Verifique se os parâmetros do modelo estão dentro dos limites válidos e se não há erros de inicialização.
+* **Segurança**: Verifique se os dados estão sendo tratados de forma segura e se não há riscos de vazamento de informações.
+* **Edge cases**:
+ + **Dados de entrada nulos**: Verifique se os dados de entrada estão nulos e se não há erros de processamento.
+ + **Dados de entrada inconsistentes**: Verifique se os dados de entrada estão inconsistentes e se não há erros de processamento.
+ + **Modelo não treinado**: Verifique se o modelo está treinado e se não há erros de inicialização.
+ + **Imagens não carregadas**: Verifique se as imagens estão carregadas e se não há erros de carregamento.
