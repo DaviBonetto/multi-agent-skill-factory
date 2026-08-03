@@ -1,33 +1,51 @@
 ---
-name: Desenvolvimento de Aplicativos Móveis Avançados
-description: Esta skill ensina como desenvolver aplicativos móveis avançados utilizando tecnologias como React Native, Flutter e Kotlin
+name: Desenvolvimento de Aplicativos Móvel
+description: Ensina a criar aplicativos móveis escaláveis e seguros utilizando tecnologias como React Native e Flutter
 ---
 
 ## Objetivo
-O objetivo desta skill é capacitar os desenvolvedores a criar aplicativos móveis avançados utilizando tecnologias como React Native, Flutter e Kotlin. Com essa habilidade, os desenvolvedores poderão criar aplicativos móveis complexos e escaláveis, atendendo às necessidades dos usuários modernos.
+O objetivo deste guia é fornecer uma abordagem prática e técnica para o desenvolvimento de aplicativos móveis escaláveis e seguros, utilizando tecnologias como React Native e Flutter. Com isso, os desenvolvedores poderão criar aplicativos móveis de alta qualidade, atendendo às necessidades dos usuários e das empresas.
 
 ## Pré-requisitos
-Para iniciar esta skill, é necessário ter conhecimento em:
-* Programação em linguagens como JavaScript, Java ou Kotlin
-* Desenvolvimento de aplicativos móveis básicos
-* Conhecimento em frameworks e bibliotecas de desenvolvimento móvel
+Antes de iniciar o desenvolvimento de aplicativos móveis, é necessário ter conhecimento em:
+* Programação em linguagens como JavaScript (para React Native) ou Dart (para Flutter)
+* Desenvolvimento de interfaces de usuário
+* Conhecimento básico de banco de dados e APIs
+* Ferramentas de desenvolvimento como Node.js, npm, yarn, Android Studio ou Visual Studio Code
 
 ## Passo a Passo Técnico / Exemplos de Código
 ### Configurando o Ambiente de Desenvolvimento
-Para começar a desenvolver aplicativos móveis avançados, é necessário configurar o ambiente de desenvolvimento. Isso inclui:
-* Instalar o Node.js e o React Native CLI para desenvolvimento com React Native
-* Instalar o Android Studio e o Flutter SDK para desenvolvimento com Flutter
-* Instalar o Android Studio e o Kotlin plugin para desenvolvimento com Kotlin
+Para começar, é necessário configurar o ambiente de desenvolvimento. Isso inclui:
+* Instalar o Node.js e o npm (para React Native)
+* Instalar o Android Studio ou o Visual Studio Code
+* Instalar o React Native CLI ou o Flutter
 
-### Criando um Aplicativo Móvel com React Native
+```bash
+# Instalar o React Native CLI
+npm install -g react-native-cli
+
+# Instalar o Flutter
+git clone https://github.com/flutter/flutter.git
+```
+
+### Criando o Aplicativo Móvel
+Com o ambiente de desenvolvimento configurado, é possível criar o aplicativo móvel. Isso inclui:
+* Criar um novo projeto React Native ou Flutter
+* Definir a estrutura do aplicativo
+* Implementar as funcionalidades do aplicativo
+
 ```javascript
-import React from 'react';
-import { View, Text } from 'react-native';
+// Exemplo de código em React Native
+import React, { useState } from 'react';
+import { View, Text, Button } from 'react-native';
 
 const App = () => {
+  const [contador, setContador] = useState(0);
+
   return (
     <View>
-      <Text>Olá, Mundo!</Text>
+      <Text>Contador: {contador}</Text>
+      <Button title="Incrementar" onPress={() => setContador(contador + 1)} />
     </View>
   );
 };
@@ -35,96 +53,62 @@ const App = () => {
 export default App;
 ```
 
-### Criando um Aplicativo Móvel com Flutter
-```dart
-import 'package:flutter/material.dart';
-
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Olá, Mundo!',
-      home: Scaffold(
-        body: Center(
-          child: Text('Olá, Mundo!'),
-        ),
-      ),
-    );
-  }
-}
-```
-
-### Criando um Aplicativo Móvel com Kotlin
-```kotlin
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import android.widget.TextView
-
-class MainActivity : AppCompatActivity() {
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    val textView = TextView(this)
-    textView.text = "Olá, Mundo!"
-    setContentView(textView)
-  }
-}
-```
-
 ## Validação
-Para validar o conhecimento adquirido, é necessário desenvolver um aplicativo móvel avançado que utilize as tecnologias aprendidas. O aplicativo deve ter as seguintes características:
-* Ter uma interface de usuário complexa e responsiva
-* Utilizar armazenamento de dados local e remoto
-* Ter funcionalidades de rede e API
-* Ser escalável e manutenível
-
-Com essas características, o aplicativo móvel avançado será considerado válido e o desenvolvedor terá demonstrado a habilidade de criar aplicativos móveis complexos e escaláveis.
+Para garantir a qualidade do aplicativo móvel, é necessário realizar testes e validações. Isso inclui:
+* Testes unitários
+* Testes de integração
+* Testes de usabilidade
+* Análise de desempenho e segurança
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-Ao desenvolver aplicativos móveis avançados, é fundamental considerar os seguintes casos de bordo e exceções:
-* **Erros de rede**: Lidar com erros de conexão, timeout e outros problemas de rede que possam afetar a funcionalidade do aplicativo.
-* **Erros de armazenamento**: Lidar com erros de armazenamento de dados, como falta de espaço ou corrupção de dados.
-* **Erros de segurança**: Lidar com erros de segurança, como ataques de injeção de código ou acesso não autorizado a dados sensíveis.
-* **Casos de bordo de plataforma**: Lidar com casos de bordo específicos de cada plataforma, como diferenças de comportamento entre Android e iOS.
-* **Casos de bordo de dispositivo**: Lidar com casos de bordo específicos de cada dispositivo, como diferenças de tela ou hardware.
+Além dos passos anteriores, é fundamental considerar os seguintes casos de exceção e edge cases:
+* **Tratamento de erros de rede**: Implementar mecanismos para lidar com erros de conexão, como retry e timeout.
+* **Validação de dados**: Verificar a integridade dos dados recebidos e enviados, evitando ataques de injeção de SQL e cross-site scripting (XSS).
+* **Segurança de autenticação**: Implementar autenticação segura, utilizando protocolos como OAuth e JWT.
+* **Proteção contra ataques de força bruta**: Implementar mecanismos para prevenir ataques de força bruta, como limitação de tentativas de login e bloqueio de IPs.
+* **Testes de segurança**: Realizar testes de segurança regulares, utilizando ferramentas como OWASP ZAP e Burp Suite.
 
-Exemplos de código para lidar com esses casos de bordo e exceções:
+Exemplo de tratamento de erros de rede em React Native:
 ```javascript
-// Erros de rede
-fetch('https://api.example.com/data')
-  .then(response => response.json())
-  .catch(error => console.error('Erro de rede:', error));
+import React, { useState, useEffect } from 'react';
+import { View, Text, Button } from 'react-native';
+import axios from 'axios';
 
-// Erros de armazenamento
-try {
-  const data = await AsyncStorage.getItem('data');
-  // ...
-} catch (error) {
-  console.error('Erro de armazenamento:', error);
-}
+const App = () => {
+  const [dados, setDados] = useState(null);
+  const [erro, setErro] = useState(null);
 
-// Erros de segurança
-if (typeof data === 'string') {
-  // ...
-} else {
-  console.error('Erro de segurança: dados inválidos');
-}
+  useEffect(() => {
+    axios.get('https://api.example.com/dados')
+      .then(response => {
+        setDados(response.data);
+      })
+      .catch(error => {
+        setErro(error.message);
+      });
+  }, []);
 
-// Casos de bordo de plataforma
-if (Platform.OS === 'android') {
-  // ...
-} else if (Platform.OS === 'ios') {
-  // ...
-}
+  return (
+    <View>
+      {dados ? (
+        <Text>Dados: {dados}</Text>
+      ) : (
+        <Text>Erro: {erro}</Text>
+      )}
+      <Button title="Tentar novamente" onPress={() => {
+        axios.get('https://api.example.com/dados')
+          .then(response => {
+            setDados(response.data);
+          })
+          .catch(error => {
+            setErro(error.message);
+          });
+      }} />
+    </View>
+  );
+};
 
-// Casos de bordo de dispositivo
-if (Device.width < 768) {
-  // ...
-} else {
-  // ...
-}
+export default App;
 ```
-Esses são apenas alguns exemplos de como lidar com casos de bordo e exceções em aplicativos móveis avançados. É fundamental considerar todos os possíveis casos de bordo e exceções para garantir a estabilidade e segurança do aplicativo.
+
+Com esses passos, é possível criar aplicativos móveis escaláveis e seguros, atendendo às necessidades dos usuários e das empresas. Além disso, é importante manter o aplicativo atualizado e realizar melhorias contínuas para garantir a satisfação dos usuários.
