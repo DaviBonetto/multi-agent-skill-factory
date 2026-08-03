@@ -1,83 +1,87 @@
 ---
 name: Arquitetura de Microsserviços
-description: Esta skill ensina como projetar e implementar arquiteturas de microsserviços escaláveis e eficientes
+description: Ensina a projetar e implementar sistemas baseados em microsserviços, utilizando padrões e tecnologias como Docker e Kubernetes
 ---
 
 ## Objetivo
-O objetivo desta skill é fornecer conhecimento e habilidades práticas para projetar e implementar arquiteturas de microsserviços escaláveis e eficientes. Isso inclui entender os princípios fundamentais dos microsserviços, como eles se diferenciam da arquitetura monolítica, e como aplicar esses conceitos em projetos reais.
+O objetivo deste guia é fornecer uma visão geral de como projetar e implementar sistemas baseados em microsserviços, utilizando padrões e tecnologias como Docker e Kubernetes. Com isso, você será capaz de criar sistemas escaláveis, flexíveis e fáceis de manter.
 
 ## Pré-requisitos
-Para aproveitar ao máximo esta skill, é recomendado que os participantes tenham:
-- Conhecimento básico em desenvolvimento de software
-- Experiência com linguagens de programação como Java, Python ou C#
-- Familiaridade com conceitos de desenvolvimento de software ágil e DevOps
-- Nível de complexidade: Senior
+Para seguir este guia, você deve ter conhecimento básico em:
+* Desenvolvimento de software
+* Docker
+* Kubernetes
+* Padrões de arquitetura de microsserviços
 
 ## Passo a Passo Técnico / Exemplos de Código
-### 1. Introdução aos Microsserviços
-Os microsserviços são uma abordagem de arquitetura de software que envolve dividir uma aplicação em serviços menores, independentes e escaláveis. Cada serviço é responsável por uma funcionalidade específica e pode ser desenvolvido, testado e implantado de forma independente.
+### 1. Definição da Arquitetura
+A arquitetura de microsserviços é baseada em serviços independentes que se comunicam entre si. Cada serviço é responsável por uma funcionalidade específica do sistema.
 
-### 2. Projetando Microsserviços
-Ao projetar microsserviços, é importante considerar os seguintes fatores:
-- **Escalabilidade**: Cada serviço deve ser capaz de escalar de forma independente para atender às demandas da aplicação.
-- **Comunicação**: Os serviços devem se comunicar de forma eficiente e segura, utilizando protocolos como HTTP, gRPC ou mensagem assíncrona.
-- **Resiliência**: A aplicação deve ser capaz de lidar com falhas em serviços individuais sem afetar a funcionalidade geral.
+### 2. Implementação com Docker
+Para implementar os serviços, utilizaremos o Docker. O Docker é uma plataforma que permite criar, testar e implantar aplicativos de forma rápida e segura.
 
-### 3. Implementação de Microsserviços
-Um exemplo de implementação de microsserviços em Python utilizando o framework Flask pode ser visto abaixo:
-```python
-from flask import Flask, jsonify
-
-app = Flask(__name__)
-
-# Definindo um serviço de usuário
-@app.route('/users', methods=['GET'])
-def get_users():
-    try:
-        users = [{'id': 1, 'name': 'João'}, {'id': 2, 'name': 'Maria'}]
-        return jsonify(users)
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-if __name__ == '__main__':
-    app.run(debug=True)
+```bash
+# Exemplo de comando para criar uma imagem Docker
+docker build -t meu-servico .
 ```
-Este exemplo ilustra um serviço simples que retorna uma lista de usuários em formato JSON, com tratamento de exceções.
+
+### 3. Orquestração com Kubernetes
+Para orquestrar os serviços, utilizaremos o Kubernetes. O Kubernetes é uma plataforma que permite gerenciar e orquestrar aplicativos em contêineres.
+
+```yml
+# Exemplo de arquivo de configuração do Kubernetes
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: meu-servico
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: meu-servico
+  template:
+    metadata:
+      labels:
+        app: meu-servico
+    spec:
+      containers:
+      - name: meu-servico
+        image: meu-servico:latest
+        ports:
+        - containerPort: 80
+```
 
 ## Validação
-Para validar a implementação de microsserviços, é importante realizar testes unitários, integração e de carga. Ferramentas como JUnit, PyUnit e Apache JMeter podem ser utilizadas para esses propósitos. Além disso, é fundamental monitorar o desempenho da aplicação em produção, utilizando ferramentas como Prometheus e Grafana, para identificar e corrigir problemas de desempenho e escalabilidade.
+Para validar a implementação, você pode utilizar ferramentas como o `kubectl` para verificar o status dos serviços e o `docker logs` para verificar os logs dos contêineres.
+
+```bash
+# Exemplo de comando para verificar o status dos serviços
+kubectl get deployments
+```
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-Ao implementar microsserviços, é importante considerar os seguintes casos de bordo e exceções:
-- **Falha de comunicação**: Em caso de falha de comunicação entre serviços, é importante ter mecanismos de retry e timeout para garantir a resiliência da aplicação.
-- **Erro de negócio**: Em caso de erro de negócio, é importante retornar erros significativos e úteis para o cliente, em vez de apenas retornar um erro genérico.
-- **Ataques de segurança**: É importante implementar medidas de segurança, como autenticação e autorização, para proteger a aplicação contra ataques mal-intencionados.
-- **Escalabilidade**: É importante monitorar a escalabilidade da aplicação e ajustar a configuração de acordo com as necessidades da aplicação.
-- **Monitoramento**: É importante monitorar a aplicação em produção para identificar e corrigir problemas de desempenho e escalabilidade.
+É fundamental considerar os seguintes casos de exceção e edge cases ao implementar uma arquitetura de microsserviços:
+* **Falha de comunicação entre serviços**: Implemente mecanismos de retry e timeout para lidar com falhas de comunicação entre serviços.
+* **Falha de um serviço**: Implemente mecanismos de load balancing e failover para garantir que o sistema continue funcionando mesmo se um serviço falhar.
+* **Sobrecarga de tráfego**: Implemente mecanismos de escalabilidade automática para lidar com aumentos de tráfego.
+* **Problemas de segurança**: Implemente mecanismos de autenticação e autorização para garantir que apenas serviços autorizados possam se comunicar entre si.
+* **Logs e monitoramento**: Implemente mecanismos de logs e monitoramento para detectar e diagnosticar problemas em tempo real.
 
-Exemplo de tratamento de exceções em Python:
+Exemplos de código para tratamento de exceções:
 ```python
-from flask import Flask, jsonify
+import logging
+import time
 
-app = Flask(__name__)
-
-# Definindo um serviço de usuário
-@app.route('/users', methods=['GET'])
-def get_users():
+def chamada_de_servico():
     try:
-        users = [{'id': 1, 'name': 'João'}, {'id': 2, 'name': 'Maria'}]
-        return jsonify(users)
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-    finally:
-        # Liberar recursos
-        pass
+        # Chamar o serviço
+        resposta = requests.get('http://meu-servico:80')
+        resposta.raise_for_status()
+    except requests.exceptions.RequestException as e:
+        # Lidar com a exceção
+        logging.error(f'Falha ao chamar o serviço: {e}')
+        time.sleep(1)  # Aguardar 1 segundo antes de tentar novamente
+        return chamada_de_servico()
+```
 
-# Tratamento de exceções personalizado
-@app.errorhandler(404)
-def not_found(error):
-    return jsonify({'error': 'Não encontrado'}), 404
-
-@app.errorhandler(500)
-def internal_server_error(error):
-    return jsonify({'error': 'Erro interno do servidor'}), 500
+Com esses passos e considerando os casos de exceção e edge cases, você terá uma arquitetura de microsserviços implementada e funcionando corretamente. Lembre-se de que a arquitetura de microsserviços é flexível e pode ser adaptada às necessidades específicas do seu sistema.
