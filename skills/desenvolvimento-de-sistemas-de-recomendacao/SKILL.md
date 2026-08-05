@@ -1,111 +1,120 @@
 ---
 name: Desenvolvimento de Sistemas de Recomendação
-description: Aborda conceitos e técnicas para o desenvolvimento de sistemas de recomendação
----
+description: Esta skill ensina como desenvolver sistemas de recomendação utilizando algoritmos de filtragem colaborativa e baseada em conteúdo, além de técnicas de aprendizado de máquina.
 
 ## Objetivo
-O objetivo deste guia é fornecer uma visão geral abrangente sobre o desenvolvimento de sistemas de recomendação, incluindo algoritmos de filtragem colaborativa e baseada em conteúdo. Este conhecimento é essencial para profissionais seniores que desejam criar soluções personalizadas e eficazes para recomendações em diversas aplicações.
+O objetivo desta skill é capacitar os desenvolvedores a criar sistemas de recomendação eficazes, utilizando algoritmos de filtragem colaborativa e baseada em conteúdo, além de técnicas de aprendizado de máquina. Isso permitirá que eles desenvolvam soluções personalizadas para atender às necessidades específicas dos usuários.
 
 ## Pré-requisitos
-Antes de mergulhar nos detalhes do desenvolvimento de sistemas de recomendação, é importante ter conhecimento em:
-- Programação em Python ou outra linguagem de programação relevante
-- Conceitos básicos de ciência de dados e aprendizado de máquina
-- Familiaridade com bibliotecas como Pandas, NumPy e Scikit-learn
+Para iniciar esta skill, é necessário ter conhecimento em:
+* Programação em linguagens como Python ou R
+* Conceitos básicos de aprendizado de máquina e estatística
+* Familiaridade com bibliotecas como Pandas, NumPy e Scikit-learn
 
 ## Passo a Passo Técnico / Exemplos de Código
-### Algoritmos de Filtragem Colaborativa
-A filtragem colaborativa é um método que se baseia nas preferências e comportamentos de usuários semelhantes para fazer recomendações. Existem dois tipos principais: filtragem colaborativa baseada em usuário e baseada em item.
+### Etapa 1: Preparação dos Dados
+Para desenvolver um sistema de recomendação, é necessário preparar os dados. Isso inclui:
+* Coletar dados de usuário e item
+* Preprocessar os dados para remover valores faltantes e normalizar as escalas
+* Dividir os dados em conjuntos de treinamento e teste
 
-#### Exemplo de Filtragem Colaborativa Baseada em Usuário
 ```python
 import pandas as pd
-from scipy import spatial
+from sklearn.model_selection import train_test_split
 
-# Carregar dados de avaliações de usuários
+# Carregar os dados
 try:
-    ratings = pd.read_csv('ratings.csv')
+    dados = pd.read_csv('dados.csv')
 except FileNotFoundError:
-    print("Arquivo 'ratings.csv' não encontrado.")
-    ratings = None
+    print("Arquivo de dados não encontrado.")
+    exit(1)
 
-if ratings is not None:
-    # Criar uma matriz de similaridade entre usuários
-    def calcular_similaridade(user1, user2):
-        try:
-            # Selecionar avaliações dos usuários
-            ratings_user1 = ratings[ratings['userId'] == user1]
-            ratings_user2 = ratings[ratings['userId'] == user2]
-            
-            # Verificar se os usuários têm avaliações
-            if ratings_user1.empty or ratings_user2.empty:
-                return 0  # ou outra valor padrão para similaridade
-            
-            # Calcular a similaridade usando cosine similarity
-            similaridade = 1 - spatial.distance.cosine(ratings_user1['rating'], ratings_user2['rating'])
-            return similaridade
-        except KeyError:
-            print("Coluna 'userId' ou 'rating' não encontrada no arquivo 'ratings.csv'.")
-            return None
+# Preprocessar os dados
+try:
+    dados = dados.dropna()
+    dados = dados.apply(lambda x: (x - x.min()) / (x.max() - x.min()))
+except Exception as e:
+    print(f"Erro ao preprocessar os dados: {e}")
+    exit(1)
 
-    # Exemplo de uso
-    similaridade = calcular_similaridade(1, 2)
-    if similaridade is not None:
-        print(f'Similaridade entre usuários 1 e 2: {similaridade}')
+# Dividir os dados em conjuntos de treinamento e teste
+try:
+    X_train, X_test, y_train, y_test = train_test_split(dados.drop('target', axis=1), dados['target'], test_size=0.2, random_state=42)
+except Exception as e:
+    print(f"Erro ao dividir os dados: {e}")
+    exit(1)
 ```
 
-### Algoritmos de Filtragem Baseada em Conteúdo
-A filtragem baseada em conteúdo se concentra nas características dos itens para fazer recomendações. Isso pode incluir atributos como gênero, autor, ou descrição do item.
+### Etapa 2: Implementação do Algoritmo de Filtragem Colaborativa
+Nesta etapa, implementaremos um algoritmo de filtragem colaborativa para gerar recomendações. Isso pode ser feito utilizando a biblioteca Surprise.
 
-#### Exemplo de Filtragem Baseada em Conteúdo
 ```python
-import numpy as np
+from surprise import Reader, Dataset, KNNWithMeans
+from surprise.model_selection import cross_validate
 
-# Carregar dados de itens
+# Carregar os dados
 try:
-    items = pd.read_csv('items.csv')
-except FileNotFoundError:
-    print("Arquivo 'items.csv' não encontrado.")
-    items = None
+    reader = Reader(rating_scale=(1, 5))
+    data = Dataset.load_from_df(dados[['user', 'item', 'rating']], reader)
+except Exception as e:
+    print(f"Erro ao carregar os dados: {e}")
+    exit(1)
 
-if items is not None:
-    # Criar um vetor de características para cada item
-    def criar_vetor_item(item):
-        try:
-            # Exemplo de características: gênero, autor
-            vetor = np.array([item['genre'], item['author']])
-            return vetor
-        except KeyError:
-            print("Coluna 'genre' ou 'author' não encontrada no arquivo 'items.csv'.")
-            return None
+# Treinar o modelo
+try:
+    sim_options = {'name': 'pearson_baseline', 'user_based': False}
+    algo = KNNWithMeans(k=50, sim_options=sim_options)
+    cross_validate(algo, data, measures=['RMSE', 'MAE'], cv=5, verbose=True)
+except Exception as e:
+    print(f"Erro ao treinar o modelo: {e}")
+    exit(1)
+```
 
-    # Calcular a similaridade entre itens
-    def calcular_similaridade_itens(item1, item2):
-        try:
-            vetor1 = criar_vetor_item(item1)
-            vetor2 = criar_vetor_item(item2)
-            if vetor1 is not None and vetor2 is not None:
-                similaridade = np.dot(vetor1, vetor2) / (np.linalg.norm(vetor1) * np.linalg.norm(vetor2))
-                return similaridade
-            else:
-                return None
-        except Exception as e:
-            print(f"Erro ao calcular similaridade: {e}")
-            return None
+### Etapa 3: Implementação do Algoritmo de Aprendizado de Máquina
+Nesta etapa, implementaremos um algoritmo de aprendizado de máquina para gerar recomendações. Isso pode ser feito utilizando a biblioteca Scikit-learn.
 
-    # Exemplo de uso
-    if not items.empty:
-        similaridade = calcular_similaridade_itens(items.iloc[0], items.iloc[1])
-        if similaridade is not None:
-            print(f'Similaridade entre itens 1 e 2: {similaridade}')
+```python
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import mean_squared_error
+
+# Treinar o modelo
+try:
+    modelo = RandomForestRegressor(n_estimators=100, random_state=42)
+    modelo.fit(X_train, y_train)
+except Exception as e:
+    print(f"Erro ao treinar o modelo: {e}")
+    exit(1)
+
+# Avaliar o modelo
+try:
+    y_pred = modelo.predict(X_test)
+    mse = mean_squared_error(y_test, y_pred)
+    print(f'MSE: {mse:.2f}')
+except Exception as e:
+    print(f"Erro ao avaliar o modelo: {e}")
+    exit(1)
 ```
 
 ## Validação
-A validação dos sistemas de recomendação é crucial para garantir que as recomendações sejam relevantes e úteis para os usuários. Isso pode ser feito através de métricas como precisão, recall, F1-score, e A/B testing. Além disso, a coleta de feedback dos usuários pode ajudar a ajustar e melhorar o sistema de recomendação ao longo do tempo.
+Para validar o sistema de recomendação, é necessário avaliar sua eficácia utilizando métricas como precisão, recall e F1-score. Além disso, é importante realizar testes de usuário para garantir que o sistema atenda às necessidades dos usuários.
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
-- **Arquivos não encontrados**: Verificar se os arquivos 'ratings.csv' e 'items.csv' existem antes de tentar carregá-los.
-- **Colunas não encontradas**: Verificar se as colunas necessárias ('userId', 'rating', 'genre', 'author') existem nos arquivos carregados.
-- **Avaliações vazias**: Lidar com o caso onde um usuário não tem avaliações, retornando uma similaridade padrão ou None.
-- **Erros de cálculo**: Capturar e tratar exceções que ocorrem durante os cálculos de similaridade, como divisão por zero ou operações inválidas com vetores.
-- **Itens vazios**: Verificar se a lista de itens está vazia antes de tentar acessar seus elementos.
-- **Tipos de dados inconsistentes**: Garantir que os dados carregados sejam do tipo esperado (por exemplo, números para ratings, strings para gênero e autor) para evitar erros de tipo durante os cálculos.
+É importante tratar as exceções e edge cases para garantir a robustez do sistema de recomendação. Alguns exemplos incluem:
+* Tratar erros de arquivo não encontrado ou corrompido
+* Tratar erros de preprocessamento de dados
+* Tratar erros de treinamento do modelo
+* Tratar erros de avaliação do modelo
+* Tratar casos de bordo, como dados faltantes ou inconsistentes
+* Implementar logging e monitoramento para detectar e resolver problemas
+
+Exemplos de código para tratamento de exceções:
+```python
+try:
+    # Código que pode gerar exceção
+except Exception as e:
+    # Tratar a exceção
+    print(f"Erro: {e}")
+    # Registrar o erro em um log
+    logging.error(f"Erro: {e}")
+    # Enviar notificação para o desenvolvedor
+    send_notification(f"Erro: {e}")
