@@ -17,27 +17,26 @@ At the start of any multi-step task, create the task artifact listing every step
 
 ### Erros de Invocação de Subagentes
 
-*   Se o subagente não for encontrado, o erro será tratado como uma exceção `SubagentNotFoundError`.
-*   Se o subagente não tiver permissão para executar uma ação, o erro será tratado como uma exceção `PermissionError`.
+*   Caso o subagente não seja encontrado, uma exceção `SubagentNotFoundError` será lançada.
+*   Se o subagente for invocado com permissões insuficientes, uma exceção `PermissionError` será lançada.
 
-### Erros de Leitura e Escrita de Arquivos
+### Erros de Manipulação de Arquivos
 
-*   Se o arquivo não for encontrado, o erro será tratado como uma exceção `FileNotFoundError`.
-*   Se o arquivo não puder ser lido ou escrito devido a permissões, o erro será tratado como uma exceção `PermissionError`.
-
-### Tratamento de Conflitos de Versão
-
-*   Se houver um conflito de versão ao atualizar um arquivo, o erro será tratado como uma exceção `VersionConflictError`.
-*   O sistema deve ser capaz de lidar com conflitos de versão e fornecer uma solução para resolvê-los.
+*   Se o arquivo não for encontrado, uma exceção `FileNotFoundError` será lançada.
+*   Se houver um erro ao escrever ou ler o arquivo, uma exceção `IOError` será lançada.
 
 ### Edge Cases
 
-*   **Tamanho do Arquivo**: O sistema deve ser capaz de lidar com arquivos de tamanhos variados, desde pequenos até muito grandes.
-*   **Tipo de Arquivo**: O sistema deve ser capaz de lidar com diferentes tipos de arquivos, incluindo texto, imagens, áudio e vídeo.
-*   **Caracteres Especiais**: O sistema deve ser capaz de lidar com caracteres especiais em nomes de arquivos e conteúdo.
+*   **Tarefa com muitos passos**: Se a tarefa tiver muitos passos, é recomendável dividir a tarefa em sub-tarefas menores e gerenciar cada uma delas separadamente.
+*   **Tarefa com dependências**: Se a tarefa tiver dependências, é importante garantir que todas as dependências sejam resolvidas antes de iniciar a tarefa.
+*   **Tarefa com prazos**: Se a tarefa tiver prazos, é importante garantir que a tarefa seja concluída dentro do prazo estabelecido.
+
+### Tratamento de Exceções
+
+*   Todas as exceções devem ser tratadas e registradas para garantir que o sistema permaneça estável e seguro.
+*   É recomendável implementar um mecanismo de retry para lidar com erros temporários.
 
 ### Segurança
 
-*   **Autenticação**: O sistema deve exigir autenticação para acessar e modificar arquivos.
-*   **Autorização**: O sistema deve ter um sistema de autorização para controlar quem pode acessar e modificar arquivos.
-*   **Criptografia**: O sistema deve usar criptografia para proteger os arquivos em trânsito e em repouso.
+*   Todas as operações devem ser realizadas com permissões mínimas necessárias para evitar vulnerabilidades de segurança.
+*   É recomendável implementar um mecanismo de autenticação e autorização para garantir que apenas usuários autorizados possam acessar e manipular as tarefas e arquivos.
