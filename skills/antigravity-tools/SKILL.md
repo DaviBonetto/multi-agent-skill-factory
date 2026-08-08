@@ -15,28 +15,17 @@ At the start of any multi-step task, create the task artifact listing every step
 
 ## ⚠️ Tratamento de Exceções e Edge Cases
 
-### Erros de Invocação de Subagentes
+### Erros de Arquivo
 
-*   Caso o subagente não seja encontrado, uma exceção `SubagentNotFoundError` será lançada.
-*   Se o subagente for invocado com permissões insuficientes, uma exceção `PermissionError` será lançada.
+*   Caso o arquivo de task artifact não exista, um erro de arquivo não encontrado será retornado. Nesse caso, o sistema deve criar o arquivo e inicializá-lo com uma lista vazia.
+*   Se o arquivo de task artifact estiver corrompido ou não for um arquivo markdown válido, um erro de parsing será retornado. Nesse caso, o sistema deve tentar recuperar o arquivo ou criar um novo.
 
-### Erros de Manipulação de Arquivos
+### Erros de Permissão
 
-*   Se o arquivo não for encontrado, uma exceção `FileNotFoundError` será lançada.
-*   Se houver um erro ao escrever ou ler o arquivo, uma exceção `IOError` será lançada.
+*   Se o sistema não tiver permissão para criar ou editar o arquivo de task artifact, um erro de permissão será retornado. Nesse caso, o sistema deve solicitar permissão ao usuário ou utilizar um local de armazenamento alternativo.
 
 ### Edge Cases
 
-*   **Tarefa com muitos passos**: Se a tarefa tiver muitos passos, é recomendável dividir a tarefa em sub-tarefas menores e gerenciar cada uma delas separadamente.
-*   **Tarefa com dependências**: Se a tarefa tiver dependências, é importante garantir que todas as dependências sejam resolvidas antes de iniciar a tarefa.
-*   **Tarefa com prazos**: Se a tarefa tiver prazos, é importante garantir que a tarefa seja concluída dentro do prazo estabelecido.
-
-### Tratamento de Exceções
-
-*   Todas as exceções devem ser tratadas e registradas para garantir que o sistema permaneça estável e seguro.
-*   É recomendável implementar um mecanismo de retry para lidar com erros temporários.
-
-### Segurança
-
-*   Todas as operações devem ser realizadas com permissões mínimas necessárias para evitar vulnerabilidades de segurança.
-*   É recomendável implementar um mecanismo de autenticação e autorização para garantir que apenas usuários autorizados possam acessar e manipular as tarefas e arquivos.
+*   **Multiplos usuários**: Se múltiplos usuários estiverem utilizando o sistema simultaneamente, é possível que haja conflitos ao editar o arquivo de task artifact. Nesse caso, o sistema deve implementar um mecanismo de controle de versão para garantir a integridade dos dados.
+*   **Tamanhos de arquivo grandes**: Se o arquivo de task artifact for muito grande, pode haver problemas de desempenho ao editá-lo. Nesse caso, o sistema deve considerar a implementação de um mecanismo de paginação ou armazenamento em banco de dados.
+*   **Caracteres especiais**: Se o nome do arquivo ou o conteúdo do task artifact contiver caracteres especiais, pode haver problemas de encoding ou parsing. Nesse caso, o sistema deve garantir que todos os caracteres sejam devidamente escapados ou tratados.
